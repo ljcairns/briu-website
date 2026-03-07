@@ -176,7 +176,11 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .timeline-year { font-size: 0.78rem; font-weight: 600; color: var(--river); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.25rem; }
 .timeline-item p { font-size: 0.95rem; margin-bottom: 0; }
 
-.mission { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.mission { text-align: center; }
+.mission h2 { max-width: 800px; margin-left: auto; margin-right: auto; }
+.mission p { max-width: 680px; margin-left: auto; margin-right: auto; }
+.mission .section-label { color: var(--gold); }
+.mission::before { content: ''; display: block; width: 60px; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral)); margin: 0 auto 2rem; }
 
 .cta-section { text-align: center; padding: 8rem 2rem; position: relative; }
 .cta-section::before { content: ''; position: absolute; top: 25%; left: 50%; transform: translateX(-50%); width: 650px; height: 450px; background: radial-gradient(ellipse, rgba(212,160,90,0.07) 0%, rgba(224,123,95,0.04) 25%, rgba(90,157,172,0.02) 45%, transparent 65%); pointer-events: none; filter: blur(55px); }
@@ -277,16 +281,16 @@ footer a:hover { color: var(--gold); }
 .compound-num { min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(212,160,90,0.1); color: var(--gold); font-family: var(--serif); font-size: 14px; border: 1px solid rgba(212,160,90,0.2); flex-shrink: 0; }
 .compound-item .ci-title { color: var(--text); font-weight: 600; }
 
-.stat-row-v2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0 0.5rem; padding: 2.5rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
-.both-go-down { color: var(--gold); font-size: 1.05rem; font-weight: 600; text-align: center; letter-spacing: 0.01em; margin-bottom: 0; }
+.cost-journey { display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 3rem 0 0.5rem; padding: 2.5rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
+.cost-journey-point { text-align: center; min-width: 200px; }
+.cost-journey-point .stat-number { font-size: 2.5rem; }
+.cost-journey-point .stat-desc { max-width: 260px; margin: 0 auto; }
+.cost-journey-arrow { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.cost-journey-label { font-size: 0.72rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
 
 .callout-box { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 20px 24px; margin: 1.5rem 0; }
 .callout-box p { color: var(--text); margin-bottom: 0; }
 
-/* Inline CTA - subtle mid-page prompt */
-.inline-cta { text-align: center; padding: 1.5rem 2rem 3rem; position: relative; }
-.inline-cta a { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.3); transition: all 0.35s ease; display: inline-block; }
-.inline-cta a:hover { background: rgba(212,160,90,0.1); border-color: rgba(212,160,90,0.5); transform: translateY(-1px); }
 
 @media (max-width: 640px) {
   .cost-stat-grid, .math-card-grid, .trust-grid { grid-template-columns: 1fr; }
@@ -605,27 +609,28 @@ footer a:hover { color: var(--gold); }
     <p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> — All-In Podcast E259 (Jan 2026)</p>
   </div>
 
-  <!-- Stat Row -->
-  <div class="stat-row-v2 reveal">
-    <div>
+  <!-- Cost Journey -->
+  <div class="cost-journey reveal">
+    <div class="cost-journey-point">
       <div class="stat-label good">Start here</div>
-      <div class="stat-number good" data-count="2-5" data-prefix="$" data-suffix="/day">$2-5/day</div>
-      <div class="stat-desc">Personal assistant. Email, calendar, CRM. Reads your messages, drafts responses, manages your day. Proper architecture. Real production system.</div>
+      <div class="stat-number good">$2-5/day</div>
+      <div class="stat-desc">Personal assistant. Email, calendar, CRM. Proper architecture.</div>
     </div>
-    <div>
+    <div class="cost-journey-arrow">
+      <svg width="60" height="24" viewBox="0 0 60 24"><path d="M0,12 L50,12 M42,4 L52,12 L42,20" stroke="var(--gold)" stroke-width="2" fill="none" opacity="0.5"/></svg>
+      <span class="cost-journey-label">Both numbers only go down</span>
+    </div>
+    <div class="cost-journey-point">
       <div class="stat-label" style="color: var(--coral);">The destination</div>
-      <div class="stat-number" data-count="300" data-prefix="$" data-suffix="/day">$300/day</div>
-      <div class="stat-desc">Fully autonomous operations. Agents across your team, working around the clock. The cost to get here drops every quarter.</div>
+      <div class="stat-number">$300/day</div>
+      <div class="stat-desc">Fully autonomous operations. Agents across your team, 24/7.</div>
     </div>
   </div>
 
-  <p class="both-go-down reveal">Both numbers only go down.</p>
+  <div style="text-align: center; margin-top: 2rem;" class="reveal">
+    <a href="#" onclick="openContactForm();return false" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.3); transition: all 0.35s ease; display: inline-block;" onmouseover="this.style.background='rgba(212,160,90,0.1)';this.style.borderColor='rgba(212,160,90,0.5)'" onmouseout="this.style.background='';this.style.borderColor='rgba(212,160,90,0.3)'">See What This Looks Like For Your Business</a>
+  </div>
 </section>
-
-<!-- Inline CTA -->
-<div class="inline-cta reveal">
-  <a href="#" onclick="openContactForm();return false">See What This Looks Like For Your Business</a>
-</div>
 
 <!-- Wave divider -->
 <div class="wave-divider">
