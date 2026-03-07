@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | Yes, We Can Automate That</title>
 <meta name="description" content="AI agent deployment for businesses using the OpenClaw framework. Personal assistants, autonomous agents, team operations. Secure, cost-controlled, and running in days.">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,8 +33,8 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); line
 body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
 
 nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
-.logo { font-family: var(--serif); font-size: 1.5rem; color: var(--text); text-decoration: none; letter-spacing: 0.02em; }
-.logo span { color: var(--gold); }
+.logo { text-decoration: none; display: flex; align-items: center; }
+.logo img { height: 40px; width: auto; }
 nav a.cta-nav { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.55rem 1.3rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
@@ -239,7 +241,7 @@ footer a:hover { color: var(--gold); }
 <body>
 
 <nav>
-  <a href="#" class="logo">briu<span>.</span></a>
+  <a href="#" class="logo"><img src="logo.png" alt="briu." height="40"></a>
   <a href="#contact" class="cta-nav">Book a Call</a>
 </nav>
 
@@ -698,18 +700,18 @@ footer a:hover { color: var(--gold); }
   <p class="section-label">Get Started</p>
   <h2>15 minutes. No pitch.</h2>
   <p>Tell us what your team does every day. We'll tell you what an agent could handle, what it would cost, and what we'd build first. If it doesn't make sense for your business, we'll say so.</p>
-  <a href="mailto:lucas@briu.ai" class="cta-button">Schedule Your Free Call</a>
+  <a href="/cdn-cgi/l/email-protection#e08c95838193a082928995ce8189" class="cta-button">Schedule Your Free Call</a>
 </section>
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
   <div class="footer-links">
-    <a href="mailto:lucas@briu.ai">lucas@briu.ai</a>
+    <a href="/cdn-cgi/l/email-protection#9af6eff9fbe9daf8e8f3efb4fbf3"><span class="__cf_email__" data-cfemail="5e322b3d3f2d1e3c2c372b703f37">[email&#160;protected]</span></a>
     <a href="tel:+12065310077">206-531-0077</a>
   </div>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 function switchChart(view) {
   document.querySelectorAll('.chart-view').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.chart-tab').forEach(function(el) { el.classList.remove('active'); });
@@ -792,15 +794,4 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         y1: {
           position: 'right',
-          min: 75, max: 95,
-          ticks: { color: '#5A9DAC', font: { size: 11 }, callback: function(v) { return v + '%'; } },
-          grid: { drawOnChartArea: false, drawBorder: false },
-          border: { display: false }
-        }
-      }
-    }
-  });
-});
-</script>
-</body>
-</html>
+          min: 75, max
