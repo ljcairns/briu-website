@@ -64,7 +64,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 .problem::before { content: ''; position: absolute; top: 15%; left: -25%; width: 500px; height: 450px; background: radial-gradient(ellipse, rgba(90,157,172,0.05), rgba(77,128,112,0.02) 50%, transparent 70%); pointer-events: none; filter: blur(50px); }
 .quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; }
-.quote-block p { font-family: var(--serif); font-size: 1.2rem; color: var(--text); font-style: italic; line-height: 1.75; margin-bottom: 0.4rem; }
+.quote-block p { font-family: var(--serif); font-size: 1.2rem; color: var(--text-muted); font-style: italic; font-weight: 400; line-height: 1.75; margin-bottom: 0.4rem; }
 .quote-source { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; }
 
 .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; padding: 2.5rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -170,7 +170,7 @@ footer a:hover { color: var(--gold); }
 .wuc-highlight { color: var(--text); }
 
 .quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; }
-.quote-card p { font-family: var(--serif); font-size: 1.15rem; color: var(--text); font-style: italic; line-height: 1.75; margin-bottom: 0; }
+.quote-card p { font-family: var(--serif); font-size: 1.15rem; color: var(--text-muted); font-style: italic; font-weight: 400; line-height: 1.75; margin-bottom: 0; }
 .quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
 .quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
 
@@ -365,8 +365,8 @@ footer a:hover { color: var(--gold); }
   <p>Cuban's math is a snapshot. Here is the trajectory.</p>
 
   <div class="chart-tabs">
-    <button class="chart-tab active" onclick="switchChart('cost')">Cost vs Capability</button>
-    <button class="chart-tab" onclick="switchChart('math')">The $300/Day Math</button>
+    <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
+    <button class="chart-tab" onclick="switchChart('math',this)">The $300/Day Math</button>
   </div>
 
   <!-- COST VIEW -->
@@ -713,11 +713,11 @@ footer a:hover { color: var(--gold); }
 </footer>
 
 <script>
-function switchChart(view) {
+function switchChart(view, btn) {
   document.querySelectorAll('.chart-view').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.chart-tab').forEach(function(el) { el.classList.remove('active'); });
   document.getElementById('chart-' + view).classList.add('active');
-  event.target.classList.add('active');
+  btn.classList.add('active');
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -795,4 +795,15 @@ document.addEventListener('DOMContentLoaded', function() {
         },
         y1: {
           position: 'right',
-          min: 75, max
+          min: 75, max: 100,
+          ticks: { color: '#5A9DAC', font: { size: 11 }, callback: function(v) { return v + '%'; } },
+          grid: { drawOnChartArea: false },
+          border: { display: false }
+        }
+      }
+    }
+  });
+});
+</script>
+</body>
+</html>
