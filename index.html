@@ -37,28 +37,37 @@ body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; heigh
 /* Nav */
 nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .logo { text-decoration: none; display: flex; align-items: center; opacity: 0; animation: logoSlideIn 0.8s ease forwards 0.1s; }
-.logo img { height: 72px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
+.logo img { height: 96px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
 .logo:hover img { transform: scale(1.05); filter: brightness(1.15); }
-nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.55rem 1.3rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 .nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
 
 /* Hero */
-.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; max-width: 1060px; margin: 0 auto; position: relative; }
-.hero::before { content: ''; position: absolute; top: 5%; right: -25%; width: 800px; height: 800px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.08) 0%, rgba(224,123,95,0.04) 25%, rgba(90,157,172,0.02) 45%, transparent 65%); pointer-events: none; filter: blur(70px); }
-.hero-eyebrow { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
-.hero h1 { font-family: var(--serif); font-size: clamp(2.5rem, 5.5vw, 4rem); line-height: 1.15; color: var(--text); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s; }
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 8rem 2rem 4rem; max-width: 1060px; margin: 0 auto; position: relative; }
+.hero::before { content: ''; position: absolute; top: 5%; left: 50%; transform: translateX(-50%); width: 900px; height: 900px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
+.hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; position: relative; display: inline-flex; align-items: center; gap: 1rem; }
+.hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.hero-eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.6rem, 5.5vw, 4.2rem); line-height: 1.12; color: var(--text); margin-bottom: 1.75rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.4s; max-width: 800px; }
 .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--gold), var(--gold-bright)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.hero > p { font-size: 1.1rem; color: var(--text-muted); max-width: 640px; line-height: 1.75; margin-bottom: 2rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s; }
+.hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 560px; line-height: 1.75; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.6s; }
 
-.hero-pillars { display: flex; gap: 2rem; margin-bottom: 2.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; flex-wrap: wrap; }
-.hero-pillar { font-size: 0.88rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; }
-.hero-pillar::before { content: ''; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
+.hero-pillars { display: flex; gap: 1.5rem; margin-bottom: 3rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.7s; flex-wrap: wrap; justify-content: center; }
+.hero-pillar { font-size: 0.82rem; color: var(--text-muted); display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.02); }
+.hero-pillar::before { content: ''; width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
 
-.hero-cta { display: inline-block; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); text-decoration: none; padding: 1rem 2.5rem; transition: all 0.35s ease; position: relative; overflow: hidden; opacity: 0; animation: fadeUp 0.8s ease forwards 0.8s; }
-.hero-cta::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent); transition: left 0.5s ease; }
-.hero-cta:hover::after { left: 100%; }
-.hero-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.25); }
+.hero-cta-group { display: flex; gap: 1.5rem; align-items: center; opacity: 0; animation: fadeUp 0.8s ease forwards 0.85s; flex-wrap: wrap; justify-content: center; }
+.hero-cta-primary { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.4); transition: all 0.35s ease; position: relative; }
+.hero-cta-primary:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); box-shadow: 0 0 30px rgba(212,160,90,0.1); }
+.hero-cta-secondary { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
+.hero-cta-secondary::after { content: '\2193'; font-size: 1rem; transition: transform 0.3s ease; }
+.hero-cta-secondary:hover { color: var(--text); }
+.hero-cta-secondary:hover::after { transform: translateY(3px); }
+
+.hero-scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); opacity: 0; animation: fadeUp 0.8s ease forwards 1.2s; }
+.hero-scroll-hint span { display: block; width: 1px; height: 40px; background: linear-gradient(180deg, var(--gold), transparent); margin: 0 auto; animation: scrollPulse 2s ease-in-out infinite; }
+@keyframes scrollPulse { 0%,100% { opacity: 0.3; transform: scaleY(0.7); } 50% { opacity: 0.7; transform: scaleY(1); } }
 
 /* Ambient gradient orbs */
 .ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
@@ -300,7 +309,7 @@ footer a:hover { color: var(--gold); }
 
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
-  .logo img { height: 52px; }
+  .logo img { height: 64px; }
   .hero { padding: 7rem 1.25rem 3rem; }
   .hero-pillars { flex-direction: column; gap: 0.75rem; }
   section { padding: 4rem 1.25rem; }
@@ -333,15 +342,20 @@ footer a:hover { color: var(--gold); }
 <section class="hero">
   <p class="hero-eyebrow">Yes, We Can Automate That</p>
   <h1>Your competitors are deploying AI agents. <em>Are you?</em></h1>
-  <p>We deploy custom AI agents that operate inside your existing tools, handle your operational workflows, and are optimized for cost and security from day one. Built on OpenClaw, the open-source agent framework. The project is community-driven and continues under open governance.</p>
+  <p class="hero-subtitle">Custom AI agents built on open-source infrastructure. Running inside your tools, optimized for cost, governed by your rules.</p>
 
   <div class="hero-pillars">
     <span class="hero-pillar">Approval gates on every action</span>
-    <span class="hero-pillar">Daily spend visibility and budget ceilings</span>
+    <span class="hero-pillar">Budget ceilings &amp; spend visibility</span>
     <span class="hero-pillar">Your infrastructure, your data</span>
   </div>
 
-  <a href="#wake-up" class="hero-cta">Explore What's Possible</a>
+  <div class="hero-cta-group">
+    <a href="#" onclick="openContactForm();return false" class="hero-cta-primary">Start a Conversation</a>
+    <a href="#wake-up" class="hero-cta-secondary">See the evidence</a>
+  </div>
+
+  <div class="hero-scroll-hint"><span></span></div>
 </section>
 
 <!-- Wave divider -->
