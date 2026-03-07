@@ -271,13 +271,13 @@ footer a:hover { color: var(--gold); }
 .chart-source { font-size: 11px; color: var(--text-muted); opacity: 0.5; margin-top: 10px; }
 
 .math-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 24px; }
-.math-card { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; transition: all 0.3s ease; }
+.math-card { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; transition: all 0.3s ease; display: flex; flex-direction: column; min-height: 170px; }
 .math-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 .math-card .mc-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
 .math-card .mc-num { font-family: var(--serif); font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 4px; }
 .math-card .mc-num span { font-size: 14px; color: var(--text-muted); }
-.math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
-.math-card .mc-note { font-size: 12px; color: var(--text); line-height: 1.5; }
+.math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; min-height: 20px; }
+.math-card .mc-note { font-size: 12px; color: var(--text); line-height: 1.5; margin-top: auto; }
 
 .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 2.5rem 0 3rem; }
 .trust-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 28px 24px; transition: all 0.4s ease; }
@@ -340,6 +340,7 @@ footer a:hover { color: var(--gold); }
   <a href="#" class="logo"><img src="briu-logo-transparent.png" alt="Briu"></a>
   <div class="nav-links">
     <a href="/why-now/">Why Now</a>
+    <a href="/build/">Build</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
@@ -436,7 +437,31 @@ footer a:hover { color: var(--gold); }
 <section>
   <p class="section-label reveal">Economics</p>
   <h2 class="reveal">Cheaper and better, every quarter.</h2>
-  <p class="reveal">One reason this category matters now is that the cost curve and the capability curve are moving at the same time. You can see the direction clearly even if you start with a narrow, supervised deployment.</p>
+  <p class="reveal">Controlled early deployments can run in the $2-5/day range. Frontier around-the-clock deployments on the most expensive models can reach roughly $300/day per agent. Most businesses should not start at the frontier. The point is that capability is rising while cost keeps falling.</p>
+
+  <div class="cost-journey reveal">
+    <div class="cost-journey-point">
+      <div class="stat-number" style="color: var(--river);">$2-5<span style="font-size: 1rem;">/day</span></div>
+      <div class="stat-desc">Practical starting point</div>
+    </div>
+    <div class="cost-journey-arrow">
+      <div class="cost-journey-label">Start narrow, add trust, expand scope</div>
+      <svg width="140" height="16" viewBox="0 0 140 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M1 8H134M134 8L127 1M134 8L127 15" stroke="url(#grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <defs>
+          <linearGradient id="grad" x1="1" y1="8" x2="134" y2="8" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#5A9DAC"/>
+            <stop offset="1" stop-color="#D4A05A"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <div class="stat-desc" style="max-width: 320px;">The useful path is architecture, controls, and rollout discipline, not jumping straight to maximum token spend.</div>
+    </div>
+    <div class="cost-journey-point">
+      <div class="stat-number" style="color: var(--gold);">~$300<span style="font-size: 1rem;">/day</span></div>
+      <div class="stat-desc">Frontier benchmark</div>
+    </div>
+  </div>
 
   <div class="chart-tabs reveal">
     <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
@@ -477,25 +502,25 @@ footer a:hover { color: var(--gold); }
   <div id="chart-math" class="chart-view">
     <div class="chart-surface" style="margin-bottom: 16px;">
       <div class="chart-label">What $300/day buys over time</div>
-      <p style="font-size: 0.88rem; margin-bottom: 24px; max-width: 540px;">$300/day is today's cost for full autonomous capacity. Here's where that number goes as models get cheaper and more capable.</p>
+      <p style="font-size: 0.88rem; margin-bottom: 24px; max-width: 540px;">$300/day is a frontier benchmark, not a recommended starting point. This view shows what happens to that same budget as models get cheaper and more capable.</p>
       <div class="math-card-grid">
         <div class="math-card" style="border-top: 2px solid var(--coral);">
           <div class="mc-year" style="color: var(--coral);">Jan 2026</div>
           <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--coral);">$300/day each</div>
-          <div class="mc-note">Early benchmark. Partial autonomous capacity.</div>
+          <div class="mc-note">Frontier model budget. Around-the-clock deployment.</div>
         </div>
         <div class="math-card" style="border-top: 2px solid var(--gold);">
           <div class="mc-year" style="color: var(--gold);">2027 est.</div>
           <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--gold);">$150/day each</div>
-          <div class="mc-note">Same agents, half the cost. Smarter models.</div>
+          <div class="mc-note">Same deployment pattern. Lower cost, stronger models.</div>
         </div>
         <div class="math-card" style="border-top: 2px solid var(--forest);">
           <div class="mc-year" style="color: var(--forest);">2028 est.</div>
           <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--forest);">$75/day each</div>
-          <div class="mc-note">Or 28 agents for the original budget.</div>
+          <div class="mc-note">Or materially more capacity on the original budget.</div>
         </div>
       </div>
       <p style="color: var(--text); font-size: 0.93rem; line-height: 1.75; margin-bottom: 0;">Every day between now and then, the agents have been learning your business. The company that started earlier has institutional knowledge in its agents that a competitor cannot buy at any price.</p>
@@ -504,7 +529,7 @@ footer a:hover { color: var(--gold); }
   </div>
 
   <div class="callout-box reveal">
-    <p>The takeaway is not that every business should race to full autonomy. It is that the economics are improving quickly enough that careful early deployments can create operating knowledge before the category feels obvious.</p>
+    <p>The takeaway is not raw token spend. The leverage comes from designing the workflow, controls, approval layers, and rollout path that turn improving economics into usable operating capacity.</p>
   </div>
 
   <div class="why-now-links reveal">
