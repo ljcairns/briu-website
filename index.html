@@ -24,6 +24,7 @@
   --coral: #E07B5F;
   --forest: #4D8070;
   --river: #5A9DAC;
+  --terra: #8B5E3C;
   --serif: 'DM Serif Display', Georgia, serif;
   --sans: 'DM Sans', -apple-system, sans-serif;
 }
@@ -33,12 +34,15 @@ html { scroll-behavior: smooth; font-size: 16px; }
 body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
 body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
 
+/* Nav */
 nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .logo { text-decoration: none; display: flex; align-items: center; }
 .logo img { height: 96px; width: auto; }
 nav a.cta-nav { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.55rem 1.3rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
 
+/* Hero */
 .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 8rem 2rem 4rem; max-width: 1060px; margin: 0 auto; position: relative; }
 .hero::before { content: ''; position: absolute; top: 5%; right: -25%; width: 800px; height: 800px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.08) 0%, rgba(224,123,95,0.04) 25%, rgba(90,157,172,0.02) 45%, transparent 65%); pointer-events: none; filter: blur(70px); }
 .hero-eyebrow { font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.2em; color: var(--gold); margin-bottom: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 0.2s; }
@@ -55,12 +59,40 @@ nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: v
 .hero-cta:hover::after { left: 100%; }
 .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.25); }
 
-.fog-line { height: 1px; background: linear-gradient(90deg, transparent, rgba(148,144,154,0.12) 15%, rgba(212,160,90,0.12) 45%, rgba(90,157,172,0.08) 75%, transparent); max-width: 1060px; margin: 0 auto; }
+/* Pyrenees mountain silhouette */
+.mountain-bg { position: absolute; bottom: -2px; left: 0; width: 100%; pointer-events: none; z-index: 0; }
+.mountain-bg svg { width: 100%; height: auto; display: block; }
 
+/* Ambient gradient orbs */
+.ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
+.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
+.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; animation: orbFloat2 30s ease-in-out infinite; }
+.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; animation: orbFloat3 20s ease-in-out infinite; }
+
+@keyframes orbFloat1 { 0%,100% { transform: translate(0,0); } 33% { transform: translate(80px,-60px); } 66% { transform: translate(-40px,80px); } }
+@keyframes orbFloat2 { 0%,100% { transform: translate(0,0); } 33% { transform: translate(-60px,40px); } 66% { transform: translate(40px,-80px); } }
+@keyframes orbFloat3 { 0%,100% { transform: translate(0,0); } 50% { transform: translate(60px,60px); } }
+
+/* Wave dividers */
+.wave-divider { width: 100%; overflow: hidden; line-height: 0; position: relative; }
+.wave-divider svg { display: block; width: 100%; height: 60px; }
+.wave-divider.flip { transform: rotate(180deg); }
+
+/* Sections */
 section { padding: 6rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; }
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
 section h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.2; margin-bottom: 1.5rem; }
 section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margin-bottom: 1.25rem; }
+
+/* Scroll reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-scale { opacity: 0; transform: translateY(20px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 
 .problem::before { content: ''; position: absolute; top: 15%; left: -25%; width: 500px; height: 450px; background: radial-gradient(ellipse, rgba(90,157,172,0.05), rgba(77,128,112,0.02) 50%, transparent 70%); pointer-events: none; filter: blur(50px); }
 .quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; }
@@ -76,8 +108,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .stat-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
 .use-case-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.use-case { background: var(--surface); padding: 2rem; border: 1px solid rgba(255,255,255,0.04); transition: all 0.3s ease; }
-.use-case:hover { border-color: rgba(212,160,90,0.15); background: var(--surface-2); }
+.use-case { background: var(--surface); padding: 2rem; border: 1px solid rgba(255,255,255,0.04); transition: all 0.4s ease; }
+.use-case:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
 .use-case h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.5rem; }
 .use-case p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0; }
 
@@ -97,12 +129,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   padding: 1.25rem 0.5rem;
   border: 1px solid rgba(255,255,255,0.04);
   background: var(--surface);
-  transition: all 0.3s ease;
+  transition: all 0.4s ease;
 }
 
 .integration-item:hover {
-  border-color: rgba(212,160,90,0.15);
+  border-color: rgba(212,160,90,0.2);
   background: var(--surface-2);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
 }
 
 .integration-item svg {
@@ -110,7 +144,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   height: 28px;
   color: var(--text-muted);
   opacity: 0.7;
-  transition: opacity 0.3s ease;
+  transition: all 0.3s ease;
 }
 
 .integration-item:hover svg {
@@ -157,6 +191,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .cta-button:hover::after { left: 100%; }
 .cta-button:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.3); }
 
+/* Modal + Questionnaire */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
 .modal { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2.5rem; max-width: 520px; width: 90%; position: relative; }
@@ -196,7 +231,8 @@ footer a:hover { color: var(--gold); }
 .wuc-subhead { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.7rem); line-height: 1.25; color: var(--text); margin-top: 3.5rem; margin-bottom: 1.5rem; }
 .wuc-highlight { color: var(--text); }
 
-.quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; }
+.quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; }
+.quote-card:hover { background: rgba(212,160,90,0.06); border-left-color: var(--gold-light); }
 .quote-card p { font-family: var(--serif); font-size: 1.15rem; color: #C4C0BA; font-style: italic; font-weight: 400; line-height: 1.75; margin-bottom: 0; }
 .quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
 .quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
@@ -209,7 +245,8 @@ footer a:hover { color: var(--gold); }
 .chart-view.active { display: block; }
 
 .cost-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
-.cost-stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; border-top: 2px solid var(--coral); }
+.cost-stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; border-top: 2px solid var(--coral); transition: all 0.3s ease; }
+.cost-stat-box:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 .cost-stat-box .csl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .cost-stat-box .csn { font-family: var(--serif); font-size: 34px; color: var(--text); line-height: 1; }
 .cost-stat-box .csn span { font-size: 15px; color: var(--text-muted); }
@@ -222,14 +259,16 @@ footer a:hover { color: var(--gold); }
 .chart-source { font-size: 11px; color: var(--text-muted); opacity: 0.5; margin-top: 10px; }
 
 .math-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 24px; }
-.math-card { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; }
+.math-card { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; transition: all 0.3s ease; }
+.math-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 .math-card .mc-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
 .math-card .mc-num { font-family: var(--serif); font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 4px; }
 .math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
 .math-card .mc-note { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
 
 .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 1.5rem 0 2rem; }
-.trust-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 20px; }
+.trust-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 20px; transition: all 0.4s ease; }
+.trust-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
 .trust-card .tc-phase { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .trust-card h4 { font-family: var(--serif); font-size: 1.05rem; color: var(--text); margin-bottom: 10px; font-weight: 400; }
 .trust-card .tc-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
@@ -245,6 +284,11 @@ footer a:hover { color: var(--gold); }
 .callout-box { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 20px 24px; margin: 1.5rem 0; }
 .callout-box p { color: var(--text); margin-bottom: 0; }
 
+/* Inline CTA - subtle mid-page prompt */
+.inline-cta { text-align: center; padding: 3rem 2rem; position: relative; }
+.inline-cta a { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.3); transition: all 0.35s ease; display: inline-block; }
+.inline-cta a:hover { background: rgba(212,160,90,0.1); border-color: rgba(212,160,90,0.5); transform: translateY(-1px); }
+
 @media (max-width: 640px) {
   .cost-stat-grid, .math-card-grid, .trust-grid { grid-template-columns: 1fr; }
   .chart-tabs { gap: 6px; }
@@ -253,6 +297,7 @@ footer a:hover { color: var(--gold); }
 
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
+  .logo img { height: 64px; }
   .hero { padding: 7rem 1.25rem 3rem; }
   .hero-pillars { flex-direction: column; gap: 0.75rem; }
   section { padding: 4rem 1.25rem; }
@@ -263,14 +308,22 @@ footer a:hover { color: var(--gold); }
   .case-study-box { padding: 1.5rem; }
   footer { flex-direction: column; text-align: center; }
   .footer-links { justify-content: center; }
+  .wave-divider svg { height: 30px; }
+  .ambient-orb { display: none; }
 }
 </style>
 </head>
 <body>
 
+<!-- Ambient gradient orbs -->
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
 <nav>
   <a href="#" class="logo"><img src="briu-logo-transparent.png" alt="Briu"></a>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <!-- HERO -->
@@ -285,113 +338,128 @@ footer a:hover { color: var(--gold); }
     <span class="hero-pillar">Your infrastructure, your data</span>
   </div>
 
-  <a href="#" onclick="openContactForm();return false" class="hero-cta">Schedule Your Free Call</a>
+  <a href="#wake-up" class="hero-cta">Explore What's Possible</a>
 </section>
 
-<div class="fog-line"></div>
+<!-- Mountain silhouette divider -->
+<div class="mountain-bg">
+  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,120 L0,95 Q60,70 120,80 Q180,90 240,72 Q300,54 360,65 Q420,76 480,58 Q540,40 600,52 Q660,64 720,45 Q780,26 840,38 Q900,50 960,35 Q1020,20 1080,32 Q1140,44 1200,28 Q1260,12 1320,25 Q1380,38 1440,20 L1440,120 Z" fill="#0E1219" opacity="0.6"/>
+    <path d="M0,120 L0,100 Q80,82 160,90 Q240,98 320,85 Q400,72 480,82 Q560,92 640,75 Q720,58 800,70 Q880,82 960,68 Q1040,54 1120,65 Q1200,76 1280,60 Q1360,44 1440,55 L1440,120 Z" fill="#0E1219" opacity="0.3"/>
+    <path d="M0,120 L0,108 Q120,95 240,102 Q360,109 480,98 Q600,87 720,95 Q840,103 960,92 Q1080,81 1200,90 Q1320,99 1440,88 L1440,120 Z" fill="var(--bg)" opacity="0.15"/>
+  </svg>
+</div>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
+    <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+  </svg>
+</div>
 
 <!-- WAKE-UP CALL -->
-<section class="problem">
-  <p class="section-label">The Wake-Up Call</p>
-  <h2>This is not about replacing your team.<br><span style="color: var(--gold);">It's about what your team becomes.</span></h2>
+<section class="problem" id="wake-up">
+  <p class="section-label reveal">The Wake-Up Call</p>
+  <h2 class="reveal">This is not about replacing your team.<br><span style="color: var(--gold);">It's about what your team becomes.</span></h2>
 
-  <p>In early 2026, investor and entrepreneur Jason Calacanis deployed AI agents across his 20-person venture firm. Not to cut headcount. To find out what happens when every employee has an AI counterpart working alongside them.</p>
+  <p class="reveal">In early 2026, investor and entrepreneur Jason Calacanis deployed AI agents across his 20-person venture firm. Not to cut headcount. To find out what happens when every employee has an AI counterpart working alongside them.</p>
 
-  <p>He started with the most technical staff and worked his way down. Each person got their own agent. Each agent got its own email, Slack, and CRM accounts. He calls them "replicants." A master agent manages the others, checks their work, and summarizes everything daily. The goal was not automation for its own sake. It was leverage.</p>
+  <p class="reveal">He started with the most technical staff and worked his way down. Each person got their own agent. Each agent got its own email, Slack, and CRM accounts. He calls them "replicants." A master agent manages the others, checks their work, and summarizes everything daily. The goal was not automation for its own sake. It was leverage.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"I'm going down the slope of employees from most technical to least and trying to get each one of them to adopt and create an agent. It will probably take six months, but when we do, I think our leverage versus a competing firm is going to be 10x."</p>
     <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> — All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p>Within the first few weeks, the results were clear:</p>
+  <p class="reveal">Within the first few weeks, the results were clear:</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
     <p class="quote-attr">All-In Podcast E259 (Jan 2026)</p>
   </div>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"On the average investment team individual, we now have probably 20% of their work being done by agents in real time."</p>
     <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p>His assistant's workload was reduced by 30%. Not to cut her hours. To free her up for higher-level work. The agents took the repetitive tasks. The humans moved up.</p>
+  <p class="reveal">His assistant's workload was reduced by 30%. Not to cut her hours. To free her up for higher-level work. The agents took the repetitive tasks. The humans moved up.</p>
 
   <!-- Employee Orchestrators -->
-  <h3 class="wuc-subhead">Your employees become agent orchestrators</h3>
+  <h3 class="wuc-subhead reveal">Your employees become agent orchestrators</h3>
 
-  <p>David Sacks, co-host and former PayPal COO, made a prediction at the start of 2026 that runs counter to most AI headlines:</p>
+  <p class="reveal">David Sacks, co-host and former PayPal COO, made a prediction at the start of 2026 that runs counter to most AI headlines:</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"My most contrarian belief is that AI would increase demand for knowledge workers, not put them out of business."</p>
     <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p>His reasoning is simple. Employees who adopt these tools do not do less work. They do more, at a higher level. The routine tasks move to agents. The thinking, the judgment, the relationships stay with people.</p>
+  <p class="reveal">His reasoning is simple. Employees who adopt these tools do not do less work. They do more, at a higher level. The routine tasks move to agents. The thinking, the judgment, the relationships stay with people.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"A key skill of employees is going to be the ability to structure work for themselves and their AI agents. And the employees who can do that are going to be far more productive than those who can't."</p>
     <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"Employees who are early adopters of these tools are going to appear to have superpowers. They're going to be the people in meetings who can take an assignment that would have taken days and get it done in 2 hours."</p>
     <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p class="wuc-highlight">This is the real transition. Not AI replacing people. People learning to orchestrate AI.</p>
+  <p class="wuc-highlight reveal">This is the real transition. Not AI replacing people. People learning to orchestrate AI.</p>
 
-  <p>It starts simple: an agent that reads your email and prepares a morning briefing. Then it drafts responses for your review. Then it manages your CRM. Then it runs overnight, researching prospects and preparing reports so your team wakes up to work already done. Each step builds trust. Each step builds skill.</p>
+  <p class="reveal">It starts simple: an agent that reads your email and prepares a morning briefing. Then it drafts responses for your review. Then it manages your CRM. Then it runs overnight, researching prospects and preparing reports so your team wakes up to work already done. Each step builds trust. Each step builds skill.</p>
 
-  <p>Your employees go from using AI as a search tool to managing a team of agents that handles the operational load of your business. The businesses doing this now are not just more efficient. They are building a workforce that understands how to structure work for AI. That capability is compounding. And it is not something you can hire for yet.</p>
+  <p class="reveal">Your employees go from using AI as a search tool to managing a team of agents that handles the operational load of your business. The businesses doing this now are not just more efficient. They are building a workforce that understands how to structure work for AI. That capability is compounding. And it is not something you can hire for yet.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"Every startup I know is hiring for this position, which is somebody who knows how to build and manage agents. There is no job rec for this yet or a title."</p>
     <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
   </div>
 
   <!-- Cost Question -->
-  <h3 class="wuc-subhead">The cost question</h3>
+  <h3 class="wuc-subhead reveal">The cost question</h3>
 
-  <p>None of this is free. Here are the real numbers from production.</p>
+  <p class="reveal">None of this is free. Here are the real numbers from production.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"We hit $300 a day per agent using the Claude API, instantly. And that was doing maybe 10 or 20%. That's $100,000 a year per agent."</p>
     <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p>Mark Cuban responded to these numbers publicly. He called them "the smartest counter I've seen to AI taking over jobs, in the short term." His math: if eight agents at $300/day each plus maintenance cost more than the employee they support, the agents need to be over twice as productive just to break even. He compared current agents to "college interns that come in hungover, make mistakes, and don't take responsibility for them."</p>
+  <p class="reveal">Mark Cuban responded to these numbers publicly. He called them "the smartest counter I've seen to AI taking over jobs, in the short term." His math: if eight agents at $300/day each plus maintenance cost more than the employee they support, the agents need to be over twice as productive just to break even. He compared current agents to "college interns that come in hungover, make mistakes, and don't take responsibility for them."</p>
 
-  <p>He is asking the right question. But he is treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>
+  <p class="reveal">He is asking the right question. But he is treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>
 
-  <p class="wuc-highlight"><strong>That is the wrong frame.</strong></p>
+  <p class="wuc-highlight reveal"><strong>That is the wrong frame.</strong></p>
 
   <!-- Capex Flip -->
-  <h3 class="wuc-subhead">Every dollar builds something permanent</h3>
+  <h3 class="wuc-subhead reveal">Every dollar builds something permanent</h3>
 
-  <p class="wuc-highlight">The agent is not just doing today's work. It is learning your business.</p>
+  <p class="wuc-highlight reveal">The agent is not just doing today's work. It is learning your business.</p>
 
-  <p>Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer. That knowledge is permanent. It does not leave when an employee quits. It does not need to be retrained when you hire someone new. It does not forget over the weekend.</p>
+  <p class="reveal">Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer. That knowledge is permanent. It does not leave when an employee quits. It does not need to be retrained when you hire someone new. It does not forget over the weekend.</p>
 
-  <p class="wuc-highlight">This is not an operating cost. It is a capital investment. You are building infrastructure that compounds in value every day it runs. And unlike physical infrastructure, it does not depreciate. It appreciates.</p>
+  <p class="wuc-highlight reveal">This is not an operating cost. It is a capital investment. You are building infrastructure that compounds in value every day it runs. And unlike physical infrastructure, it does not depreciate. It appreciates.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"Every time you add it to something, it gets smarter."</p>
     <p class="quote-attr">All-In Podcast E259 (Jan 2026)</p>
   </div>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"They don't forget to do work. They don't make mistakes. Once you put this in, you don't need to have checklists. They just do it perfectly every single time."</p>
     <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
   </div>
 
   <!-- Cost Trajectory -->
-  <h3 class="wuc-subhead">Cheaper and better, every quarter</h3>
+  <h3 class="wuc-subhead reveal">Cheaper and better, every quarter</h3>
 
-  <p>Cuban's math is a snapshot. Here is the trajectory.</p>
+  <p class="reveal">Cuban's math is a snapshot. Here is the trajectory.</p>
 
-  <div class="chart-tabs">
+  <div class="chart-tabs reveal">
     <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
     <button class="chart-tab" onclick="switchChart('math',this)">The $300/Day Math</button>
   </div>
@@ -399,24 +467,24 @@ footer a:hover { color: var(--gold); }
   <!-- COST VIEW -->
   <div id="chart-cost" class="chart-view active">
     <div class="cost-stat-grid">
-      <div class="cost-stat-box" style="border-top-color: var(--coral);">
+      <div class="cost-stat-box reveal-scale" style="border-top-color: var(--coral);">
         <div class="csl" style="color: var(--coral);">Best model, Mar 2023</div>
         <div class="csn">$60<span>/M output</span></div>
         <div class="csd">GPT-4 · 8K context</div>
       </div>
-      <div class="cost-stat-box" style="border-top-color: var(--forest);">
+      <div class="cost-stat-box reveal-scale reveal-delay-1" style="border-top-color: var(--forest);">
         <div class="csl" style="color: var(--forest);">Same intelligence, today</div>
         <div class="csn">$0.60<span>/M output</span></div>
         <div class="csd">GPT-4o mini · 99% cheaper</div>
       </div>
-      <div class="cost-stat-box" style="border-top-color: var(--gold);">
+      <div class="cost-stat-box reveal-scale reveal-delay-2" style="border-top-color: var(--gold);">
         <div class="csl" style="color: var(--gold);">Best model, Mar 2026</div>
         <div class="csn">$14<span>/M output</span></div>
         <div class="csd">GPT-5.2 · far more capable</div>
       </div>
     </div>
 
-    <div class="chart-surface">
+    <div class="chart-surface reveal">
       <div class="chart-label">Frontier output price vs capability (MMLU %)</div>
       <div style="position:relative;height:280px;"><canvas id="costChart"></canvas></div>
       <div class="chart-legend">
@@ -425,7 +493,7 @@ footer a:hover { color: var(--gold); }
       </div>
     </div>
 
-    <div class="callout-box" style="margin-top: 16px;">
+    <div class="callout-box reveal" style="margin-top: 16px;">
       <p>Two things happening simultaneously. Yesterday's breakthrough becomes today's commodity. And today's frontier keeps getting smarter. The cost line trends down. The capability line trends up. They never reverse.</p>
     </div>
 
@@ -462,44 +530,44 @@ footer a:hover { color: var(--gold); }
     <div class="chart-source">Projections based on observed 50%+ annual decline in frontier pricing 2023-2026.</div>
   </div>
 
-  <p class="wuc-highlight" style="margin-top: 2rem;">$300 per day is the most you will ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
+  <p class="wuc-highlight reveal" style="margin-top: 2rem;">$300 per day is the most you will ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
     <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
   </div>
 
   <!-- You don't need $300/day -->
-  <h3 class="wuc-subhead">You do not need to spend $300 a day</h3>
+  <h3 class="wuc-subhead reveal">You do not need to spend $300 a day</h3>
 
-  <p>That is what it costs to run agents at full capacity around the clock across an entire team. That is where the early adopters with venture-scale budgets are spending.</p>
+  <p class="reveal">That is what it costs to run agents at full capacity around the clock across an entire team. That is where the early adopters with venture-scale budgets are spending.</p>
 
-  <p>Most businesses do not start there. And they should not.</p>
+  <p class="reveal">Most businesses do not start there. And they should not.</p>
 
-  <p>We run a fully capable AI agent managing two email accounts, a CRM, sales prospecting, automated client reporting, calendar, and cost monitoring. Our daily cost: $2 to $5. Not because we cut corners. Because we built the architecture to be efficient. A personal agent that orchestrates task-specific agents. Each one given a defined job, a defined budget, and a defined scope. They run when there is work to do and stop when it is done.</p>
+  <p class="reveal">We run a fully capable AI agent managing two email accounts, a CRM, sales prospecting, automated client reporting, calendar, and cost monitoring. Our daily cost: $2 to $5. Not because we cut corners. Because we built the architecture to be efficient. A personal agent that orchestrates task-specific agents. Each one given a defined job, a defined budget, and a defined scope. They run when there is work to do and stop when it is done.</p>
 
-  <p class="wuc-highlight">The progression for most businesses looks like this:</p>
+  <p class="wuc-highlight reveal">The progression for most businesses looks like this:</p>
 
   <div class="trust-grid">
-    <div class="trust-card" style="border-top: 2px solid var(--river);">
+    <div class="trust-card reveal-scale" style="border-top: 2px solid var(--river);">
       <div class="tc-phase" style="color: var(--river);">$2-5/day</div>
       <h4>Read, learn, brief</h4>
       <div class="tc-desc">Agent connects to email, calendar, CRM with read-only access. Morning briefings in Slack or Discord. Your team sees what it can do.</div>
       <div class="tc-security">No write access. No send permissions.</div>
     </div>
-    <div class="trust-card" style="border-top: 2px solid var(--forest);">
+    <div class="trust-card reveal-scale reveal-delay-1" style="border-top: 2px solid var(--forest);">
       <div class="tc-phase" style="color: var(--forest);">$5-15/day</div>
       <h4>Draft and suggest</h4>
       <div class="tc-desc">Agent drafts email responses, prepares CRM updates, flags stale deals. Everything waits for your review. You approve, edit, or reject.</div>
       <div class="tc-security">Every action requires explicit approval.</div>
     </div>
-    <div class="trust-card" style="border-top: 2px solid var(--gold);">
+    <div class="trust-card reveal-scale reveal-delay-2" style="border-top: 2px solid var(--gold);">
       <div class="tc-phase" style="color: var(--gold);">$15-30/day</div>
       <h4>Approve and execute</h4>
       <div class="tc-desc">Approval gates go live. Agent proposes, you tap a button, it executes. Draft, review, send. Your team builds trust on your schedule.</div>
       <div class="tc-security">Approval buttons with full audit logging.</div>
     </div>
-    <div class="trust-card" style="border-top: 2px solid var(--gold-bright);">
+    <div class="trust-card reveal-scale reveal-delay-3" style="border-top: 2px solid var(--gold-bright);">
       <div class="tc-phase" style="color: var(--gold-bright);">$30+/day</div>
       <h4>Let it ride</h4>
       <div class="tc-desc">Low-risk actions auto-execute. High-stakes still gated. Overnight prospecting, reporting, follow-ups. Your team wakes up to work already done.</div>
@@ -507,165 +575,189 @@ footer a:hover { color: var(--gold); }
     </div>
   </div>
 
-  <p>The $300/day fully autonomous setup is a destination, not a starting point. And by the time you get there, the cost to run it will be significantly lower than it is today.</p>
+  <p class="reveal">The $300/day fully autonomous setup is a destination, not a starting point. And by the time you get there, the cost to run it will be significantly lower than it is today.</p>
 
   <!-- What happens if you wait -->
-  <h3 class="wuc-subhead">What happens if you wait</h3>
+  <h3 class="wuc-subhead reveal">What happens if you wait</h3>
 
-  <p>This is not a warning about AI taking over. It is a straightforward competitive reality.</p>
+  <p class="reveal">This is not a warning about AI taking over. It is a straightforward competitive reality.</p>
 
-  <p>Sacks predicted that AI adoption in 2026 would not come from the top down. Not from CEO transformation initiatives. Not from enterprise RFP processes that take six months. It would come from individual employees who figured it out themselves.</p>
+  <p class="reveal">Sacks predicted that AI adoption in 2026 would not come from the top down. Not from CEO transformation initiatives. Not from enterprise RFP processes that take six months. It would come from individual employees who figured it out themselves.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"You're going to see massive enterprise adoption of AI this year. But it's going to be driven by the bottom up, by these early adopter employees bringing in consumerized AI tools."</p>
     <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
   </div>
 
-  <p>Somewhere right now, a business that competes with yours has an employee figuring this out. They are building an agent that handles their inbox. They are automating their CRM updates. They are running prospect research overnight. And they are getting better at it every week.</p>
+  <p class="reveal">Somewhere right now, a business that competes with yours has an employee figuring this out. They are building an agent that handles their inbox. They are automating their CRM updates. They are running prospect research overnight. And they are getting better at it every week.</p>
 
-  <p class="wuc-highlight">The businesses that start now get three advantages that compound over time:</p>
+  <p class="wuc-highlight reveal">The businesses that start now get three advantages that compound over time:</p>
 
   <div style="margin: 1.5rem 0 2rem;">
-    <div class="compound-item">
+    <div class="compound-item reveal">
       <div class="compound-num">1</div>
       <div><span class="ci-title">Institutional knowledge.</span> <span style="color: var(--text-muted);">Every workflow your agents learn is permanent. Six months of agent learning is six months your competitor has to make up. That gap does not close by itself.</span></div>
     </div>
-    <div class="compound-item">
+    <div class="compound-item reveal">
       <div class="compound-num">2</div>
       <div><span class="ci-title">A team that knows how to work with AI.</span> <span style="color: var(--text-muted);">Your employees build the skill of structuring work for agents. That capability comes from months of working alongside the tools, not from a training seminar.</span></div>
     </div>
-    <div class="compound-item">
+    <div class="compound-item reveal">
       <div class="compound-num">3</div>
       <div><span class="ci-title">A cost curve in your favor.</span> <span style="color: var(--text-muted);">The infrastructure you build today runs on tomorrow's better, cheaper models with no migration required. You are locked into today's learning, not today's pricing.</span></div>
     </div>
   </div>
 
-  <p>You do not need to wait for a big corporation to build this for you. The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>
+  <p class="reveal">You do not need to wait for a big corporation to build this for you. The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>
 
-  <div class="quote-card">
+  <div class="quote-card reveal">
     <p>"It's not just the assistant... it's like this super worker."</p>
     <p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> — All-In Podcast E259 (Jan 2026)</p>
   </div>
 
   <!-- Stat Row -->
-  <div class="stat-row-v2">
+  <div class="stat-row-v2 reveal">
     <div>
       <div class="stat-label good">Start here</div>
-      <div class="stat-number good">$2-5/day</div>
+      <div class="stat-number good" data-count="2-5" data-prefix="$" data-suffix="/day">$2-5/day</div>
       <div class="stat-desc">Personal assistant. Email, calendar, CRM. Reads your messages, drafts responses, manages your day. Proper architecture. Real production system.</div>
     </div>
     <div>
       <div class="stat-label" style="color: var(--coral);">The destination</div>
-      <div class="stat-number">$300/day</div>
+      <div class="stat-number" data-count="300" data-prefix="$" data-suffix="/day">$300/day</div>
       <div class="stat-desc">Fully autonomous operations. Agents across your team, working around the clock. The cost to get here drops every quarter.</div>
     </div>
   </div>
 
-  <p class="both-go-down">Both numbers only go down.</p>
+  <p class="both-go-down reveal">Both numbers only go down.</p>
 </section>
 
-<div class="fog-line"></div>
+<!-- Inline CTA -->
+<div class="inline-cta reveal">
+  <a href="#" onclick="openContactForm();return false">See What This Looks Like For Your Business</a>
+</div>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C180,50 360,0 540,25 C720,50 900,10 1080,30 C1260,50 1380,20 1440,25 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.03)"/>
+    <path d="M0,30 C240,5 480,50 720,25 C960,0 1200,45 1440,20 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
+  </svg>
+</div>
 
 <!-- WHAT WE BUILD -->
 <section>
-  <p class="section-label">What We Build</p>
-  <h2>Agents that operate inside your existing tools.</h2>
-  <p>Every agent is custom-built for your workflows, connected to your systems, and ships with approval gates, budget controls, and audit logs your team can actually operate.</p>
+  <p class="section-label reveal">What We Build</p>
+  <h2 class="reveal">Agents that operate inside your existing tools.</h2>
+  <p class="reveal">Every agent is custom-built for your workflows, connected to your systems, and ships with approval gates, budget controls, and audit logs your team can actually operate.</p>
 
   <div class="use-case-grid">
-    <div class="use-case">
+    <div class="use-case reveal-scale">
       <h3>Personal Assistants</h3>
       <p>Text your agent on WhatsApp, Discord, or Slack. It manages email, calendar, contacts, and daily briefings. Fully integrated into your systems, available 24/7, with human approval gates on sensitive actions.</p>
     </div>
-    <div class="use-case">
+    <div class="use-case reveal-scale reveal-delay-1">
       <h3>Autonomous Operations</h3>
       <p>Agents that run overnight: consolidating sales data, researching prospects, updating your CRM, prepping morning reports. Your team wakes up to work already done. Build a master agent that oversees and coordinates the others.</p>
     </div>
-    <div class="use-case">
+    <div class="use-case reveal-scale reveal-delay-2">
       <h3>Email, CRM &amp; Sales</h3>
       <p>Triage inbound email, draft responses, update HubSpot or Salesforce, qualify leads, send personalized outreach, schedule follow-ups. Nothing sends without your OK.</p>
     </div>
-    <div class="use-case">
+    <div class="use-case reveal-scale reveal-delay-3">
       <h3>Reporting &amp; Monitoring</h3>
       <p>Automated reports, dashboards, cost tracking. PDF generation and email delivery on a schedule. Real-time spend visibility across all your agents.</p>
     </div>
   </div>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.03)"/>
+    <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+  </svg>
+</div>
 
 <!-- INTEGRATIONS -->
 <section>
-  <p class="section-label">Integrations</p>
-  <h2>Your agents work with the tools you already use.</h2>
-  <p>OpenClaw connects to 100+ services. Here are some of the most common.</p>
+  <p class="section-label reveal">Integrations</p>
+  <h2 class="reveal">Your agents work with the tools you already use.</h2>
+  <p class="reveal">OpenClaw connects to 100+ services. Here are some of the most common.</p>
 
   <div class="integration-grid">
-    <div class="integration-item">
+    <div class="integration-item reveal-scale">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M24 5.457v13.909c0 .904-.732 1.636-1.636 1.636h-3.819V11.73L12 16.64l-6.545-4.91v9.273H1.636A1.636 1.636 0 0 1 0 19.366V5.457c0-2.023 2.309-3.178 3.927-1.964L5.455 4.64 12 9.548l6.545-4.91 1.528-1.145C21.69 2.28 24 3.434 24 5.457z"/></svg>
       <span>Gmail</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-1">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M5.042 15.165a2.528 2.528 0 0 1-2.52 2.523A2.528 2.528 0 0 1 0 15.165a2.527 2.527 0 0 1 2.522-2.52h2.52v2.52zM6.313 15.165a2.527 2.527 0 0 1 2.521-2.52 2.527 2.527 0 0 1 2.521 2.52v6.313A2.528 2.528 0 0 1 8.834 24a2.528 2.528 0 0 1-2.521-2.522v-6.313zM8.834 5.042a2.528 2.528 0 0 1-2.521-2.52A2.528 2.528 0 0 1 8.834 0a2.528 2.528 0 0 1 2.521 2.522v2.52H8.834zM8.834 6.313a2.528 2.528 0 0 1 2.521 2.521 2.528 2.528 0 0 1-2.521 2.521H2.522A2.528 2.528 0 0 1 0 8.834a2.528 2.528 0 0 1 2.522-2.521h6.312zM18.956 8.834a2.528 2.528 0 0 1 2.522-2.521A2.528 2.528 0 0 1 24 8.834a2.528 2.528 0 0 1-2.522 2.521h-2.522V8.834zM17.688 8.834a2.528 2.528 0 0 1-2.523 2.521 2.527 2.527 0 0 1-2.52-2.521V2.522A2.527 2.527 0 0 1 15.165 0a2.528 2.528 0 0 1 2.523 2.522v6.312zM15.165 18.956a2.528 2.528 0 0 1 2.523 2.522A2.528 2.528 0 0 1 15.165 24a2.527 2.527 0 0 1-2.52-2.522v-2.522h2.52zM15.165 17.688a2.527 2.527 0 0 1-2.52-2.523 2.526 2.526 0 0 1 2.52-2.52h6.313A2.527 2.527 0 0 1 24 15.165a2.528 2.528 0 0 1-2.522 2.523h-6.313z"/></svg>
       <span>Slack</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-2">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.095 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
       <span>Discord</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-3">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       <span>WhatsApp</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18 1.2H6C3.1 1.2.8 3.5.8 6.4v11.2c0 2.9 2.3 5.2 5.2 5.2h12c2.9 0 5.2-2.3 5.2-5.2V6.4c0-2.9-2.3-5.2-5.2-5.2zM9.2 17.6H6.8V9.6h2.4v8zM8 8.6c-.8 0-1.4-.6-1.4-1.4 0-.8.6-1.4 1.4-1.4s1.4.6 1.4 1.4c0 .8-.6 1.4-1.4 1.4zm10 9h-2.4v-3.9c0-.9 0-2.2-1.3-2.2-1.3 0-1.5 1-1.5 2.1v4h-2.4V9.6h2.3v1.1c.3-.6 1.1-1.3 2.3-1.3 2.5 0 3 1.6 3 3.7v4.5z"/></svg>
       <span>Notion</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-1">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
       <span>Google Cal</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-2">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
       <span>HubSpot</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-3">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12 0C5.374 0 0 5.373 0 12c0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
       <span>GitHub</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.251-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595a6.92 6.92 0 01-.949-3.475c.002-3.826 3.114-6.938 6.94-6.938 1.854.001 3.598.722 4.907 2.034a6.903 6.903 0 012.029 4.91c-.002 3.826-3.114 6.944-6.916 6.944z"/></svg>
       <span>Telegram</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-1">
       <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M21.35 11.1h-9.18v2.73h5.51c-.24 1.28-.99 2.37-2.09 3.1v2.58h3.39c1.98-1.82 3.13-4.51 3.13-7.66 0-.52-.05-1.03-.13-1.53l-.63-.22zM12.17 21.48c2.83 0 5.21-.94 6.95-2.54l-3.39-2.63c-.94.63-2.15 1-3.56 1-2.74 0-5.06-1.85-5.88-4.34H2.77v2.72c1.73 3.46 5.31 5.79 9.4 5.79zM6.29 13.97a6.37 6.37 0 010-3.94V7.31H2.77a10.48 10.48 0 000 9.38l3.52-2.72zM12.17 5.69c1.55 0 2.93.53 4.02 1.58l3.01-3.01C17.36 2.55 14.98 1.52 12.17 1.52 8.08 1.52 4.5 3.85 2.77 7.31l3.52 2.72c.82-2.49 3.14-4.34 5.88-4.34z"/></svg>
       <span>Google Docs</span>
     </div>
-    <div class="integration-item">
+    <div class="integration-item reveal-scale reveal-delay-2">
       <span style="font-size: 1.5rem; font-weight: 600; color: var(--text-muted);">+100</span>
       <span>more via OpenClaw</span>
     </div>
   </div>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,25 C360,50 720,0 1080,30 C1260,45 1380,35 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
+    <path d="M0,35 C240,10 480,45 720,20 C960,45 1200,10 1440,35 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.02)"/>
+  </svg>
+</div>
+
 <!-- HOW WE WORK -->
 <section class="services" id="services">
-  <p class="section-label">How We Work</p>
-  <h2>From first conversation to running agents.</h2>
+  <p class="section-label reveal">How We Work</p>
+  <h2 class="reveal">From first conversation to running agents.</h2>
 
   <div class="service-grid">
-    <div class="service-card">
+    <div class="service-card reveal">
       <h3>Discovery + Architecture</h3>
       <div class="service-price">Starting at $5,000</div>
       <p>Half-day workshop with your team. We map workflows, rank automation candidates by ROI, and deliver a written architecture plan covering security model, integrations, cost profile, and rollout. Includes an AI literacy session for your broader team: what tools are worth paying for, how to get value from $20/month through $200/month tiers, and an honest review of any AI software products you're being pitched. Live demos from our production systems.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <h3>Implementation</h3>
       <div class="service-price">$5K - $30K+ per project</div>
       <p>We build and deploy the agents. Integrations, custom skills, approval gates, cost monitoring, and security boundaries. Everything on OpenClaw, on your infrastructure, connected to your tools. Your team learns to operate and extend it.</p>
     </div>
-    <div class="service-card">
+    <div class="service-card reveal">
       <h3>Retainer</h3>
       <div class="service-price">$500 / month</div>
       <p>Ongoing deployment of new skills and capabilities as your workflows evolve. Cost optimization, maintenance, and upgrades. Additional projects quoted separately. Your agents get more useful every month.</p>
@@ -673,29 +765,40 @@ footer a:hover { color: var(--gold); }
   </div>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.03)"/>
+    <path d="M0,20 C360,45 720,10 1080,35 C1260,45 1350,30 1440,25 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
+  </svg>
+</div>
 
 <!-- CASE STUDY -->
 <section>
-  <p class="section-label">Case Study</p>
-  <h2>This website was built by our agents.</h2>
+  <p class="section-label reveal">Case Study</p>
+  <h2 class="reveal">This website was built by our agents.</h2>
 
-  <div class="case-study-box">
+  <div class="case-study-box reveal-scale">
     <div class="case-study-tag">Live Example</div>
     <h3>Brand naming, domain registration, and website launch in one session</h3>
     <p>Our OpenClaw agent checked domain availability across 50+ candidates in seven languages with automated due diligence: whois lookups, .com owner identification, site analysis, and preliminary trademark screening. When the existing skills weren't enough, we built new ones on the spot using Claude Code and deployed them to the agent mid-session. The website was designed using Claude Opus 4.6. From first candidate to registered domain, hosted website, and live brand: one working session, human and agent together.</p>
   </div>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,25 C180,50 360,5 540,30 C720,55 900,10 1080,35 C1260,50 1380,25 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
+  </svg>
+</div>
 
 <!-- BACKGROUND -->
 <section class="credentials">
-  <p class="section-label">Background</p>
-  <h2>Building production AI systems since 2024.</h2>
-  <p>Lucas Cairns. Co-Founder of Subsights. We don't just consult on agents. We run our entire business on one.</p>
+  <p class="section-label reveal">Background</p>
+  <h2 class="reveal">Building production AI systems since 2024.</h2>
+  <p class="reveal">Lucas Cairns. Co-Founder of Subsights. We don't just consult on agents. We run our entire business on one.</p>
 
-  <div class="timeline">
+  <div class="timeline reveal">
     <div class="timeline-item">
       <div class="timeline-year">2024</div>
       <p>Co-founded Subsights to fix broken chatbot experiences for small businesses. Built multi-agent systems across all leading models, developing deep tool familiarity, prompt expertise, and production reliability.</p>
@@ -711,24 +814,35 @@ footer a:hover { color: var(--gold); }
   </div>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,20 C240,50 480,5 720,35 C960,5 1200,45 1440,20 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.02)"/>
+    <path d="M0,30 C360,55 720,10 1080,40 C1260,50 1380,30 1440,25 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.015)"/>
+  </svg>
+</div>
 
 <!-- MISSION -->
 <section class="mission">
-  <p class="section-label">What We Believe</p>
-  <h2>The businesses that thrive will be the ones that give their best people the best tools.</h2>
-  <p>The market is moving. Every major business will eventually have people building and managing AI agents. The question is whether you start now with proper architecture, or scramble to catch up later at ten times the cost.</p>
-  <p>We're not waiting on big corporations to ship slow software. We build systems that work today, hand them to your team, and keep expanding what they can do. Approval gates, budget controls, audit logs. You stay in control. Your people get leverage. Your business gets a system that compounds.</p>
+  <p class="section-label reveal">What We Believe</p>
+  <h2 class="reveal">The businesses that thrive will be the ones that give their best people the best tools.</h2>
+  <p class="reveal">The market is moving. Every major business will eventually have people building and managing AI agents. The question is whether you start now with proper architecture, or scramble to catch up later at ten times the cost.</p>
+  <p class="reveal">We're not waiting on big corporations to ship slow software. We build systems that work today, hand them to your team, and keep expanding what they can do. Approval gates, budget controls, audit logs. You stay in control. Your people get leverage. Your business gets a system that compounds.</p>
 </section>
 
-<div class="fog-line"></div>
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
+  </svg>
+</div>
 
 <!-- CTA -->
 <section class="cta-section" id="contact">
-  <p class="section-label">Get Started</p>
-  <h2>15 minutes. No pitch.</h2>
-  <p>Tell us what your team does every day. We'll tell you what an agent could handle, what it would cost, and what we'd build first. If it doesn't make sense for your business, we'll say so.</p>
-  <a href="#" onclick="openContactForm();return false" class="cta-button">Schedule Your Free Call</a>
+  <p class="section-label reveal">Get Started</p>
+  <h2 class="reveal">15 minutes. No pitch.</h2>
+  <p class="reveal">Tell us what your team does every day. We'll tell you what an agent could handle, what it would cost, and what we'd build first. If it doesn't make sense for your business, we'll say so.</p>
+  <a href="#" onclick="openContactForm();return false" class="cta-button reveal">Start the Conversation</a>
 </section>
 
 <div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
@@ -794,6 +908,7 @@ footer a:hover { color: var(--gold); }
 </footer>
 
 <script>
+/* Questionnaire */
 var qData = {};
 function openContactForm() {
   document.getElementById('contactModal').classList.add('active');
@@ -848,6 +963,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   });
 });
 
+/* Chart tabs */
 function switchChart(view, btn) {
   document.querySelectorAll('.chart-view').forEach(function(el) { el.classList.remove('active'); });
   document.querySelectorAll('.chart-tab').forEach(function(el) { el.classList.remove('active'); });
@@ -855,7 +971,33 @@ function switchChart(view, btn) {
   btn.classList.add('active');
 }
 
+/* Scroll reveal via Intersection Observer */
 document.addEventListener('DOMContentLoaded', function() {
+  var reveals = document.querySelectorAll('.reveal, .reveal-scale');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    reveals.forEach(function(el) { observer.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  /* Nav scroll progress */
+  var navProgress = document.getElementById('navProgress');
+  window.addEventListener('scroll', function() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var scrollPercent = (scrollTop / docHeight) * 100;
+    navProgress.style.width = scrollPercent + '%';
+  }, { passive: true });
+
+  /* Chart.js */
   var ctx = document.getElementById('costChart');
   if (!ctx) return;
 
