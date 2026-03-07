@@ -62,6 +62,33 @@ article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin
 footer { border-top: 1px solid rgba(255,255,255,0.04); padding: 3rem 2rem; max-width: 980px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 footer p, footer a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
 footer a:hover { color: var(--gold); }
+/* Modal + Questionnaire */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2.5rem; max-width: 520px; width: 90%; position: relative; }
+.modal h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--text); margin-bottom: 0.5rem; }
+.modal p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--text); }
+.modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
+.modal input:focus, .modal textarea:focus { border-color: rgba(212,160,90,0.4); }
+.modal input::placeholder, .modal textarea::placeholder { color: rgba(196,185,168,0.5); }
+.modal textarea { resize: vertical; min-height: 100px; }
+.modal-btn { width: 100%; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; padding: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: var(--sans); }
+.modal-btn:hover { box-shadow: 0 8px 35px rgba(212,160,90,0.25); transform: translateY(-1px); }
+.modal .form-success { display: none; text-align: center; padding: 2rem 0; }
+.modal .form-success h3 { margin-bottom: 0.75rem; }
+.q-step { display: none; }
+.q-step.active { display: block; }
+.q-option { display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
+.q-option:hover { border-color: rgba(212,160,90,0.4); background: rgba(212,160,90,0.05); }
+.q-option .q-opt-label { font-weight: 600; margin-bottom: 0.25rem; }
+.q-option .q-opt-desc { font-size: 0.8rem; color: var(--text-muted); }
+.q-progress { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.q-dot { height: 3px; flex: 1; background: rgba(255,255,255,0.08); transition: background 0.3s; }
+.q-dot.filled { background: var(--gold); }
+.q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
+.q-back:hover { color: var(--text); }
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
   .nav-links { display: none; }
@@ -79,7 +106,7 @@ footer a:hover { color: var(--gold); }
     <a href="/why-now/">Why Now</a>
     <a href="/build/" class="active">Build</a>
   </div>
-  <a href="/#contact" class="cta-nav">Book a Call</a>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
 </nav>
 
 <section class="hero">
@@ -129,13 +156,70 @@ footer a:hover { color: var(--gold); }
 
   <div class="article-links">
     <a href="/build/" class="primary-link">Back to Build</a>
-    <a href="/#contact" class="secondary-link">Book a Call</a>
+    <a href="#" onclick="openContactForm();return false" class="secondary-link">Book a Call</a>
   </div>
 </article>
+
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContactForm()">&times;</button>
+    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>
+    <div class="q-step active" id="q-step-1">
+      <h3>How does your business use AI today?</h3>
+      <p>This helps us tailor the conversation to where you are.</p>
+      <button class="q-option" onclick="selectAI('We use free tools like ChatGPT')"><div class="q-opt-label">Getting started</div><div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div></button>
+      <button class="q-option" onclick="selectAI('Enterprise AI accounts with multiple vendors')"><div class="q-opt-label">Enterprise accounts</div><div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div></button>
+      <button class="q-option" onclick="selectAI('Already building agents or significant automation')"><div class="q-opt-label">Building with AI</div><div class="q-opt-desc">We're already building agents or automating significant business processes</div></button>
+    </div>
+    <div class="q-step" id="q-step-2">
+      <h3>What would you most like to automate?</h3>
+      <p>No wrong answers. Just tell us what takes up your team's time.</p>
+      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
+      <button class="modal-btn" onclick="goToStep(3)">Continue</button>
+      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
+    </div>
+    <div class="q-step" id="q-step-3">
+      <h3>Where should we send our thoughts?</h3>
+      <p>We'll get back within 24 hours with specific ideas for your business.</p>
+      <form id="contactForm" action="https://formsubmit.co/ajax/lucas@briu.ai" method="POST">
+        <input type="text" name="_honey" style="display:none">
+        <input type="hidden" name="_subject" value="New inquiry from briu.ai (Build article)">
+        <input type="hidden" name="ai_usage" id="q-ai-usage">
+        <input type="hidden" name="automate" id="q-automate-val">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <input type="text" name="company" placeholder="Company (optional)">
+        <button type="submit" class="modal-btn">Send</button>
+      </form>
+      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
+    </div>
+    <div class="form-success" id="formSuccess"><h3>Message sent</h3><p>We'll be in touch within 24 hours.</p></div>
+  </div>
+</div>
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
   <a href="mailto:lucas@briu.ai">lucas@briu.ai</a>
 </footer>
+
+<script>
+var qData = {};
+function openContactForm() { document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; goToStep(1); }
+function closeContactForm() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
+function goToStep(n) { document.querySelectorAll('.q-step').forEach(function(el) { el.classList.remove('active'); }); document.getElementById('q-step-' + n).classList.add('active'); var dots = document.querySelectorAll('.q-dot'); dots.forEach(function(d, i) { d.classList.toggle('filled', i < n); }); }
+function selectAI(val) { qData.ai_usage = val; document.getElementById('q-ai-usage').value = val; goToStep(2); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeContactForm(); });
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault(); var form = this;
+  document.getElementById('q-automate-val').value = document.getElementById('q-automate').value;
+  var btn = form.querySelector('.modal-btn'); btn.textContent = 'Sending...'; btn.disabled = true;
+  fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
+  .then(function(r) { return r.json(); }).then(function() {
+    document.querySelectorAll('.q-step').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelector('.q-progress').style.display = 'none'; document.getElementById('formSuccess').style.display = 'block';
+    setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
+  }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
+});
+</script>
 </body>
 </html>
