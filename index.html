@@ -65,9 +65,6 @@ nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: v
 .hero-cta-secondary:hover { color: var(--text); }
 .hero-cta-secondary:hover::after { transform: translateY(3px); }
 
-.hero-scroll-hint { position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%); opacity: 0; animation: fadeUp 0.8s ease forwards 1.2s; }
-.hero-scroll-hint span { display: block; width: 1px; height: 40px; background: linear-gradient(180deg, var(--gold), transparent); margin: 0 auto; animation: scrollPulse 2s ease-in-out infinite; }
-@keyframes scrollPulse { 0%,100% { opacity: 0.3; transform: scaleY(0.7); } 50% { opacity: 0.7; transform: scaleY(1); } }
 
 /* Ambient gradient orbs */
 .ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
@@ -355,7 +352,6 @@ footer a:hover { color: var(--gold); }
     <a href="#wake-up" class="hero-cta-secondary">See the evidence</a>
   </div>
 
-  <div class="hero-scroll-hint"><span></span></div>
 </section>
 
 <!-- Wave divider -->
@@ -712,15 +708,15 @@ footer a:hover { color: var(--gold); }
       <span>WhatsApp</span>
     </div>
     <div class="integration-item reveal-scale">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18 1.2H6C3.1 1.2.8 3.5.8 6.4v11.2c0 2.9 2.3 5.2 5.2 5.2h12c2.9 0 5.2-2.3 5.2-5.2V6.4c0-2.9-2.3-5.2-5.2-5.2zM9.2 17.6H6.8V9.6h2.4v8zM8 8.6c-.8 0-1.4-.6-1.4-1.4 0-.8.6-1.4 1.4-1.4s1.4.6 1.4 1.4c0 .8-.6 1.4-1.4 1.4zm10 9h-2.4v-3.9c0-.9 0-2.2-1.3-2.2-1.3 0-1.5 1-1.5 2.1v4h-2.4V9.6h2.3v1.1c.3-.6 1.1-1.3 2.3-1.3 2.5 0 3 1.6 3 3.7v4.5z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M4.459 4.208c.746.606 1.026.56 2.428.466l13.215-.793c.28 0 .047-.28-.046-.326L18.56 2.35c-.42-.326-.98-.7-2.055-.607L3.57 2.81c-.467.047-.56.28-.374.466zM5.252 7.618v13.908c0 .747.373 1.027 1.214.98l14.523-.84c.841-.046.935-.56.935-1.166V6.825c0-.606-.234-.933-.748-.886l-15.177.887c-.56.047-.747.327-.747.793zm14.337.745c.093.42 0 .84-.42.888l-.7.14v10.264c-.608.327-1.168.514-1.635.514-.748 0-.935-.234-1.495-.933l-4.577-7.186v6.952l1.449.327s0 .84-1.168.84l-3.222.187c-.094-.187 0-.654.327-.747l.84-.22V9.854L7.822 9.76c-.094-.42.14-1.026.793-1.073l3.456-.233 4.764 7.279v-6.44l-1.215-.14c-.093-.514.28-.886.747-.933zM1.597 1.227L15.12.24c1.635-.14 2.055-.047 3.082.7l4.252 2.986c.7.513.934.653.934 1.213v16.378c0 1.026-.373 1.634-1.68 1.726l-15.458.934c-.98.046-1.448-.094-1.962-.747l-3.129-4.06c-.56-.747-.793-1.306-.793-1.96V2.907c0-.84.373-1.54 1.228-1.68z"/></svg>
       <span>Notion</span>
     </div>
     <div class="integration-item reveal-scale reveal-delay-1">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18.316 5.684H24v12.632h-5.684V5.684zM5.684 24h12.632v-5.684H5.684V24zM18.316 5.684V0H5.684v5.684h12.632zM0 18.316h5.684V5.684H0v12.632zM5.684 24H0v-5.684h5.684V24zM24 0h-5.684v5.684H24V0zM24 18.316h-5.684V24H24v-5.684zM0 0v5.684h5.684V0H0z"/><path d="M9.895 15.895l-1.263-1.737L12 12l-3.368-2.158 1.263-1.737L14.21 12z" opacity=".6"/></svg>
       <span>Google Cal</span>
     </div>
     <div class="integration-item reveal-scale reveal-delay-2">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M4.98 3.5c0 1.381-1.11 2.5-2.48 2.5s-2.48-1.119-2.48-2.5c0-1.38 1.11-2.5 2.48-2.5s2.48 1.12 2.48 2.5zm.02 4.5h-5v16h5v-16zm7.982 0h-4.968v16h4.969v-8.399c0-4.67 6.029-5.052 6.029 0v8.399h4.988v-10.131c0-7.88-8.922-7.593-11.018-3.714v-2.155z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M18.164 7.93V5.084a2.198 2.198 0 001.267-1.984v-.066A2.2 2.2 0 0017.232.836h-.066a2.2 2.2 0 00-2.2 2.198v.066c0 .87.514 1.617 1.253 1.968v2.862a6.22 6.22 0 00-2.89 1.293l-7.655-5.96a2.636 2.636 0 00.07-.588A2.624 2.624 0 003.12 0 2.624 2.624 0 00.496 2.624 2.624 2.624 0 003.12 5.248c.554 0 1.065-.18 1.487-.478l7.53 5.862a6.226 6.226 0 00-.94 3.27 6.247 6.247 0 001.09 3.525l-2.15 2.15a2.063 2.063 0 00-.6-.094 2.073 2.073 0 100 4.146 2.073 2.073 0 002.073-2.073c0-.213-.036-.417-.09-.613l2.083-2.083a6.258 6.258 0 003.56 1.112 6.264 6.264 0 006.26-6.26 6.263 6.263 0 00-5.26-6.182zm-.998 9.476a3.298 3.298 0 01-3.296-3.296 3.298 3.298 0 013.296-3.296 3.298 3.298 0 013.296 3.296 3.298 3.298 0 01-3.296 3.296z"/></svg>
       <span>HubSpot</span>
     </div>
     <div class="integration-item reveal-scale reveal-delay-3">
@@ -728,7 +724,7 @@ footer a:hover { color: var(--gold); }
       <span>GitHub</span>
     </div>
     <div class="integration-item reveal-scale">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"/></svg>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M10.006 5.15a4.444 4.444 0 013.2-1.37 4.473 4.473 0 014.231 3.03 3.7 3.7 0 011.453-.297 3.75 3.75 0 013.75 3.75 3.75 3.75 0 01-3.75 3.75h-.038a3.12 3.12 0 01-2.86 1.875 3.1 3.1 0 01-1.594-.44 3.73 3.73 0 01-3.343 2.072 3.73 3.73 0 01-3.345-2.075 3.11 3.11 0 01-1.59.443 3.12 3.12 0 01-2.86-1.875H3.22A3.22 3.22 0 010 10.793a3.22 3.22 0 013.22-3.22c.254 0 .503.031.744.088a4.18 4.18 0 016.042-2.51z"/></svg>
       <span>Salesforce</span>
     </div>
     <div class="integration-item reveal-scale reveal-delay-1">
