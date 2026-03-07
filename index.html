@@ -275,6 +275,7 @@ footer a:hover { color: var(--gold); }
 .math-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
 .math-card .mc-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
 .math-card .mc-num { font-family: var(--serif); font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.math-card .mc-num span { font-size: 14px; color: var(--text-muted); }
 .math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
 .math-card .mc-note { font-size: 12px; color: var(--text); line-height: 1.5; }
 
@@ -338,8 +339,7 @@ footer a:hover { color: var(--gold); }
 <nav>
   <a href="#" class="logo"><img src="briu-logo-transparent.png" alt="Briu"></a>
   <div class="nav-links">
-    <a href="/insights/">Insights</a>
-    <a href="/why-now-economics/">Why Now / Economics</a>
+    <a href="/why-now/">Why Now</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
@@ -420,8 +420,7 @@ footer a:hover { color: var(--gold); }
   </div>
 
   <div class="why-now-links reveal">
-    <a href="/why-now-economics/" class="hero-cta-primary">Why Now / Economics</a>
-    <a href="/insights/manifesto/" class="hero-cta-secondary">Read the full Wake-Up Call</a>
+    <a href="/why-now/" class="hero-cta-primary">Read Why Now</a>
   </div>
 </section>
 
@@ -482,19 +481,19 @@ footer a:hover { color: var(--gold); }
       <div class="math-card-grid">
         <div class="math-card" style="border-top: 2px solid var(--coral);">
           <div class="mc-year" style="color: var(--coral);">Jan 2026</div>
-          <div class="mc-num">7</div>
+          <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--coral);">$300/day each</div>
-          <div class="mc-note">First week. 10-20% capacity.</div>
+          <div class="mc-note">Early benchmark. Partial autonomous capacity.</div>
         </div>
         <div class="math-card" style="border-top: 2px solid var(--gold);">
           <div class="mc-year" style="color: var(--gold);">2027 est.</div>
-          <div class="mc-num">7</div>
+          <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--gold);">$150/day each</div>
           <div class="mc-note">Same agents, half the cost. Smarter models.</div>
         </div>
         <div class="math-card" style="border-top: 2px solid var(--forest);">
           <div class="mc-year" style="color: var(--forest);">2028 est.</div>
-          <div class="mc-num">7</div>
+          <div class="mc-num">7<span> agents</span></div>
           <div class="mc-cost" style="color: var(--forest);">$75/day each</div>
           <div class="mc-note">Or 28 agents for the original budget.</div>
         </div>
@@ -509,7 +508,7 @@ footer a:hover { color: var(--gold); }
   </div>
 
   <div class="why-now-links reveal">
-    <a href="/why-now-economics/" class="hero-cta-primary">Read the full Why Now page</a>
+    <a href="/why-now/" class="hero-cta-primary">Read Why Now</a>
   </div>
 </section>
 
