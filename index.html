@@ -433,6 +433,94 @@ footer a:hover { color: var(--gold); }
   </svg>
 </div>
 
+<!-- ECONOMICS -->
+<section>
+  <p class="section-label reveal">Economics</p>
+  <h2 class="reveal">Cheaper and better, every quarter.</h2>
+  <p class="reveal">One reason this category matters now is that the cost curve and the capability curve are moving at the same time. You can see the direction clearly even if you start with a narrow, supervised deployment.</p>
+
+  <div class="chart-tabs reveal">
+    <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
+    <button class="chart-tab" onclick="switchChart('math',this)">The $300/Day Math</button>
+  </div>
+
+  <div id="chart-cost" class="chart-view active">
+    <div class="cost-stat-grid">
+      <div class="cost-stat-box reveal-scale" style="border-top-color: var(--coral);">
+        <div class="csl" style="color: var(--coral);">Best model, Mar 2023</div>
+        <div class="csn">$60<span>/M output</span></div>
+        <div class="csd">GPT-4 · 8K context</div>
+      </div>
+      <div class="cost-stat-box reveal-scale reveal-delay-1" style="border-top-color: var(--forest);">
+        <div class="csl" style="color: var(--forest);">Same intelligence, today</div>
+        <div class="csn">$0.60<span>/M output</span></div>
+        <div class="csd">GPT-4o mini · 99% cheaper</div>
+      </div>
+      <div class="cost-stat-box reveal-scale reveal-delay-2" style="border-top-color: var(--gold);">
+        <div class="csl" style="color: var(--gold);">Best model, Mar 2026</div>
+        <div class="csn">$14<span>/M output</span></div>
+        <div class="csd">GPT-5.2 · far more capable</div>
+      </div>
+    </div>
+
+    <div class="chart-surface reveal">
+      <div class="chart-label">Frontier output price vs capability (MMLU %)</div>
+      <div style="position:relative;height:280px;"><canvas id="costChart"></canvas></div>
+      <div class="chart-legend">
+        <div class="chart-legend-item"><div style="width:18px;height:2px;background:var(--gold);"></div>Output cost ($/M tokens)</div>
+        <div class="chart-legend-item"><div style="width:18px;height:0;border-top:2px dashed var(--river);"></div>Capability (MMLU %)</div>
+      </div>
+    </div>
+
+    <div class="chart-source">Sources: OpenAI, Anthropic official pricing. MMLU via Artificial Analysis. GPT-4o mini ($0.60/M) omitted to preserve scale.</div>
+  </div>
+
+  <div id="chart-math" class="chart-view">
+    <div class="chart-surface" style="margin-bottom: 16px;">
+      <div class="chart-label">What $300/day buys over time</div>
+      <p style="font-size: 0.88rem; margin-bottom: 24px; max-width: 540px;">$300/day is today's cost for full autonomous capacity. Here's where that number goes as models get cheaper and more capable.</p>
+      <div class="math-card-grid">
+        <div class="math-card" style="border-top: 2px solid var(--coral);">
+          <div class="mc-year" style="color: var(--coral);">Jan 2026</div>
+          <div class="mc-num">7</div>
+          <div class="mc-cost" style="color: var(--coral);">$300/day each</div>
+          <div class="mc-note">First week. 10-20% capacity.</div>
+        </div>
+        <div class="math-card" style="border-top: 2px solid var(--gold);">
+          <div class="mc-year" style="color: var(--gold);">2027 est.</div>
+          <div class="mc-num">7</div>
+          <div class="mc-cost" style="color: var(--gold);">$150/day each</div>
+          <div class="mc-note">Same agents, half the cost. Smarter models.</div>
+        </div>
+        <div class="math-card" style="border-top: 2px solid var(--forest);">
+          <div class="mc-year" style="color: var(--forest);">2028 est.</div>
+          <div class="mc-num">7</div>
+          <div class="mc-cost" style="color: var(--forest);">$75/day each</div>
+          <div class="mc-note">Or 28 agents for the original budget.</div>
+        </div>
+      </div>
+      <p style="color: var(--text); font-size: 0.93rem; line-height: 1.75; margin-bottom: 0;">Every day between now and then, the agents have been learning your business. The company that started earlier has institutional knowledge in its agents that a competitor cannot buy at any price.</p>
+    </div>
+    <div class="chart-source">Projections based on observed 50%+ annual decline in frontier pricing 2023-2026.</div>
+  </div>
+
+  <div class="callout-box reveal">
+    <p>The takeaway is not that every business should race to full autonomy. It is that the economics are improving quickly enough that careful early deployments can create operating knowledge before the category feels obvious.</p>
+  </div>
+
+  <div class="why-now-links reveal">
+    <a href="/why-now-economics/" class="hero-cta-primary">Read the full Why Now page</a>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,25 C360,50 720,0 1080,30 C1260,45 1380,35 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
+    <path d="M0,35 C240,10 480,45 720,20 C960,45 1200,10 1440,35 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.02)"/>
+  </svg>
+</div>
+
 <!-- WHAT WE BUILD -->
 <section>
   <p class="section-label reveal">What We Build</p>
