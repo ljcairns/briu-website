@@ -35,10 +35,13 @@ body { background: var(--bg); color: var(--text); font-family: var(--sans); line
 body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1000; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
 
 /* Nav */
-nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .logo { text-decoration: none; display: flex; align-items: center; opacity: 0; animation: logoSlideIn 0.8s ease forwards 0.1s; }
 .logo img { height: 96px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
 .logo:hover img { transform: scale(1.05); filter: brightness(1.15); }
+.nav-links { display: flex; align-items: center; gap: 1.4rem; margin-left: auto; }
+.nav-links a { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
+.nav-links a:hover { color: var(--gold); }
 nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 .nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
@@ -297,6 +300,8 @@ footer a:hover { color: var(--gold); }
 .callout-box { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 20px 24px; margin: 1.5rem 0; }
 .callout-box p { color: var(--text); margin-bottom: 0; }
 
+.why-now-links { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; margin-top: 2rem; }
+
 
 @media (max-width: 640px) {
   .cost-stat-grid, .math-card-grid, .trust-grid { grid-template-columns: 1fr; }
@@ -306,6 +311,7 @@ footer a:hover { color: var(--gold); }
 
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
   .logo img { height: 64px; }
   .hero { padding: 7rem 1.25rem 3rem; }
   .hero-pillars { flex-direction: column; gap: 0.75rem; }
@@ -331,6 +337,10 @@ footer a:hover { color: var(--gold); }
 
 <nav>
   <a href="#" class="logo"><img src="briu-logo-transparent.png" alt="Briu"></a>
+  <div class="nav-links">
+    <a href="/insights/">Insights</a>
+    <a href="/why-now-economics/">Why Now / Economics</a>
+  </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
 </nav>
@@ -349,7 +359,7 @@ footer a:hover { color: var(--gold); }
 
   <div class="hero-cta-group">
     <a href="#" onclick="openContactForm();return false" class="hero-cta-primary">Start a Conversation</a>
-    <a href="#wake-up" class="hero-cta-secondary">See the evidence</a>
+    <a href="#wake-up" class="hero-cta-secondary">Why now</a>
   </div>
 
 </section>
@@ -364,281 +374,54 @@ footer a:hover { color: var(--gold); }
 
 <!-- WAKE-UP CALL -->
 <section class="problem" id="wake-up">
-  <p class="section-label reveal">The Wake-Up Call</p>
-  <h2 class="reveal">This is not about replacing your team.<br><span style="color: var(--gold);">It's about what your team becomes.</span></h2>
+  <p class="section-label reveal">Why Now</p>
+  <h2 class="reveal">AI agents are becoming practical operating tools for small teams.</h2>
 
-  <p class="reveal">In early 2026, investor and entrepreneur Jason Calacanis deployed AI agents across his 20-person venture firm. Not to cut headcount. To find out what happens when every employee has an AI counterpart working alongside them.</p>
-
-  <p class="reveal">He started with the most technical staff and worked his way down. Each person got their own agent. Each agent got its own email, Slack, and CRM accounts. He calls them "replicants." A master agent manages the others, checks their work, and summarizes everything daily. The goal was not automation for its own sake. It was leverage.</p>
-
-  <div class="quote-card reveal">
-    <p>"I'm going down the slope of employees from most technical to least and trying to get each one of them to adopt and create an agent. It will probably take six months, but when we do, I think our leverage versus a competing firm is going to be 10x."</p>
-    <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> — All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="reveal">Within the first few weeks, the results were clear:</p>
-
-  <div class="quote-card reveal">
-    <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
-    <p class="quote-attr">All-In Podcast E259 (Jan 2026)</p>
-  </div>
-
-  <div class="quote-card reveal">
-    <p>"On the average investment team individual, we now have probably 20% of their work being done by agents in real time."</p>
-    <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="reveal">His assistant's workload was reduced by 30%. Not to cut her hours. To free her up for higher-level work. The agents took the repetitive tasks. The humans moved up.</p>
-
-  <!-- Employee Orchestrators -->
-  <h3 class="wuc-subhead reveal">Your employees become agent orchestrators</h3>
-
-  <p class="reveal">David Sacks, co-host and former PayPal COO, made a prediction at the start of 2026 that runs counter to most AI headlines:</p>
-
-  <div class="quote-card reveal">
-    <p>"My most contrarian belief is that AI would increase demand for knowledge workers, not put them out of business."</p>
-    <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="reveal">His reasoning is simple. Employees who adopt these tools do not do less work. They do more, at a higher level. The routine tasks move to agents. The thinking, the judgment, the relationships stay with people.</p>
-
-  <div class="quote-card reveal">
-    <p>"A key skill of employees is going to be the ability to structure work for themselves and their AI agents. And the employees who can do that are going to be far more productive than those who can't."</p>
-    <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <div class="quote-card reveal">
-    <p>"Employees who are early adopters of these tools are going to appear to have superpowers. They're going to be the people in meetings who can take an assignment that would have taken days and get it done in 2 hours."</p>
-    <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="wuc-highlight reveal">This is the real transition. Not AI replacing people. People learning to orchestrate AI.</p>
-
-  <p class="reveal">It starts simple: an agent that reads your email and prepares a morning briefing. Then it drafts responses for your review. Then it manages your CRM. Then it runs overnight, researching prospects and preparing reports so your team wakes up to work already done. Each step builds trust. Each step builds skill.</p>
-
-  <p class="reveal">Your employees go from using AI as a search tool to managing a team of agents that handles the operational load of your business. The businesses doing this now are not just more efficient. They are building a workforce that understands how to structure work for AI. That capability is compounding. And it is not something you can hire for yet.</p>
-
-  <div class="quote-card reveal">
-    <p>"Every startup I know is hiring for this position, which is somebody who knows how to build and manage agents. There is no job rec for this yet or a title."</p>
-    <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <!-- Cost Question -->
-  <h3 class="wuc-subhead reveal">The cost question</h3>
-
-  <p class="reveal">None of this is free. Here are the real numbers from production.</p>
-
-  <div class="quote-card reveal">
-    <p>"We hit $300 a day per agent using the Claude API, instantly. And that was doing maybe 10 or 20%. That's $100,000 a year per agent."</p>
-    <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="reveal">Mark Cuban responded to these numbers publicly. He called them "the smartest counter I've seen to AI taking over jobs, in the short term." His math: if eight agents at $300/day each plus maintenance cost more than the employee they support, the agents need to be over twice as productive just to break even. He compared current agents to "college interns that come in hungover, make mistakes, and don't take responsibility for them."</p>
-
-  <p class="reveal">He is asking the right question. But he is treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>
-
-  <p class="wuc-highlight reveal"><strong>That is the wrong frame.</strong></p>
-
-  <!-- Capex Flip -->
-  <h3 class="wuc-subhead reveal">Every dollar builds something permanent</h3>
-
-  <p class="wuc-highlight reveal">The agent is not just doing today's work. It is learning your business.</p>
-
-  <p class="reveal">Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer. That knowledge is permanent. It does not leave when an employee quits. It does not need to be retrained when you hire someone new. It does not forget over the weekend.</p>
-
-  <p class="wuc-highlight reveal">This is not an operating cost. It is a capital investment. You are building infrastructure that compounds in value every day it runs. And unlike physical infrastructure, it does not depreciate. It appreciates.</p>
-
-  <div class="quote-card reveal">
-    <p>"Every time you add it to something, it gets smarter."</p>
-    <p class="quote-attr">All-In Podcast E259 (Jan 2026)</p>
-  </div>
-
-  <div class="quote-card reveal">
-    <p>"They don't forget to do work. They don't make mistakes. Once you put this in, you don't need to have checklists. They just do it perfectly every single time."</p>
-    <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <!-- Cost Trajectory -->
-  <h3 class="wuc-subhead reveal">Cheaper and better, every quarter</h3>
-
-  <p class="reveal">Cuban's math is a snapshot. Here is the trajectory.</p>
-
-  <div class="chart-tabs reveal">
-    <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
-    <button class="chart-tab" onclick="switchChart('math',this)">The $300/Day Math</button>
-  </div>
-
-  <!-- COST VIEW -->
-  <div id="chart-cost" class="chart-view active">
-    <div class="cost-stat-grid">
-      <div class="cost-stat-box reveal-scale" style="border-top-color: var(--coral);">
-        <div class="csl" style="color: var(--coral);">Best model, Mar 2023</div>
-        <div class="csn">$60<span>/M output</span></div>
-        <div class="csd">GPT-4 · 8K context</div>
-      </div>
-      <div class="cost-stat-box reveal-scale reveal-delay-1" style="border-top-color: var(--forest);">
-        <div class="csl" style="color: var(--forest);">Same intelligence, today</div>
-        <div class="csn">$0.60<span>/M output</span></div>
-        <div class="csd">GPT-4o mini · 99% cheaper</div>
-      </div>
-      <div class="cost-stat-box reveal-scale reveal-delay-2" style="border-top-color: var(--gold);">
-        <div class="csl" style="color: var(--gold);">Best model, Mar 2026</div>
-        <div class="csn">$14<span>/M output</span></div>
-        <div class="csd">GPT-5.2 · far more capable</div>
-      </div>
-    </div>
-
-    <div class="chart-surface reveal">
-      <div class="chart-label">Frontier output price vs capability (MMLU %)</div>
-      <div style="position:relative;height:280px;"><canvas id="costChart"></canvas></div>
-      <div class="chart-legend">
-        <div class="chart-legend-item"><div style="width:18px;height:2px;background:var(--gold);"></div>Output cost ($/M tokens)</div>
-        <div class="chart-legend-item"><div style="width:18px;height:0;border-top:2px dashed var(--river);"></div>Capability (MMLU %)</div>
-      </div>
-    </div>
-
-    <div class="callout-box reveal" style="margin-top: 16px;">
-      <p>Two things happening simultaneously. Yesterday's breakthrough becomes today's commodity. And today's frontier keeps getting smarter. The cost line trends down. The capability line trends up. They never reverse.</p>
-    </div>
-
-    <div class="chart-source">Sources: OpenAI, Anthropic official pricing. MMLU via Artificial Analysis. GPT-4o mini ($0.60/M) omitted to preserve scale.</div>
-  </div>
-
-  <!-- MATH VIEW -->
-  <div id="chart-math" class="chart-view">
-    <div class="chart-surface" style="margin-bottom: 16px;">
-      <div class="chart-label">What $300/day buys over time</div>
-      <p style="font-size: 0.88rem; margin-bottom: 24px; max-width: 540px;">$300/day is today's cost for full autonomous capacity. Here's where that number goes as models get cheaper and more capable.</p>
-      <div class="math-card-grid">
-        <div class="math-card" style="border-top: 2px solid var(--coral);">
-          <div class="mc-year" style="color: var(--coral);">Jan 2026</div>
-          <div class="mc-num">7</div>
-          <div class="mc-cost" style="color: var(--coral);">$300/day each</div>
-          <div class="mc-note">First week. 10-20% capacity.</div>
-        </div>
-        <div class="math-card" style="border-top: 2px solid var(--gold);">
-          <div class="mc-year" style="color: var(--gold);">2027 est.</div>
-          <div class="mc-num">7</div>
-          <div class="mc-cost" style="color: var(--gold);">$150/day each</div>
-          <div class="mc-note">Same agents, half the cost. Smarter models.</div>
-        </div>
-        <div class="math-card" style="border-top: 2px solid var(--forest);">
-          <div class="mc-year" style="color: var(--forest);">2028 est.</div>
-          <div class="mc-num">7</div>
-          <div class="mc-cost" style="color: var(--forest);">$75/day each</div>
-          <div class="mc-note">Or 28 agents for the original budget.</div>
-        </div>
-      </div>
-      <p style="color: var(--text); font-size: 0.93rem; line-height: 1.75; margin-bottom: 0;">Every day between now and then, the agents have been learning your business. The company that started earlier has institutional knowledge in its agents that a competitor cannot buy at any price.</p>
-    </div>
-    <div class="chart-source">Projections based on observed 50%+ annual decline in frontier pricing 2023-2026.</div>
-  </div>
-
-  <p class="wuc-highlight reveal" style="margin-top: 2rem;">$300 per day is the most you will ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
-
-  <div class="quote-card reveal">
-    <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
-    <p class="quote-attr">All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <!-- You don't need $300/day -->
-  <h3 class="wuc-subhead reveal">You do not need to spend $300 a day</h3>
-
-  <p class="reveal">That is what it costs to run agents at full capacity around the clock across an entire team. That is where the early adopters with venture-scale budgets are spending.</p>
-
-  <p class="reveal">Most businesses do not start there. And they should not.</p>
-
-  <p class="reveal">We run a fully capable AI agent managing two email accounts, a CRM, sales prospecting, automated client reporting, calendar, and cost monitoring. Our daily cost: $2 to $5. Not because we cut corners. Because we built the architecture to be efficient. A personal agent that orchestrates task-specific agents. Each one given a defined job, a defined budget, and a defined scope. They run when there is work to do and stop when it is done.</p>
-
-  <p class="wuc-highlight reveal">The progression for most businesses looks like this:</p>
-
-  <div class="trust-grid">
-    <div class="trust-card reveal-scale" style="border-top: 2px solid var(--river);">
-      <div class="tc-phase" style="color: var(--river);">$2-5/day</div>
-      <h4>Read, learn, brief</h4>
-      <div class="tc-desc">Agent connects to email, calendar, CRM with read-only access. Morning briefings in Slack or Discord. Your team sees what it can do.</div>
-      <div class="tc-security">No write access. No send permissions.</div>
-    </div>
-    <div class="trust-card reveal-scale reveal-delay-1" style="border-top: 2px solid var(--forest);">
-      <div class="tc-phase" style="color: var(--forest);">$5-15/day</div>
-      <h4>Draft and suggest</h4>
-      <div class="tc-desc">Agent drafts email responses, prepares CRM updates, flags stale deals. Everything waits for your review. You approve, edit, or reject.</div>
-      <div class="tc-security">Every action requires explicit approval.</div>
-    </div>
-    <div class="trust-card reveal-scale reveal-delay-2" style="border-top: 2px solid var(--gold);">
-      <div class="tc-phase" style="color: var(--gold);">$15-30/day</div>
-      <h4>Approve and execute</h4>
-      <div class="tc-desc">Approval gates go live. Agent proposes, you tap a button, it executes. Draft, review, send. Your team builds trust on your schedule.</div>
-      <div class="tc-security">Approval buttons with full audit logging.</div>
-    </div>
-    <div class="trust-card reveal-scale reveal-delay-3" style="border-top: 2px solid var(--gold-bright);">
-      <div class="tc-phase" style="color: var(--gold-bright);">$30+/day</div>
-      <h4>Let it ride</h4>
-      <div class="tc-desc">Low-risk actions auto-execute. High-stakes still gated. Overnight prospecting, reporting, follow-ups. Your team wakes up to work already done.</div>
-      <div class="tc-security">Budget ceilings. Daily alerts. Revoke anytime.</div>
-    </div>
-  </div>
-
-  <p class="reveal">The $300/day fully autonomous setup is a destination, not a starting point. And by the time you get there, the cost to run it will be significantly lower than it is today.</p>
-
-  <!-- What happens if you wait -->
-  <h3 class="wuc-subhead reveal">What happens if you wait</h3>
-
-  <p class="reveal">This is not a warning about AI taking over. It is a straightforward competitive reality.</p>
-
-  <p class="reveal">Sacks predicted that AI adoption in 2026 would not come from the top down. Not from CEO transformation initiatives. Not from enterprise RFP processes that take six months. It would come from individual employees who figured it out themselves.</p>
-
-  <div class="quote-card reveal">
-    <p>"You're going to see massive enterprise adoption of AI this year. But it's going to be driven by the bottom up, by these early adopter employees bringing in consumerized AI tools."</p>
-    <p class="quote-attr"><span class="quote-speaker">David Sacks</span> — All-In Podcast E261 (Feb 2026)</p>
-  </div>
-
-  <p class="reveal">Somewhere right now, a business that competes with yours has an employee figuring this out. They are building an agent that handles their inbox. They are automating their CRM updates. They are running prospect research overnight. And they are getting better at it every week.</p>
-
-  <p class="wuc-highlight reveal">The businesses that start now get three advantages that compound over time:</p>
+  <p class="reveal">The change is not that every business suddenly needs a fleet of autonomous agents. It is that useful, supervised deployments are now realistic, affordable to test, and increasingly hard to ignore.</p>
 
   <div style="margin: 1.5rem 0 2rem;">
     <div class="compound-item reveal">
       <div class="compound-num">1</div>
-      <div><span class="ci-title">Institutional knowledge.</span> <span style="color: var(--text-muted);">Every workflow your agents learn is permanent. Six months of agent learning is six months your competitor has to make up. That gap does not close by itself.</span></div>
+      <div><span class="ci-title">The first step is manageable.</span> <span style="color: var(--text-muted);">Most teams start with narrow workflows: inbox triage, CRM hygiene, reporting, research, and draft generation. The right first deployment is controlled, not dramatic.</span></div>
     </div>
     <div class="compound-item reveal">
       <div class="compound-num">2</div>
-      <div><span class="ci-title">A team that knows how to work with AI.</span> <span style="color: var(--text-muted);">Your employees build the skill of structuring work for agents. That capability comes from months of working alongside the tools, not from a training seminar.</span></div>
+      <div><span class="ci-title">The learning compounds.</span> <span style="color: var(--text-muted);">Teams that start early build operating knowledge: where agents help, where people stay in the loop, and which systems are worth standardizing into repeatable internal infrastructure.</span></div>
     </div>
     <div class="compound-item reveal">
       <div class="compound-num">3</div>
-      <div><span class="ci-title">A cost curve in your favor.</span> <span style="color: var(--text-muted);">The infrastructure you build today runs on tomorrow's better, cheaper models with no migration required. You are locked into today's learning, not today's pricing.</span></div>
+      <div><span class="ci-title">The economics keep improving.</span> <span style="color: var(--text-muted);">Model quality, tooling, and cost efficiency continue to move in the right direction. You do not need a perfect end state today to benefit from starting carefully now.</span></div>
     </div>
   </div>
 
-  <p class="reveal">You do not need to wait for a big corporation to build this for you. The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>
-
-  <div class="quote-card reveal">
-    <p>"It's not just the assistant... it's like this super worker."</p>
-    <p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> — All-In Podcast E259 (Jan 2026)</p>
+  <div class="callout-box reveal">
+    <p>We have spent the last two years building production AI systems, first through Subsights and now through Briu. The consistent pattern is not hype. It is that businesses need a trusted way to move from curiosity to controlled deployment without losing visibility, governance, or common sense.</p>
   </div>
 
-  <!-- Cost Journey -->
-  <div class="cost-journey reveal">
-    <div class="cost-journey-point">
-      <div class="stat-label good">Start here</div>
-      <div class="stat-number good">$2-5/day</div>
-      <div class="stat-desc">Personal assistant. Email, calendar, CRM. Proper architecture.</div>
+  <div class="trust-grid">
+    <div class="trust-card reveal-scale" style="border-top: 2px solid var(--river);">
+      <div class="tc-phase" style="color: var(--river);">Clarity</div>
+      <h4>Know where agents fit</h4>
+      <div class="tc-desc">Separate useful workflow automation from market noise. Start with work that is repetitive, reviewable, and connected to real operating leverage.</div>
+      <div class="tc-security">Use cases should be legible to an owner, not just impressive in a demo.</div>
     </div>
-    <div class="cost-journey-arrow">
-      <svg width="60" height="24" viewBox="0 0 60 24"><path d="M0,12 L50,12 M42,4 L52,12 L42,20" stroke="var(--gold)" stroke-width="2" fill="none" opacity="0.5"/></svg>
-      <span class="cost-journey-label">Both numbers only go down</span>
+    <div class="trust-card reveal-scale reveal-delay-1" style="border-top: 2px solid var(--forest);">
+      <div class="tc-phase" style="color: var(--forest);">Control</div>
+      <h4>Keep humans in the loop</h4>
+      <div class="tc-desc">Approval gates, access boundaries, cost ceilings, and auditability matter more than grand claims about autonomy.</div>
+      <div class="tc-security">Trust grows when the system is observable and reversible.</div>
     </div>
-    <div class="cost-journey-point">
-      <div class="stat-label" style="color: var(--coral);">The destination</div>
-      <div class="stat-number">$300/day</div>
-      <div class="stat-desc">Fully autonomous operations. Agents across your team, 24/7.</div>
+    <div class="trust-card reveal-scale reveal-delay-2" style="border-top: 2px solid var(--gold);">
+      <div class="tc-phase" style="color: var(--gold);">Timing</div>
+      <h4>Build capability before it is standard</h4>
+      <div class="tc-desc">The advantage is not being loud about AI. It is building the operational habits and reusable systems that will matter when these deployments become normal.</div>
+      <div class="tc-security">That is useful today for services work and durable later for productized systems.</div>
     </div>
   </div>
 
-  <div style="text-align: center; margin-top: 2rem;" class="reveal">
-    <a href="#" onclick="openContactForm();return false" style="font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.3); transition: all 0.35s ease; display: inline-block;" onmouseover="this.style.background='rgba(212,160,90,0.1)';this.style.borderColor='rgba(212,160,90,0.5)'" onmouseout="this.style.background='';this.style.borderColor='rgba(212,160,90,0.3)'">See What This Looks Like For Your Business</a>
+  <div class="why-now-links reveal">
+    <a href="/why-now-economics/" class="hero-cta-primary">Why Now / Economics</a>
+    <a href="/insights/" class="hero-cta-secondary">Read Insights</a>
   </div>
 </section>
 

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Why Now / Economics</title>
+<meta name="description" content="A structured view of the timing, economics, and trust model behind practical AI agent deployment.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090E;
+  --surface: #0E1219;
+  --surface-2: #151B24;
+  --text: #EAE7E3;
+  --text-muted: #C4B9A8;
+  --gold: #D4A05A;
+  --gold-light: #E2B574;
+  --coral: #E07B5F;
+  --forest: #4D8070;
+  --river: #5A9DAC;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+@media (min-width: 768px) { html { font-size: 19px; } }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+nav { position: sticky; top: 0; z-index: 10; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.logo { text-decoration: none; display: flex; align-items: center; }
+.logo img { height: 96px; width: auto; }
+.nav-links { display: flex; gap: 1.4rem; align-items: center; margin-left: auto; }
+.nav-links a { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.hero { padding: 8rem 2rem 3rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.hero::before { content: ''; position: absolute; top: 0; right: 0; width: 580px; height: 580px; background: radial-gradient(circle, rgba(90,157,172,0.08), transparent 70%); filter: blur(80px); pointer-events: none; }
+.hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.1; margin-bottom: 1.2rem; max-width: 820px; }
+.hero p { max-width: 720px; color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; }
+section { padding: 2rem 2rem 6rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; margin-top: 2rem; }
+.card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.8rem; }
+.card h2 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.8rem; }
+.card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; }
+.callout { margin-top: 2rem; background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; }
+.callout p { color: var(--text); max-width: 760px; }
+.link-row { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 2rem; }
+.primary-link { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); }
+.secondary-link { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.06em; }
+footer { border-top: 1px solid rgba(255,255,255,0.04); padding: 3rem 2rem; max-width: 1060px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap; }
+footer p, footer a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+@media (max-width: 640px) {
+  nav { padding: 1rem 1.25rem; }
+  .logo img { height: 64px; }
+  .nav-links { display: none; }
+  .hero { padding: 7rem 1.25rem 2rem; }
+  section { padding: 2rem 1.25rem 4rem; }
+  footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
+  <div class="nav-links">
+    <a href="/insights/">Insights</a>
+    <a href="/why-now-economics/" class="active">Why Now / Economics</a>
+  </div>
+  <a href="/#contact" class="cta-nav">Book a Call</a>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Why Now / Economics</p>
+  <h1>A structured case for acting early without acting recklessly.</h1>
+  <p>This page will hold the deeper argument behind timing, trust, and economics. The goal is not to sell a fantasy of full autonomy. It is to explain why careful early adoption can matter operationally before the category settles.</p>
+</section>
+
+<section>
+  <p class="section-label">What This Page Will Cover</p>
+  <div class="grid">
+    <article class="card">
+      <h2>Trust ramps</h2>
+      <p>How sensible deployments move from read-only assistance to approved actions and only later to selective automation.</p>
+    </article>
+    <article class="card">
+      <h2>Cost curves</h2>
+      <p>Why model quality and price trends change the economics over time, and why the first deployment does not need to mirror the final one.</p>
+    </article>
+    <article class="card">
+      <h2>Operational learning</h2>
+      <p>Why the durable advantage is often process knowledge, internal systems, and governance habits rather than a flashy demo.</p>
+    </article>
+  </div>
+
+  <div class="callout">
+    <p>Briu is building this argument from implementation work in the field. Services work creates the pattern library. Over time, the most repeatable parts can become productized systems and software.</p>
+  </div>
+
+  <div class="link-row">
+    <a href="/insights/" class="primary-link">Read Insights</a>
+    <a href="/" class="secondary-link">Back to homepage</a>
+  </div>
+</section>
+
+<footer>
+  <p>&copy; 2026 Briu. All rights reserved.</p>
+  <a href="mailto:lucas@briu.ai">lucas@briu.ai</a>
+</footer>
+</body>
+</html>
