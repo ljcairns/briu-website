@@ -92,7 +92,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 .problem::before { content: ''; position: absolute; top: 15%; left: -25%; width: 500px; height: 450px; background: radial-gradient(ellipse, rgba(90,157,172,0.05), rgba(77,128,112,0.02) 50%, transparent 70%); pointer-events: none; filter: blur(50px); }
 .quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; }
-.quote-block p { font-family: var(--serif); font-size: 1.2rem; color: #C4C0BA; font-style: italic; font-weight: 400; line-height: 1.75; margin-bottom: 0.4rem; }
+.quote-block p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0.4rem; }
 .quote-source { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; }
 
 .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; margin: 3rem 0; padding: 2.5rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); }
@@ -229,7 +229,7 @@ footer a:hover { color: var(--gold); }
 
 .quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; }
 .quote-card:hover { background: rgba(212,160,90,0.06); border-left-color: var(--gold-light); }
-.quote-card p { font-family: var(--serif); font-size: 1.15rem; color: #C4C0BA; font-style: italic; font-weight: 400; line-height: 1.75; margin-bottom: 0; }
+.quote-card p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0; }
 .quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
 .quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
 
@@ -246,7 +246,7 @@ footer a:hover { color: var(--gold); }
 .cost-stat-box .csl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .cost-stat-box .csn { font-family: var(--serif); font-size: 34px; color: var(--text); line-height: 1; }
 .cost-stat-box .csn span { font-size: 15px; color: var(--text-muted); }
-.cost-stat-box .csd { font-size: 12px; color: var(--text-muted); margin-top: 6px; }
+.cost-stat-box .csd { font-size: 12px; color: var(--text); margin-top: 6px; }
 
 .chart-surface { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 18px 18px; }
 .chart-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
@@ -260,15 +260,15 @@ footer a:hover { color: var(--gold); }
 .math-card .mc-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
 .math-card .mc-num { font-family: var(--serif); font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 4px; }
 .math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
-.math-card .mc-note { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+.math-card .mc-note { font-size: 12px; color: var(--text); line-height: 1.5; }
 
 .trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; margin: 1.5rem 0 2rem; }
 .trust-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 20px; transition: all 0.4s ease; }
 .trust-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
 .trust-card .tc-phase { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
 .trust-card h4 { font-family: var(--serif); font-size: 1.05rem; color: var(--text); margin-bottom: 10px; font-weight: 400; }
-.trust-card .tc-desc { font-size: 0.86rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 14px; }
-.trust-card .tc-security { font-size: 0.76rem; color: var(--forest); line-height: 1.4; padding: 8px 10px; background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.12); }
+.trust-card .tc-desc { font-size: 0.86rem; color: var(--text); line-height: 1.6; margin-bottom: 14px; }
+.trust-card .tc-security { font-size: 0.78rem; color: #6DB89E; line-height: 1.4; padding: 8px 10px; background: rgba(77,128,112,0.1); border: 1px solid rgba(77,128,112,0.18); }
 
 .compound-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
 .compound-num { min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(212,160,90,0.1); color: var(--gold); font-family: var(--serif); font-size: 14px; border: 1px solid rgba(212,160,90,0.2); flex-shrink: 0; }
