@@ -37,7 +37,7 @@ body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; heigh
 /* Nav */
 nav { position: fixed; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .logo { text-decoration: none; display: flex; align-items: center; opacity: 0; animation: logoSlideIn 0.8s ease forwards 0.1s; }
-.logo img { height: 96px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
+.logo img { height: 72px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
 .logo:hover img { transform: scale(1.05); filter: brightness(1.15); }
 nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.55rem 1.3rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
@@ -112,8 +112,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 .integration-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 1rem;
   margin-top: 2.5rem;
   text-align: center;
 }
@@ -300,13 +300,13 @@ footer a:hover { color: var(--gold); }
 
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
-  .logo img { height: 64px; }
+  .logo img { height: 52px; }
   .hero { padding: 7rem 1.25rem 3rem; }
   .hero-pillars { flex-direction: column; gap: 0.75rem; }
   section { padding: 4rem 1.25rem; }
   .stat-row { grid-template-columns: 1fr; }
   .use-case-grid { grid-template-columns: 1fr; }
-  .integration-grid { grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .integration-grid { grid-template-columns: repeat(3, 1fr); }
   .service-card { padding: 2rem 1.5rem; }
   .case-study-box { padding: 1.5rem; }
   footer { flex-direction: column; text-align: center; }
@@ -714,14 +714,10 @@ footer a:hover { color: var(--gold); }
       <span>GitHub</span>
     </div>
     <div class="integration-item reveal-scale">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.582 2.128 2.182-.573c.978.58 1.911.928 3.145.929 3.178 0 5.767-2.587 5.768-5.766.001-3.187-2.575-5.77-5.764-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.251-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86s.274.072.376-.043c.101-.116.433-.506.549-.68.116-.173.231-.145.39-.087s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.1.824zm-3.423-14.416c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm.029 18.88c-1.161 0-2.305-.292-3.318-.844l-3.677.964.984-3.595a6.92 6.92 0 01-.949-3.475c.002-3.826 3.114-6.938 6.94-6.938 1.854.001 3.598.722 4.907 2.034a6.903 6.903 0 012.029 4.91c-.002 3.826-3.114 6.944-6.916 6.944z"/></svg>
-      <span>Telegram</span>
+      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M19.35 10.04A7.49 7.49 0 0 0 12 4C9.11 4 6.6 5.64 5.35 8.04A5.994 5.994 0 0 0 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM19 18H6c-2.21 0-4-1.79-4-4s1.79-4 4-4h.71C7.37 7.69 9.48 6 12 6c3.04 0 5.5 2.46 5.5 5.5v.5H19c1.66 0 3 1.34 3 3s-1.34 3-3 3z"/></svg>
+      <span>Salesforce</span>
     </div>
     <div class="integration-item reveal-scale reveal-delay-1">
-      <svg viewBox="0 0 24 24" fill="currentColor" width="28" height="28"><path d="M21.35 11.1h-9.18v2.73h5.51c-.24 1.28-.99 2.37-2.09 3.1v2.58h3.39c1.98-1.82 3.13-4.51 3.13-7.66 0-.52-.05-1.03-.13-1.53l-.63-.22zM12.17 21.48c2.83 0 5.21-.94 6.95-2.54l-3.39-2.63c-.94.63-2.15 1-3.56 1-2.74 0-5.06-1.85-5.88-4.34H2.77v2.72c1.73 3.46 5.31 5.79 9.4 5.79zM6.29 13.97a6.37 6.37 0 010-3.94V7.31H2.77a10.48 10.48 0 000 9.38l3.52-2.72zM12.17 5.69c1.55 0 2.93.53 4.02 1.58l3.01-3.01C17.36 2.55 14.98 1.52 12.17 1.52 8.08 1.52 4.5 3.85 2.77 7.31l3.52 2.72c.82-2.49 3.14-4.34 5.88-4.34z"/></svg>
-      <span>Google Docs</span>
-    </div>
-    <div class="integration-item reveal-scale reveal-delay-2">
       <span style="font-size: 1.5rem; font-weight: 600; color: var(--text-muted);">+100</span>
       <span>more via OpenClaw</span>
     </div>
