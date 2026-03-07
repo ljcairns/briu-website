@@ -59,10 +59,6 @@ nav a.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: v
 .hero-cta:hover::after { left: 100%; }
 .hero-cta:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.25); }
 
-/* Pyrenees mountain silhouette */
-.mountain-bg { position: absolute; bottom: -2px; left: 0; width: 100%; pointer-events: none; z-index: 0; }
-.mountain-bg svg { width: 100%; height: auto; display: block; }
-
 /* Ambient gradient orbs */
 .ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
 .ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
@@ -340,15 +336,6 @@ footer a:hover { color: var(--gold); }
 
   <a href="#wake-up" class="hero-cta">Explore What's Possible</a>
 </section>
-
-<!-- Mountain silhouette divider -->
-<div class="mountain-bg">
-  <svg viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,120 L0,95 Q60,70 120,80 Q180,90 240,72 Q300,54 360,65 Q420,76 480,58 Q540,40 600,52 Q660,64 720,45 Q780,26 840,38 Q900,50 960,35 Q1020,20 1080,32 Q1140,44 1200,28 Q1260,12 1320,25 Q1380,38 1440,20 L1440,120 Z" fill="#0E1219" opacity="0.6"/>
-    <path d="M0,120 L0,100 Q80,82 160,90 Q240,98 320,85 Q400,72 480,82 Q560,92 640,75 Q720,58 800,70 Q880,82 960,68 Q1040,54 1120,65 Q1200,76 1280,60 Q1360,44 1440,55 L1440,120 Z" fill="#0E1219" opacity="0.3"/>
-    <path d="M0,120 L0,108 Q120,95 240,102 Q360,109 480,98 Q600,87 720,95 Q840,103 960,92 Q1080,81 1200,90 Q1320,99 1440,88 L1440,120 Z" fill="var(--bg)" opacity="0.15"/>
-  </svg>
-</div>
 
 <!-- Wave divider -->
 <div class="wave-divider">
