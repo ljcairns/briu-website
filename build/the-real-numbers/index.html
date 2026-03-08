@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | The Real Numbers</title>
+<meta name="description" content="$376 to build a production agent system. 26 days. Every receipt included. Interactive cost dashboard from the Briu build.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090E;
+  --surface: #0E1219;
+  --surface-2: #151B24;
+  --text: #EAE7E3;
+  --text-muted: #C4B9A8;
+  --gold: #D4A05A;
+  --gold-light: #E2B574;
+  --coral: #E07B5F;
+  --forest: #4D8070;
+  --river: #5A9DAC;
+  --opus: #8a5a7a;
+  --haiku: #5a8a6a;
+  --serif: 'DM Serif Display', Georgia, serif;
+  --sans: 'DM Sans', -apple-system, sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; font-size: 16px; }
+@media (min-width: 768px) { html { font-size: 19px; } }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
+
+/* Nav */
+nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.logo { text-decoration: none; display: flex; align-items: center; }
+.logo img { height: 96px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
+.logo:hover img { transform: scale(1.05); filter: brightness(1.15); }
+.nav-links { display: flex; align-items: center; gap: 1.4rem; margin-left: auto; }
+.nav-links a { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-decoration: none; transition: color 0.2s ease; }
+.nav-links a:hover, .nav-links a.active { color: var(--gold); }
+.cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+.cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
+/* Hero */
+.hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 760px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
+.hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.1; margin-bottom: 0.5rem; max-width: 820px; position: relative; }
+.hero h1 em { color: var(--gold); font-style: italic; }
+.hero .hero-sub { max-width: 640px; color: var(--text-muted); font-size: 1rem; line-height: 1.8; position: relative; margin-top: 1rem; }
+
+/* Content sections */
+.content { max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
+article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 3rem 0 1rem; }
+article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
+article p strong { color: var(--text); font-weight: 600; }
+
+/* Stat boxes */
+.stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 2.5rem 0 3rem; }
+.stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.3s; }
+.stat-box:hover { border-color: rgba(212,160,90,0.2); }
+.stat-value { font-family: var(--serif); font-size: 1.35rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
+.stat-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Tabs */
+.tab-nav { display: flex; gap: 0.35rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.tab-btn { background: transparent; border: 1px solid rgba(255,255,255,0.06); padding: 0.55rem 1.1rem; color: var(--text-muted); font-size: 0.72rem; font-weight: 600; font-family: var(--sans); text-transform: uppercase; letter-spacing: 0.1em; cursor: pointer; transition: all 0.2s; }
+.tab-btn.active { background: rgba(212,160,90,0.12); border-color: rgba(212,160,90,0.35); color: var(--gold); }
+.tab-btn:hover:not(.active) { border-color: rgba(255,255,255,0.12); color: var(--text); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Chart container */
+.chart-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; margin-bottom: 2rem; }
+.chart-box svg { display: block; width: 100%; overflow: visible; }
+.chart-note { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem; }
+.chart-summary { text-align: center; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.chart-summary .big { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); }
+.chart-summary .sub { color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem; }
+
+/* Phase bar */
+.phase-bar { display: flex; gap: 2px; margin-bottom: 0.5rem; }
+.phase-seg { height: 4px; position: relative; }
+.phase-label { position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-size: 0.58rem; color: var(--text-muted); white-space: nowrap; letter-spacing: 0.05em; text-transform: uppercase; }
+
+/* Milestones list */
+.milestones { border-top: 1px solid rgba(255,255,255,0.04); padding-top: 1rem; margin-top: 1.25rem; }
+.milestones-title { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.75rem; }
+.ms-row { display: flex; align-items: baseline; gap: 0.75rem; padding: 0.35rem 0; }
+.ms-date { color: var(--gold); font-size: 0.72rem; font-weight: 600; min-width: 3.2rem; }
+.ms-arrow { color: var(--gold); font-size: 0.6rem; opacity: 0.5; }
+.ms-text { color: var(--text-muted); font-size: 0.78rem; flex: 1; }
+.ms-cost { color: var(--text-muted); font-size: 0.72rem; margin-left: auto; }
+
+/* Model breakdown */
+.model-layout { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; }
+.model-chart { flex: 0 0 260px; }
+.model-list { flex: 1; min-width: 260px; }
+.model-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.model-item:last-child { border-bottom: none; }
+.model-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.model-name { font-size: 0.85rem; font-weight: 500; }
+.model-pct { font-size: 0.72rem; color: var(--text-muted); }
+.model-cost { font-size: 0.95rem; font-weight: 600; color: var(--gold); margin-left: auto; }
+.model-note { margin-top: 1.25rem; padding: 1rem; background: rgba(212,160,90,0.06); border: 1px solid rgba(212,160,90,0.12); }
+.model-note p { margin: 0; font-size: 0.85rem; color: var(--text); line-height: 1.65; }
+
+/* Comparison */
+.comp-bar-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
+.comp-label { min-width: 120px; font-size: 0.82rem; color: var(--text-muted); text-align: right; }
+.comp-track { flex: 1; height: 28px; position: relative; }
+.comp-fill { height: 100%; transition: width 0.6s ease; }
+.comp-val { position: absolute; right: -4rem; top: 50%; transform: translateY(-50%); font-size: 0.82rem; font-weight: 600; }
+
+/* Capabilities grid */
+.cap-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.75rem 0 2.5rem; }
+.cap-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; transition: border-color 0.3s; }
+.cap-card:hover { border-color: rgba(212,160,90,0.2); }
+.cap-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.4rem; }
+.cap-card p { margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+/* Investment table */
+.inv-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.inv-table th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.inv-table td { font-size: 0.88rem; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.inv-table td:nth-child(2) { color: var(--gold); font-weight: 600; white-space: nowrap; }
+.inv-table tr:last-child td { border-bottom: none; font-weight: 600; color: var(--text); }
+.inv-table tr:last-child td:nth-child(2) { color: var(--gold); font-size: 1rem; }
+.inv-table .free { color: var(--forest); }
+
+/* Workflow diagram */
+.workflow { display: flex; align-items: center; justify-content: center; gap: 0.5rem; flex-wrap: wrap; margin: 2rem 0; }
+.wf-node { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1rem 1.25rem; text-align: center; min-width: 140px; }
+.wf-node.human { border-color: rgba(212,160,90,0.35); background: rgba(212,160,90,0.06); }
+.wf-node h4 { font-size: 0.78rem; font-weight: 600; margin-bottom: 0.25rem; }
+.wf-node p { font-size: 0.7rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
+.wf-arrow { color: var(--text-muted); font-size: 1.2rem; }
+
+/* Commit chart */
+.commit-chart-wrap { margin: 1.5rem 0; }
+
+/* Quote */
+.quote-block { border-left: 2px solid var(--gold); padding: 1.5rem 0 1.5rem 1.5rem; margin: 2.5rem 0; max-width: 700px; }
+.quote-block blockquote { font-family: var(--serif); font-size: 1.1rem; font-style: italic; color: var(--text); line-height: 1.55; margin-bottom: 0.5rem; }
+.quote-block cite { font-size: 0.78rem; color: var(--text-muted); font-style: normal; }
+
+/* Callout */
+.callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
+.callout p { color: var(--text); margin: 0; }
+
+/* Article links */
+.article-links { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.primary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+.primary-link:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); }
+.secondary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.12); transition: all 0.3s ease; }
+.secondary-link:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
+
+/* CTA */
+.build-cta { text-align: center; padding: 3rem 0 5rem; }
+.build-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+
+/* Tooltip */
+.chart-tooltip { position: absolute; pointer-events: none; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.08); padding: 0.75rem 1rem; z-index: 50; min-width: 160px; opacity: 0; transition: opacity 0.15s; }
+.chart-tooltip.visible { opacity: 1; }
+.ct-date { font-size: 0.82rem; font-weight: 600; color: var(--text); }
+.ct-val { font-size: 1.15rem; font-weight: 700; color: var(--gold); margin: 0.2rem 0; }
+.ct-phase { font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+.ct-ms { font-size: 0.75rem; color: var(--text); margin-top: 0.4rem; padding-top: 0.4rem; border-top: 1px solid rgba(255,255,255,0.06); line-height: 1.4; }
+
+footer { border-top: 1px solid rgba(255,255,255,0.04); padding: 3rem 2rem; max-width: 1060px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+footer p, footer a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
+footer a:hover { color: var(--gold); }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; align-items: center; justify-content: center; }
+.modal-overlay.active { display: flex; }
+.modal { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2.5rem; max-width: 520px; width: 90%; position: relative; }
+.modal h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--text); margin-bottom: 0.5rem; }
+.modal p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); font-size: 1.5rem; cursor: pointer; line-height: 1; }
+.modal-close:hover { color: var(--text); }
+.modal input, .modal textarea { width: 100%; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; }
+.modal input:focus, .modal textarea:focus { border-color: rgba(212,160,90,0.4); }
+.modal input::placeholder, .modal textarea::placeholder { color: rgba(196,185,168,0.5); }
+.modal textarea { resize: vertical; min-height: 100px; }
+.modal-btn { width: 100%; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; padding: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: var(--sans); }
+.modal-btn:hover { box-shadow: 0 8px 35px rgba(212,160,90,0.25); transform: translateY(-1px); }
+.modal .form-success { display: none; text-align: center; padding: 2rem 0; }
+.modal .form-success h3 { margin-bottom: 0.75rem; }
+.q-step { display: none; }
+.q-step.active { display: block; }
+.q-option { display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
+.q-option:hover { border-color: rgba(212,160,90,0.4); background: rgba(212,160,90,0.05); }
+.q-option .q-opt-label { font-weight: 600; margin-bottom: 0.25rem; }
+.q-option .q-opt-desc { font-size: 0.8rem; color: var(--text-muted); }
+.q-progress { display: flex; gap: 6px; margin-bottom: 1.5rem; }
+.q-dot { height: 3px; flex: 1; background: rgba(255,255,255,0.08); transition: background 0.3s; }
+.q-dot.filled { background: var(--gold); }
+.q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
+.q-back:hover { color: var(--text); }
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .model-layout { flex-direction: column; }
+  .model-chart { flex: none; width: 100%; display: flex; justify-content: center; }
+  .comp-label { min-width: 80px; font-size: 0.72rem; }
+  .comp-val { right: -3rem; font-size: 0.72rem; }
+  .workflow { gap: 0.25rem; }
+  .wf-node { min-width: 100px; padding: 0.75rem; }
+  .wf-arrow { font-size: 0.9rem; }
+}
+@media (max-width: 640px) {
+  nav { padding: 1rem 1.25rem; }
+  .nav-links { display: none; }
+  .logo img { height: 64px; }
+  .hero { padding: 7rem 1.25rem 2rem; }
+  .content { padding: 0 1.25rem; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
+  <div class="nav-links">
+    <a href="/why-now/">Why Now</a>
+    <a href="/build/" class="active">Build</a>
+    <a href="/services/">Services</a>
+  </div>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+</nav>
+
+<section class="hero">
+  <p class="hero-eyebrow">Build &mdash; The Real Numbers</p>
+  <h1>$376 to build a production agent system. <em>26 days. Every receipt included.</em></h1>
+  <p class="hero-sub">From first skill to a running business. Email, CRM, calendar, sales prospecting, automated reporting, security monitoring, and cost controls. Then we used the same stack to name, brand, and launch Briu. Here's every dollar.</p>
+</section>
+
+<div class="content">
+<article>
+
+  <div class="stats">
+    <div class="stat-box">
+      <div class="stat-value">$376</div>
+      <div class="stat-label">Total API Spend</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">$14.46</div>
+      <div class="stat-label">Average Daily</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">$2–5</div>
+      <div class="stat-label">Steady State / Day</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">$42.58</div>
+      <div class="stat-label">Peak Day (Mar 6)</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">12</div>
+      <div class="stat-label">Skills Deployed</div>
+    </div>
+  </div>
+
+  <!-- Tab navigation -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('daily')">Daily Spend</button>
+    <button class="tab-btn" onclick="switchTab('cumulative')">Cumulative</button>
+    <button class="tab-btn" onclick="switchTab('models')">Model Breakdown</button>
+    <button class="tab-btn" onclick="switchTab('comparison')">vs. Traditional</button>
+  </div>
+
+  <!-- Daily Spend -->
+  <div class="tab-panel active" id="panel-daily">
+    <div class="chart-box">
+      <div class="phase-bar">
+        <div class="phase-seg" style="flex:7;background:rgba(212,160,90,0.8)"><span class="phase-label">Building</span></div>
+        <div class="phase-seg" style="flex:7;background:rgba(212,160,90,0.45)"><span class="phase-label">Stabilization</span></div>
+        <div class="phase-seg" style="flex:5;background:rgba(212,160,90,0.6)"><span class="phase-label">Cost Fix</span></div>
+        <div class="phase-seg" style="flex:7;background:rgba(212,160,90,0.95)"><span class="phase-label">Briu Launch</span></div>
+      </div>
+      <div id="daily-chart" style="height:340px;position:relative;margin-top:2rem"></div>
+      <div class="milestones">
+        <div class="milestones-title">Key Milestones</div>
+        <div id="milestones-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cumulative -->
+  <div class="tab-panel" id="panel-cumulative">
+    <div class="chart-box">
+      <p class="chart-note">Running total over 26 days. The steepest slopes are the heaviest build and optimization days.</p>
+      <div id="cumulative-chart" style="height:340px;position:relative"></div>
+      <div class="chart-summary">
+        <span class="big">$376</span>
+        <span class="sub">Total investment to build a production agent system + launch a company</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Model Breakdown -->
+  <div class="tab-panel" id="panel-models">
+    <div class="chart-box">
+      <div class="model-layout">
+        <div class="model-chart">
+          <svg id="donut-chart" viewBox="0 0 260 260" width="260" height="260"></svg>
+        </div>
+        <div class="model-list">
+          <div class="milestones-title" style="margin-bottom:0.5rem">Cost by Model</div>
+          <div class="model-item">
+            <div class="model-dot" style="background:var(--gold)"></div>
+            <div><div class="model-name">Sonnet 4.6</div><div class="model-pct">46.9% of spend</div></div>
+            <div class="model-cost">$176</div>
+          </div>
+          <div class="model-item">
+            <div class="model-dot" style="background:var(--gold-light)"></div>
+            <div><div class="model-name">Sonnet 4.5</div><div class="model-pct">45.1% of spend</div></div>
+            <div class="model-cost">$170</div>
+          </div>
+          <div class="model-item">
+            <div class="model-dot" style="background:var(--opus)"></div>
+            <div><div class="model-name">Opus 4.6</div><div class="model-pct">5.7% of spend</div></div>
+            <div class="model-cost">$21</div>
+          </div>
+          <div class="model-item">
+            <div class="model-dot" style="background:var(--haiku)"></div>
+            <div><div class="model-name">Haiku 4.5</div><div class="model-pct">2.3% of spend</div></div>
+            <div class="model-cost">$9</div>
+          </div>
+          <div class="model-note">
+            <p>Haiku handles the heartbeat (routine checks) at $9 total. Sonnet handles daily operations. Opus is reserved for complex reasoning and self-modification. Multi-model routing is how you keep costs under control without sacrificing quality where it matters.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- vs. Traditional -->
+  <div class="tab-panel" id="panel-comparison">
+    <div class="chart-box">
+      <p class="chart-note">What it would cost to hire humans for the same work. The agent doesn't replace a single role. It handles pieces of many roles, 24/7, for $376 total.</p>
+      <div id="comparison-chart" style="padding:1rem 0"></div>
+      <div class="callout" style="margin-top:1.5rem;background:rgba(212,160,90,0.06);border-color:rgba(212,160,90,0.12)">
+        <p style="text-align:center;line-height:1.8">
+          Traditional equivalent: <strong style="color:var(--gold)">~$27,500</strong> in contractors and agencies.<br>
+          Actual cost with agents: <strong style="color:var(--gold)">$376</strong> in API spend + founder time.<br>
+          <span style="color:var(--text-muted);font-size:0.85rem">And the system keeps running. Every day it operates, the ROI compounds.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- What $376 Built -->
+  <h2>What $376 built</h2>
+  <div class="cap-grid">
+    <div class="cap-card"><h4>Email Management</h4><p>Inbox triage, draft responses, sent-mail tracking across 2 accounts. Human approval before any outbound.</p></div>
+    <div class="cap-card"><h4>CRM Automation</h4><p>HubSpot contact/company management, activity logging, deal tracking. Dedup checks against cached data.</p></div>
+    <div class="cap-card"><h4>Sales Prospecting</h4><p>Apollo discovery, website qualification via browser automation, personalized outreach drafts. $0.60-0.70 per run.</p></div>
+    <div class="cap-card"><h4>Automated Reporting</h4><p>Monthly client reports: data export, PDF generation, Gmail draft with attachments. 4 clients, fully autonomous.</p></div>
+    <div class="cap-card"><h4>Daily Briefings</h4><p>Morning briefing at 7 AM: email summary, calendar, follow-ups, CRM activity, cost tracking. Delivered to Discord.</p></div>
+    <div class="cap-card"><h4>Security Monitoring</h4><p>Weekly self-audits, cost watchdog every 15 min, exec approval gates on all sensitive operations.</p></div>
+    <div class="cap-card"><h4>Brand Creation</h4><p>Domain search across 50+ candidates, trademark screening, whois lookups. Built a new OpenClaw skill mid-session.</p></div>
+    <div class="cap-card"><h4>This Website</h4><p>Strategy with Claude Max. Built with Claude Code. Services page, economics charts, interactive forms. Shipped same day.</p></div>
+  </div>
+
+  <!-- Full Investment Table -->
+  <h2>The full investment picture</h2>
+  <p>The $376 API figure is the OpenClaw runtime cost. Here is the complete picture including all subscriptions and tools used during the first month:</p>
+
+  <table class="inv-table">
+    <thead>
+      <tr><th>Item</th><th>Cost</th><th>What it did</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>OpenClaw API</td><td>$376</td><td>Agent runtime: email, CRM, sales, reporting, security, brand research</td></tr>
+      <tr><td>Claude Max</td><td>$200/mo</td><td>Strategy (web app), code generation (Claude Code), 9-10hr sessions</td></tr>
+      <tr><td>ChatGPT Plus</td><td>$20/mo</td><td>Second opinion, review, cross-validation of agent output</td></tr>
+      <tr><td>Gemini Advanced</td><td>$20/mo</td><td>Third opinion, factual checks, alternative perspectives</td></tr>
+      <tr><td>Midjourney</td><td>~$10-20/mo</td><td>400+ brand generations across 7 creative directions</td></tr>
+      <tr><td>Domain (briu.ai)</td><td>~$10</td><td>Porkbun registration</td></tr>
+      <tr><td>GitHub Pages</td><td class="free">$0</td><td>Website hosting</td></tr>
+      <tr><td>Cloudflare</td><td class="free">$0</td><td>DNS + SSL</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>~$636</strong></td><td><strong>Production agent + company launch, month one</strong></td></tr>
+    </tbody>
+  </table>
+
+  <!-- Multi-Model Workflow -->
+  <h2>The multi-model workflow</h2>
+  <p>No single model does everything. The real architecture is a routing system where each model handles what it is best at, with a human orchestrating the whole thing:</p>
+
+  <div class="workflow">
+    <div class="wf-node">
+      <h4>Claude Max</h4>
+      <p>Strategy, positioning,<br>copy, Claude Code</p>
+    </div>
+    <span class="wf-arrow">&rarr;</span>
+    <div class="wf-node">
+      <h4>OpenClaw / Sonnet</h4>
+      <p>Autonomous ops,<br>daily tasks, skills</p>
+    </div>
+    <span class="wf-arrow">&rarr;</span>
+    <div class="wf-node">
+      <h4>GPT</h4>
+      <p>Review, feedback,<br>cross-validation</p>
+    </div>
+    <span class="wf-arrow">&rarr;</span>
+    <div class="wf-node">
+      <h4>Gemini</h4>
+      <p>Fact-checking,<br>alternative view</p>
+    </div>
+  </div>
+  <div style="text-align:center;margin-bottom:2.5rem">
+    <div class="wf-node human" style="display:inline-block;margin-top:0.75rem">
+      <h4 style="color:var(--gold)">Human Orchestrator</h4>
+      <p>Judgment, taste, final decisions, approval gates</p>
+    </div>
+  </div>
+
+  <p>Claude Max handles strategic thinking and code generation. The OpenClaw agent (running Sonnet) handles autonomous daily operations. GPT reviews output for blind spots. Gemini validates facts. The human sits in the center, orchestrating which model handles what, and making every decision that requires judgment.</p>
+
+  <!-- Commit Velocity -->
+  <h2>Commit velocity: 244 commits in 26 days</h2>
+  <p>Every commit in the OpenClaw repository, plotted by day. Commit density tracks closely with API spend — the heaviest build days are also the most expensive. Day one (Feb 12) had 36 commits. The Briu launch day (Mar 5) had 28.</p>
+
+  <div class="chart-box">
+    <div id="commit-chart" style="height:260px;position:relative"></div>
+    <div class="chart-summary">
+      <span class="big">244</span>
+      <span class="sub">commits across 26 days &mdash; 9.4 per day average</span>
+    </div>
+  </div>
+
+  <!-- Steinberger quote -->
+  <div class="quote-block">
+    <blockquote>"People told me they have a small business and they've been struggling and OpenClaw helped them automate a few of the tedious tasks, from collecting invoices to answering customer emails, that then freed them up and gave them a bit more joy in their life."</blockquote>
+    <cite>Peter Steinberger, creator of OpenClaw &mdash; Lex Fridman Podcast #491</cite>
+  </div>
+
+  <div class="callout">
+    <p>Jason Calacanis hit the key question: "When do tokens outpace the salary of the employee? Because you're about to hit it." For most businesses, we are nowhere near that threshold. The economics are overwhelmingly in favor of building.</p>
+  </div>
+
+  <div class="article-links">
+    <a href="/build/" class="primary-link">Back to Build</a>
+    <a href="#" onclick="openContactForm();return false" class="secondary-link">Book a Call</a>
+  </div>
+
+</article>
+</div>
+
+<div class="build-cta">
+  <p>If you read this and thought "I could do this" &mdash; you're right.</p>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContactForm()">&times;</button>
+    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>
+    <div class="q-step active" id="q-step-1">
+      <h3>How does your business use AI today?</h3>
+      <p>This helps us tailor the conversation to where you are.</p>
+      <button class="q-option" onclick="selectAI('We use free tools like ChatGPT')"><div class="q-opt-label">Getting started</div><div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div></button>
+      <button class="q-option" onclick="selectAI('Enterprise AI accounts with multiple vendors')"><div class="q-opt-label">Enterprise accounts</div><div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div></button>
+      <button class="q-option" onclick="selectAI('Already building agents or significant automation')"><div class="q-opt-label">Building with AI</div><div class="q-opt-desc">We're already building agents or automating significant business processes</div></button>
+    </div>
+    <div class="q-step" id="q-step-2">
+      <h3>What would you most like to automate?</h3>
+      <p>No wrong answers. Just tell us what takes up your team's time.</p>
+      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
+      <button class="modal-btn" onclick="goToStep(3)">Continue</button>
+      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
+    </div>
+    <div class="q-step" id="q-step-3">
+      <h3>Where should we send our thoughts?</h3>
+      <p>We'll get back within 24 hours with specific ideas for your business.</p>
+      <form id="contactForm" action="https://formsubmit.co/ajax/lucas@briu.ai" method="POST">
+        <input type="text" name="_honey" style="display:none">
+        <input type="hidden" name="_subject" value="New inquiry from briu.ai (The Real Numbers)">
+        <input type="hidden" name="ai_usage" id="q-ai-usage">
+        <input type="hidden" name="automate" id="q-automate-val">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <input type="text" name="company" placeholder="Company (optional)">
+        <button type="submit" class="modal-btn">Send</button>
+      </form>
+      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
+    </div>
+    <div class="form-success" id="formSuccess"><h3>Message sent</h3><p>We'll be in touch within 24 hours.</p></div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Briu. All rights reserved.</p>
+  <a href="mailto:lucas@briu.ai">lucas@briu.ai</a>
+</footer>
+
+<script>
+// === DATA ===
+var dailyData = [
+  { date:"Feb 10", cost:4.22, phase:"build", milestone:"First skills deployed", commits:1 },
+  { date:"Feb 11", cost:10.70, phase:"build", commits:0 },
+  { date:"Feb 12", cost:23.02, phase:"build", milestone:"Gmail + Calendar connected", commits:36 },
+  { date:"Feb 13", cost:36.38, phase:"build", milestone:"HubSpot + Apollo live", commits:14 },
+  { date:"Feb 14", cost:23.54, phase:"build", commits:12 },
+  { date:"Feb 15", cost:4.84, phase:"build", commits:6 },
+  { date:"Feb 16", cost:26.08, phase:"build", commits:16 },
+  { date:"Feb 17", cost:17.13, phase:"stable", milestone:"Morning briefing v3", commits:26 },
+  { date:"Feb 18", cost:8.31, phase:"stable", commits:7 },
+  { date:"Feb 19", cost:9.58, phase:"stable", commits:1 },
+  { date:"Feb 20", cost:5.63, phase:"stable", commits:7 },
+  { date:"Feb 21", cost:7.11, phase:"stable", commits:0 },
+  { date:"Feb 22", cost:4.02, phase:"stable", commits:0 },
+  { date:"Feb 23", cost:8.88, phase:"stable", commits:6 },
+  { date:"Feb 24", cost:9.00, phase:"optimize", milestone:"State database live", commits:15 },
+  { date:"Feb 25", cost:40.74, phase:"optimize", milestone:"Cost crisis: 195K token session", commits:13 },
+  { date:"Feb 26", cost:33.65, phase:"optimize", milestone:"Cache + context pruning deployed", commits:13 },
+  { date:"Feb 27", cost:1.79, phase:"optimize", milestone:"Cost drops 90%", commits:7 },
+  { date:"Feb 28", cost:38.29, phase:"optimize", milestone:"Sales prospecting skill chain", commits:22 },
+  { date:"Mar 1", cost:7.81, phase:"launch", commits:1 },
+  { date:"Mar 2", cost:1.19, phase:"launch", commits:1 },
+  { date:"Mar 3", cost:0.55, phase:"launch", commits:5 },
+  { date:"Mar 4", cost:5.15, phase:"launch", commits:13 },
+  { date:"Mar 5", cost:3.22, phase:"launch", milestone:"Briu founded", commits:28 },
+  { date:"Mar 6", cost:42.58, phase:"launch", milestone:"Website + services built", commits:1 },
+  { date:"Mar 7", cost:2.59, phase:"launch", commits:1 }
+];
+
+var phaseAlpha = { build:0.8, stable:0.45, optimize:0.6, launch:0.95 };
+
+var compData = [
+  { label:"Part-time VA (3 mo)", cost:4500 },
+  { label:"Freelance dev (website)", cost:8000 },
+  { label:"Branding agency", cost:15000 },
+  { label:"Full agent build", cost:376, briu:true }
+];
+
+// === TABS ===
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(function(b,i) {
+    b.classList.toggle('active', b.textContent.toLowerCase().replace(/[^a-z]/g,'').indexOf(id.replace(/[^a-z]/g,'')) >= 0 ||
+      (['daily','cumulative','models','comparison'][i] === id));
+  });
+  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+  document.getElementById('panel-' + id).classList.add('active');
+  // Re-render charts on tab switch
+  if (id === 'cumulative' && !document.getElementById('cumulative-chart').hasChildNodes()) renderCumulative();
+  if (id === 'comparison' && !document.getElementById('comparison-chart').hasChildNodes()) renderComparison();
+}
+// Fix tab switching
+document.querySelectorAll('.tab-btn').forEach(function(btn, i) {
+  var ids = ['daily','cumulative','models','comparison'];
+  btn.onclick = function() { switchTab(ids[i]); };
+});
+
+// === CHART RENDERING ===
+function renderBarChart(containerId, data, valueKey, barColor, maxOverride, showLabels) {
+  var container = document.getElementById(containerId);
+  container.innerHTML = '';
+  var w = container.offsetWidth;
+  var h = container.offsetHeight;
+  var pad = { top: 10, right: 10, bottom: 40, left: 50 };
+  var cw = w - pad.left - pad.right;
+  var ch = h - pad.top - pad.bottom;
+  var max = maxOverride || Math.max.apply(null, data.map(function(d) { return d[valueKey]; }));
+  max = max * 1.1;
+  var barW = Math.max(4, (cw / data.length) * 0.7);
+  var gap = cw / data.length;
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+  svg.setAttribute('width', w);
+  svg.setAttribute('height', h);
+  svg.style.display = 'block';
+  svg.style.width = '100%';
+  svg.style.height = h + 'px';
+
+  // Y axis ticks
+  for (var t = 0; t <= 4; t++) {
+    var val = (max / 4) * t;
+    var y = pad.top + ch - (val / max) * ch;
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', pad.left); line.setAttribute('x2', w - pad.right);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+    svg.appendChild(line);
+    var txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', pad.left - 8); txt.setAttribute('y', y + 3);
+    txt.setAttribute('text-anchor', 'end');
+    txt.setAttribute('fill', 'rgba(196,185,168,0.4)');
+    txt.setAttribute('font-size', '10');
+    txt.textContent = valueKey === 'cost' ? '$' + Math.round(val) : Math.round(val);
+    svg.appendChild(txt);
+  }
+
+  // Bars
+  data.forEach(function(d, i) {
+    var barH = (d[valueKey] / max) * ch;
+    var x = pad.left + i * gap + (gap - barW) / 2;
+    var y = pad.top + ch - barH;
+    var rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+    rect.setAttribute('x', x); rect.setAttribute('y', y);
+    rect.setAttribute('width', barW); rect.setAttribute('height', Math.max(1, barH));
+    rect.setAttribute('rx', '2');
+    if (typeof barColor === 'function') {
+      rect.setAttribute('fill', barColor(d, i));
+    } else {
+      rect.setAttribute('fill', barColor);
+    }
+    rect.setAttribute('data-idx', i);
+    rect.style.cursor = 'pointer';
+    svg.appendChild(rect);
+
+    // X labels (every 3rd)
+    if (i % 3 === 0 || i === data.length - 1) {
+      var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lbl.setAttribute('x', x + barW / 2); lbl.setAttribute('y', pad.top + ch + 20);
+      lbl.setAttribute('text-anchor', 'middle');
+      lbl.setAttribute('fill', 'rgba(196,185,168,0.4)');
+      lbl.setAttribute('font-size', '9');
+      lbl.textContent = d.date;
+      svg.appendChild(lbl);
+    }
+  });
+
+  container.appendChild(svg);
+
+  // Tooltip
+  var tooltip = document.createElement('div');
+  tooltip.className = 'chart-tooltip';
+  container.appendChild(tooltip);
+
+  svg.addEventListener('mousemove', function(e) {
+    var rect = svg.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var idx = Math.floor((mx - pad.left) / gap);
+    if (idx >= 0 && idx < data.length) {
+      var d = data[idx];
+      tooltip.className = 'chart-tooltip visible';
+      tooltip.innerHTML = '<div class="ct-date">' + d.date + '</div>' +
+        '<div class="ct-val">' + (valueKey === 'cost' ? '$' + d[valueKey].toFixed(2) : d[valueKey] + ' commits') + '</div>' +
+        (d.phase ? '<div class="ct-phase">' + ({build:'Building Core Skills',stable:'Stabilization',optimize:'Cost Crisis + Fix',launch:'Briu Launch'}[d.phase] || '') + '</div>' : '') +
+        (d.milestone ? '<div class="ct-ms">' + d.milestone + '</div>' : '');
+      var tx = Math.min(e.clientX - container.getBoundingClientRect().left + 12, container.offsetWidth - 200);
+      tooltip.style.left = tx + 'px';
+      tooltip.style.top = (e.clientY - container.getBoundingClientRect().top - 60) + 'px';
+    }
+  });
+  svg.addEventListener('mouseleave', function() {
+    tooltip.className = 'chart-tooltip';
+  });
+}
+
+// Daily spend chart
+function renderDaily() {
+  renderBarChart('daily-chart', dailyData, 'cost', function(d) {
+    var a = phaseAlpha[d.phase] || 0.7;
+    if (d.milestone) return 'rgba(212,160,90,1)';
+    return 'rgba(212,160,90,' + a + ')';
+  });
+
+  // Milestones
+  var ml = document.getElementById('milestones-list');
+  ml.innerHTML = '';
+  dailyData.forEach(function(d) {
+    if (!d.milestone) return;
+    var row = document.createElement('div');
+    row.className = 'ms-row';
+    row.innerHTML = '<span class="ms-date">' + d.date + '</span><span class="ms-arrow">&rarr;</span><span class="ms-text">' + d.milestone + '</span><span class="ms-cost">$' + d.cost.toFixed(2) + '</span>';
+    ml.appendChild(row);
+  });
+}
+
+// Cumulative chart
+function renderCumulative() {
+  var container = document.getElementById('cumulative-chart');
+  container.innerHTML = '';
+  var w = container.offsetWidth;
+  var h = container.offsetHeight;
+  var pad = { top: 10, right: 10, bottom: 40, left: 50 };
+  var cw = w - pad.left - pad.right;
+  var ch = h - pad.top - pad.bottom;
+
+  var running = 0;
+  var cumData = dailyData.map(function(d) { running += d.cost; return { date: d.date, cum: running, cost: d.cost, milestone: d.milestone }; });
+  var max = cumData[cumData.length - 1].cum * 1.1;
+
+  var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+  svg.style.display = 'block'; svg.style.width = '100%'; svg.style.height = h + 'px';
+
+  // Gradient
+  var defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+  var grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+  grad.setAttribute('id', 'areaGrad'); grad.setAttribute('x1', '0'); grad.setAttribute('y1', '0'); grad.setAttribute('x2', '0'); grad.setAttribute('y2', '1');
+  var s1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+  s1.setAttribute('offset', '0%'); s1.setAttribute('stop-color', '#D4A05A'); s1.setAttribute('stop-opacity', '0.25');
+  var s2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+  s2.setAttribute('offset', '100%'); s2.setAttribute('stop-color', '#D4A05A'); s2.setAttribute('stop-opacity', '0.02');
+  grad.appendChild(s1); grad.appendChild(s2); defs.appendChild(grad); svg.appendChild(defs);
+
+  // Y axis
+  for (var t = 0; t <= 4; t++) {
+    var val = (max / 4) * t;
+    var y = pad.top + ch - (val / max) * ch;
+    var line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('x1', pad.left); line.setAttribute('x2', w - pad.right);
+    line.setAttribute('y1', y); line.setAttribute('y2', y);
+    line.setAttribute('stroke', 'rgba(255,255,255,0.04)');
+    svg.appendChild(line);
+    var txt = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    txt.setAttribute('x', pad.left - 8); txt.setAttribute('y', y + 3);
+    txt.setAttribute('text-anchor', 'end'); txt.setAttribute('fill', 'rgba(196,185,168,0.4)'); txt.setAttribute('font-size', '10');
+    txt.textContent = '$' + Math.round(val);
+    svg.appendChild(txt);
+  }
+
+  // Build path
+  var gap = cw / (cumData.length - 1);
+  var linePts = [];
+  var areaPts = [];
+  cumData.forEach(function(d, i) {
+    var x = pad.left + i * gap;
+    var y = pad.top + ch - (d.cum / max) * ch;
+    linePts.push(x + ',' + y);
+    areaPts.push(x + ',' + y);
+  });
+  // Close area
+  areaPts.push((pad.left + (cumData.length - 1) * gap) + ',' + (pad.top + ch));
+  areaPts.push(pad.left + ',' + (pad.top + ch));
+
+  var area = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+  area.setAttribute('points', areaPts.join(' '));
+  area.setAttribute('fill', 'url(#areaGrad)');
+  svg.appendChild(area);
+
+  var line2 = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
+  line2.setAttribute('points', linePts.join(' '));
+  line2.setAttribute('fill', 'none'); line2.setAttribute('stroke', '#D4A05A'); line2.setAttribute('stroke-width', '2');
+  svg.appendChild(line2);
+
+  // X labels
+  cumData.forEach(function(d, i) {
+    if (i % 4 === 0 || i === cumData.length - 1) {
+      var lbl = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+      lbl.setAttribute('x', pad.left + i * gap); lbl.setAttribute('y', pad.top + ch + 20);
+      lbl.setAttribute('text-anchor', 'middle'); lbl.setAttribute('fill', 'rgba(196,185,168,0.4)'); lbl.setAttribute('font-size', '9');
+      lbl.textContent = d.date;
+      svg.appendChild(lbl);
+    }
+  });
+
+  container.appendChild(svg);
+
+  // Tooltip
+  var tooltip = document.createElement('div');
+  tooltip.className = 'chart-tooltip';
+  container.appendChild(tooltip);
+  svg.addEventListener('mousemove', function(e) {
+    var rect = svg.getBoundingClientRect();
+    var mx = e.clientX - rect.left;
+    var idx = Math.round((mx - pad.left) / gap);
+    idx = Math.max(0, Math.min(cumData.length - 1, idx));
+    var d = cumData[idx];
+    tooltip.className = 'chart-tooltip visible';
+    tooltip.innerHTML = '<div class="ct-date">' + d.date + '</div><div class="ct-val">$' + d.cum.toFixed(2) + ' total</div><div class="ct-phase">+$' + d.cost.toFixed(2) + ' this day</div>' + (d.milestone ? '<div class="ct-ms">' + d.milestone + '</div>' : '');
+    var tx = Math.min(e.clientX - container.getBoundingClientRect().left + 12, container.offsetWidth - 200);
+    tooltip.style.left = tx + 'px';
+    tooltip.style.top = (e.clientY - container.getBoundingClientRect().top - 60) + 'px';
+  });
+  svg.addEventListener('mouseleave', function() { tooltip.className = 'chart-tooltip'; });
+}
+
+// Donut chart
+function renderDonut() {
+  var svg = document.getElementById('donut-chart');
+  var data = [
+    { value: 176.44, color: '#D4A05A' },
+    { value: 169.53, color: '#E2B574' },
+    { value: 21.41, color: '#8a5a7a' },
+    { value: 8.62, color: '#5a8a6a' }
+  ];
+  var total = data.reduce(function(s, d) { return s + d.value; }, 0);
+  var cx = 130, cy = 130, r = 100, ir = 62;
+  var startAngle = -Math.PI / 2;
+
+  data.forEach(function(d) {
+    var angle = (d.value / total) * Math.PI * 2;
+    var endAngle = startAngle + angle;
+    var largeArc = angle > Math.PI ? 1 : 0;
+    var x1 = cx + r * Math.cos(startAngle);
+    var y1 = cy + r * Math.sin(startAngle);
+    var x2 = cx + r * Math.cos(endAngle);
+    var y2 = cy + r * Math.sin(endAngle);
+    var ix1 = cx + ir * Math.cos(endAngle);
+    var iy1 = cy + ir * Math.sin(endAngle);
+    var ix2 = cx + ir * Math.cos(startAngle);
+    var iy2 = cy + ir * Math.sin(startAngle);
+
+    var pathD = 'M ' + x1 + ' ' + y1 +
+      ' A ' + r + ' ' + r + ' 0 ' + largeArc + ' 1 ' + x2 + ' ' + y2 +
+      ' L ' + ix1 + ' ' + iy1 +
+      ' A ' + ir + ' ' + ir + ' 0 ' + largeArc + ' 0 ' + ix2 + ' ' + iy2 + ' Z';
+
+    var path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    path.setAttribute('d', pathD);
+    path.setAttribute('fill', d.color);
+    svg.appendChild(path);
+
+    startAngle = endAngle + 0.03; // small gap
+  });
+
+  // Center text
+  var t1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t1.setAttribute('x', cx); t1.setAttribute('y', cy - 4);
+  t1.setAttribute('text-anchor', 'middle'); t1.setAttribute('fill', '#D4A05A');
+  t1.setAttribute('font-size', '24'); t1.setAttribute('font-family', "'DM Serif Display', Georgia, serif");
+  t1.textContent = '$376';
+  svg.appendChild(t1);
+  var t2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+  t2.setAttribute('x', cx); t2.setAttribute('y', cy + 16);
+  t2.setAttribute('text-anchor', 'middle'); t2.setAttribute('fill', 'rgba(196,185,168,0.5)');
+  t2.setAttribute('font-size', '10');
+  t2.textContent = 'TOTAL API';
+  svg.appendChild(t2);
+}
+
+// Comparison chart
+function renderComparison() {
+  var container = document.getElementById('comparison-chart');
+  container.innerHTML = '';
+  var maxCost = 15000;
+  compData.forEach(function(d) {
+    var row = document.createElement('div');
+    row.className = 'comp-bar-row';
+    var pct = Math.max(1, (d.cost / maxCost) * 100);
+    var color = d.briu ? 'var(--gold)' : 'rgba(234,231,227,0.1)';
+    var valColor = d.briu ? 'var(--gold)' : 'var(--text-muted)';
+    row.innerHTML = '<div class="comp-label">' + d.label + '</div>' +
+      '<div class="comp-track"><div class="comp-fill" style="width:' + pct + '%;background:' + color + '"></div></div>' +
+      '<div class="comp-val" style="color:' + valColor + '">' + (d.cost >= 1000 ? '$' + (d.cost/1000) + 'K' : '$' + d.cost) + '</div>';
+    container.appendChild(row);
+  });
+}
+
+// Commit velocity chart
+function renderCommits() {
+  renderBarChart('commit-chart', dailyData, 'commits', function(d) {
+    if (d.commits >= 20) return 'rgba(212,160,90,1)';
+    if (d.commits >= 10) return 'rgba(212,160,90,0.75)';
+    return 'rgba(212,160,90,0.4)';
+  }, 40);
+}
+
+// === INIT ===
+window.addEventListener('load', function() {
+  renderDaily();
+  renderDonut();
+  renderCommits();
+});
+window.addEventListener('resize', function() {
+  renderDaily();
+  if (document.getElementById('panel-cumulative').classList.contains('active')) renderCumulative();
+  if (document.getElementById('panel-comparison').classList.contains('active')) renderComparison();
+  renderCommits();
+});
+
+// === MODAL ===
+var qData = {};
+function openContactForm() { document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; goToStep(1); }
+function closeContactForm() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
+function goToStep(n) { document.querySelectorAll('.q-step').forEach(function(el) { el.classList.remove('active'); }); document.getElementById('q-step-' + n).classList.add('active'); var dots = document.querySelectorAll('.q-dot'); dots.forEach(function(d, i) { d.classList.toggle('filled', i < n); }); }
+function selectAI(val) { qData.ai_usage = val; document.getElementById('q-ai-usage').value = val; goToStep(2); }
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeContactForm(); });
+document.getElementById('contactForm').addEventListener('submit', function(e) {
+  e.preventDefault(); var form = this;
+  document.getElementById('q-automate-val').value = document.getElementById('q-automate').value;
+  var btn = form.querySelector('.modal-btn'); btn.textContent = 'Sending...'; btn.disabled = true;
+  fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
+  .then(function(r) { return r.json(); }).then(function() {
+    document.querySelectorAll('.q-step').forEach(function(el) { el.classList.remove('active'); });
+    document.querySelector('.q-progress').style.display = 'none'; document.getElementById('formSuccess').style.display = 'block';
+    setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
+  }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
+});
+</script>
+</body>
+</html>
