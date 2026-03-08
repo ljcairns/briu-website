@@ -94,6 +94,23 @@ revealEls.forEach(function(el) { revealObs.observe(el); });
   counters.forEach(function(el) { counterObs.observe(el); });
 })();
 
+/* Card Tilt on Hover (desktop only) */
+(function() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  var cards = document.querySelectorAll('.use-case, .stat-box, .kickoff-card, .trust-card, .cost-card, .build-item, .tier');
+  cards.forEach(function(card) {
+    card.addEventListener('mousemove', function(e) {
+      var rect = card.getBoundingClientRect();
+      var x = (e.clientX - rect.left) / rect.width - 0.5;
+      var y = (e.clientY - rect.top) / rect.height - 0.5;
+      card.style.transform = 'perspective(800px) rotateY(' + (x * 4) + 'deg) rotateX(' + (-y * 4) + 'deg) translateY(-3px)';
+    });
+    card.addEventListener('mouseleave', function() {
+      card.style.transform = '';
+    });
+  });
+})();
+
 /* Magnetic Buttons (desktop only) */
 (function() {
   if (!window.matchMedia('(pointer: fine)').matches) return;

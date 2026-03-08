@@ -43,10 +43,21 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 
 /* What we build grid */
 .build-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
-.build-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; transition: all 0.4s ease; }
+.build-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; transition: all 0.4s ease; cursor: pointer; position: relative; }
 .build-item:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
-.build-item h4 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 400; }
+.build-item h4 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 400; display: flex; justify-content: space-between; align-items: center; }
+.build-item h4::after { content: '+'; color: var(--gold); font-size: 1.2rem; transition: transform 0.3s ease; }
+.build-item.expanded h4::after { transform: rotate(45deg); }
 .build-item p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0; }
+.build-item .build-detail { max-height: 0; overflow: hidden; transition: max-height 0.4s ease, margin 0.4s ease; }
+.build-item.expanded .build-detail { max-height: 300px; margin-top: 1rem; }
+.build-item.expanded { border-color: rgba(212,160,90,0.25); border-left: 2px solid var(--gold); }
+.build-detail p { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.build-detail .detail-link { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; margin-top: 0.5rem; transition: opacity 0.2s; }
+.build-detail .detail-link:hover { opacity: 0.7; }
+.build-detail .detail-link::after { content: ' →'; }
+@keyframes highlightFade { 0% { border-color: var(--gold); box-shadow: 0 0 20px rgba(212,160,90,0.2); } 100% { border-color: rgba(255,255,255,0.04); box-shadow: none; } }
+.build-item.highlighted { animation: highlightFade 2s ease forwards; }
 
 /* Service tiers */
 .tiers { display: grid; gap: 1.5rem; margin-top: 3rem; }
@@ -147,22 +158,42 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   <h2 class="reveal">Custom agents for the work that eats your team's time.</h2>
   <p>Every agent runs on your infrastructure, connects to your existing tools, and ships with approval gates, cost controls, and audit logs. Built on OpenClaw, the open-source agent framework. Your systems run independently of Briu. If you stop working with us, everything keeps running.</p>
 
-  <div class="build-grid">
-    <div class="build-item">
+  <div class="build-grid" id="capabilities">
+    <div class="build-item" id="personal-assistants" onclick="toggleCapability(this)">
       <h4>Personal Assistants</h4>
       <p>Email, calendar, contacts, daily briefings. Available 24/7 on WhatsApp, Slack, or Discord. Human approval on sensitive actions.</p>
+      <div class="build-detail">
+        <p>Integrates with Gmail, Google Calendar, Slack, WhatsApp, Discord. Your agent learns your preferences, manages your inbox, and handles scheduling — but every external action requires your approval.</p>
+        <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
+        <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
+      </div>
     </div>
-    <div class="build-item">
+    <div class="build-item" id="email-crm-sales" onclick="toggleCapability(this)">
       <h4>Email, CRM & Sales</h4>
       <p>Triage inbound email, draft responses, update HubSpot or Salesforce, qualify leads, send outreach, schedule follow-ups. Nothing sends without your OK.</p>
+      <div class="build-detail">
+        <p>Connects to HubSpot, Salesforce, Apollo, Gmail. Your agent researches prospects, drafts personalized outreach, logs every interaction, and keeps your pipeline current — overnight, every night.</p>
+        <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
+        <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
+      </div>
     </div>
-    <div class="build-item">
+    <div class="build-item" id="reporting-monitoring" onclick="toggleCapability(this)">
       <h4>Reporting & Monitoring</h4>
       <p>Automated reports, cost tracking, PDF generation and delivery on a schedule. Real-time spend visibility across all agents.</p>
+      <div class="build-detail">
+        <p>Daily summaries, weekly dashboards, cost alerts when spending exceeds thresholds. PDF reports generated and emailed on your schedule. Every agent's token usage tracked and visible.</p>
+        <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
+        <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
+      </div>
     </div>
-    <div class="build-item">
+    <div class="build-item" id="autonomous-operations" onclick="toggleCapability(this)">
       <h4>Autonomous Operations</h4>
       <p>Agents that work overnight: consolidating data, researching prospects, prepping morning reports. Your team wakes up to work already done.</p>
+      <div class="build-detail">
+        <p>Multi-agent orchestration with a master agent coordinating sub-agents. Runs on schedules you define. Morning briefings ready before you open your laptop. Full audit trail of every action taken.</p>
+        <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
+        <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
+      </div>
     </div>
   </div>
 </section>
@@ -377,5 +408,29 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 </footer>
 
 <script src="/shared.js"></script>
+<script>
+/* Expandable capability cards */
+function toggleCapability(el) {
+  var items = document.querySelectorAll('.build-item');
+  for (var i = 0; i < items.length; i++) {
+    if (items[i] !== el) items[i].classList.remove('expanded');
+  }
+  el.classList.toggle('expanded');
+}
+
+/* Deep-link highlight on arrival */
+(function() {
+  var hash = location.hash.replace('#', '');
+  if (!hash) return;
+  var target = document.getElementById(hash);
+  if (target) {
+    setTimeout(function() {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      target.classList.add('highlighted');
+      if (target.classList.contains('build-item')) target.classList.add('expanded');
+    }, 300);
+  }
+})();
+</script>
 </body>
 </html>

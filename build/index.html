@@ -36,6 +36,21 @@
 .stat-box:hover .stat-value { color: var(--gold-light); }
 .stat-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); transition: color 0.3s ease; }
 .stat-box:hover .stat-label { color: var(--text); }
+@keyframes statPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; text-shadow: 0 0 8px rgba(212,160,90,0.3); } }
+.stat-pulse .stat-value { animation: statPulse 3s ease-in-out infinite; }
+.stats-meta { text-align: center; margin-top: 0.75rem; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; max-width: 1060px; margin-left: auto; margin-right: auto; padding: 0 2rem; }
+
+/* Timeline filters */
+.vtl-filters { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.vtl-filter { padding: 0.4rem 1rem; font-size: 0.72rem; font-weight: 600; font-family: var(--sans); cursor: pointer; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s; letter-spacing: 0.02em; text-transform: uppercase; }
+.vtl-filter.active { background: rgba(212,160,90,0.15); color: var(--gold); border-color: rgba(212,160,90,0.3); }
+.vtl-filter:hover { border-color: rgba(212,160,90,0.2); }
+.vtl-entry { transition: opacity 0.3s ease, transform 0.3s ease; }
+.vtl-entry.filtered-out { opacity: 0.15; pointer-events: none; }
+
+/* Service cross-links */
+.card-service-link { display: block; font-size: 0.68rem; font-weight: 500; color: var(--text-muted); text-decoration: none; margin-top: 0.5rem; transition: color 0.2s; }
+.card-service-link:hover { color: var(--gold); }
 
 /* Sections */
 section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
@@ -143,8 +158,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <p>Briu was built by agents from day one. This is the operating log.</p>
 </section>
 
-<div class="stats">
-  <div class="stat-box reveal-scale">
+<div class="stats" id="buildStats">
+  <div class="stat-box reveal-scale stat-pulse">
     <div class="stat-value">Mar 5, 2026</div>
     <div class="stat-label">Founded</div>
   </div>
@@ -169,12 +184,20 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <div class="stat-label">Midjourney Generations</div>
   </div>
 </div>
+<div class="stats-meta">Last updated: Mar 8, 2026</div>
 
 <section>
   <p class="section-label reveal">Timeline</p>
+  <div class="vtl-filters">
+    <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
+    <button class="vtl-filter" onclick="filterTimeline('agent',this)">Agent</button>
+    <button class="vtl-filter" onclick="filterTimeline('brand',this)">Brand</button>
+    <button class="vtl-filter" onclick="filterTimeline('website',this)">Website</button>
+    <button class="vtl-filter" onclick="filterTimeline('business',this)">Business</button>
+  </div>
   <div class="vtl">
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="agent">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Feb 10</div>
@@ -183,7 +206,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="agent">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Feb 12</div>
@@ -192,7 +215,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="agent">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Feb 25</div>
@@ -201,7 +224,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="agent">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Feb 28</div>
@@ -210,7 +233,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry major">
+    <div class="vtl-entry major" data-category="business">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Mar 5</div>
@@ -219,7 +242,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="website">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Mar 6</div>
@@ -228,7 +251,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       </div>
     </div>
 
-    <div class="vtl-entry">
+    <div class="vtl-entry" data-category="business">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
         <div class="vtl-date">Mar 7</div>
@@ -295,6 +318,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <h3>Building Briu with Agents</h3>
       <p>From first agent skill to company launch. Exact toolchain, costs, security architecture, and what the agent cannot do.</p>
       <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
+      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
     </div>
 
     <div class="article-card">
@@ -302,6 +326,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <h3>Building a Production Agent in 26 Days</h3>
       <p>From first skill to 12 production capabilities. The full implementation: architecture, security, what broke, what we fixed, and what it cost.</p>
       <a href="/build/the-real-numbers/" class="card-link">Read</a>
+      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
     </div>
 
     <div class="article-card">
@@ -309,6 +334,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <h3>Creating the Briu Brand with Agents</h3>
       <p>400+ Midjourney generations. Hundreds of name candidates. One logo. How agents + founder taste produced a brand identity in hours, not months.</p>
       <a href="/build/brand-in-a-session/" class="card-link">Read</a>
+      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
     </div>
 
     <div class="article-card coming-soon">
@@ -370,5 +396,30 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </footer>
 
 <script src="/shared.js"></script>
+<script>
+/* Timeline filter */
+function filterTimeline(cat, btn) {
+  var filters = document.querySelectorAll('.vtl-filter');
+  for (var i = 0; i < filters.length; i++) filters[i].classList.remove('active');
+  btn.classList.add('active');
+  var entries = document.querySelectorAll('.vtl-entry');
+  for (var j = 0; j < entries.length; j++) {
+    if (cat === 'all' || entries[j].getAttribute('data-category') === cat) {
+      entries[j].classList.remove('filtered-out');
+    } else {
+      entries[j].classList.add('filtered-out');
+    }
+  }
+  if (history.replaceState) history.replaceState(null, '', cat === 'all' ? '/build/' : '/build/#' + cat);
+}
+/* Restore filter from hash */
+(function() {
+  var hash = location.hash.replace('#', '');
+  if (hash && hash !== 'all') {
+    var btn = document.querySelector('.vtl-filter[onclick*="' + hash + '"]');
+    if (btn) filterTimeline(hash, btn);
+  }
+})();
+</script>
 </body>
 </html>

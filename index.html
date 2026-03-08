@@ -219,6 +219,12 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
 .faq-item.open .faq-a { max-height: 200px; }
 .faq-a p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.75; padding-bottom: 1.25rem; margin: 0; }
+.faq-search { width: 100%; padding: 0.75rem 1rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.95rem; outline: none; transition: border-color 0.3s ease; margin-top: 1rem; }
+.faq-search:focus { border-color: rgba(212,160,90,0.4); }
+.faq-search::placeholder { color: var(--text-muted); }
+.faq-no-results { display: none; padding: 2rem; text-align: center; color: var(--text-muted); font-size: 0.95rem; }
+.faq-no-results a { color: var(--gold); text-decoration: none; font-weight: 600; }
+.faq-item.faq-hidden { display: none; }
 
 /* Assessment */
 .assess-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem; max-width: 640px; margin: 0 auto; }
@@ -1022,8 +1028,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <section>
   <p class="section-label reveal">FAQ</p>
   <h2 class="reveal">Common questions.</h2>
+  <input type="text" class="faq-search" id="faqSearch" placeholder="Search questions..." oninput="filterFAQ(this.value)">
 
-  <div class="faq-list">
+  <div class="faq-list" id="faqList">
     <div class="faq-item">
       <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
         <h3>Who is this for?</h3>
@@ -1078,6 +1085,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <p>A Founder Kickoff takes one session. You'll leave with a working agent deployed on your infrastructure and a written plan for what to build next. Most clients have their first agent running within a week.</p>
       </div>
     </div>
+  </div>
+  <div class="faq-no-results" id="faqNoResults">
+    We haven't answered that one yet. <a href="#" onclick="openContactForm();return false">Ask us directly →</a>
   </div>
 </section>
 
@@ -1158,6 +1168,27 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <script src="/shared.js"></script>
 <script src="/interactive.js"></script>
+<script>
+/* FAQ Search */
+function filterFAQ(query) {
+  var items = document.querySelectorAll('.faq-item');
+  var noResults = document.getElementById('faqNoResults');
+  var q = query.toLowerCase().trim();
+  var visible = 0;
+  for (var i = 0; i < items.length; i++) {
+    var h3 = items[i].querySelector('h3');
+    var p = items[i].querySelector('.faq-a p');
+    var text = (h3 ? h3.textContent : '') + ' ' + (p ? p.textContent : '');
+    if (!q || text.toLowerCase().indexOf(q) !== -1) {
+      items[i].classList.remove('faq-hidden');
+      visible++;
+    } else {
+      items[i].classList.add('faq-hidden');
+    }
+  }
+  noResults.style.display = (q && visible === 0) ? 'block' : 'none';
+}
+</script>
 <script>
 /* Chart tabs */
 function switchChart(view, btn) {
