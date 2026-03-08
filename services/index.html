@@ -41,10 +41,20 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
+@keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
+@keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-40px, 30px); } 66% { transform: translate(20px, -40px); } }
+@keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(50px, 20px); } 66% { transform: translate(-30px, -30px); } }
 .ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
-.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; }
-.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; }
-.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; }
+.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
+.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; animation: orbFloat2 30s ease-in-out infinite; }
+.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; animation: orbFloat3 20s ease-in-out infinite; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-scale { opacity: 0; transform: translateY(20px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 .hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
 .hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
@@ -202,6 +212,7 @@ footer a:hover { color: var(--gold); }
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <section class="hero">
@@ -212,8 +223,8 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">What we build</p>
-  <h2>Custom agents for the work that eats your team's time.</h2>
+  <p class="section-label reveal">What we build</p>
+  <h2 class="reveal">Custom agents for the work that eats your team's time.</h2>
   <p>Every agent runs on your infrastructure, connects to your existing tools, and ships with approval gates, cost controls, and audit logs. Built on OpenClaw, the open-source agent framework. Your systems run independently of Briu. If you stop working with us, everything keeps running.</p>
 
   <div class="build-grid">
@@ -237,8 +248,8 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">What operators are seeing</p>
-  <h2>This is already happening at real companies.</h2>
+  <p class="section-label reveal">What operators are seeing</p>
+  <h2 class="reveal">This is already happening at real companies.</h2>
 
   <div class="quotes-row">
     <div class="quote-card">
@@ -257,8 +268,8 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">How we work</p>
-  <h2>Choose your starting point. You own everything we build.</h2>
+  <p class="section-label reveal">How we work</p>
+  <h2 class="reveal">Choose your starting point. You own everything we build.</h2>
 
   <div class="tiers">
 
@@ -371,8 +382,8 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">Our Commitments</p>
-  <h2>How we think about pricing and trust.</h2>
+  <p class="section-label reveal">Our Commitments</p>
+  <h2 class="reveal">How we think about pricing and trust.</h2>
 
   <div class="principles-grid">
     <div class="principle">
@@ -462,6 +473,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
+
+var navProgress = document.getElementById('navProgress');
+window.addEventListener('scroll', function() {
+  var scrollTop = window.scrollY;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var scrollPercent = (scrollTop / docHeight) * 100;
+  navProgress.style.width = scrollPercent + '%';
+});
+
+var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(function(el) { revealObs.observe(el); });
 </script>
 </body>
 </html>

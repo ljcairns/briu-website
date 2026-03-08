@@ -43,6 +43,20 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
+@keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
+@keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-40px, 30px); } 66% { transform: translate(20px, -40px); } }
+@keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(50px, 20px); } 66% { transform: translate(-30px, -30px); } }
+.ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
+.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
+.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; animation: orbFloat2 30s ease-in-out infinite; }
+.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; animation: orbFloat3 20s ease-in-out infinite; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-scale { opacity: 0; transform: translateY(20px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 
 /* Hero */
 .hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
@@ -235,10 +249,14 @@ footer a:hover { color: var(--gold); }
   .content { padding: 0 1.25rem; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
+  .ambient-orb { display: none; }
 }
 </style>
 </head>
 <body>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
 
 <nav>
   <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
@@ -250,6 +268,7 @@ footer a:hover { color: var(--gold); }
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <section class="hero">
@@ -374,7 +393,7 @@ footer a:hover { color: var(--gold); }
   </div>
 
   <!-- What $376 Built -->
-  <h2>What $376 built</h2>
+  <h2 class="reveal">What $376 built</h2>
   <div class="cap-grid">
     <div class="cap-card"><h4>Email Management</h4><p>Inbox triage, draft responses, sent-mail tracking across 2 accounts. Human approval before any outbound.</p></div>
     <div class="cap-card"><h4>CRM Automation</h4><p>HubSpot contact/company management, activity logging, deal tracking. Dedup checks against cached data.</p></div>
@@ -387,7 +406,7 @@ footer a:hover { color: var(--gold); }
   </div>
 
   <!-- Full Investment Table -->
-  <h2>The full investment picture</h2>
+  <h2 class="reveal">The full investment picture</h2>
   <p>The $376 API figure is the OpenClaw runtime cost. Here is the complete picture including all subscriptions and tools used during the first month:</p>
 
   <table class="inv-table">
@@ -408,7 +427,7 @@ footer a:hover { color: var(--gold); }
   </table>
 
   <!-- Multi-Model Workflow -->
-  <h2>The multi-model workflow</h2>
+  <h2 class="reveal">The multi-model workflow</h2>
   <p>No single model does everything. The real architecture is a routing system where each model handles what it is best at, with a human orchestrating the whole thing:</p>
 
   <div class="workflow">
@@ -442,7 +461,7 @@ footer a:hover { color: var(--gold); }
   <p>Claude Max handles strategic thinking and code generation. The OpenClaw agent (running Sonnet) handles autonomous daily operations. GPT reviews output for blind spots. Gemini validates facts. The human sits in the center, orchestrating which model handles what, and making every decision that requires judgment.</p>
 
   <!-- Commit Velocity -->
-  <h2>Commit velocity: 244 commits in 26 days</h2>
+  <h2 class="reveal">Commit velocity: 244 commits in 26 days</h2>
   <p>Every commit in the OpenClaw repository, plotted by day. Commit density tracks closely with API spend — the heaviest build days are also the most expensive. Day one (Feb 12) had 36 commits. The Briu launch day (Mar 5) had 28.</p>
 
   <div class="chart-box">
@@ -906,6 +925,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
+
+var navProgress = document.getElementById('navProgress');
+window.addEventListener('scroll', function() {
+  var scrollTop = window.scrollY;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var scrollPercent = (scrollTop / docHeight) * 100;
+  navProgress.style.width = scrollPercent + '%';
+});
+
+var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(function(el) { revealObs.observe(el); });
 </script>
 </body>
 </html>

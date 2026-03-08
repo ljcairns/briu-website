@@ -39,6 +39,20 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
+@keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
+@keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-40px, 30px); } 66% { transform: translate(20px, -40px); } }
+@keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(50px, 20px); } 66% { transform: translate(-30px, -30px); } }
+.ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
+.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
+.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; animation: orbFloat2 30s ease-in-out infinite; }
+.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; animation: orbFloat3 20s ease-in-out infinite; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-scale { opacity: 0; transform: translateY(20px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 .hero { padding: 8rem 2rem 2rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
 .hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
@@ -110,10 +124,15 @@ footer a:hover { color: var(--gold); }
   .hero { padding: 7rem 1.25rem 2rem; }
   article { padding: 2rem 1.25rem 4rem; }
   footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
+  .ambient-orb { display: none; }
 }
 </style>
 </head>
 <body>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
 <nav>
   <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
   <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
@@ -124,6 +143,7 @@ footer a:hover { color: var(--gold); }
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <section class="hero">
@@ -133,11 +153,11 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <article>
-  <p class="section-label">Why We Started Building</p>
+  <p class="section-label reveal">Why We Started Building</p>
   <p>It started with a simple realization. Jason Calacanis described it on the All-In Podcast: "Every week 5 to 10% of the work we're doing inside of our venture firm is being moved over to OpenClaw." That number is not hypothetical. It is cumulative and permanent. Once a workflow is automated, it stays automated. Do the math: if you can move even 5% of your workload to an agent every week, in 20 weeks you have automated everything you currently do by hand.</p>
   <p>Once that clicked, the question stopped being "should we use agents" and became "how fast can we get this running." So we started building.</p>
 
-  <h2>Meet the agent</h2>
+  <h2 class="reveal">Meet the agent</h2>
   <p>Before Briu existed as a company, there was an agent. We built our first production agent through Subsights, our previous business. The goal was not a demo or a proof of concept. The goal was a system that could handle real daily operations — and that I could trust with my actual inbox, calendar, and business tools.</p>
   <p>The agent — we call him Jannik — started simple: processing inbound email, triaging messages, drafting responses for review. Then it expanded. Calendar management. Daily reporting across all connected systems. Creating customer demos through the Subsights web app. CRM updates through HubSpot. Prospecting workflows through Apollo. Research and competitive analysis through web access.</p>
   <p>Each new skill went through the same process: build it, test it in isolation, connect it to live systems with approval gates, monitor the output, then gradually reduce oversight as trust was earned. The critical principle was that the agent never takes an external action without human approval. It can draft an email — it cannot send one. It can propose a calendar change — it cannot confirm one. Every outbound action goes through a gate.</p>
@@ -148,7 +168,7 @@ footer a:hover { color: var(--gold); }
 
   <p>Today, I do not go into my email. I do not manage my calendar. Those things are done for me, reviewed by me, and executed on my approval. And honestly — it is great. The cognitive load reduction alone is worth the entire investment. But the real value is what it frees up: time and attention for the work that moves the business forward.</p>
 
-  <h2>The toolchain: exactly what we use</h2>
+  <h2 class="reveal">The toolchain: exactly what we use</h2>
   <p>We want to be specific here because vague descriptions of "AI-powered workflows" are useless if you are trying to replicate this. Here is exactly what we run:</p>
 
   <div class="mini-grid">
@@ -168,7 +188,7 @@ footer a:hover { color: var(--gold); }
 
   <p>These three tools work together but serve different functions. Claude on the web is for thinking. Claude Code is for building. OpenClaw is for operating. The distinction matters because it shapes how you structure work: strategic decisions happen in conversation, code happens in the terminal, and recurring operations happen through the agent framework.</p>
 
-  <h2>Security: why we built everything in-house</h2>
+  <h2 class="reveal">Security: why we built everything in-house</h2>
   <p>This is the part most people skip, and it is the part that matters most. When your agent is connected to your email, your CRM, your calendar, and your customer data, the security model is not optional. It is the foundation.</p>
   <p>We do not use any outside skills or third-party agent plugins. Every skill is built in-house. Every system connection is implemented directly with defined scopes and permissions. The agent has its own security architecture — daily security checks, trend monitoring, vulnerability scanning across all connected systems. We built an internal security agent whose sole job is to audit the primary agent's access patterns, flag anomalies, and verify that data handling meets our standards.</p>
 
@@ -178,7 +198,7 @@ footer a:hover { color: var(--gold); }
 
   <p>The practical architecture is a multi-agent system where the primary agent handles high-trust tasks on the most capable model, and isolated sub-agents handle lower-risk internal work on more cost-effective options. This lets you optimize spend without compromising security on the tasks that matter. We identified all major risk areas — prompt injection, data exfiltration, scope creep, unauthorized actions — and have systems in place for each one. As Chamath put it: "If I'm GEICO, do I want to have all of my actuaries using all of our proprietary, private, and confidential data in an open instance of an LLM? The answer is no."</p>
 
-  <h2>The three-week build: costs and timeline</h2>
+  <h2 class="reveal">The three-week build: costs and timeline</h2>
   <p>The initial agent buildout — from first skill to production-ready system — took about three weeks of focused work. Here is what that looked like financially:</p>
 
   <div class="mini-grid">
@@ -198,7 +218,7 @@ footer a:hover { color: var(--gold); }
 
   <p>Jason Calacanis hit the key question: "When do tokens outpace the salary of the employee? Because you're about to hit it." For most businesses, we are nowhere near that threshold. The economics are overwhelmingly in favor of building — it is just a question of knowing how.</p>
 
-  <h2>Building the Briu brand with the stack</h2>
+  <h2 class="reveal">Building the Briu brand with the stack</h2>
   <p>Once the agent system was stable and running daily operations, the next question was obvious: use the same stack to build the next business. Briu did not start as a company and then adopt AI tooling. It was built with the tooling from day one.</p>
 
   <p><strong>Name and domain.</strong> We used Claude on the web to explore naming directions — geographic roots, Gaelic language patterns, abstract concepts, industry terms. The agent generated hundreds of candidates. Each was evaluated against availability, trademark risk, pronunciation, and brand fit. The search space was wider than any manual process would allow. "Briu" emerged from an exploration of Scottish Gaelic — it means "meaning" or "significance." A human made the final call, but the agent did the legwork that made an informed call possible.</p>
@@ -209,12 +229,12 @@ footer a:hover { color: var(--gold); }
 
   <p><strong>Content and positioning.</strong> The site copy went through dozens of iterations. Claude on the web handled the strategic thinking — what claims can we credibly make, what tone separates us from generic AI consultancies, what does the reader actually need to hear. Claude Code handled the implementation — taking refined copy and building it into page structure with proper styling and layout. Every quote on the site was sourced with episode-level attribution and verified against its original context.</p>
 
-  <h2>What the agent cannot do</h2>
+  <h2 class="reveal">What the agent cannot do</h2>
   <p>There were moments where the agent produced technically excellent work that completely missed the point. A beautifully structured services page that positioned Briu like an enterprise vendor. A homepage that was impressive but felt cold. A pricing section that was logical but sent the wrong signal about who we serve.</p>
   <p>The agent cannot feel the gap between "correct" and "right." It does not know when a sentence sounds polished but hollow. It does not know when a site feels premium versus merely expensive-looking. It does not know which direction is worth staking a business on. Those are founder decisions. Peter Steinberger, the creator of OpenClaw, put it well: "People who try to automate the whole thing... it misses style, love, that human touch. I don't think you can automate that away so quickly."</p>
   <p>The goal is not full automation. The goal is a system where the human spends their time on judgment instead of production.</p>
 
-  <h2>Why your employees are your biggest advantage</h2>
+  <h2 class="reveal">Why your employees are your biggest advantage</h2>
   <p>One of the clearest insights from watching teams adopt agents: the people who already understand your business are the ones who get the most out of this. David Sacks made the point directly: "A key skill of employees is going to be the ability to structure work for themselves and their AI agents."</p>
   <p>The playbook is straightforward. Get your most technical people onto agents first. Teach them how to build workflows, how to structure tasks, how to set review points. Then keep going — expand to the next tier, and the next. The tools are getting better fast enough that eventually even the least technical person on your team can be an agent orchestrator, effectively becoming a 10x or 100x version of themselves.</p>
   <p>The reason you keep your employees around is not that they can type faster or process more spreadsheets. It is that they have institutional knowledge — the nuanced, hard-to-capture understanding of your systems, your customers, your edge cases, your culture. That human judgment is what makes agent systems actually work instead of just producing plausible-looking output. You do not replace your people. You power them up.</p>
@@ -223,7 +243,7 @@ footer a:hover { color: var(--gold); }
     <p>Jason Calacanis on the emerging role: "Every startup I know is hiring for this position, which is somebody who knows how to build and manage agents. There is no job rec for this yet or a title." That role is what Briu helps create inside your organization.</p>
   </div>
 
-  <h2>The pattern we deploy for clients</h2>
+  <h2 class="reveal">The pattern we deploy for clients</h2>
   <p>Building Briu this way produced the operating playbook we now use in every engagement:</p>
 
   <div class="mini-grid">
@@ -243,7 +263,7 @@ footer a:hover { color: var(--gold); }
 
   <p>This is the same approach whether we are building a client's first email automation or deploying a full multi-agent system with security monitoring. The tools change. The pattern holds. And it gets easier every time because the pattern library grows with each deployment.</p>
 
-  <h2>Services now, systems later</h2>
+  <h2 class="reveal">Services now, systems later</h2>
   <p>Being services-led is not a temporary phase to explain away. It is the mechanism by which real product knowledge is earned. Every client engagement, every internal workflow, every deployment generates patterns. Over time, those patterns become more standardized systems, more reusable tooling, and eventually software. But that only works if the underlying implementation experience is real.</p>
   <p>That is why Build exists. Not to publish generic takes on AI, but to document the operating layer underneath the business and show what these systems look like when they are used for actual work. If you read this and thought "I could do this" — you are right. And if you want help getting there faster, that is exactly what we do.</p>
 
@@ -313,6 +333,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
+
+var navProgress = document.getElementById('navProgress');
+window.addEventListener('scroll', function() {
+  var scrollTop = window.scrollY;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var scrollPercent = (scrollTop / docHeight) * 100;
+  navProgress.style.width = scrollPercent + '%';
+});
+
+var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(function(el) { revealObs.observe(el); });
 </script>
 </body>
 </html>

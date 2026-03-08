@@ -39,6 +39,20 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.nav-progress { position: absolute; bottom: 0; left: 0; height: 2px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; }
+@keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
+@keyframes orbFloat2 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(-40px, 30px); } 66% { transform: translate(20px, -40px); } }
+@keyframes orbFloat3 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(50px, 20px); } 66% { transform: translate(-30px, -30px); } }
+.ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
+.ambient-orb-1 { width: 600px; height: 600px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 10%; left: -10%; animation: orbFloat1 25s ease-in-out infinite; }
+.ambient-orb-2 { width: 500px; height: 500px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 20%; right: -10%; animation: orbFloat2 30s ease-in-out infinite; }
+.ambient-orb-3 { width: 400px; height: 400px; background: radial-gradient(circle, rgba(139,94,60,0.04), transparent 70%); top: 50%; left: 30%; animation: orbFloat3 20s ease-in-out infinite; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-scale { opacity: 0; transform: translateY(20px) scale(0.97); transition: opacity 0.6s ease, transform 0.6s ease; }
+.reveal-scale.visible { opacity: 1; transform: translateY(0) scale(1); }
 
 /* Hero */
 .hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
@@ -190,10 +204,14 @@ footer a:hover { color: var(--gold); }
   section { padding: 3rem 1.25rem 2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
   footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
+  .ambient-orb { display: none; }
 }
 </style>
 </head>
 <body>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
 
 <nav>
   <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
@@ -205,6 +223,7 @@ footer a:hover { color: var(--gold); }
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <section class="hero">
@@ -241,7 +260,7 @@ footer a:hover { color: var(--gold); }
 </div>
 
 <section>
-  <p class="section-label">Timeline</p>
+  <p class="section-label reveal">Timeline</p>
   <div class="vtl">
 
     <div class="vtl-entry">
@@ -311,7 +330,7 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">What Each Task Actually Cost</p>
+  <p class="section-label reveal">What Each Task Actually Cost</p>
   <div class="cost-grid">
     <div class="cost-card">
       <h3>Production agent system</h3>
@@ -349,7 +368,7 @@ footer a:hover { color: var(--gold); }
 </section>
 
 <section>
-  <p class="section-label">Deep Dives</p>
+  <p class="section-label reveal">Deep Dives</p>
   <div class="articles-grid">
 
     <div class="article-card">
@@ -448,6 +467,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
     setTimeout(function() { closeContactForm(); document.querySelector('.q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; }, 3000);
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
+
+var navProgress = document.getElementById('navProgress');
+window.addEventListener('scroll', function() {
+  var scrollTop = window.scrollY;
+  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+  var scrollPercent = (scrollTop / docHeight) * 100;
+  navProgress.style.width = scrollPercent + '%';
+});
+
+var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
+var revealObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } });
+}, { threshold: 0.15 });
+revealEls.forEach(function(el) { revealObs.observe(el); });
 </script>
 </body>
 </html>

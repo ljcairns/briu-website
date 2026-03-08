@@ -184,6 +184,24 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .deliverable { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.6rem; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
 .deliverable::before { content: '\2192'; color: var(--gold); flex-shrink: 0; }
 
+/* Kickoff grid */
+.kickoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.kickoff-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.4s ease; }
+.kickoff-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.kickoff-card-featured { border-color: rgba(212,160,90,0.25); background: linear-gradient(135deg, var(--surface) 0%, rgba(212,160,90,0.03) 100%); }
+.kickoff-card-header { margin-bottom: 1.25rem; }
+.kickoff-card-header .tier-name { font-family: var(--serif); font-size: 1.25rem; color: var(--text); margin-bottom: 0.4rem; }
+.kickoff-card-header .tier-price { font-size: 1.5rem; font-weight: 600; color: var(--gold); margin-bottom: 0.15rem; }
+.kickoff-card-header .tier-price-note { font-size: 0.82rem; color: var(--text-muted); }
+.kickoff-card-body { padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.followup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
+.followup-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); }
+.followup-name { font-family: var(--serif); font-size: 1.05rem; color: var(--text); }
+.followup-price { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
+.services-detail-link { margin-top: 1.5rem; text-align: center; }
+.services-detail-link a { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; transition: opacity 0.3s ease; }
+.services-detail-link a:hover { opacity: 0.7; }
+
 /* Principles */
 .principles-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
 .principle { padding: 2rem; border-top: 2px solid rgba(255,255,255,0.06); transition: border-color 0.3s ease; }
@@ -354,6 +372,8 @@ footer a:hover { color: var(--gold); }
   .integration-grid { grid-template-columns: repeat(3, 1fr); }
   .tier { grid-template-columns: 1fr; gap: 1.5rem; padding: 2rem; }
   .tier-number { font-size: 2.5rem; }
+  .kickoff-grid { grid-template-columns: 1fr; }
+  .followup-row { grid-template-columns: 1fr; }
   .principles-grid { grid-template-columns: 1fr; }
   .quotes-row { grid-template-columns: 1fr; }
   .case-study-box { padding: 1.5rem; }
@@ -716,88 +736,48 @@ footer a:hover { color: var(--gold); }
   <h2 class="reveal">Three steps. No lock-in. You own everything.</h2>
   <p class="reveal">Every engagement starts with understanding your business. We don't sell hours. We sell outcomes that your team can operate and extend without us.</p>
 
-  <div class="tiers">
-    <div class="tier tier-featured reveal">
-      <div class="tier-header">
-        <div>
-          <div class="tier-number">01</div>
-          <div class="tier-name">Kickoff</div>
-        </div>
-        <div>
-          <div class="tier-price">$5,000</div>
-          <div class="tier-price-note">Strategy + your first agent</div>
-        </div>
+  <div class="kickoff-grid reveal">
+    <div class="kickoff-card">
+      <div class="kickoff-card-header">
+        <div class="tier-name">Founder Kickoff</div>
+        <div class="tier-price">$3,500</div>
+        <div class="tier-price-note">For solo founders &amp; small teams</div>
       </div>
-      <div class="tier-body">
-        <p>This is the starting point for a real partnership, not a one-off consultation. You get a founder who has worked across industries sitting down with your team, learning your business, and building the plan for what agents look like inside your operation.</p>
-        <p>We spend 4-5 hours with your team. Full AI landscape briefing for your broader staff so everyone is on the same page. One-on-one sessions with executives and key operators to map their actual daily workflows. Live demos from our production agent systems. Honest review of any AI tools you're already paying for or being sold. Nothing scripted. We send a standard agenda in advance and you tell us what to adjust.</p>
-        <p>By the end, you have a written architecture plan and a clear scope for your first agent build, which is included in the price. Depending on complexity, it may go live that week or take longer for more involved integrations, but the build starts as part of this engagement, not as a separate proposal.</p>
-        <p>The goal is to become your long-term partner for building an ecosystem of agents that makes everyone on your team more effective. This is the kickoff for that relationship.</p>
-        <div class="tier-deliverables">
-          <h4>What you get</h4>
-          <div class="deliverable">Your first agent, built and deployed on your infrastructure as part of this engagement</div>
-          <div class="deliverable">Full team session: the AI landscape, what's real, what's worth paying for, and what to ignore</div>
-          <div class="deliverable">One-on-one sessions with executives and key team members</div>
-          <div class="deliverable">Live demos from our production systems (not slides, not mockups)</div>
-          <div class="deliverable">Honest review of any AI products you're paying for or being pitched</div>
-          <div class="deliverable">Written architecture plan: automation candidates ranked by ROI, security model, cost profile, rollout order</div>
-        </div>
+      <div class="kickoff-card-body">
+        <div class="deliverable">2-3 hour working session</div>
+        <div class="deliverable">Workflow mapping</div>
+        <div class="deliverable">First agent built and deployed</div>
+        <div class="deliverable">Written architecture plan</div>
       </div>
     </div>
-
-    <div class="tier reveal">
-      <div class="tier-header">
-        <div>
-          <div class="tier-number">02</div>
-          <div class="tier-name">Implementation</div>
-        </div>
-        <div>
-          <div class="tier-price">Quoted per project</div>
-          <div class="tier-price-note">Scoped from Kickoff</div>
-        </div>
+    <div class="kickoff-card kickoff-card-featured">
+      <div class="kickoff-card-header">
+        <div class="tier-name">Team Kickoff</div>
+        <div class="tier-price">$5,000</div>
+        <div class="tier-price-note">For teams with multiple stakeholders</div>
       </div>
-      <div class="tier-body">
-        <p>After Kickoff, you have a working agent and a roadmap. Implementation is where we build out the rest.</p>
-        <p>Every project is different. Some businesses need a personal assistant agent that handles email, calendar, and daily briefings. Others need a multi-agent system running sales prospecting, CRM updates, and automated reporting overnight. We scope each project from what we learned in Kickoff, quote it upfront, and build it on your infrastructure with your API keys.</p>
-        <p>The goal is not a one-off build. It's a platform. Each agent we deploy makes the next one easier to build, because the architecture, the security model, and the integrations are already in place. As our tools and processes improve, we pass those efficiencies directly to you. Projects that took weeks at the start of this year take days now, and that trajectory continues.</p>
-        <p>You pay model providers directly. No margin on your API costs. No proprietary platform. When we hand it over, your team owns and operates everything.</p>
-        <div class="tier-deliverables">
-          <h4>Typical projects include</h4>
-          <div class="deliverable">Email triage, CRM automation, and sales workflow agents</div>
-          <div class="deliverable">Personal assistant agents (email, calendar, briefings, research)</div>
-          <div class="deliverable">Automated reporting, dashboards, and monitoring</div>
-          <div class="deliverable">Multi-agent systems with orchestration and cost controls</div>
-          <div class="deliverable">Custom integrations across your existing tools</div>
-          <div class="deliverable">Team training on agent operation and system extension</div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tier reveal">
-      <div class="tier-header">
-        <div>
-          <div class="tier-number">03</div>
-          <div class="tier-name">Retainer</div>
-        </div>
-        <div>
-          <div class="tier-price">$500/month</div>
-          <div class="tier-price-note">Base retainer</div>
-        </div>
-      </div>
-      <div class="tier-body">
-        <p>Ongoing context and availability. When something needs adjustment, when models update, when you want to expand into new workflows, you're not starting from scratch with someone who doesn't know your system.</p>
-        <p>This covers maintenance, small adjustments, and keeping your agent infrastructure current as models and tools improve. Your agents get more useful every month. Significant new capability work is quoted separately.</p>
-        <div class="tier-deliverables">
-          <h4>What's included</h4>
-          <div class="deliverable">Ongoing system maintenance and monitoring</div>
-          <div class="deliverable">Model upgrades and cost optimization as pricing changes</div>
-          <div class="deliverable">Small skill additions and workflow adjustments</div>
-          <div class="deliverable">Priority response when things need fixing</div>
-          <div class="deliverable">Continuous context on your business so support is immediate, not a re-onboarding</div>
-        </div>
+      <div class="kickoff-card-body">
+        <div class="deliverable">4-5 hour engagement</div>
+        <div class="deliverable">Full team AI briefing</div>
+        <div class="deliverable">One-on-one exec sessions</div>
+        <div class="deliverable">First agent built and deployed</div>
+        <div class="deliverable">Written architecture plan</div>
       </div>
     </div>
   </div>
+
+  <div class="followup-row reveal">
+    <div class="followup-item">
+      <span class="followup-name">Implementation</span>
+      <span class="followup-price">Quoted per project</span>
+    </div>
+    <div class="followup-item">
+      <span class="followup-name">Retainer</span>
+      <span class="followup-price">$500/mo</span>
+    </div>
+  </div>
+
+  <p class="services-detail-link reveal"><a href="/services/">See full details &rarr;</a></p>
 </section>
 
 <!-- Wave divider -->
