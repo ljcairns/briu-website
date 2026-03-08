@@ -61,10 +61,19 @@ article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin
 article strong { color: var(--text); }
 .callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
 .callout p { color: var(--text); margin: 0; }
-/* Phase images */
-.phase-block { margin: 2.5rem 0; }
-.phase-img { width: 100%; height: auto; border: 1px solid rgba(255,255,255,0.04); display: block; }
-.phase-label { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-top: 0.75rem; }
+/* Phase filmstrip */
+.phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 0 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: calc(50vw - 50% + 2rem); padding-right: 2rem; }
+.phase-strip::-webkit-scrollbar { height: 4px; }
+.phase-strip::-webkit-scrollbar-track { background: transparent; }
+.phase-strip::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.3); border-radius: 2px; }
+.phase-strip::-webkit-scrollbar-thumb:hover { background: rgba(212,160,90,0.5); }
+.phase-card { flex: 0 0 300px; scroll-snap-align: start; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); transition: border-color 0.3s; }
+.phase-card:hover { border-color: rgba(212,160,90,0.15); }
+.phase-img { width: 100%; height: 400px; object-fit: cover; object-position: top; display: block; }
+.phase-card-body { padding: 1rem 1.25rem 1.25rem; }
+.phase-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.4rem; }
+.phase-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
+.scroll-hint { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.5rem; opacity: 0.6; }
 /* Cost table */
 .cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
 .cost-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -171,7 +180,7 @@ footer a:hover { color: var(--gold); }
   <p>"Briu" came from an exploration of Catalan. It means "energy," "push," or "courage." The .ai was available. No trademark conflicts. Short, pronounceable, and it didn't sound like every other AI company.</p>
   <p>But the name did something else we didn't plan for. A Catalan word naturally pointed toward Barcelona, and Barcelona pointed toward Gaudi. The moment the name landed, a visual world came with it: pointed arches, mosaic tilework, organic geometry, warm gold and teal. The name and the design language share the same root. That connection wasn't engineered. It emerged from following the work.</p>
   <p>A human made the final call. The agent did the legwork that made an informed call possible.</p>
-  <p><strong>Cost: ~$0.60 in API for the domain search skill run. $85 for the domain registration.</strong></p>
+  <p><strong>Cost: a few dollars in API for the domain search runs across 50+ candidates. $85 for the domain registration.</strong></p>
 
   <h2 class="reveal">The visual identity</h2>
   <p>With the Catalan origin pointing toward Gaudi, we had a starting prompt. We opened Midjourney and began generating with his aesthetic as the reference: the pointed arches of Sagrada Familia, the mosaic tilework of Park Guell, the way he layered organic geometry with warm stone and gold.</p>
@@ -183,48 +192,59 @@ footer a:hover { color: var(--gold); }
   <p><strong>Over 400 generations. The whole process took one evening.</strong></p>
 
   <h2 class="reveal">Watch the brand evolve</h2>
-  <p>If you scroll through the Midjourney archive, you can literally watch the brand take shape. Each phase below represents a distinct creative direction we explored before converging on the final mark.</p>
+  <p>Scroll through the Midjourney archive and watch the brand take shape in real time. Each phase represents a distinct creative direction — from literal Gaudi mosaics to the final clean mark.</p>
+  <p class="scroll-hint">Scroll right to follow the evolution &rarr;</p>
 
-  <div class="phase-block reveal">
-    <img src="mj-phase-1.png" alt="Phase 1: Textured Mosaics" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 1: Textured Mosaics</div>
-    <p style="margin-top: 0.5rem;">Direct Gaudi influence. Pointed arches from Sagrada Familia, mosaic tilework from Park Guell. Teal and copper on dark backgrounds. Beautiful but too detailed for a mark.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-2.png" alt="Phase 2: Simplified Arches" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 2: Simplified Arches</div>
-    <p style="margin-top: 0.5rem;">The Gaudi influence simplifies. The arch shape survives but the mosaic drops away. Gold on dark. The forms start to feel more like logos and less like art. Getting closer.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-3.png" alt="Phase 3: Line Art" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 3: Line Art</div>
-    <p style="margin-top: 0.5rem;">Art deco feel. Concentric arches, varying line weights, clean geometry. Some of the strongest candidates come from this phase.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-4.png" alt="Phase 4: Geometric Gold" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 4: Geometric Gold</div>
-    <p style="margin-top: 0.5rem;">Mountains, trees, flames, abstract symbols. Testing whether the arch is really the right direction or if something else fits better. It was the right direction.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-5.png" alt="Phase 5: Letters & Trees" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 5: Letters &amp; Trees</div>
-    <p style="margin-top: 0.5rem;">Mosaic B's, clean B's, monogram variations. Tree of life explorations. Some worked as standalone art but none beat the arch as a brand mark.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-6.png" alt="Phase 6: Abstract Symbols" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 6: Abstract Symbols</div>
-    <p style="margin-top: 0.5rem;">Stars, geometric forms, compass roses, interlocking shapes. The search space needed to be this wide to be confident the final choice was the best one, not just the first good one.</p>
-  </div>
-
-  <div class="phase-block reveal">
-    <img src="mj-phase-7.png" alt="Phase 7: Final Convergence" class="phase-img" loading="lazy">
-    <div class="phase-label">Phase 7: Final Convergence</div>
-    <p style="margin-top: 0.5rem;">Back to the arch. Tight iteration on the final form. B lettermarks. Flame motifs. The arch wins. Upscaling. Canva formatting. Done.</p>
+  <div class="phase-strip">
+    <div class="phase-card">
+      <img src="mj-phase-1.png" alt="Phase 1: Textured Mosaics" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 1: Textured Mosaics</div>
+        <p class="phase-desc">Direct Gaudi influence. Pointed arches from Sagrada Familia, mosaic tilework from Park Guell. Beautiful but too detailed for a mark.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-2.png" alt="Phase 2: Simplified Arches" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 2: Simplified Arches</div>
+        <p class="phase-desc">The Gaudi influence simplifies. Arch shape survives, mosaic drops away. Gold on dark. Starting to feel like logos.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-3.png" alt="Phase 3: Line Art" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 3: Line Art</div>
+        <p class="phase-desc">Art deco feel. Concentric arches, varying line weights, clean geometry. Some of the strongest candidates come from here.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-4.png" alt="Phase 4: Geometric Gold" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 4: Geometric Gold</div>
+        <p class="phase-desc">Mountains, trees, flames, abstract symbols. Testing whether the arch is really the right direction. It was.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-5.png" alt="Phase 5: Letters &amp; Trees" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 5: Letters &amp; Trees</div>
+        <p class="phase-desc">Mosaic B's, monogram variations, tree of life explorations. None beat the arch as a brand mark.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-6.png" alt="Phase 6: Abstract Symbols" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 6: Abstract Symbols</div>
+        <p class="phase-desc">Stars, compass roses, interlocking shapes. The search needed to be this wide to know the final choice was the best one.</p>
+      </div>
+    </div>
+    <div class="phase-card">
+      <img src="mj-phase-7.png" alt="Phase 7: Final Convergence" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 7: Convergence</div>
+        <p class="phase-desc">Back to the arch. Tight iteration on the final form. B lettermarks. Flame motifs. The arch wins. Canva formatting. Done.</p>
+      </div>
+    </div>
   </div>
 
   <a href="#" class="mj-link">See all 400+ generations on Midjourney</a>
@@ -241,9 +261,9 @@ footer a:hover { color: var(--gold); }
       <tr><td>Midjourney subscription</td><td>~$30/month</td></tr>
       <tr><td>Domain registration (briu.ai)</td><td>$85</td></tr>
       <tr><td>Claude (name generation, strategy)</td><td>Included in $200/mo Max plan</td></tr>
-      <tr><td>OpenClaw (domain search skill)</td><td>~$0.60 per run</td></tr>
+      <tr><td>OpenClaw (domain search across 50+ candidates)</td><td>~$5 in API</td></tr>
       <tr><td>Canva</td><td>Free tier</td></tr>
-      <tr><td><strong>Total</strong></td><td><strong>~$115</strong></td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>~$120</strong></td></tr>
     </tbody>
   </table>
 
@@ -263,7 +283,7 @@ footer a:hover { color: var(--gold); }
   <p>The whole thing is one creative arc. The agent searched hundreds of names across multiple languages and landed on a Catalan word. That word pointed to a visual world — Gaudi, Barcelona, arches, mosaics. The founder directed Midjourney through 400+ iterations refining that visual world into a clean mark, then finalized it in Canva. Name to logo in one connected process, orchestrated by a human using agents at every step.</p>
   <p>You don't need a branding agency to build a real brand identity. You need taste, a clear direction, and tools that let you iterate fast enough to find what you're looking for. The AI expands what's possible in a given amount of time. The human decides what's worth keeping.</p>
   <p>If you're starting a business and you have a clear aesthetic sense, this process is replicable. Open Midjourney. Start generating. React to what you see. Refine the prompt. Keep going until something clicks. Then take it to Canva or Figma for final polish.</p>
-  <p><strong>The $115 brand is live at briu.ai right now.</strong></p>
+  <p><strong>The $120 brand is live at briu.ai right now.</strong></p>
 
   <div class="article-links">
     <a href="/build/" class="primary-link">Back to Build</a>
