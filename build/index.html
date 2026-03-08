@@ -86,15 +86,28 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .vtl-entry.major .vtl-title { font-size: 1.1rem; }
 
 /* Cost Comparison Cards */
-.cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
-.cost-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; }
-.cost-card:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-.cost-card h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.75rem; line-height: 1.25; }
-.cost-agent { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.35rem; }
-.cost-agent .price { font-family: var(--serif); font-size: 1.35rem; color: var(--gold); }
-.cost-agent .detail { font-size: 0.72rem; color: var(--text-muted); }
-.cost-trad { font-size: 0.78rem; color: var(--text-muted); }
-.cost-trad span { text-decoration: line-through; opacity: 0.6; }
+/* Cost comparison table */
+.cost-compare { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+.cost-compare th, .cost-compare td { padding: 1rem 1.25rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.92rem; }
+.cost-compare thead th { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cost-compare thead th:first-child { color: var(--text); }
+.cost-compare .col-agent { color: var(--gold); }
+.cost-compare .col-trad { color: var(--text-muted); }
+.cost-compare tbody td:first-child { font-family: var(--serif); font-size: 1rem; color: var(--text); }
+.cost-compare .agent-cost { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); }
+.cost-compare .agent-time { font-size: 0.78rem; color: rgba(212,160,90,0.6); display: block; margin-top: 0.15rem; }
+.cost-compare .trad-cost { font-size: 0.95rem; color: var(--text-muted); opacity: 0.7; }
+.cost-compare .trad-time { font-size: 0.78rem; color: var(--text-muted); opacity: 0.5; display: block; margin-top: 0.15rem; }
+.cost-compare tfoot td { border-bottom: none; padding-top: 1.25rem; border-top: 2px solid rgba(212,160,90,0.15); }
+.cost-compare tfoot .agent-cost { font-size: 1.25rem; }
+.cost-compare tfoot .trad-cost { font-size: 1.05rem; }
+.cost-footer { font-size: 0.82rem; color: var(--text-muted); margin-top: 1.5rem; line-height: 1.7; }
+.cost-footer strong { color: var(--text); font-weight: 500; }
+@media (max-width: 640px) {
+  .cost-compare th, .cost-compare td { padding: 0.75rem 0.5rem; font-size: 0.82rem; }
+  .cost-compare .agent-cost { font-size: 0.95rem; }
+  .cost-compare tfoot .agent-cost { font-size: 1.05rem; }
+}
 
 /* Articles grid */
 .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 0.5rem; }
@@ -264,49 +277,74 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </section>
 
 <section>
-  <p class="section-label reveal">What Each Task Actually Cost</p>
-  <div class="cost-grid">
-    <div class="cost-card">
-      <h3>Agent API runtime</h3>
-      <div class="cost-agent">
-        <span class="price">$376</span>
-        <span class="detail">OpenClaw &mdash; all 12 skills</span>
-      </div>
-      <div class="cost-trad">Traditional: <span>$4,500+</span> part-time VA (3 months)</div>
-    </div>
-    <div class="cost-card">
-      <h3>Brand &amp; domain</h3>
-      <div class="cost-agent">
-        <span class="price">~$30</span>
-        <span class="detail">Midjourney + domain registration</span>
-      </div>
-      <div class="cost-trad">Traditional: <span>$15,000–25,000</span> branding agency</div>
-    </div>
-    <div class="cost-card">
-      <h3>Website hosting</h3>
-      <div class="cost-agent">
-        <span class="price">$0</span>
-        <span class="detail">GitHub Pages + Cloudflare</span>
-      </div>
-      <div class="cost-trad">Traditional: <span>$8,000+</span> dev agency + hosting</div>
-    </div>
-    <div class="cost-card" style="border-top: 2px solid var(--gold);">
-      <h3>Claude Max</h3>
-      <div class="cost-agent">
-        <span class="price">$200</span>
-        <span class="detail">/mo &mdash; shared across everything</span>
-      </div>
-      <div class="cost-trad">Agent strategy, Claude Code (website), brand direction, planning</div>
-    </div>
-    <div class="cost-card">
-      <h3>Review &amp; validation</h3>
-      <div class="cost-agent">
-        <span class="price">$40</span>
-        <span class="detail">/mo &mdash; GPT + Gemini</span>
-      </div>
-      <div class="cost-trad">Traditional: <span>$2,000+/mo</span> hiring consultants</div>
-    </div>
-  </div>
+  <p class="section-label reveal">What It Actually Cost</p>
+  <h2 class="reveal">Agent-driven vs. traditional.</h2>
+  <p class="reveal">Everything below was done by one person with agents. No employees, no contractors, no agencies.</p>
+
+  <table class="cost-compare">
+    <thead>
+      <tr>
+        <th></th>
+        <th class="col-agent">Agent-Driven</th>
+        <th class="col-trad">Traditional Route</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Production Agent</td>
+        <td>
+          <span class="agent-cost">$376</span>
+          <span class="agent-time">3 days · API costs only</span>
+        </td>
+        <td>
+          <span class="trad-cost">$15,000–30,000</span>
+          <span class="trad-time">3–6 months · dev agency or internal hire</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Brand &amp; Identity</td>
+        <td>
+          <span class="agent-cost">~$30</span>
+          <span class="agent-time">1 session · 400+ generations</span>
+        </td>
+        <td>
+          <span class="trad-cost">$15,000–25,000</span>
+          <span class="trad-time">4–8 weeks · branding agency</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Website</td>
+        <td>
+          <span class="agent-cost">$0</span>
+          <span class="agent-time">Ongoing · built in-terminal with Claude Code</span>
+        </td>
+        <td>
+          <span class="trad-cost">$8,000–20,000</span>
+          <span class="trad-time">4–6 weeks · dev shop</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Platform</td>
+        <td>
+          <span class="agent-cost">$200/mo</span>
+          <span class="agent-time">Claude Max · shared across all three</span>
+        </td>
+        <td>
+          <span class="trad-cost">$2,000+/mo</span>
+          <span class="trad-time">SaaS stack, consultants, multiple tools</span>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot>
+      <tr>
+        <td>Total (month one)</td>
+        <td><span class="agent-cost">~$636</span></td>
+        <td><span class="trad-cost">$40,000–75,000+</span></td>
+      </tr>
+    </tfoot>
+  </table>
+
+  <p class="cost-footer"><strong>1 person + agents.</strong> No employees, no agencies, no project managers. The agents do the work. The human provides judgment, taste, and approval. That's the model we deploy for clients.</p>
 </section>
 
 <section>
