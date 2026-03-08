@@ -384,6 +384,77 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .wave-divider svg { height: 30px; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Who is this for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Founders and teams at businesses doing $1M-$50M in revenue who want to deploy AI agents without hiring an internal AI team. You don't need technical expertise — you need a clear workflow you want to improve."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What tech stack do you use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "We build on OpenClaw, an open-source agent framework. Models from Anthropic, OpenAI, and others depending on the task. Your agents connect to your existing tools — Gmail, Slack, HubSpot, Salesforce, Google Calendar, and 100+ more."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Who owns the code and data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You do. Every agent, skill, and configuration file belongs to you. Your API keys, your infrastructure. If you stop working with us, everything keeps running."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do API costs work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You pay model providers directly with your own API keys. We don't add a margin to your token spend. Most businesses start at $2-5/day. We set budget ceilings so there are no surprises."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do you replace employees?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. We automate the repetitive parts of your team's work so they can focus on judgment, relationships, and strategy. The goal is leverage, not headcount reduction."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How fast can we start?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Founder Kickoff takes one session. You'll leave with a working agent deployed on your infrastructure and a written plan for what to build next. Most clients have their first agent running within a week."
+      }
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Briu",
+  "url": "https://briu.ai",
+  "logo": "https://briu.ai/briu-logo-transparent.png",
+  "email": "hi@briu.ai",
+  "description": "AI agent deployment for businesses. Practical agents, clear economics, systems that grow.",
+  "founder": {
+    "@type": "Person",
+    "name": "Lucas Cairns"
+  }
+}
+</script>
 </head>
 <body>
 <div class="vignette"></div>
@@ -1115,8 +1186,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <!-- CTA -->
 <section class="cta-section" id="contact">
   <p class="section-label reveal">Get Started</p>
-  <h2 class="reveal">15 minutes. No pitch.</h2>
-  <p class="reveal">Tell us what your team does every day. We'll tell you what an agent could handle, what it would cost, and what we'd build first. If it doesn't make sense for your business, we'll say so.</p>
+  <h2 class="reveal">Tell us what you're working on.</h2>
+  <p class="reveal">Describe what your team does every day. We'll reply within 24 hours with specific ideas for your business — what an agent could handle, what it would cost, and what we'd build first.</p>
   <a href="#" onclick="openContactForm();return false" class="cta-button reveal">Start the Conversation</a>
 </section>
 </main>
@@ -1177,7 +1248,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
-  <a href="mailto:hi@briu.ai">hi@briu.ai</a>
+  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
 <script src="/shared.js"></script>
