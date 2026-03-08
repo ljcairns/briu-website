@@ -74,12 +74,16 @@
       }
     } catch(e) {}
 
-    fetch('https://api.github.com/repos/' + REPO + '/contributors')
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!Array.isArray(data)) return;
-        var total = 0;
-        for (var i = 0; i < data.length; i++) total += (data[i].contributions || 0);
+    // Use commits API with per_page=1 and parse total from Link header
+    fetch('https://api.github.com/repos/' + REPO + '/commits?per_page=1')
+      .then(function(r) {
+        var link = r.headers.get('Link');
+        if (!link) return 1;
+        var match = link.match(/page=(\d+)>;\s*rel="last"/);
+        return match ? parseInt(match[1], 10) : 1;
+      })
+      .then(function(total) {
+        if (total < 2) return; // sanity check
         try { localStorage.setItem(CACHE_KEY, JSON.stringify({ commits: total, ts: Date.now() })); } catch(e) {}
         applyCommits(total);
       })
