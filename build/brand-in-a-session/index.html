@@ -61,15 +61,19 @@ article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin
 article strong { color: var(--text); }
 .callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
 .callout p { color: var(--text); margin: 0; }
-/* Phase timeline */
-.phase-timeline { margin: 2rem 0; position: relative; padding-left: 2rem; border-left: 2px solid rgba(212,160,90,0.2); }
-.phase-entry { position: relative; padding: 0 0 2.5rem 0; }
-.phase-entry:last-child { padding-bottom: 0; }
-.phase-entry::before { content: ''; position: absolute; left: -2rem; top: 0.5rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); transform: translateX(calc(-5px + 1px)); }
-.phase-entry.final::before { width: 16px; height: 16px; background: var(--gold-light); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 16px rgba(212,160,90,0.2); transform: translateX(calc(-8px + 1px)); }
-.phase-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.35rem; }
-.phase-count { font-size: 0.72rem; color: var(--text-muted); margin-bottom: 0.35rem; }
-.phase-desc { font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; margin: 0; }
+/* Phase filmstrip */
+.phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 0 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: calc(50vw - 50% + 2rem); padding-right: 2rem; }
+.phase-strip::-webkit-scrollbar { height: 4px; }
+.phase-strip::-webkit-scrollbar-track { background: transparent; }
+.phase-strip::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.3); border-radius: 2px; }
+.phase-strip::-webkit-scrollbar-thumb:hover { background: rgba(212,160,90,0.5); }
+.phase-card { flex: 0 0 300px; scroll-snap-align: start; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); transition: border-color 0.3s; }
+.phase-card:hover { border-color: rgba(212,160,90,0.15); }
+.phase-img { width: 100%; height: 380px; object-fit: cover; object-position: bottom; display: block; }
+.phase-card-body { padding: 1rem 1.25rem 1.25rem; }
+.phase-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.4rem; }
+.phase-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
+.scroll-hint { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.5rem; opacity: 0.6; }
 /* Cost table */
 .cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
 .cost-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
@@ -188,43 +192,58 @@ footer a:hover { color: var(--gold); }
   <p><strong>Over 400 generations. The whole process took one evening.</strong></p>
 
   <h2 class="reveal">Watch the brand evolve</h2>
-  <p>The Midjourney archive tells the story in generations. Each phase below is a distinct creative direction we explored — from literal Gaudi mosaics to the final clean mark. Over 400 generations in a single evening.</p>
+  <p>Scroll through the Midjourney archive and watch the brand take shape in real time. Each phase represents a distinct creative direction — from literal Gaudi mosaics to the final clean mark.</p>
+  <p class="scroll-hint">Scroll right to follow the evolution &rarr;</p>
 
-  <div class="phase-timeline reveal">
-    <div class="phase-entry">
-      <div class="phase-label">Phase 1: Textured Mosaics</div>
-      <div class="phase-count">~70 generations</div>
-      <p class="phase-desc">Direct Gaudi influence. Pointed arches from Sagrada Familia, mosaic tilework from Park Guell. Teal, copper, and gold on dark backgrounds. Cathedral window shapes with intricate stonework patterns. Beautiful as art — too detailed for a mark.</p>
+  <div class="phase-strip">
+    <div class="phase-card">
+      <img src="mj-phase-1.png" alt="Phase 1: Textured Mosaics" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 1: Textured Mosaics</div>
+        <p class="phase-desc">Direct Gaudi influence. Pointed arches from Sagrada Familia, mosaic tilework from Park Guell. Beautiful but too detailed for a mark.</p>
+      </div>
     </div>
-    <div class="phase-entry">
-      <div class="phase-label">Phase 2: Simplified Arches</div>
-      <div class="phase-count">~65 generations</div>
-      <p class="phase-desc">The Gaudi influence simplifies. The arch shape survives but the mosaic drops away. Gold on dark. The ornament gives way to geometry. The forms start to feel more like logos and less like art. Getting closer.</p>
+    <div class="phase-card">
+      <img src="mj-phase-2.png" alt="Phase 2: Simplified Arches" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 2: Simplified Arches</div>
+        <p class="phase-desc">The Gaudi influence simplifies. Arch shape survives, mosaic drops away. Gold on dark. Starting to feel like logos.</p>
+      </div>
     </div>
-    <div class="phase-entry">
-      <div class="phase-label">Phase 3: Line Art</div>
-      <div class="phase-count">~60 generations</div>
-      <p class="phase-desc">Art deco feel. Concentric arches, varying line weights, clean geometry. The strongest candidates come from this phase — minimal forms that still carry the architectural DNA of the Gaudi starting point.</p>
+    <div class="phase-card">
+      <img src="mj-phase-3.png" alt="Phase 3: Line Art" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 3: Line Art</div>
+        <p class="phase-desc">Art deco feel. Concentric arches, varying line weights, clean geometry. Some of the strongest candidates come from here.</p>
+      </div>
     </div>
-    <div class="phase-entry">
-      <div class="phase-label">Phase 4: Geometric Gold</div>
-      <div class="phase-count">~80 generations</div>
-      <p class="phase-desc">Deliberate divergence. Mountains, trees, flames, abstract symbols, compass roses. Testing whether the arch is really the right direction or if something else fits better. Explored every alternative. The arch kept winning.</p>
+    <div class="phase-card">
+      <img src="mj-phase-4.png" alt="Phase 4: Geometric Gold" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 4: Geometric Gold</div>
+        <p class="phase-desc">Mountains, trees, flames, abstract symbols. Testing whether the arch is really the right direction. It was.</p>
+      </div>
     </div>
-    <div class="phase-entry">
-      <div class="phase-label">Phase 5: Letters &amp; Trees</div>
-      <div class="phase-count">~55 generations</div>
-      <p class="phase-desc">Mosaic B's, clean B's, monogram variations. Tree of life explorations. Some worked as standalone art but none beat the arch as a brand mark. The letter experiments confirmed the abstract form was stronger than any lettermark.</p>
+    <div class="phase-card">
+      <img src="mj-phase-5.png" alt="Phase 5: Letters &amp; Trees" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 5: Letters &amp; Trees</div>
+        <p class="phase-desc">Mosaic B's, monogram variations, tree of life explorations. None beat the arch as a brand mark.</p>
+      </div>
     </div>
-    <div class="phase-entry">
-      <div class="phase-label">Phase 6: Abstract Symbols</div>
-      <div class="phase-count">~45 generations</div>
-      <p class="phase-desc">Stars, geometric forms, interlocking shapes, compass roses. The search space needed to be this wide to be confident the final choice was the best one — not just the first good one.</p>
+    <div class="phase-card">
+      <img src="mj-phase-6.png" alt="Phase 6: Abstract Symbols" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 6: Abstract Symbols</div>
+        <p class="phase-desc">Stars, compass roses, interlocking shapes. The search needed to be this wide to know the final choice was the best one.</p>
+      </div>
     </div>
-    <div class="phase-entry final">
-      <div class="phase-label">Phase 7: Convergence</div>
-      <div class="phase-count">~30 generations</div>
-      <p class="phase-desc">Back to the arch. Tight iteration on the final form: line weight, symmetry, layering, nested arches. B lettermarks and flame motifs tested one last time. The arch wins. Upscaled, exported to Canva for final formatting. Done.</p>
+    <div class="phase-card">
+      <img src="mj-phase-7.png" alt="Phase 7: Convergence" class="phase-img" loading="lazy">
+      <div class="phase-card-body">
+        <div class="phase-label">Phase 7: Convergence</div>
+        <p class="phase-desc">Back to the arch. Tight iteration on the final form. B lettermarks. Flame motifs. The arch wins. Canva formatting. Done.</p>
+      </div>
     </div>
   </div>
 
