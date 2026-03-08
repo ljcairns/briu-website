@@ -203,6 +203,23 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .cta-button:hover::after { left: 100%; }
 .cta-button:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.3); }
 
+/* Offer block */
+.offer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 2rem; }
+.offer-item { padding: 1.5rem; border-top: 2px solid rgba(255,255,255,0.06); }
+.offer-item h3 { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.5rem; color: var(--text); font-weight: 400; }
+.offer-item p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0; }
+
+/* FAQ */
+.faq-list { margin-top: 2rem; }
+.faq-item { border-bottom: 1px solid rgba(255,255,255,0.06); }
+.faq-q { display: flex; justify-content: space-between; align-items: center; padding: 1.25rem 0; cursor: pointer; gap: 1rem; }
+.faq-q h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; color: var(--text); margin: 0; }
+.faq-q .faq-toggle { font-size: 1.2rem; color: var(--gold); transition: transform 0.3s ease; flex-shrink: 0; }
+.faq-item.open .faq-toggle { transform: rotate(45deg); }
+.faq-a { max-height: 0; overflow: hidden; transition: max-height 0.35s ease, padding 0.35s ease; }
+.faq-item.open .faq-a { max-height: 200px; }
+.faq-a p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.75; padding-bottom: 1.25rem; margin: 0; }
+
 .footer-links { display: flex; gap: 2rem; }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -295,6 +312,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .principles-grid { grid-template-columns: 1fr; }
   .quotes-row { grid-template-columns: 1fr; }
   .case-study-box { padding: 1.5rem; }
+  .offer-grid { grid-template-columns: 1fr; }
   .footer-links { justify-content: center; }
   .wave-divider svg { height: 30px; }
 }
@@ -346,6 +364,36 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
     <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+  </svg>
+</div>
+
+<!-- WHAT WE DO -->
+<section>
+  <p class="section-label reveal">What We Do</p>
+  <h2 class="reveal">Custom AI agents for businesses that want to automate real work without losing control.</h2>
+  <p class="reveal">You get a founder who learns your business, an agent deployed on your infrastructure, and a system you own completely.</p>
+
+  <div class="offer-grid">
+    <div class="offer-item reveal-scale">
+      <h3>For founders and teams</h3>
+      <p>Not enterprise sales cycles. A founder works directly with you to understand your workflows and build systems that fit how your team actually operates.</p>
+    </div>
+    <div class="offer-item reveal-scale reveal-delay-1">
+      <h3>Start with one workflow</h3>
+      <p>Email triage, CRM updates, sales prospecting, reporting. Pick the process that eats the most time relative to the judgment it requires. We build that first.</p>
+    </div>
+    <div class="offer-item reveal-scale reveal-delay-2">
+      <h3>You own everything</h3>
+      <p>Your API keys, your infrastructure, your code. No margin on token spend, no vendor lock-in. If you stop working with us, your agents keep running.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,25 C360,50 720,0 1080,30 C1260,45 1380,35 1440,30 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
+    <path d="M0,35 C240,10 480,45 720,20 C960,45 1200,10 1440,35 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
   </svg>
 </div>
 
@@ -629,10 +677,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
       <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E259</p>
     </div>
-    <div class="quote-card quote-decorated reveal-scale reveal-delay-1">
-      <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
-      <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E261</p>
-    </div>
   </div>
 </section>
 
@@ -722,10 +766,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     </div>
   </div>
 
-  <div class="quote-block reveal" style="margin-top: 3rem;">
-    <p>"They don't forget to do work. They don't make mistakes. Once you put this in, you don't need to have checklists. They just do it perfectly every single time."</p>
-    <p class="quote-source">Jason Calacanis on his OpenClaw deployment — All-In Podcast E261</p>
-  </div>
 </section>
 
 <!-- Wave divider -->
@@ -791,6 +831,76 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <h2 class="reveal">The businesses that thrive will be the ones that give their best people the best tools.</h2>
   <p class="reveal">The market is moving. Every major business will eventually have people building and managing AI agents. The question is whether you start now with proper architecture, or scramble to catch up later at ten times the cost.</p>
   <p class="reveal">We're not waiting on big corporations to ship slow software. We build systems that work today, hand them to your team, and keep expanding what they can do. Approval gates, budget controls, audit logs. You stay in control. Your people get leverage. Your business gets a system that compounds.</p>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
+  </svg>
+</div>
+
+<!-- FAQ -->
+<section>
+  <p class="section-label reveal">FAQ</p>
+  <h2 class="reveal">Common questions.</h2>
+
+  <div class="faq-list">
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>Who is this for?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>Founders and teams at businesses doing $1M-$50M in revenue who want to deploy AI agents without hiring an internal AI team. You don't need technical expertise — you need a clear workflow you want to improve.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>What tech stack do you use?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>We build on OpenClaw, an open-source agent framework. Models from Anthropic, OpenAI, and others depending on the task. Your agents connect to your existing tools — Gmail, Slack, HubSpot, Salesforce, Google Calendar, and 100+ more.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>Who owns the code and data?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>You do. Every agent, skill, and configuration file belongs to you. Your API keys, your infrastructure. If you stop working with us, everything keeps running.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>How do API costs work?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>You pay model providers directly with your own API keys. We don't add a margin to your token spend. Most businesses start at $2-5/day. We set budget ceilings so there are no surprises.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>Do you replace employees?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>No. We automate the repetitive parts of your team's work so they can focus on judgment, relationships, and strategy. The goal is leverage, not headcount reduction.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+        <h3>How fast can we start?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a">
+        <p>A Founder Kickoff takes one session. You'll leave with a working agent deployed on your infrastructure and a written plan for what to build next. Most clients have their first agent running within a week.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- Wave divider -->
