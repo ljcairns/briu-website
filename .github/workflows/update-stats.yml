@@ -19,7 +19,7 @@ jobs:
       - name: Fetch commit counts
         env:
           PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
-          PRIVATE_REPO: ljcairns/openclaw-agent
+          PRIVATE_REPO: ljcairns/openclaw-config
           PUBLIC_REPO: ljcairns/briu-website
         run: |
           # Public repo - no auth needed
