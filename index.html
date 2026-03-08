@@ -220,6 +220,59 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .faq-item.open .faq-a { max-height: 200px; }
 .faq-a p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.75; padding-bottom: 1.25rem; margin: 0; }
 
+/* Assessment */
+.assess-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem; max-width: 640px; margin: 0 auto; }
+.assess-progress { height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 2rem; overflow: hidden; }
+.assess-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0%; transition: width 0.4s ease; }
+.assess-step { display: none; }
+.assess-step.active { display: block; animation: fadeUp 0.4s ease; }
+.assess-step h3 { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 1.25rem; }
+.assess-options { display: flex; flex-direction: column; gap: 0.75rem; }
+.assess-opt { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem 1.25rem; color: var(--text); font-family: var(--sans); font-size: 0.95rem; cursor: pointer; text-align: left; transition: all 0.25s ease; }
+.assess-opt:hover { border-color: rgba(212,160,90,0.3); background: rgba(212,160,90,0.05); transform: translateX(4px); }
+.assess-opt.selected { border-color: var(--gold); background: rgba(212,160,90,0.1); }
+.assess-result { display: none; text-align: center; }
+.assess-result.active { display: block; animation: fadeUp 0.5s ease; }
+.assess-gauge { width: 140px; height: 140px; border-radius: 50%; margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center; }
+.assess-gauge-inner { width: 110px; height: 110px; border-radius: 50%; background: var(--surface); display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.assess-gauge-score { font-family: var(--serif); font-size: 2.2rem; color: var(--gold); line-height: 1; }
+.assess-gauge-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.assess-persona { font-family: var(--serif); font-size: 1.5rem; margin-bottom: 0.75rem; }
+.assess-desc { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 2rem; max-width: 480px; margin-left: auto; margin-right: auto; }
+.assess-recs { text-align: left; margin-bottom: 2rem; }
+.assess-rec { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; padding: 0.75rem 1rem; background: rgba(212,160,90,0.04); border-left: 2px solid var(--gold); }
+.assess-rec p { margin: 0; font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+.assess-rec strong { color: var(--text); }
+.assess-cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.assess-retake { font-size: 0.78rem; color: var(--text-muted); cursor: pointer; background: none; border: none; font-family: var(--sans); text-decoration: underline; margin-top: 1.5rem; }
+.assess-retake:hover { color: var(--text); }
+.rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
+
+/* Calculator */
+.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
+.calc-inputs { display: flex; flex-direction: column; gap: 1.5rem; }
+.calc-field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
+.calc-field .calc-value { float: right; color: var(--gold); font-family: var(--serif); }
+.calc-slider { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.08); outline: none; border-radius: 2px; }
+.calc-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 0 10px rgba(212,160,90,0.3); }
+.calc-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--bg); }
+.calc-toggles { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
+.calc-toggle { flex: 1; padding: 0.75rem 0.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-family: var(--sans); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.25s ease; }
+.calc-toggle span { display: block; font-size: 0.72rem; font-weight: 400; margin-top: 2px; }
+.calc-toggle:hover { border-color: rgba(212,160,90,0.2); }
+.calc-toggle.active { border-color: var(--gold); background: rgba(212,160,90,0.1); color: var(--gold); }
+.calc-output { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
+.calc-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.calc-row:last-child { border-bottom: none; }
+.calc-row-label { font-size: 0.88rem; color: var(--text-muted); }
+.calc-row-value { font-family: var(--serif); font-size: 1.3rem; }
+.calc-savings { text-align: center; padding: 1rem; margin-top: 1rem; }
+.calc-savings.positive { background: rgba(77,128,112,0.1); border: 1px solid rgba(77,128,112,0.2); }
+.calc-savings.neutral { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
+.calc-savings-num { font-family: var(--serif); font-size: 2rem; color: var(--forest); }
+.calc-savings-num span { font-size: 1rem; }
+.calc-savings-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+
 .footer-links { display: flex; gap: 2rem; }
 
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -313,6 +366,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .quotes-row { grid-template-columns: 1fr; }
   .case-study-box { padding: 1.5rem; }
   .offer-grid { grid-template-columns: 1fr; }
+  .assess-container { padding: 1.5rem; }
+  .calc-grid { grid-template-columns: 1fr; }
+  .calc-toggles { flex-direction: column; }
   .footer-links { justify-content: center; }
   .wave-divider svg { height: 30px; }
 }
@@ -364,6 +420,68 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
     <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+  </svg>
+</div>
+
+<!-- ASSESSMENT -->
+<section id="assessment">
+  <p class="section-label reveal">Find Your Starting Point</p>
+  <h2 class="reveal">What could an agent handle for your business?</h2>
+  <p class="reveal">Four questions. Personalized recommendation. 30 seconds.</p>
+
+  <div class="assess-container reveal">
+    <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
+
+    <div class="assess-step active" id="assess-1">
+      <h3>What's your role?</h3>
+      <div class="assess-options">
+        <button class="assess-opt" data-value="founder" onclick="assessSelect(1,this)">Founder / CEO</button>
+        <button class="assess-opt" data-value="leader" onclick="assessSelect(1,this)">Team Lead / Manager</button>
+        <button class="assess-opt" data-value="ic" onclick="assessSelect(1,this)">Individual Contributor</button>
+        <button class="assess-opt" data-value="exploring" onclick="assessSelect(1,this)">Exploring for my company</button>
+      </div>
+    </div>
+
+    <div class="assess-step" id="assess-2">
+      <h3>How big is your team?</h3>
+      <div class="assess-options">
+        <button class="assess-opt" data-value="solo" onclick="assessSelect(2,this)">Just me</button>
+        <button class="assess-opt" data-value="small" onclick="assessSelect(2,this)">2–10 people</button>
+        <button class="assess-opt" data-value="medium" onclick="assessSelect(2,this)">11–50 people</button>
+        <button class="assess-opt" data-value="large" onclick="assessSelect(2,this)">50+</button>
+      </div>
+    </div>
+
+    <div class="assess-step" id="assess-3">
+      <h3>How does your team use AI today?</h3>
+      <div class="assess-options">
+        <button class="assess-opt" data-value="none" onclick="assessSelect(3,this)">Not yet</button>
+        <button class="assess-opt" data-value="free" onclick="assessSelect(3,this)">Free tools (ChatGPT, etc.)</button>
+        <button class="assess-opt" data-value="paid" onclick="assessSelect(3,this)">Paid AI accounts</button>
+        <button class="assess-opt" data-value="building" onclick="assessSelect(3,this)">Already building agents</button>
+      </div>
+    </div>
+
+    <div class="assess-step" id="assess-4">
+      <h3>What takes the most of your team's time?</h3>
+      <div class="assess-options">
+        <button class="assess-opt" data-value="email" onclick="assessSelect(4,this)">Email &amp; communication</button>
+        <button class="assess-opt" data-value="sales" onclick="assessSelect(4,this)">Sales &amp; prospecting</button>
+        <button class="assess-opt" data-value="reporting" onclick="assessSelect(4,this)">Reporting &amp; data</button>
+        <button class="assess-opt" data-value="ops" onclick="assessSelect(4,this)">Operations &amp; admin</button>
+        <button class="assess-opt" data-value="support" onclick="assessSelect(4,this)">Customer support</button>
+      </div>
+    </div>
+
+    <div id="assessResult"></div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C180,50 360,10 540,30 C720,50 900,10 1080,35 C1260,50 1380,25 1440,30 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
+    <path d="M0,20 C360,45 720,10 1080,35 C1260,45 1350,30 1440,25 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
   </svg>
 </div>
 
@@ -490,6 +608,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="chart-tabs reveal">
     <button class="chart-tab active" onclick="switchChart('cost',this)">Cost vs Capability</button>
     <button class="chart-tab" onclick="switchChart('math',this)">The $300/Day Math</button>
+    <button class="chart-tab" onclick="switchChart('calc',this)">Estimate Your Costs</button>
   </div>
 
   <div id="chart-cost" class="chart-view active">
@@ -550,6 +669,50 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <p style="color: var(--text); font-size: 0.93rem; line-height: 1.75; margin-bottom: 0;">Every day between now and then, the agents have been learning your business. The company that started earlier has institutional knowledge in its agents that a competitor cannot buy at any price.</p>
     </div>
     <div class="chart-source">Projections based on observed 50%+ annual decline in frontier pricing 2023-2026.</div>
+  </div>
+
+  <div id="chart-calc" class="chart-view">
+    <div class="calc-grid">
+      <div class="calc-inputs">
+        <div class="calc-field">
+          <label>Hours of work to automate <span class="calc-value" id="calcHoursVal">4h/day</span></label>
+          <input type="range" class="calc-slider" id="calcHours" min="1" max="10" step="0.5" value="4" oninput="updateCalc()">
+        </div>
+        <div class="calc-field">
+          <label>Current cost of that work <span class="calc-value" id="calcRateVal">$50/hr</span></label>
+          <input type="range" class="calc-slider" id="calcRate" min="15" max="150" step="5" value="50" oninput="updateCalc()">
+        </div>
+        <div class="calc-field">
+          <label>Deployment level</label>
+          <div class="calc-toggles">
+            <button class="calc-toggle active" data-val="practical" onclick="setComplexity('practical',this)">Practical<span>$2–5/day</span></button>
+            <button class="calc-toggle" data-val="moderate" onclick="setComplexity('moderate',this)">Moderate<span>$10–20/day</span></button>
+            <button class="calc-toggle" data-val="frontier" onclick="setComplexity('frontier',this)">Frontier<span>$30–100/day</span></button>
+          </div>
+        </div>
+      </div>
+      <div class="calc-output">
+        <div class="calc-comparison">
+          <div class="calc-row">
+            <span class="calc-row-label">Current monthly cost</span>
+            <span class="calc-row-value" style="color:var(--coral)" id="calcCurrentCost">$4,400</span>
+          </div>
+          <div class="calc-row">
+            <span class="calc-row-label">Agent monthly cost</span>
+            <span class="calc-row-value" style="color:var(--forest)" id="calcAgentCost">$305</span>
+          </div>
+          <div class="calc-row" style="border:none;padding-top:0">
+            <span class="calc-row-label"></span>
+            <span id="calcAgentBreakdown" style="font-size:0.75rem;color:var(--text-muted)">($105 API + $200 platform)</span>
+          </div>
+        </div>
+        <div class="calc-savings positive" id="calcSavings">
+          <div class="calc-savings-num">$4,095<span>/mo</span></div>
+          <div class="calc-savings-label">Estimated savings (93% reduction)</div>
+        </div>
+      </div>
+    </div>
+    <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max $200/mo shared platform.</div>
   </div>
 
   <div class="callout-box reveal">
@@ -994,6 +1157,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/interactive.js"></script>
 <script>
 /* Chart tabs */
 function switchChart(view, btn) {
