@@ -75,6 +75,7 @@ article strong { color: var(--text); }
 </style>
 </head>
 <body>
+<div class="vignette"></div>
 <div class="ambient-orb ambient-orb-1"></div>
 <div class="ambient-orb ambient-orb-2"></div>
 <div class="ambient-orb ambient-orb-3"></div>
@@ -88,12 +89,12 @@ article strong { color: var(--text); }
     <a href="/services/">Services</a>
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
-  <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <main>
-<section class="hero">
+<section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>Creating the Briu Brand with our Agent</h1>
   <p>400+ Midjourney generations. Hundreds of name candidates. One logo. Here's how agents and founder taste produced a brand identity in hours, not months.</p>
@@ -107,7 +108,7 @@ article strong { color: var(--text); }
   <h2 class="reveal">Finding the name</h2>
   <p>The name search started in Claude. We explored directions: geographic roots, Gaelic and Celtic language patterns, abstract concepts, short domains that would actually be available. The agent generated hundreds of candidates. Each one was checked against domain availability, trademark risk, pronunciation in English, and whether it would hold up as a brand.</p>
   <p>We built a new OpenClaw skill mid-session to automate the domain search. The agent ran whois lookups, checked .com and .ai availability, identified who owned the domains we wanted, analyzed whether they were parked or active, and did preliminary trademark screening through USPTO. 50+ candidates got the full treatment.</p>
-  <p>"Briu" came from an exploration of Catalan. It means "energy," "push," or "courage." The .ai was available. No trademark conflicts. Short, pronounceable, and it didn't sound like every other AI company.</p>
+  <p>"Briu" came from an exploration of Catalan. In Catalan, the word works two ways: as a noun meaning energy, push, courage — synonyms include <em>energia</em>, <em>empenta</em>, <em>coratge</em>, <em>ànim</em> — and as an interjection used to urge someone to act quickly, like "let's go." The word traces back to Proto-Celtic roots meaning strength, the same root that gives English the word "brio." A Catalan word with Celtic ancestry, used to urge action. The .ai was available. No trademark conflicts. Short, pronounceable, and it didn't sound like every other AI company.</p>
   <p>But the name did something else we didn't plan for. A Catalan word naturally pointed toward Barcelona, and Barcelona pointed toward Gaudi. The moment the name landed, a visual world came with it: pointed arches, mosaic tilework, organic geometry, warm gold and teal. The name and the design language share the same root. That connection wasn't engineered. It emerged from following the work.</p>
   <p>A human made the final call. The agent did the legwork that made an informed call possible.</p>
   <p><strong>Cost: a few dollars in API for the domain search runs across 50+ candidates. $85 for the domain registration.</strong></p>
@@ -243,7 +244,7 @@ article strong { color: var(--text); }
       <h3>What would you most like to automate?</h3>
       <p>No wrong answers. Just tell us what takes up your team's time.</p>
       <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
-      <button class="modal-btn" onclick="goToStep(3)">Continue</button>
+      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
       <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
     </div>
     <div class="q-step" id="q-step-3">
@@ -257,7 +258,7 @@ article strong { color: var(--text); }
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="Your email" required>
         <input type="text" name="company" placeholder="Company (optional)">
-        <button type="submit" class="modal-btn">Send</button>
+        <button type="submit" class="modal-btn cta-shimmer">Send</button>
       </form>
       <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
     </div>
