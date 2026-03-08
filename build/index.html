@@ -114,7 +114,12 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .article-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; display: flex; flex-direction: column; transition: all 0.35s ease; }
 .article-card:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
 .article-card.coming-soon:hover { transform: none; box-shadow: none; background: var(--surface); }
-.article-card .card-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--forest); margin-bottom: 0.75rem; }
+.article-card .card-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--forest); margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; }
+.card-category { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.2rem 0.55rem; border: 1px solid; }
+.card-category[data-cat="agent"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
+.card-category[data-cat="brand"] { color: var(--forest); border-color: rgba(77,128,112,0.25); }
+.card-category[data-cat="website"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
+.article-card h4 { font-family: var(--sans); font-size: 0.82rem; color: var(--text-muted); font-weight: 400; margin-bottom: 0.75rem; line-height: 1.5; }
 .article-card h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.65rem; line-height: 1.25; }
 .article-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 1rem; flex: 1; }
 .article-card .card-link { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; transition: color 0.2s; }
@@ -352,33 +357,37 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <div class="articles-grid">
 
     <div class="article-card">
-      <div class="card-tag">Live</div>
-      <h3>Building Briu with Agents</h3>
-      <p>From first agent skill to company launch. Exact toolchain, costs, security architecture, and what the agent cannot do.</p>
-      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
-      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
-    </div>
-
-    <div class="article-card">
-      <div class="card-tag">Live</div>
-      <h3>Building a Production Agent in 26 Days</h3>
-      <p>From first skill to 12 production capabilities. The full implementation: architecture, security, what broke, what we fixed, and what it cost.</p>
+      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
+      <h3>One Agent, 12 Skills, 26 Days</h3>
+      <h4>Architecture, security, what broke, and what it cost</h4>
+      <p>From first skill to 12 production capabilities. The full implementation journey — multi-model routing, cost controls, approval gates, and the real numbers behind every decision.</p>
       <a href="/build/the-real-numbers/" class="card-link">Read</a>
-      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
+      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service →</a>
     </div>
 
     <div class="article-card">
-      <div class="card-tag">Live</div>
-      <h3>Creating the Briu Brand with Agents</h3>
-      <p>400+ Midjourney generations. Hundreds of name candidates. One logo. How agents + founder taste produced a brand identity in hours, not months.</p>
+      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
+      <h3>Starting a Company with Agents</h3>
+      <h4>From first agent skill to company launch</h4>
+      <p>The full story of building Briu — toolchain, costs, security architecture, and what the agent cannot do. One person, multiple agents, everything documented.</p>
+      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
+      <a href="/services/#personal-assistants" class="card-service-link">See this as a service →</a>
+    </div>
+
+    <div class="article-card">
+      <div class="card-tag"><span class="card-category" data-cat="brand">Brand</span> Live</div>
+      <h3>Brand in a Session</h3>
+      <h4>400+ generations, 50+ name candidates, one logo</h4>
+      <p>How agents + founder taste produced a brand identity in hours, not months. Midjourney directed by Claude, automated trademark screening, domain search across seven languages.</p>
       <a href="/build/brand-in-a-session/" class="card-link">Read</a>
-      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
+      <a href="/services/#email-crm-sales" class="card-service-link">See this as a service →</a>
     </div>
 
     <div class="article-card coming-soon">
-      <div class="card-tag">Coming Soon</div>
-      <h3>Meet the Agent</h3>
-      <p>What the agent actually does daily. The skill inventory, security architecture, multi-model routing, and real Discord conversations with Claw.</p>
+      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Coming Soon</div>
+      <h3>What the Agent Does Every Day</h3>
+      <h4>Skills, security, multi-model routing, real conversations</h4>
+      <p>What the agent actually does daily. The skill inventory, how it decides which model to use, and real Discord conversations with Claw.</p>
       <span class="card-link">In progress</span>
     </div>
 
