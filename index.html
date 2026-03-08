@@ -5,8 +5,16 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | Yes, We Can Automate That</title>
 <meta name="description" content="AI agent deployment for businesses using the OpenClaw framework. Personal assistants, autonomous agents, team operations. Secure, cost-controlled, and running in days.">
-<link rel="icon" type="image/png" href="favicon.png">
-<link rel="apple-touch-icon" href="favicon.png">
+<meta property="og:title" content="Briu | Yes, We Can Automate That">
+<meta property="og:description" content="AI agent deployment for businesses using the OpenClaw framework. Personal assistants, autonomous agents, team operations. Secure, cost-controlled, and running in days.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/">
+<meta property="og:image" content="https://briu.ai/briu-logo-transparent.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Briu | Yes, We Can Automate That">
+<meta name="twitter:description" content="AI agent deployment for businesses using the OpenClaw framework. Personal assistants, autonomous agents, team operations. Secure, cost-controlled, and running in days.">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,7 +30,7 @@
   --gold-light: #E2B574;
   --gold-bright: #EDCA8A;
   --coral: #E07B5F;
-  --forest: #4D8070;
+  --forest: #6AAE9C;
   --river: #5A9DAC;
   --terra: #8B5E3C;
   --serif: 'DM Serif Display', Georgia, serif;
@@ -394,7 +402,7 @@ footer a:hover { color: var(--gold); }
 <div class="ambient-orb ambient-orb-3"></div>
 
 <nav>
-  <a href="#" class="logo"><img src="briu-logo-transparent.png" alt="Briu"></a>
+  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
   <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/why-now/">Why Now</a>
@@ -406,6 +414,7 @@ footer a:hover { color: var(--gold); }
   <div class="nav-progress" id="navProgress"></div>
 </nav>
 
+<main>
 <!-- HERO -->
 <section class="hero">
   <p class="hero-eyebrow">Yes, We Can Automate That</p>
@@ -895,6 +904,7 @@ footer a:hover { color: var(--gold); }
   <p class="reveal">Tell us what your team does every day. We'll tell you what an agent could handle, what it would cost, and what we'd build first. If it doesn't make sense for your business, we'll say so.</p>
   <a href="#" onclick="openContactForm();return false" class="cta-button reveal">Start the Conversation</a>
 </section>
+</main>
 
 <div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
   <div class="modal">
@@ -952,10 +962,7 @@ footer a:hover { color: var(--gold); }
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
-  <div class="footer-links">
-    <a href="mailto:hi@briu.ai">hi@briu.ai</a>
-    <a href="tel:+12065310077">206-531-0077</a>
-  </div>
+  <a href="mailto:hi@briu.ai">hi@briu.ai</a>
 </footer>
 
 <script>
