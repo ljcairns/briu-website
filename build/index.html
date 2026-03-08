@@ -118,6 +118,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </style>
 </head>
 <body>
+<div class="vignette"></div>
 <div class="ambient-orb ambient-orb-1"></div>
 <div class="ambient-orb ambient-orb-2"></div>
 <div class="ambient-orb ambient-orb-3"></div>
@@ -131,12 +132,12 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <a href="/services/">Services</a>
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
-  <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <main>
-<section class="hero">
+<section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>What it actually costs to build with agents.</h1>
   <p>Briu was built by agents from day one. This is the operating log.</p>
@@ -148,23 +149,23 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <div class="stat-label">Founded</div>
   </div>
   <div class="stat-box reveal-scale reveal-delay-1">
-    <div class="stat-value">~$636</div>
+    <div class="stat-value" data-count="636" data-prefix="~$">~$636</div>
     <div class="stat-label">Total Build Cost</div>
   </div>
   <div class="stat-box reveal-scale reveal-delay-2">
-    <div class="stat-value">244</div>
+    <div class="stat-value" data-count="244">244</div>
     <div class="stat-label">Commits in 26 Days</div>
   </div>
   <div class="stat-box reveal-scale" style="transition-delay:0.3s">
-    <div class="stat-value">12</div>
+    <div class="stat-value" data-count="12">12</div>
     <div class="stat-label">Skills Deployed</div>
   </div>
   <div class="stat-box reveal-scale" style="transition-delay:0.4s">
-    <div class="stat-value">3</div>
+    <div class="stat-value" data-count="3">3</div>
     <div class="stat-label">Days to Production Agent</div>
   </div>
   <div class="stat-box reveal-scale" style="transition-delay:0.5s">
-    <div class="stat-value">400+</div>
+    <div class="stat-value" data-count="400" data-suffix="+">400+</div>
     <div class="stat-label">Midjourney Generations</div>
   </div>
 </div>
@@ -333,7 +334,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <h3>What would you most like to automate?</h3>
       <p>No wrong answers. Just tell us what takes up your team's time.</p>
       <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
-      <button class="modal-btn" onclick="goToStep(3)">Continue</button>
+      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
       <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
     </div>
     <div class="q-step" id="q-step-3">
@@ -347,7 +348,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="Your email" required>
         <input type="text" name="company" placeholder="Company (optional)">
-        <button type="submit" class="modal-btn">Send</button>
+        <button type="submit" class="modal-btn cta-shimmer">Send</button>
       </form>
       <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
     </div>

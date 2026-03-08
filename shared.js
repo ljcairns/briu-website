@@ -35,3 +35,66 @@ var revealObs = new IntersectionObserver(function(entries) {
   entries.forEach(function(entry) { if (entry.isIntersecting) { entry.target.classList.add('visible'); revealObs.unobserve(entry.target); } });
 }, { threshold: 0.15 });
 revealEls.forEach(function(el) { revealObs.observe(el); });
+
+/* Cursor Glow (desktop only) */
+(function() {
+  if (window.matchMedia('(pointer: fine)').matches) {
+    var glow = document.createElement('div');
+    glow.className = 'cursor-glow';
+    document.body.appendChild(glow);
+    var mx = 0, my = 0, gx = 0, gy = 0;
+    document.addEventListener('mousemove', function(e) { mx = e.clientX; my = e.clientY; });
+    (function render() {
+      gx += (mx - gx) * 0.15; gy += (my - gy) * 0.15;
+      glow.style.transform = 'translate(' + (gx - 200) + 'px,' + (gy - 200) + 'px)';
+      requestAnimationFrame(render);
+    })();
+  }
+})();
+
+/* Number Counter Animation */
+(function() {
+  var counters = document.querySelectorAll('[data-count]');
+  if (!counters.length) return;
+  var counterObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (!entry.isIntersecting) return;
+      var el = entry.target;
+      var target = parseFloat(el.getAttribute('data-count'));
+      var prefix = el.getAttribute('data-prefix') || '';
+      var suffix = el.getAttribute('data-suffix') || '';
+      var decimals = (target % 1 !== 0) ? (target.toString().split('.')[1] || '').length : 0;
+      var start = 0, duration = 1500, startTime = null;
+      function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
+      function step(ts) {
+        if (!startTime) startTime = ts;
+        var p = Math.min((ts - startTime) / duration, 1);
+        var val = start + (target - start) * ease(p);
+        el.textContent = prefix + val.toFixed(decimals) + suffix;
+        if (p < 1) requestAnimationFrame(step);
+      }
+      requestAnimationFrame(step);
+      counterObs.unobserve(el);
+    });
+  }, { threshold: 0.3 });
+  counters.forEach(function(el) { counterObs.observe(el); });
+})();
+
+/* Magnetic Buttons (desktop only) */
+(function() {
+  if (!window.matchMedia('(pointer: fine)').matches) return;
+  var btns = document.querySelectorAll('.cta-nav, .modal-btn, .cta');
+  btns.forEach(function(btn) {
+    btn.addEventListener('mousemove', function(e) {
+      var rect = btn.getBoundingClientRect();
+      var cx = rect.left + rect.width / 2;
+      var cy = rect.top + rect.height / 2;
+      var dx = (e.clientX - cx) * 0.15;
+      var dy = (e.clientY - cy) * 0.15;
+      btn.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+    });
+    btn.addEventListener('mouseleave', function() {
+      btn.style.transform = '';
+    });
+  });
+})();

@@ -301,6 +301,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 </style>
 </head>
 <body>
+<div class="vignette"></div>
 
 <!-- Ambient gradient orbs -->
 <div class="ambient-orb ambient-orb-1"></div>
@@ -316,13 +317,13 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <a href="/services/">Services</a>
     <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
-  <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
   <div class="nav-progress" id="navProgress"></div>
 </nav>
 
 <main>
 <!-- HERO -->
-<section class="hero">
+<section class="hero hero-breathe">
   <p class="hero-eyebrow">Yes, We Can Automate That</p>
   <h1>Deploy AI agents with control, clarity, and real operating value.</h1>
   <p class="hero-subtitle">Founder-led AI implementation for businesses that want practical agents, clear economics, and systems that can grow from custom deployments into repeatable software.</p>
@@ -447,17 +448,17 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <div class="cost-stat-grid">
       <div class="cost-stat-box reveal-scale" style="border-top-color: var(--coral);">
         <div class="csl" style="color: var(--coral);">Best model, Mar 2023</div>
-        <div class="csn">$60<span>/M output</span></div>
+        <div class="csn"><span data-count="60" data-prefix="$">$60</span><span>/M output</span></div>
         <div class="csd">GPT-4 · 8K context</div>
       </div>
       <div class="cost-stat-box reveal-scale reveal-delay-1" style="border-top-color: var(--forest);">
         <div class="csl" style="color: var(--forest);">Same intelligence, today</div>
-        <div class="csn">$0.60<span>/M output</span></div>
+        <div class="csn"><span data-count="0.60" data-prefix="$">$0.60</span><span>/M output</span></div>
         <div class="csd">GPT-4o mini · 99% cheaper</div>
       </div>
       <div class="cost-stat-box reveal-scale reveal-delay-2" style="border-top-color: var(--gold);">
         <div class="csl" style="color: var(--gold);">Best model, Mar 2026</div>
-        <div class="csn">$14<span>/M output</span></div>
+        <div class="csn"><span data-count="14" data-prefix="$">$14</span><span>/M output</span></div>
         <div class="csd">GPT-5.2 · far more capable</div>
       </div>
     </div>
@@ -624,7 +625,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <p class="reveal">The people running real businesses on agents are seeing numbers that change how they think about headcount, cost structure, and competitive advantage.</p>
 
   <div class="quotes-row">
-    <div class="quote-card reveal-scale">
+    <div class="quote-card quote-decorated reveal-scale">
       <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
       <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E259</p>
     </div>
@@ -839,7 +840,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <h3>What would you most like to automate?</h3>
       <p>No wrong answers. Just tell us what takes up your team's time.</p>
       <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
-      <button class="modal-btn" onclick="goToStep(3)">Continue</button>
+      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
       <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
     </div>
 
@@ -854,7 +855,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <input type="text" name="name" placeholder="Your name" required>
         <input type="email" name="email" placeholder="Your email" required>
         <input type="text" name="company" placeholder="Company (optional)">
-        <button type="submit" class="modal-btn">Send</button>
+        <button type="submit" class="modal-btn cta-shimmer">Send</button>
       </form>
       <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
     </div>
