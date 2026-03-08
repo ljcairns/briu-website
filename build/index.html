@@ -57,28 +57,24 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
 
-/* Horizontal Timeline — wide breakout */
-.htl-section { max-width: min(1400px, 92vw); padding: 4rem 3rem 2rem; margin: 0 auto; position: relative; z-index: 1; }
-.htl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2.5rem; scrollbar-width: none; }
-.htl-wrap::-webkit-scrollbar { display: none; }
-.htl { display: flex; align-items: flex-start; position: relative; padding: 0 2rem; justify-content: space-between; }
-.htl::before { content: ''; position: absolute; top: 46px; left: 2rem; right: 2rem; height: 3px; background: rgba(212,160,90,0.35); }
-.htl-node { display: flex; flex-direction: column; align-items: center; position: relative; cursor: default; padding: 0 1.25rem; }
-.htl-date { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(212,160,90,0.6); margin-bottom: 0.7rem; white-space: nowrap; }
-.htl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(212,160,90,0.1); position: relative; z-index: 2; transition: all 0.25s ease; flex-shrink: 0; }
-.htl-node:hover .htl-dot { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 16px rgba(212,160,90,0.3); }
-.htl-title { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-align: center; margin-top: 0.85rem; line-height: 1.5; max-width: 140px; transition: color 0.2s; }
-.htl-node:hover .htl-title { color: var(--text); }
-/* Medium milestone */
-.htl-node.mid .htl-dot { width: 16px; height: 16px; box-shadow: 0 0 0 4px rgba(212,160,90,0.15); }
-.htl-node.mid .htl-title { color: var(--text); }
+/* Vertical Timeline */
+.vtl { position: relative; padding: 1rem 0 1rem 3.5rem; }
+.vtl::before { content: ''; position: absolute; left: 1.1rem; top: 1.5rem; bottom: 1.5rem; width: 3px; background: linear-gradient(to bottom, rgba(212,160,90,0.1), rgba(212,160,90,0.4) 15%, rgba(212,160,90,0.4) 85%, rgba(212,160,90,0.1)); }
+.vtl-entry { position: relative; padding: 0.25rem 0 2.5rem 0; transition: opacity 0.2s; }
+.vtl-entry:last-child { padding-bottom: 0; }
+.vtl-dot { position: absolute; left: -3.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); top: 0.35rem; z-index: 2; transition: all 0.25s ease; transform: translateX(calc(1.1rem + 1.5px - 6px)); }
+.vtl-entry:hover .vtl-dot { transform: translateX(calc(1.1rem + 1.5px - 6px)) scale(1.25); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
+.vtl-date { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(212,160,90,0.6); margin-bottom: 0.25rem; }
+.vtl-title { font-family: var(--serif); font-size: 1.1rem; line-height: 1.25; margin-bottom: 0.3rem; color: var(--text); transition: color 0.2s; }
+.vtl-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; transition: color 0.2s; }
+.vtl-entry:hover .vtl-title { color: var(--gold-light); }
+.vtl-entry:hover .vtl-desc { color: var(--text); }
 /* Major milestone */
-.htl-node.major .htl-dot { width: 22px; height: 22px; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 24px rgba(212,160,90,0.25); }
-.htl-node.major .htl-title { color: var(--text); font-size: 0.82rem; }
-.htl-node.major .htl-date { color: var(--gold); }
-.htl-node.major:hover .htl-dot { transform: scale(1.2); box-shadow: 0 0 0 7px rgba(212,160,90,0.25), 0 0 30px rgba(212,160,90,0.4); }
-.htl-tip { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%); background: var(--surface-2); border: 1px solid rgba(212,160,90,0.2); padding: 0.65rem 1rem; font-size: 0.74rem; color: var(--text); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10; }
-.htl-node:hover .htl-tip { opacity: 1; }
+.vtl-entry.major .vtl-dot { width: 20px; height: 20px; top: 0.1rem; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.15), 0 0 20px rgba(212,160,90,0.2); transform: translateX(calc(1.1rem + 1.5px - 10px)); }
+.vtl-entry.major:hover .vtl-dot { transform: translateX(calc(1.1rem + 1.5px - 10px)) scale(1.15); box-shadow: 0 0 0 6px rgba(212,160,90,0.25), 0 0 28px rgba(212,160,90,0.35); }
+.vtl-entry.major .vtl-date { color: var(--gold); }
+.vtl-entry.major .vtl-title { font-size: 1.25rem; }
+.vtl-entry.major { padding-bottom: 3rem; }
 
 /* Cost Comparison Cards */
 .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
@@ -150,11 +146,13 @@ footer a:hover { color: var(--gold); }
   nav { padding: 1rem 1.25rem; }
   .nav-links { display: none; }
   .logo img { height: 64px; }
-  .htl-section { padding: 3rem 1.25rem 2rem; }
-  .htl { min-width: max-content; padding: 0 1rem; }
-  .htl-wrap { scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.2) transparent; }
-  .htl-wrap::-webkit-scrollbar { display: block; height: 3px; }
-  .htl-wrap::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.2); border-radius: 2px; }
+  .vtl { padding-left: 2.5rem; }
+  .vtl::before { left: 0.6rem; }
+  .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 6px)); }
+  .vtl-entry:hover .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 6px)) scale(1.25); }
+  .vtl-entry.major .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 10px)); }
+  .vtl-entry.major:hover .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 10px)) scale(1.15); }
+  .vtl-dot { left: -2.5rem; }
   .hero { padding: 7rem 1.25rem 2rem; }
   .stats { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
   section { padding: 3rem 1.25rem 2rem; }
@@ -208,55 +206,61 @@ footer a:hover { color: var(--gold); }
   </div>
 </div>
 
-<div class="htl-section">
+<section>
   <p class="section-label">Timeline</p>
-  <div class="htl-wrap">
-    <div class="htl">
-      <div class="htl-node">
-        <div class="htl-date">Feb 10</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">Day zero</div>
-        <div class="htl-tip">OpenClaw installed. Claude Max subscription started.</div>
-      </div>
-      <div class="htl-node mid">
-        <div class="htl-date">Feb 12</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">36 commits</div>
-        <div class="htl-tip">Gmail, HubSpot, Apollo, security, heartbeat. Production in one day.</div>
-      </div>
-      <div class="htl-node mid">
-        <div class="htl-date">Feb 25</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">Costs drop 90%</div>
-        <div class="htl-tip">195K token session found. Multi-model routing deployed.</div>
-      </div>
-      <div class="htl-node">
-        <div class="htl-date">Feb 28</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">First sales run</div>
-        <div class="htl-tip">Apollo integration. Thread isolation. 22 commits.</div>
-      </div>
-      <div class="htl-node major">
-        <div class="htl-date">Mar 5</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">Briu founded</div>
-        <div class="htl-tip">Domain, trademark, website. One session. 28 commits.</div>
-      </div>
-      <div class="htl-node">
-        <div class="htl-date">Mar 6</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">Site goes live</div>
-        <div class="htl-tip">Economics charts, interactive forms, full redesign via Claude Code.</div>
-      </div>
-      <div class="htl-node">
-        <div class="htl-date">Mar 7</div>
-        <div class="htl-dot"></div>
-        <div class="htl-title">Services launched</div>
-        <div class="htl-tip">Quote library from 3 podcast transcripts. Episode-level attribution.</div>
-      </div>
+  <div class="vtl">
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Feb 10</div>
+      <div class="vtl-title">Day zero</div>
+      <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
     </div>
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Feb 12</div>
+      <div class="vtl-title">36 commits</div>
+      <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
+    </div>
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Feb 25</div>
+      <div class="vtl-title">Costs drop 90%</div>
+      <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
+    </div>
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Feb 28</div>
+      <div class="vtl-title">First sales run</div>
+      <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
+    </div>
+
+    <div class="vtl-entry major">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Mar 5</div>
+      <div class="vtl-title">Briu founded</div>
+      <div class="vtl-desc">Domain, trademark, website. One session. 28 commits.</div>
+    </div>
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Mar 6</div>
+      <div class="vtl-title">Site goes live</div>
+      <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
+    </div>
+
+    <div class="vtl-entry">
+      <div class="vtl-dot"></div>
+      <div class="vtl-date">Mar 7</div>
+      <div class="vtl-title">Services launched</div>
+      <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
+    </div>
+
   </div>
-</div>
+</section>
 
 <section>
   <p class="section-label">What Each Task Actually Cost</p>
@@ -357,7 +361,7 @@ footer a:hover { color: var(--gold); }
     <div class="q-step" id="q-step-3">
       <h3>Where should we send our thoughts?</h3>
       <p>We'll get back within 24 hours with specific ideas for your business.</p>
-      <form id="contactForm" action="https://formsubmit.co/ajax/lucas@briu.ai" method="POST">
+      <form id="contactForm" action="https://formsubmit.co/ajax/hi@briu.ai" method="POST">
         <input type="text" name="_honey" style="display:none">
         <input type="hidden" name="_subject" value="New inquiry from briu.ai (Build)">
         <input type="hidden" name="ai_usage" id="q-ai-usage">
@@ -375,7 +379,7 @@ footer a:hover { color: var(--gold); }
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
-  <a href="mailto:lucas@briu.ai">lucas@briu.ai</a>
+  <a href="mailto:hi@briu.ai">lucas@briu.ai</a>
 </footer>
 
 <script>
