@@ -107,6 +107,21 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 .cta-button:hover::after { left: 100%; }
 .cta-button:hover { transform: translateY(-1px); box-shadow: 0 8px 35px rgba(212,160,90,0.3); }
 
+/* Tier Finder Mini-Quiz */
+.tier-finder { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2rem 2.5rem; margin-bottom: 2rem; }
+.tier-finder-header h3 { font-family: var(--serif); font-size: 1.2rem; color: var(--text); margin-bottom: 0.25rem; }
+.tier-finder-header p { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+.tf-question { font-size: 0.95rem; color: var(--text); font-weight: 500; margin-bottom: 0.75rem; }
+.tf-options { display: flex; gap: 0.75rem; }
+.tf-opt { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); padding: 0.6rem 1.25rem; font-size: 0.85rem; cursor: pointer; transition: all 0.25s ease; font-family: var(--sans); }
+.tf-opt:hover { border-color: rgba(212,160,90,0.3); color: var(--text); background: rgba(212,160,90,0.05); }
+.tf-opt.selected { border-color: var(--gold); color: var(--gold); background: rgba(212,160,90,0.08); }
+.tier-finder-result { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.06); }
+.tf-rec { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); margin-bottom: 0.5rem; }
+.tf-rec-reason { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0; }
+.tf-rec-link { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; margin-top: 0.75rem; transition: opacity 0.2s; }
+.tf-rec-link:hover { opacity: 0.7; }
+
 /* Reveal — disabled on services (no scroll reveal) */
 .reveal { opacity: 1; transform: none; }
 .reveal-scale { opacity: 1; transform: none; }
@@ -123,6 +138,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   .principles-grid { grid-template-columns: 1fr; }
   .quotes-row { grid-template-columns: 1fr; }
   .build-grid { grid-template-columns: 1fr; }
+  .tf-options { flex-direction: column; }
 }
 </style>
 </head>
@@ -221,6 +237,31 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 <section>
   <p class="section-label reveal">How we work</p>
   <h2 class="reveal">Choose your starting point. You own everything we build.</h2>
+
+  <!-- Tier Finder Mini-Quiz -->
+  <div class="tier-finder" id="tierFinder">
+    <div class="tier-finder-header">
+      <h3>Not sure which kickoff fits?</h3>
+      <p>Two questions. Ten seconds.</p>
+    </div>
+    <div class="tier-finder-q" id="tfQ1">
+      <p class="tf-question">How many people will be involved in the decision?</p>
+      <div class="tf-options">
+        <button class="tf-opt" onclick="tfAnswer(1,'solo')">Just me</button>
+        <button class="tf-opt" onclick="tfAnswer(1,'small')">2-3 people</button>
+        <button class="tf-opt" onclick="tfAnswer(1,'team')">4+ stakeholders</button>
+      </div>
+    </div>
+    <div class="tier-finder-q" id="tfQ2" style="display:none">
+      <p class="tf-question">How many workflows do you want to automate first?</p>
+      <div class="tf-options">
+        <button class="tf-opt" onclick="tfAnswer(2,'one')">One specific thing</button>
+        <button class="tf-opt" onclick="tfAnswer(2,'few')">A few ideas</button>
+        <button class="tf-opt" onclick="tfAnswer(2,'many')">Full landscape review</button>
+      </div>
+    </div>
+    <div class="tier-finder-result" id="tfResult" style="display:none"></div>
+  </div>
 
   <div class="tiers">
 
@@ -416,6 +457,33 @@ function toggleCapability(el) {
     if (items[i] !== el) items[i].classList.remove('expanded');
   }
   el.classList.toggle('expanded');
+}
+
+/* Tier Finder Quiz */
+var tfAnswers = {};
+function tfAnswer(q, val) {
+  tfAnswers['q' + q] = val;
+  var opts = document.querySelectorAll('#tfQ' + q + ' .tf-opt');
+  for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
+  event.target.classList.add('selected');
+  if (q === 1) {
+    document.getElementById('tfQ2').style.display = '';
+    document.getElementById('tfQ2').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  if (q === 2) {
+    var score = 0;
+    if (tfAnswers.q1 === 'team') score += 2;
+    else if (tfAnswers.q1 === 'small') score += 1;
+    if (tfAnswers.q2 === 'many') score += 2;
+    else if (tfAnswers.q2 === 'few') score += 1;
+    var result = document.getElementById('tfResult');
+    if (score >= 3) {
+      result.innerHTML = '<p class="tf-rec">Team Kickoff — $5,000</p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Team Kickoff →</a>';
+    } else {
+      result.innerHTML = '<p class="tf-rec">Founder Kickoff — $3,500</p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Founder Kickoff →</a>';
+    }
+    result.style.display = '';
+  }
 }
 
 /* Deep-link highlight on arrival */

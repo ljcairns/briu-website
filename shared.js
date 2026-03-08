@@ -111,6 +111,40 @@ revealEls.forEach(function(el) { revealObs.observe(el); });
   });
 })();
 
+/* Page Transitions */
+(function() {
+  if (!window.fetch || !history.pushState) return;
+  document.addEventListener('click', function(e) {
+    var link = e.target.closest('a[href]');
+    if (!link) return;
+    var href = link.getAttribute('href');
+    // Only internal page links (not anchors, modals, or external)
+    if (!href || href.charAt(0) === '#' || href.indexOf('mailto:') === 0 || href.indexOf('http') === 0) return;
+    if (link.getAttribute('onclick')) return;
+    if (e.ctrlKey || e.metaKey || e.shiftKey) return;
+    e.preventDefault();
+    var main = document.querySelector('main');
+    if (!main) { location.href = href; return; }
+    main.style.transition = 'opacity 0.2s ease, transform 0.2s ease';
+    main.style.opacity = '0';
+    main.style.transform = 'translateY(-8px)';
+    setTimeout(function() { location.href = href; }, 200);
+  });
+  // Fade in on load
+  var main = document.querySelector('main');
+  if (main) {
+    main.style.opacity = '0';
+    main.style.transform = 'translateY(8px)';
+    main.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        main.style.opacity = '1';
+        main.style.transform = 'translateY(0)';
+      });
+    });
+  }
+})();
+
 /* Magnetic Buttons (desktop only) */
 (function() {
   if (!window.matchMedia('(pointer: fine)').matches) return;
