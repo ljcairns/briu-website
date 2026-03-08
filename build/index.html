@@ -62,13 +62,21 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .htl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 2.5rem; scrollbar-width: none; }
 .htl-wrap::-webkit-scrollbar { display: none; }
 .htl { display: flex; align-items: flex-start; position: relative; padding: 0 2rem; justify-content: space-between; }
-.htl::before { content: ''; position: absolute; top: 48px; left: 2rem; right: 2rem; height: 3px; background: rgba(212,160,90,0.35); }
+.htl::before { content: ''; position: absolute; top: 46px; left: 2rem; right: 2rem; height: 3px; background: rgba(212,160,90,0.35); }
 .htl-node { display: flex; flex-direction: column; align-items: center; position: relative; cursor: default; padding: 0 1.25rem; }
-.htl-date { font-size: 0.74rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.7rem; white-space: nowrap; }
-.htl-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 4px rgba(212,160,90,0.12); position: relative; z-index: 2; transition: all 0.25s ease; flex-shrink: 0; }
-.htl-node:hover .htl-dot { transform: scale(1.35); box-shadow: 0 0 0 6px rgba(212,160,90,0.2), 0 0 20px rgba(212,160,90,0.35); }
-.htl-title { font-size: 0.74rem; font-weight: 500; color: var(--text-muted); text-align: center; margin-top: 0.85rem; line-height: 1.5; max-width: 140px; transition: color 0.2s; }
+.htl-date { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: rgba(212,160,90,0.6); margin-bottom: 0.7rem; white-space: nowrap; }
+.htl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 0 3px rgba(212,160,90,0.1); position: relative; z-index: 2; transition: all 0.25s ease; flex-shrink: 0; }
+.htl-node:hover .htl-dot { transform: scale(1.3); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 16px rgba(212,160,90,0.3); }
+.htl-title { font-size: 0.78rem; font-weight: 600; color: var(--text-muted); text-align: center; margin-top: 0.85rem; line-height: 1.5; max-width: 140px; transition: color 0.2s; }
 .htl-node:hover .htl-title { color: var(--text); }
+/* Medium milestone */
+.htl-node.mid .htl-dot { width: 16px; height: 16px; box-shadow: 0 0 0 4px rgba(212,160,90,0.15); }
+.htl-node.mid .htl-title { color: var(--text); }
+/* Major milestone */
+.htl-node.major .htl-dot { width: 22px; height: 22px; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 24px rgba(212,160,90,0.25); }
+.htl-node.major .htl-title { color: var(--text); font-size: 0.82rem; }
+.htl-node.major .htl-date { color: var(--gold); }
+.htl-node.major:hover .htl-dot { transform: scale(1.2); box-shadow: 0 0 0 7px rgba(212,160,90,0.25), 0 0 30px rgba(212,160,90,0.4); }
 .htl-tip { position: absolute; top: calc(100% + 0.75rem); left: 50%; transform: translateX(-50%); background: var(--surface-2); border: 1px solid rgba(212,160,90,0.2); padding: 0.65rem 1rem; font-size: 0.74rem; color: var(--text); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10; }
 .htl-node:hover .htl-tip { opacity: 1; }
 
@@ -207,28 +215,28 @@ footer a:hover { color: var(--gold); }
       <div class="htl-node">
         <div class="htl-date">Feb 10</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">First agent skill</div>
+        <div class="htl-title">Day zero</div>
         <div class="htl-tip">OpenClaw installed. Claude Max subscription started.</div>
       </div>
-      <div class="htl-node">
+      <div class="htl-node mid">
         <div class="htl-date">Feb 12</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">Production in one day</div>
-        <div class="htl-tip">36 commits. Gmail, HubSpot, Apollo, security, heartbeat.</div>
+        <div class="htl-title">36 commits</div>
+        <div class="htl-tip">Gmail, HubSpot, Apollo, security, heartbeat. Production in one day.</div>
       </div>
-      <div class="htl-node">
+      <div class="htl-node mid">
         <div class="htl-date">Feb 25</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">Cost crisis + fix</div>
-        <div class="htl-tip">195K token session found. Multi-model routing deployed. Costs drop 90%.</div>
+        <div class="htl-title">Costs drop 90%</div>
+        <div class="htl-tip">195K token session found. Multi-model routing deployed.</div>
       </div>
       <div class="htl-node">
         <div class="htl-date">Feb 28</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">Sales prospecting live</div>
+        <div class="htl-title">First sales run</div>
         <div class="htl-tip">Apollo integration. Thread isolation. 22 commits.</div>
       </div>
-      <div class="htl-node">
+      <div class="htl-node major">
         <div class="htl-date">Mar 5</div>
         <div class="htl-dot"></div>
         <div class="htl-title">Briu founded</div>
@@ -237,13 +245,13 @@ footer a:hover { color: var(--gold); }
       <div class="htl-node">
         <div class="htl-date">Mar 6</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">Website launched</div>
+        <div class="htl-title">Site goes live</div>
         <div class="htl-tip">Economics charts, interactive forms, full redesign via Claude Code.</div>
       </div>
       <div class="htl-node">
         <div class="htl-date">Mar 7</div>
         <div class="htl-dot"></div>
-        <div class="htl-title">Services page live</div>
+        <div class="htl-title">Services launched</div>
         <div class="htl-tip">Quote library from 3 podcast transcripts. Episode-level attribution.</div>
       </div>
     </div>
