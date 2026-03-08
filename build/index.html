@@ -57,24 +57,41 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
 
-/* Vertical Timeline */
-.vtl { position: relative; padding: 1rem 0 1rem 3.5rem; }
-.vtl::before { content: ''; position: absolute; left: 1.1rem; top: 1.5rem; bottom: 1.5rem; width: 3px; background: linear-gradient(to bottom, rgba(212,160,90,0.1), rgba(212,160,90,0.4) 15%, rgba(212,160,90,0.4) 85%, rgba(212,160,90,0.1)); }
-.vtl-entry { position: relative; padding: 0.25rem 0 2.5rem 0; transition: opacity 0.2s; }
-.vtl-entry:last-child { padding-bottom: 0; }
-.vtl-dot { position: absolute; left: -3.5rem; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); top: 0.35rem; z-index: 2; transition: all 0.25s ease; transform: translateX(calc(1.1rem + 1.5px - 6px)); }
-.vtl-entry:hover .vtl-dot { transform: translateX(calc(1.1rem + 1.5px - 6px)) scale(1.25); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
-.vtl-date { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(212,160,90,0.6); margin-bottom: 0.25rem; }
-.vtl-title { font-family: var(--serif); font-size: 1.1rem; line-height: 1.25; margin-bottom: 0.3rem; color: var(--text); transition: color 0.2s; }
-.vtl-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; transition: color 0.2s; }
+/* Vertical Timeline — two-column alternating on desktop */
+.vtl { position: relative; padding: 2rem 0; }
+.vtl::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, rgba(212,160,90,0.05), rgba(212,160,90,0.35) 10%, rgba(212,160,90,0.35) 90%, rgba(212,160,90,0.05)); transform: translateX(-1px); }
+.vtl-entry { position: relative; width: 46%; padding: 0; margin-bottom: 2.5rem; }
+.vtl-entry:last-child { margin-bottom: 0; }
+/* Alternating sides */
+.vtl-entry:nth-child(odd) { margin-left: 0; text-align: right; }
+.vtl-entry:nth-child(even) { margin-left: 54%; text-align: left; }
+/* Card styling */
+.vtl-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; transition: all 0.3s ease; position: relative; }
+.vtl-entry:hover .vtl-card { border-color: rgba(212,160,90,0.15); background: var(--surface-2); }
+/* Dot on center line */
+.vtl-dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); top: 1.5rem; z-index: 2; transition: all 0.25s ease; }
+.vtl-entry:nth-child(odd) .vtl-dot { right: -8.7%; transform: translateX(50%); }
+.vtl-entry:nth-child(even) .vtl-dot { left: -8.7%; transform: translateX(-50%); }
+.vtl-entry:hover .vtl-dot { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
+.vtl-entry:nth-child(odd):hover .vtl-dot { transform: translateX(50%) scale(1.3); }
+.vtl-entry:nth-child(even):hover .vtl-dot { transform: translateX(-50%) scale(1.3); }
+/* Connector line from card to dot */
+.vtl-card::after { content: ''; position: absolute; top: 1.75rem; width: 6%; height: 1px; background: rgba(212,160,90,0.2); }
+.vtl-entry:nth-child(odd) .vtl-card::after { right: -6%; }
+.vtl-entry:nth-child(even) .vtl-card::after { left: -6%; }
+.vtl-date { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(212,160,90,0.6); margin-bottom: 0.3rem; }
+.vtl-title { font-family: var(--serif); font-size: 1.05rem; line-height: 1.25; margin-bottom: 0.3rem; color: var(--text); transition: color 0.2s; }
+.vtl-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; transition: color 0.2s; }
 .vtl-entry:hover .vtl-title { color: var(--gold-light); }
 .vtl-entry:hover .vtl-desc { color: var(--text); }
 /* Major milestone */
-.vtl-entry.major .vtl-dot { width: 20px; height: 20px; top: 0.1rem; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.15), 0 0 20px rgba(212,160,90,0.2); transform: translateX(calc(1.1rem + 1.5px - 10px)); }
-.vtl-entry.major:hover .vtl-dot { transform: translateX(calc(1.1rem + 1.5px - 10px)) scale(1.15); box-shadow: 0 0 0 6px rgba(212,160,90,0.25), 0 0 28px rgba(212,160,90,0.35); }
+.vtl-entry.major .vtl-dot { width: 20px; height: 20px; background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.15), 0 0 20px rgba(212,160,90,0.2); }
+.vtl-entry.major:hover .vtl-dot { box-shadow: 0 0 0 6px rgba(212,160,90,0.25), 0 0 28px rgba(212,160,90,0.35); }
+.vtl-entry.major .vtl-card { border-color: rgba(212,160,90,0.12); background: linear-gradient(135deg, var(--surface), rgba(212,160,90,0.04)); }
+.vtl-entry.major:hover .vtl-card { border-color: rgba(212,160,90,0.25); }
 .vtl-entry.major .vtl-date { color: var(--gold); }
-.vtl-entry.major .vtl-title { font-size: 1.25rem; }
-.vtl-entry.major { padding-bottom: 3rem; }
+.vtl-entry.major .vtl-title { font-size: 1.2rem; }
+.vtl-entry.major { margin-bottom: 3rem; }
 
 /* Cost Comparison Cards */
 .cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
@@ -142,17 +159,31 @@ footer a:hover { color: var(--gold); }
 @media (max-width: 900px) {
   .stats { grid-template-columns: repeat(3, 1fr); }
 }
+/* Hamburger */
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 0.5rem; margin-left: auto; z-index: 101; }
+.nav-toggle span { display: block; width: 22px; height: 2px; background: var(--text-muted); margin: 5px 0; transition: all 0.3s ease; }
+.nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
-  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .nav-links { display: none; position: absolute; top: 100%; left: 0; right: 0; background: rgba(7,9,14,0.96); backdrop-filter: blur(24px); flex-direction: column; padding: 1.5rem 1.25rem; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.04); margin-left: 0; }
+  .nav-links.open { display: flex; }
+  .nav-links a { padding: 0.75rem 0; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+  .nav-links a:last-child { border-bottom: none; }
+  .nav-links .mobile-cta { color: var(--gold); border-bottom: none; padding-top: 1rem; }
+  .cta-nav { display: none; }
   .logo img { height: 64px; }
   .vtl { padding-left: 2.5rem; }
-  .vtl::before { left: 0.6rem; }
-  .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 6px)); }
-  .vtl-entry:hover .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 6px)) scale(1.25); }
-  .vtl-entry.major .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 10px)); }
-  .vtl-entry.major:hover .vtl-dot { transform: translateX(calc(0.6rem + 1.5px - 10px)) scale(1.15); }
-  .vtl-dot { left: -2.5rem; }
+  .vtl::before { left: 0.6rem; top: 0; }
+  .vtl-entry, .vtl-entry:nth-child(odd), .vtl-entry:nth-child(even) { width: 100%; margin-left: 0; text-align: left; }
+  .vtl-dot, .vtl-entry:nth-child(odd) .vtl-dot, .vtl-entry:nth-child(even) .vtl-dot { left: -2.5rem; right: auto; top: 1.25rem; transform: translateX(calc(0.6rem + 1px - 6px)); }
+  .vtl-entry:hover .vtl-dot, .vtl-entry:nth-child(odd):hover .vtl-dot, .vtl-entry:nth-child(even):hover .vtl-dot { transform: translateX(calc(0.6rem + 1px - 6px)) scale(1.3); }
+  .vtl-entry.major .vtl-dot { transform: translateX(calc(0.6rem + 1px - 10px)); }
+  .vtl-entry.major:hover .vtl-dot { transform: translateX(calc(0.6rem + 1px - 10px)) scale(1.3); }
+  .vtl-card::after { display: none; }
   .hero { padding: 7rem 1.25rem 2rem; }
   .stats { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
   section { padding: 3rem 1.25rem 2rem; }
@@ -165,10 +196,12 @@ footer a:hover { color: var(--gold); }
 
 <nav>
   <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
+  <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
   <div class="nav-links">
     <a href="/why-now/">Why Now</a>
     <a href="/build/" class="active">Build</a>
     <a href="/services/">Services</a>
+    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
   </div>
   <a href="#" onclick="openContactForm();return false" class="cta-nav">Book a Call</a>
 </nav>
@@ -212,51 +245,65 @@ footer a:hover { color: var(--gold); }
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Feb 10</div>
-      <div class="vtl-title">Day zero</div>
-      <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 10</div>
+        <div class="vtl-title">Day zero</div>
+        <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
+      </div>
     </div>
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Feb 12</div>
-      <div class="vtl-title">36 commits</div>
-      <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 12</div>
+        <div class="vtl-title">36 commits</div>
+        <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
+      </div>
     </div>
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Feb 25</div>
-      <div class="vtl-title">Costs drop 90%</div>
-      <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 25</div>
+        <div class="vtl-title">Costs drop 90%</div>
+        <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
+      </div>
     </div>
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Feb 28</div>
-      <div class="vtl-title">First sales run</div>
-      <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 28</div>
+        <div class="vtl-title">First sales run</div>
+        <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
+      </div>
     </div>
 
     <div class="vtl-entry major">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Mar 5</div>
-      <div class="vtl-title">Briu founded</div>
-      <div class="vtl-desc">Domain, trademark, website. One session. 28 commits.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 5</div>
+        <div class="vtl-title">Briu founded</div>
+        <div class="vtl-desc">Domain, trademark, website. One session. 28 commits.</div>
+      </div>
     </div>
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Mar 6</div>
-      <div class="vtl-title">Site goes live</div>
-      <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 6</div>
+        <div class="vtl-title">Site goes live</div>
+        <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
+      </div>
     </div>
 
     <div class="vtl-entry">
       <div class="vtl-dot"></div>
-      <div class="vtl-date">Mar 7</div>
-      <div class="vtl-title">Services launched</div>
-      <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 7</div>
+        <div class="vtl-title">Services launched</div>
+        <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
+      </div>
     </div>
 
   </div>
@@ -379,7 +426,7 @@ footer a:hover { color: var(--gold); }
 
 <footer>
   <p>&copy; 2026 Briu. All rights reserved.</p>
-  <a href="mailto:hi@briu.ai">lucas@briu.ai</a>
+  <a href="mailto:hi@briu.ai">hi@briu.ai</a>
 </footer>
 
 <script>
