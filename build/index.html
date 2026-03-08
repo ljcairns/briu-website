@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | Build</title>
-<meta name="description" content="How Briu is being built using agents, tools, and human judgment. Proof-of-work from a founder-led AI implementation company.">
+<meta name="description" content="Building a business in public. Every dollar. Every commit. The operating log of a company built by agents from day one.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,34 +39,64 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-.ambient-orb { position: fixed; border-radius: 50%; pointer-events: none; filter: blur(120px); z-index: -1; }
-.ambient-orb-1 { width: 580px; height: 580px; background: radial-gradient(circle, rgba(212,160,90,0.06), transparent 70%); top: 0; left: -10%; }
-.ambient-orb-2 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(90,157,172,0.05), transparent 70%); bottom: 10%; right: -10%; }
-.hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+
+/* Hero */
+.hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 760px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
 .hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
-.hero h1 { font-family: var(--serif); font-size: clamp(2.5rem, 5vw, 4rem); line-height: 1.08; margin-bottom: 1rem; max-width: 820px; position: relative; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.1; margin-bottom: 1rem; max-width: 820px; position: relative; }
 .hero p { max-width: 720px; color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; position: relative; }
-section { padding: 2rem 2rem 6rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
-.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
-.split { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 1.5rem; align-items: start; margin-top: 2rem; }
-.card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; }
-.card h2 { font-family: var(--serif); font-size: 1.35rem; margin-bottom: 0.9rem; }
-.card p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.75; margin-bottom: 1rem; }
-.card-tag { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.9rem; }
-.primary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
-.primary-link:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); }
-.secondary-grid { display: grid; gap: 1rem; }
-.note { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; }
-.note p { color: var(--text); font-size: 0.92rem; line-height: 1.7; }
-.bullet-list { display: grid; gap: 0.9rem; }
-.bullet-item { display: flex; gap: 0.9rem; align-items: flex-start; }
-.bullet-num { min-width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; background: rgba(212,160,90,0.1); color: var(--gold); border: 1px solid rgba(212,160,90,0.2); font-family: var(--serif); font-size: 13px; }
-.bullet-item p { margin: 0; font-size: 0.92rem; }
+
+/* Stat boxes */
+.stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; padding: 0 2rem; max-width: 1060px; margin: 2.5rem auto 0; position: relative; z-index: 1; }
+.stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; }
+.stat-value { font-family: var(--serif); font-size: 1.35rem; color: var(--text); line-height: 1.2; margin-bottom: 0.35rem; }
+.stat-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Sections */
+section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
+
+/* Timeline */
+.timeline { position: relative; padding-left: 2.5rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0.5rem; bottom: 0.5rem; width: 1px; background: linear-gradient(to bottom, var(--gold), rgba(212,160,90,0.15)); }
+.tl-entry { position: relative; margin-bottom: 2rem; }
+.tl-entry:last-child { margin-bottom: 0; }
+.tl-entry::before { content: ''; position: absolute; left: -2.5rem; top: 0.55rem; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--gold); border-radius: 50%; z-index: 1; }
+.tl-entry.milestone::before { background: var(--gold); box-shadow: 0 0 12px rgba(212,160,90,0.4); }
+.tl-date { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.3rem; }
+.tl-title { font-family: var(--serif); font-size: 1.15rem; line-height: 1.3; margin-bottom: 0.35rem; }
+.tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; }
+.tl-link { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; margin-top: 0.5rem; transition: color 0.2s; }
+.tl-link:hover { color: var(--gold-light); }
+.tl-link::after { content: ' \2192'; }
+.tl-meta { font-size: 0.75rem; color: rgba(196,185,168,0.5); margin-top: 0.25rem; }
+
+/* Articles grid */
+.articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 0.5rem; }
+.article-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; display: flex; flex-direction: column; transition: border-color 0.3s ease; }
+.article-card:hover { border-color: rgba(212,160,90,0.2); }
+.article-card .card-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--forest); margin-bottom: 0.75rem; }
+.article-card h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.65rem; line-height: 1.25; }
+.article-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 1rem; flex: 1; }
+.article-card .card-link { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; transition: color 0.2s; }
+.article-card .card-link:hover { color: var(--gold-light); }
+.article-card .card-link::after { content: ' \2192'; }
+.article-card.coming-soon { opacity: 0.55; }
+.article-card.coming-soon .card-link { color: var(--text-muted); cursor: default; }
+.article-card.coming-soon .card-link::after { content: ''; }
+
+/* CTA */
+.build-cta { text-align: center; padding: 4rem 2rem 6rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
+.build-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
+.cta-btn { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+.cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+
 footer { border-top: 1px solid rgba(255,255,255,0.04); padding: 3rem 2rem; max-width: 1060px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 footer p, footer a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }
 footer a:hover { color: var(--gold); }
-/* Modal + Questionnaire */
+
+/* Modal */
 .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 200; align-items: center; justify-content: center; }
 .modal-overlay.active { display: flex; }
 .modal { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2.5rem; max-width: 520px; width: 90%; position: relative; }
@@ -93,21 +123,25 @@ footer a:hover { color: var(--gold); }
 .q-dot.filled { background: var(--gold); }
 .q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
 .q-back:hover { color: var(--text); }
+
+@media (max-width: 900px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
   .nav-links { display: none; }
   .logo img { height: 64px; }
   .hero { padding: 7rem 1.25rem 2rem; }
-  section { padding: 2rem 1.25rem 4rem; }
-  .split { grid-template-columns: 1fr; }
-  footer { flex-direction: column; text-align: center; }
-  .ambient-orb { display: none; }
+  .stats { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
+  section { padding: 3rem 1.25rem 2rem; }
+  .timeline { padding-left: 2rem; }
+  .tl-entry::before { left: -2rem; }
+  .build-cta { padding: 3rem 1.25rem 4rem; }
+  footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
 }
 </style>
 </head>
 <body>
-<div class="ambient-orb ambient-orb-1"></div>
-<div class="ambient-orb ambient-orb-2"></div>
 
 <nav>
   <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
@@ -121,45 +155,144 @@ footer a:hover { color: var(--gold); }
 
 <section class="hero">
   <p class="hero-eyebrow">Build</p>
-  <h1>How Briu is being built with agents, tools, and human judgment.</h1>
-  <p>This section is not generic AI commentary. It is the operating record: how we use our own stack, where agents are genuinely useful, where human review still matters, and how services work becomes the foundation for more repeatable systems over time.</p>
+  <h1>Building a business in public. Every dollar. Every commit.</h1>
+  <p>Briu was built by agents from day one. This is the operating log.</p>
+</section>
+
+<div class="stats">
+  <div class="stat-box">
+    <div class="stat-value">Mar 5, 2026</div>
+    <div class="stat-label">Founded</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-value">~$616</div>
+    <div class="stat-label">Total Build Cost</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-value">244</div>
+    <div class="stat-label">Commits in 26 Days</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-value">12</div>
+    <div class="stat-label">Skills Deployed</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-value">3</div>
+    <div class="stat-label">Days to Production Agent</div>
+  </div>
+  <div class="stat-box">
+    <div class="stat-value">400+</div>
+    <div class="stat-label">Midjourney Generations</div>
+  </div>
+</div>
+
+<section>
+  <p class="section-label">Timeline</p>
+  <div class="timeline">
+
+    <div class="tl-entry milestone">
+      <div class="tl-date">Mar 7, 2026</div>
+      <div class="tl-title">Services page launched</div>
+      <div class="tl-desc">Quote library built from 3 podcast transcripts. Episode-level attribution across All-In E259, E261, and Lex Fridman #491.</div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Mar 6, 2026</div>
+      <div class="tl-title">Website redesigned</div>
+      <div class="tl-desc">Economics charts, interactive 3-step contact form, trust cards, social proof section. Full site built through Claude Code.</div>
+    </div>
+
+    <div class="tl-entry milestone">
+      <div class="tl-date">Mar 5, 2026</div>
+      <div class="tl-title">Briu founded</div>
+      <div class="tl-desc">Domain found, trademark filed, website live. One session. Name sourced from Scottish Gaelic — "briu" means meaning, significance.</div>
+      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="tl-link">Read the full story</a>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Mar 3–4, 2026</div>
+      <div class="tl-title">Client reporting pipeline</div>
+      <div class="tl-desc">Automated PDF generation + email delivery for 4 Subsights clients. Agent handles data pull, formatting, and delivery. Human reviews before send.</div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Feb 28, 2026</div>
+      <div class="tl-title">Sales prospecting skill chain</div>
+      <div class="tl-desc">Thread isolation. Session reset policy. Apollo integration hardened. 22 commits.</div>
+    </div>
+
+    <div class="tl-entry milestone">
+      <div class="tl-date">Feb 25–26, 2026</div>
+      <div class="tl-title">Cost crisis</div>
+      <div class="tl-desc">195K token session discovered. Single runaway conversation burning through budget. Optimization deployed — multi-model routing, Haiku for low-risk tasks, session caps. Costs drop 90%.</div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Feb 24, 2026</div>
+      <div class="tl-title">State database live</div>
+      <div class="tl-desc">Phase 2 activated. Persistent memory across sessions. Agent retains context between conversations. 15 commits.</div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Feb 17, 2026</div>
+      <div class="tl-title">Morning briefing v3</div>
+      <div class="tl-desc">Hardened wrappers. Cron overhaul. Daily briefing delivered to Discord at 7 AM — email summary, calendar, CRM pipeline, action items. 26 commits.</div>
+    </div>
+
+    <div class="tl-entry milestone">
+      <div class="tl-date">Feb 12, 2026</div>
+      <div class="tl-title">Day one</div>
+      <div class="tl-desc">36 commits. Gmail connected. HubSpot connected. Apollo connected. Browser automation. Security architecture. Heartbeat monitoring. The agent goes live.</div>
+    </div>
+
+    <div class="tl-entry">
+      <div class="tl-date">Feb 10, 2026</div>
+      <div class="tl-title">OpenClaw installed</div>
+      <div class="tl-desc">First skill deployed. Claude Max subscription started. The beginning.</div>
+    </div>
+
+  </div>
 </section>
 
 <section>
-  <p class="section-label">Proof Of Work</p>
-  <div class="split">
-    <article class="card">
-      <div class="card-tag">Featured Article</div>
-      <h2>How We Built Briu Using Our Own Agent Stack</h2>
-      <p>Briu did not start as a branding exercise. It emerged from real work: deploying agent systems, using those systems internally, and treating the business itself as a live testbed for how agents and human judgment should actually work together.</p>
-      <p>This first piece covers the stack, the workflow, the division of labor between agents and people, and what we learned by using our own systems to shape the company.</p>
-      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="primary-link">Read The Article</a>
-    </article>
+  <p class="section-label">Deep Dives</p>
+  <div class="articles-grid">
 
-    <div class="secondary-grid">
-      <div class="note">
-        <p>Briu is services-led today. That matters here. The implementation work creates the pressure test, the tool judgment, and the pattern library that can later become more repeatable productized systems and software.</p>
-      </div>
-      <div class="card">
-        <div class="card-tag">What Build Covers</div>
-        <div class="bullet-list">
-          <div class="bullet-item">
-            <div class="bullet-num">1</div>
-            <p>Which parts of the workflow agents handled directly, and which parts still needed a founder in the loop.</p>
-          </div>
-          <div class="bullet-item">
-            <div class="bullet-num">2</div>
-            <p>How tools, prompts, skills, review steps, and output quality were managed in practice.</p>
-          </div>
-          <div class="bullet-item">
-            <div class="bullet-num">3</div>
-            <p>What these internal systems reveal about the difference between AI theater and usable operating infrastructure.</p>
-          </div>
-        </div>
-      </div>
+    <div class="article-card">
+      <div class="card-tag">Live</div>
+      <h3>How We Built Briu Using Our Own Agent Stack</h3>
+      <p>The full story: from first agent skill to company launch. Exact toolchain, costs, security architecture, and what the agent cannot do.</p>
+      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
     </div>
+
+    <div class="article-card coming-soon">
+      <div class="card-tag">Coming Soon</div>
+      <h3>The Real Numbers</h3>
+      <p>Interactive cost dashboard. Daily API spend, model breakdown, cumulative costs, and what $616 actually built. Every dollar accounted for.</p>
+      <span class="card-link">In progress</span>
+    </div>
+
+    <div class="article-card coming-soon">
+      <div class="card-tag">Coming Soon</div>
+      <h3>Brand in a Session</h3>
+      <p>400+ Midjourney generations. Hundreds of name candidates. One logo. How agents + founder taste produced a brand identity in hours, not months.</p>
+      <span class="card-link">In progress</span>
+    </div>
+
+    <div class="article-card coming-soon">
+      <div class="card-tag">Coming Soon</div>
+      <h3>Meet the Agent</h3>
+      <p>What the agent actually does daily. The skill inventory, security architecture, multi-model routing, and real Discord conversations with Claw.</p>
+      <span class="card-link">In progress</span>
+    </div>
+
   </div>
 </section>
+
+<div class="build-cta">
+  <p>If you read this and thought "I could do this" — you're right.</p>
+  <a href="#" onclick="openContactForm();return false" class="cta-btn">Book a Call</a>
+</div>
 
 <div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
   <div class="modal">
