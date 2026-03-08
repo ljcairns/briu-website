@@ -2,7 +2,21 @@
 
 /* Contact Form Modal */
 var qData = {};
-function openContactForm() { document.getElementById('contactModal').classList.add('active'); document.body.style.overflow = 'hidden'; goToStep(1); }
+function openContactForm(prefill) {
+  document.getElementById('contactModal').classList.add('active');
+  document.body.style.overflow = 'hidden';
+  if (prefill && prefill.ai_usage) {
+    qData.ai_usage = prefill.ai_usage;
+    document.getElementById('q-ai-usage').value = prefill.ai_usage;
+    if (prefill.automate) document.getElementById('q-automate').value = prefill.automate;
+    document.getElementById('q-automate-val').value = prefill.automate || '';
+    goToStep(3);
+    var dots = document.querySelectorAll('.q-dot');
+    dots.forEach(function(d) { d.classList.add('filled'); });
+  } else {
+    goToStep(1);
+  }
+}
 function closeContactForm() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
 function goToStep(n) { document.querySelectorAll('.q-step').forEach(function(el) { el.classList.remove('active'); }); document.getElementById('q-step-' + n).classList.add('active'); var dots = document.querySelectorAll('.q-dot'); dots.forEach(function(d, i) { d.classList.toggle('filled', i < n); }); }
 function selectAI(val) { qData.ai_usage = val; document.getElementById('q-ai-usage').value = val; goToStep(2); }

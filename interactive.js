@@ -117,7 +117,7 @@
     }
 
     h += '</div><div class="assess-cta-group">' +
-      '<a href="#" onclick="openContactForm();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
+      '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
       '<a href="#services" class="hero-cta-secondary">See pricing</a></div>' +
       '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
 
@@ -196,6 +196,34 @@
       }
     }
   }
+
+  window.openContactFromAssess = function() {
+    var aiMap = {
+      none: 'We haven\'t started with AI yet',
+      free: 'We use free tools like ChatGPT',
+      paid: 'Enterprise AI accounts with multiple vendors',
+      building: 'Already building agents or significant automation'
+    };
+    var sinkMap = {
+      email: 'Email & communication',
+      sales: 'Sales & prospecting',
+      reporting: 'Reporting & data',
+      ops: 'Operations & admin',
+      support: 'Customer support'
+    };
+    var roleMap = { founder: 'Founder/CEO', leader: 'Team Lead/Manager', ic: 'Individual Contributor', exploring: 'Exploring for company' };
+    var teamMap = { solo: 'Solo', small: '2-10 people', medium: '11-50 people', large: '50+' };
+
+    var automate = (sinkMap[answers.q4] || 'Not specified') +
+      ' | Role: ' + (roleMap[answers.q1] || 'Not specified') +
+      ' | Team: ' + (teamMap[answers.q2] || 'Not specified') +
+      ' | Readiness: ' + score() + '/95';
+
+    openContactForm({
+      ai_usage: aiMap[answers.q3] || 'Not specified',
+      automate: automate
+    });
+  };
 
   function removePersonalization() {
     var cards = document.querySelectorAll('.use-case');
