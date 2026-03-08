@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | Build</title>
-<meta name="description" content="Building a business in public. Every dollar. Every commit. The operating log of a company built by agents from day one.">
+<meta name="description" content="What it actually costs to build with agents. The operating log of a company built by agents from day one.">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -57,20 +57,32 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
 
-/* Timeline */
-.timeline { position: relative; padding-left: 2.5rem; }
-.timeline::before { content: ''; position: absolute; left: 0; top: 0.5rem; bottom: 0.5rem; width: 1px; background: linear-gradient(to bottom, var(--gold), rgba(212,160,90,0.15)); }
-.tl-entry { position: relative; margin-bottom: 2rem; }
-.tl-entry:last-child { margin-bottom: 0; }
-.tl-entry::before { content: ''; position: absolute; left: -2.5rem; top: 0.55rem; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--gold); border-radius: 50%; z-index: 1; }
-.tl-entry.milestone::before { background: var(--gold); box-shadow: 0 0 12px rgba(212,160,90,0.4); }
-.tl-date { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.3rem; }
-.tl-title { font-family: var(--serif); font-size: 1.15rem; line-height: 1.3; margin-bottom: 0.35rem; }
-.tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; }
-.tl-link { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; margin-top: 0.5rem; transition: color 0.2s; }
-.tl-link:hover { color: var(--gold-light); }
-.tl-link::after { content: ' \2192'; }
-.tl-meta { font-size: 0.75rem; color: rgba(196,185,168,0.5); margin-top: 0.25rem; }
+/* Horizontal Timeline */
+.htl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 1rem; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
+.htl-wrap::-webkit-scrollbar { height: 4px; }
+.htl-wrap::-webkit-scrollbar-track { background: transparent; }
+.htl-wrap::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.25); border-radius: 2px; }
+.htl { display: flex; align-items: flex-start; min-width: max-content; position: relative; padding: 0 1rem; }
+.htl::before { content: ''; position: absolute; top: 54px; left: 1rem; right: 1rem; height: 2px; background: linear-gradient(to right, rgba(212,160,90,0.15), var(--gold), rgba(212,160,90,0.15)); }
+.htl-node { display: flex; flex-direction: column; align-items: center; flex: 1; min-width: 120px; max-width: 160px; position: relative; cursor: default; }
+.htl-date { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.6rem; white-space: nowrap; }
+.htl-dot { width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 2px solid var(--gold); position: relative; z-index: 2; transition: all 0.2s; flex-shrink: 0; }
+.htl-node:hover .htl-dot { background: var(--gold); box-shadow: 0 0 14px rgba(212,160,90,0.5); }
+.htl-title { font-size: 0.72rem; font-weight: 500; color: var(--text-muted); text-align: center; margin-top: 0.65rem; line-height: 1.35; max-width: 130px; }
+.htl-node:hover .htl-title { color: var(--text); }
+.htl-tip { position: absolute; top: calc(100% + 0.5rem); left: 50%; transform: translateX(-50%); background: var(--surface-2); border: 1px solid rgba(212,160,90,0.2); padding: 0.6rem 0.85rem; font-size: 0.72rem; color: var(--text); white-space: nowrap; opacity: 0; pointer-events: none; transition: opacity 0.2s; z-index: 10; }
+.htl-node:hover .htl-tip { opacity: 1; }
+
+/* Cost Comparison Cards */
+.cost-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; }
+.cost-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: border-color 0.3s; }
+.cost-card:hover { border-color: rgba(212,160,90,0.2); }
+.cost-card h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.75rem; line-height: 1.25; }
+.cost-agent { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 0.35rem; }
+.cost-agent .price { font-family: var(--serif); font-size: 1.35rem; color: var(--gold); }
+.cost-agent .detail { font-size: 0.72rem; color: var(--text-muted); }
+.cost-trad { font-size: 0.78rem; color: var(--text-muted); }
+.cost-trad span { text-decoration: line-through; opacity: 0.6; }
 
 /* Articles grid */
 .articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 0.5rem; }
@@ -134,8 +146,6 @@ footer a:hover { color: var(--gold); }
   .hero { padding: 7rem 1.25rem 2rem; }
   .stats { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
   section { padding: 3rem 1.25rem 2rem; }
-  .timeline { padding-left: 2rem; }
-  .tl-entry::before { left: -2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
   footer { padding: 2rem 1.25rem; flex-direction: column; text-align: center; }
 }
@@ -155,7 +165,7 @@ footer a:hover { color: var(--gold); }
 
 <section class="hero">
   <p class="hero-eyebrow">Build</p>
-  <h1>Building a business in public. Every dollar. Every commit.</h1>
+  <h1>What it actually costs to build with agents.</h1>
   <p>Briu was built by agents from day one. This is the operating log.</p>
 </section>
 
@@ -188,70 +198,89 @@ footer a:hover { color: var(--gold); }
 
 <section>
   <p class="section-label">Timeline</p>
-  <div class="timeline">
-
-    <div class="tl-entry milestone">
-      <div class="tl-date">Mar 7, 2026</div>
-      <div class="tl-title">Services page launched</div>
-      <div class="tl-desc">Quote library built from 3 podcast transcripts. Episode-level attribution across All-In E259, E261, and Lex Fridman #491.</div>
+  <div class="htl-wrap">
+    <div class="htl">
+      <div class="htl-node">
+        <div class="htl-date">Feb 10</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">First agent skill</div>
+        <div class="htl-tip">OpenClaw installed. Claude Max subscription started.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Feb 12</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Production in one day</div>
+        <div class="htl-tip">36 commits. Gmail, HubSpot, Apollo, security, heartbeat.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Feb 25</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Cost crisis + fix</div>
+        <div class="htl-tip">195K token session found. Multi-model routing deployed. Costs drop 90%.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Feb 28</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Sales prospecting live</div>
+        <div class="htl-tip">Apollo integration. Thread isolation. 22 commits.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Mar 5</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Briu founded</div>
+        <div class="htl-tip">Domain, trademark, website. One session. 28 commits.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Mar 6</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Website launched</div>
+        <div class="htl-tip">Economics charts, interactive forms, full redesign via Claude Code.</div>
+      </div>
+      <div class="htl-node">
+        <div class="htl-date">Mar 7</div>
+        <div class="htl-dot"></div>
+        <div class="htl-title">Services page live</div>
+        <div class="htl-tip">Quote library from 3 podcast transcripts. Episode-level attribution.</div>
+      </div>
     </div>
+  </div>
+</section>
 
-    <div class="tl-entry">
-      <div class="tl-date">Mar 6, 2026</div>
-      <div class="tl-title">Website redesigned</div>
-      <div class="tl-desc">Economics charts, interactive 3-step contact form, trust cards, social proof section. Full site built through Claude Code.</div>
+<section>
+  <p class="section-label">What Each Task Actually Cost</p>
+  <div class="cost-grid">
+    <div class="cost-card">
+      <h3>Production agent system</h3>
+      <div class="cost-agent">
+        <span class="price">$576</span>
+        <span class="detail">API + Claude Max</span>
+      </div>
+      <div class="cost-trad">Traditional: <span>$4,500+</span> part-time VA (3 months)</div>
     </div>
-
-    <div class="tl-entry milestone">
-      <div class="tl-date">Mar 5, 2026</div>
-      <div class="tl-title">Briu founded</div>
-      <div class="tl-desc">Domain found, trademark filed, website live. One session. Name sourced from Scottish Gaelic — "briu" means meaning, significance.</div>
-      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="tl-link">Read the full story</a>
+    <div class="cost-card">
+      <h3>Brand creation</h3>
+      <div class="cost-agent">
+        <span class="price">~$105</span>
+        <span class="detail">Midjourney + domain</span>
+      </div>
+      <div class="cost-trad">Traditional: <span>$15,000–25,000</span> branding agency</div>
     </div>
-
-    <div class="tl-entry">
-      <div class="tl-date">Mar 3–4, 2026</div>
-      <div class="tl-title">Client reporting pipeline</div>
-      <div class="tl-desc">Automated PDF generation + email delivery for 4 Subsights clients. Agent handles data pull, formatting, and delivery. Human reviews before send.</div>
+    <div class="cost-card">
+      <h3>Website</h3>
+      <div class="cost-agent">
+        <span class="price">$0</span>
+        <span class="detail">Claude Code + GitHub Pages + Cloudflare</span>
+      </div>
+      <div class="cost-trad">Traditional: <span>$8,000+</span> dev agency</div>
     </div>
-
-    <div class="tl-entry">
-      <div class="tl-date">Feb 28, 2026</div>
-      <div class="tl-title">Sales prospecting skill chain</div>
-      <div class="tl-desc">Thread isolation. Session reset policy. Apollo integration hardened. 22 commits.</div>
+    <div class="cost-card">
+      <h3>Review &amp; validation</h3>
+      <div class="cost-agent">
+        <span class="price">$40</span>
+        <span class="detail">/mo &mdash; GPT + Gemini</span>
+      </div>
+      <div class="cost-trad">Traditional: <span>$2,000+/mo</span> hiring consultants</div>
     </div>
-
-    <div class="tl-entry milestone">
-      <div class="tl-date">Feb 25–26, 2026</div>
-      <div class="tl-title">Cost crisis</div>
-      <div class="tl-desc">195K token session discovered. Single runaway conversation burning through budget. Optimization deployed — multi-model routing, Haiku for low-risk tasks, session caps. Costs drop 90%.</div>
-      <a href="/build/the-real-numbers/" class="tl-link">See the full cost breakdown</a>
-    </div>
-
-    <div class="tl-entry">
-      <div class="tl-date">Feb 24, 2026</div>
-      <div class="tl-title">State database live</div>
-      <div class="tl-desc">Phase 2 activated. Persistent memory across sessions. Agent retains context between conversations. 15 commits.</div>
-    </div>
-
-    <div class="tl-entry">
-      <div class="tl-date">Feb 17, 2026</div>
-      <div class="tl-title">Morning briefing v3</div>
-      <div class="tl-desc">Hardened wrappers. Cron overhaul. Daily briefing delivered to Discord at 7 AM — email summary, calendar, CRM pipeline, action items. 26 commits.</div>
-    </div>
-
-    <div class="tl-entry milestone">
-      <div class="tl-date">Feb 12, 2026</div>
-      <div class="tl-title">Day one</div>
-      <div class="tl-desc">36 commits. Gmail connected. HubSpot connected. Apollo connected. Browser automation. Security architecture. Heartbeat monitoring. The agent goes live.</div>
-    </div>
-
-    <div class="tl-entry">
-      <div class="tl-date">Feb 10, 2026</div>
-      <div class="tl-title">OpenClaw installed</div>
-      <div class="tl-desc">First skill deployed. Claude Max subscription started. The beginning.</div>
-    </div>
-
   </div>
 </section>
 
