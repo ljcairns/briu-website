@@ -334,6 +334,7 @@ footer a:hover { color: var(--gold); }
 .nav-toggle.open span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+.mobile-cta { display: none; }
 
 @media (max-width: 640px) {
   nav { padding: 1rem 1.25rem; }
@@ -342,7 +343,7 @@ footer a:hover { color: var(--gold); }
   .nav-links.open { display: flex; }
   .nav-links a { padding: 0.75rem 0; font-size: 0.82rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
   .nav-links a:last-child { border-bottom: none; }
-  .nav-links .mobile-cta { color: var(--gold); border-bottom: none; padding-top: 1rem; }
+  .nav-links .mobile-cta { display: block; color: var(--gold); border-bottom: none; padding-top: 1rem; }
   nav a.cta-nav { display: none; }
   .logo img { height: 64px; }
   .hero { padding: 7rem 1.25rem 3rem; }
