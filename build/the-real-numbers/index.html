@@ -381,14 +381,14 @@ article p strong { color: var(--text); font-weight: 600; }
   <p>Claude Max handles strategic thinking and code generation. The OpenClaw agent (running Sonnet) handles autonomous daily operations. GPT reviews output for blind spots. Gemini validates facts. The human sits in the center, orchestrating which model handles what, and making every decision that requires judgment.</p>
 
   <!-- Commit Velocity -->
-  <h2 class="reveal">Commit velocity: 244 commits in 26 days</h2>
+  <h2 class="reveal">Commit velocity: <span data-dynamic="commits">244</span> commits in <span data-dynamic="build-days">26</span> days</h2>
   <p>Every commit in the OpenClaw repository, plotted by day. Commit density tracks closely with API spend — the heaviest build days are also the most expensive. Day one (Feb 12) had 36 commits. The Briu launch day (Mar 5) had 28.</p>
 
   <div class="chart-box">
     <div id="commit-chart" style="height:260px;position:relative"></div>
     <div class="chart-summary">
-      <span class="big">244</span>
-      <span class="sub">commits across 26 days &mdash; 9.4 per day average</span>
+      <span class="big" data-dynamic="commits">244</span>
+      <span class="sub">commits across <span data-dynamic="build-days">26</span> days</span>
     </div>
   </div>
 
@@ -459,6 +459,7 @@ article p strong { color: var(--text); font-weight: 600; }
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/dynamic-stats.js"></script>
 <script>
 // === DATA ===
 var dailyData = [

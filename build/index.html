@@ -168,8 +168,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <div class="stat-label">Total Build Cost</div>
   </div>
   <div class="stat-box reveal-scale reveal-delay-2">
-    <div class="stat-value" data-count="244">244</div>
-    <div class="stat-label">Commits in 26 Days</div>
+    <div class="stat-value" data-count="244" data-dynamic="commits">244</div>
+    <div class="stat-label" data-dynamic-label="commit-days">Commits in 26 Days</div>
   </div>
   <div class="stat-box reveal-scale" style="transition-delay:0.3s">
     <div class="stat-value" data-count="12">12</div>
@@ -184,7 +184,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <div class="stat-label">Midjourney Generations</div>
   </div>
 </div>
-<div class="stats-meta">Last updated: Mar 8, 2026</div>
+<div class="stats-meta">Last updated: Mar 8, 2026 PT</div>
 
 <section>
   <p class="section-label reveal">Timeline</p>
@@ -396,6 +396,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/dynamic-stats.js"></script>
 <script>
 /* Timeline filter */
 function filterTimeline(cat, btn) {
