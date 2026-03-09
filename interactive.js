@@ -445,6 +445,9 @@
     conversation.push({ role: 'user', content: text });
     saveConversation();
 
+    // Show floating bubble so chat persists if they navigate away
+    if (window.briuShowChatBubble) window.briuShowChatBubble();
+
     var thread = document.getElementById('convThread');
     appendUserMessage(thread, text);
     clearActions();

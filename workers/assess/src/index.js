@@ -504,11 +504,26 @@ Full Conversation:
 ${conversationLog}`;
 
   if (env.DISCORD_WEBHOOK) {
+    // Structured message for OpenClaw agent to act on
+    const lastFewMessages = messages.slice(-6).map(m =>
+      `${m.role === 'user' ? '👤' : '🤖'} ${m.content}`
+    ).join('\n');
+
     await fetch(env.DISCORD_WEBHOOK, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        content: `**New Lead from briu.ai**\n**Name:** ${name || 'Not provided'}\n**Email:** ${email}\n\n**Summary:**\n${summary}`,
+        content: `🔔 **HANDOFF: New lead from briu.ai**`,
+        embeds: [{
+          title: `${name || email.split('@')[0]} wants to talk`,
+          color: 0xd4a05a,
+          fields: [
+            { name: 'Email', value: email, inline: true },
+            { name: 'Context', value: summary.slice(0, 200), inline: false },
+            { name: 'Recent Conversation', value: lastFewMessages.slice(0, 900) || 'No messages', inline: false },
+          ],
+          footer: { text: `Action: Draft a follow-up email for ${email} based on their conversation. Suggest specific next steps and pricing.` },
+        }],
       }),
     });
   }
