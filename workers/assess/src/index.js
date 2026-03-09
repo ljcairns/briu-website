@@ -319,7 +319,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-sonnet-4-6-20250514',
+      model: 'claude-3-haiku-20240307',
       max_tokens: 600,
       system: [
         {
@@ -339,8 +339,8 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
 
   if (!response.ok) {
     const err = await response.text();
-    console.error('Claude API error:', err);
-    return new Response(JSON.stringify({ error: 'AI service unavailable' }), {
+    console.error('Claude API error:', response.status, err);
+    return new Response(JSON.stringify({ error: 'AI service unavailable', status: response.status, detail: err.slice(0, 200) }), {
       status: 502,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
