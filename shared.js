@@ -342,6 +342,17 @@ revealEls.forEach(function(el) { revealObs.observe(el); });
       });
     });
   }
+  // Fix back button: bfcache restores page with exit animation applied
+  window.addEventListener('pageshow', function(e) {
+    if (e.persisted) {
+      var m = document.querySelector('main');
+      if (m) {
+        m.style.transition = 'none';
+        m.style.opacity = '1';
+        m.style.transform = 'translateY(0)';
+      }
+    }
+  });
 })();
 
 /* Magnetic Buttons (desktop only) */
