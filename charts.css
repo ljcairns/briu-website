@@ -1,0 +1,203 @@
+/* ============================================
+   Briu Chart Component Library — Styles
+   ============================================ */
+
+/* Shared chart containers */
+.briu-chart { margin: 2.5rem 0; }
+.briu-chart .chart-surface { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 18px 18px; }
+.briu-chart .chart-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
+.briu-chart .chart-source { font-size: 11px; color: var(--text-muted); opacity: 0.5; margin-top: 10px; }
+
+/* ---- Chart 1: Automation Bars ---- */
+.auto-bars { display: flex; flex-direction: column; gap: 20px; }
+.auto-bar-row { display: grid; grid-template-columns: 140px 1fr 60px; align-items: center; gap: 16px; }
+.auto-bar-role { font-size: 0.82rem; font-weight: 600; color: var(--text); font-family: var(--sans); }
+.auto-bar-track { height: 8px; background: var(--surface-2); border-radius: 4px; overflow: hidden; position: relative; }
+.auto-bar-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.auto-bar-pct { font-family: var(--serif); font-size: 1.6rem; color: var(--text); text-align: right; line-height: 1; }
+.auto-bar-detail { font-size: 0.75rem; color: var(--text-muted); margin-top: 2px; grid-column: 2 / 4; opacity: 0; transition: opacity 0.3s ease; }
+.auto-bar-row:hover .auto-bar-detail { opacity: 1; }
+.briu-chart.visible .auto-bar-fill { width: var(--target); }
+
+/* ---- Chart 3: Leverage Rings ---- */
+.leverage-rings { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; text-align: center; }
+.lever-ring { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+.lever-ring-circle { width: 130px; height: 130px; border-radius: 50%; background: conic-gradient(var(--ring-color) 0deg, var(--ring-color) 0deg, rgba(255,255,255,0.06) 0deg); display: flex; align-items: center; justify-content: center; transition: background 1.4s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
+.lever-ring-circle::after { content: ''; position: absolute; inset: 8px; border-radius: 50%; background: var(--surface); }
+.lever-ring-inner { position: relative; z-index: 1; }
+.lever-ring-num { font-family: var(--serif); font-size: 1.8rem; color: var(--text); line-height: 1; }
+.lever-ring-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.lever-ring-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; max-width: 160px; }
+.lever-ring:hover .lever-ring-circle { transform: scale(1.04); }
+.lever-ring-circle { transition: background 1.4s cubic-bezier(0.22, 1, 0.36, 1), transform 0.3s ease; }
+
+/* ---- Chart 4: Adoption Timeline ---- */
+.adopt-timeline { position: relative; padding: 40px 0 20px; }
+.adopt-track { height: 4px; background: var(--surface-2); border-radius: 2px; position: relative; margin: 0 20px; }
+.adopt-track-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--forest)); width: 0%; transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .adopt-track-fill { width: 100%; }
+.adopt-milestones { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
+.adopt-milestone { opacity: 0; transform: translateY(12px); transition: all 0.5s ease; }
+.briu-chart.visible .adopt-milestone { opacity: 1; transform: translateY(0); }
+.briu-chart.visible .adopt-milestone:nth-child(2) { transition-delay: 0.3s; }
+.briu-chart.visible .adopt-milestone:nth-child(3) { transition-delay: 0.6s; }
+.briu-chart.visible .adopt-milestone:nth-child(4) { transition-delay: 0.9s; }
+.adopt-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 8px; box-shadow: 0 0 12px var(--dot-color); }
+.adopt-milestone-num { font-family: var(--serif); font-size: 1.4rem; color: var(--text); line-height: 1; margin-bottom: 4px; text-align: center; }
+.adopt-milestone-label { font-size: 0.75rem; color: var(--text-muted); text-align: center; line-height: 1.4; }
+
+/* ---- Chart 5: Infrastructure Scale Cards ---- */
+.infra-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+.infra-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 20px; border-left: 3px solid var(--card-color); transition: all 0.4s ease; }
+.infra-card:hover { transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); border-color: var(--card-color); }
+.infra-card-num { font-family: var(--serif); font-size: 2.2rem; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.infra-card-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; }
+.infra-card-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+.infra-bar { height: 4px; background: var(--surface-2); border-radius: 2px; margin-top: 12px; overflow: hidden; }
+.infra-bar-fill { height: 100%; border-radius: 2px; width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .infra-bar-fill { width: var(--bar-width); }
+
+/* ---- Chart 7: Compression Meter ---- */
+.compress-meter { position: relative; }
+.compress-bars { display: flex; flex-direction: column; gap: 16px; margin-bottom: 16px; }
+.compress-bar-row { display: flex; align-items: center; gap: 16px; }
+.compress-bar-label { font-size: 0.82rem; font-weight: 600; color: var(--text); min-width: 90px; text-align: right; font-family: var(--sans); }
+.compress-bar-track { flex: 1; height: 28px; background: var(--surface-2); border-radius: 4px; overflow: hidden; position: relative; }
+.compress-bar-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 12px; font-size: 0.78rem; font-weight: 600; color: var(--bg); transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.compress-bar-fill.before { background: linear-gradient(90deg, var(--coral), rgba(224,123,95,0.7)); width: 0%; }
+.compress-bar-fill.after { background: linear-gradient(90deg, var(--forest), rgba(77,128,112,0.8)); width: 0%; }
+.briu-chart.visible .compress-bar-fill.before { width: 100%; }
+.briu-chart.visible .compress-bar-fill.after { width: var(--target); }
+.compress-factor { text-align: center; margin: 8px 0 20px; }
+.compress-factor-num { font-family: var(--serif); font-size: 2.8rem; background: linear-gradient(135deg, var(--coral), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.compress-factor-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.compress-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.compress-stat { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 16px 14px; text-align: center; }
+.compress-stat-num { font-family: var(--serif); font-size: 1.6rem; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.compress-stat-label { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ---- Chart 8: Week Breakdown (Donut) ---- */
+.week-donut { display: grid; grid-template-columns: 200px 1fr; gap: 32px; align-items: center; }
+.week-donut-ring { position: relative; width: 180px; height: 180px; margin: 0 auto; }
+.week-donut-ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.week-donut-ring circle { fill: none; stroke-width: 18; cx: 90; cy: 90; r: 72; }
+.week-donut-track { stroke: var(--surface-2); }
+.week-donut-agent { stroke: var(--gold); stroke-dasharray: 0 452.4; transition: stroke-dasharray 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.week-donut-human { stroke: var(--river); stroke-dasharray: 0 452.4; transition: stroke-dasharray 1.4s cubic-bezier(0.22, 1, 0.36, 1) 0.3s; }
+.briu-chart.visible .week-donut-agent { stroke-dasharray: var(--agent-arc) 452.4; }
+.briu-chart.visible .week-donut-human { stroke-dasharray: var(--human-arc) 452.4; stroke-dashoffset: calc(-1 * var(--agent-arc)); }
+.week-donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+.week-donut-center-num { font-family: var(--serif); font-size: 2rem; color: var(--text); line-height: 1; }
+.week-donut-center-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-top: 2px; }
+.week-donut-legend { display: flex; flex-direction: column; gap: 16px; }
+.week-donut-item { display: flex; align-items: flex-start; gap: 12px; }
+.week-donut-swatch { width: 14px; height: 14px; border-radius: 3px; flex-shrink: 0; margin-top: 2px; }
+.week-donut-item-num { font-family: var(--serif); font-size: 1.3rem; color: var(--text); line-height: 1; }
+.week-donut-item-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
+
+/* ---- Chart 9: Agent Team Org ---- */
+.agent-org { display: flex; flex-direction: column; align-items: center; gap: 0; }
+.agent-org-level { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
+.agent-org-node { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.06); padding: 14px 20px; text-align: center; min-width: 120px; transition: all 0.4s ease; opacity: 0; transform: translateY(12px); }
+.briu-chart.visible .agent-org-node { opacity: 1; transform: translateY(0); }
+.agent-org-node:hover { border-color: rgba(212,160,90,0.25); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.agent-org-node.human { border-color: rgba(90,157,172,0.3); border-top: 2px solid var(--river); }
+.agent-org-node.meta { border-color: rgba(212,160,90,0.3); border-top: 2px solid var(--gold); background: linear-gradient(135deg, var(--surface-2) 0%, rgba(212,160,90,0.04) 100%); }
+.agent-org-node.sub { border-top: 2px solid var(--forest); }
+.agent-org-icon { font-size: 1.4rem; margin-bottom: 6px; }
+.agent-org-title { font-family: var(--serif); font-size: 0.95rem; color: var(--text); margin-bottom: 2px; }
+.agent-org-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
+.agent-org-connector { width: 2px; height: 28px; background: linear-gradient(180deg, rgba(212,160,90,0.3), rgba(77,128,112,0.2)); margin: 0 auto; }
+.agent-org-fan { display: flex; justify-content: center; align-items: flex-start; gap: 0; margin-bottom: -4px; }
+.agent-org-fan-line { width: 2px; height: 20px; background: rgba(77,128,112,0.2); }
+.agent-org-fan-bar { height: 2px; background: rgba(77,128,112,0.2); }
+.briu-chart.visible .agent-org-node:nth-child(1) { transition-delay: 0s; }
+.briu-chart.visible .agent-org-node:nth-child(2) { transition-delay: 0.15s; }
+.briu-chart.visible .agent-org-node:nth-child(3) { transition-delay: 0.3s; }
+.briu-chart.visible .agent-org-node:nth-child(4) { transition-delay: 0.45s; }
+.agent-org-tools { display: flex; gap: 6px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
+.agent-org-tool { font-size: 0.65rem; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 2px; }
+
+/* ---- Chart 10: Cost Per Hour ---- */
+.cph-bars { display: flex; flex-direction: column; gap: 14px; }
+.cph-row { display: grid; grid-template-columns: 110px 1fr 70px; align-items: center; gap: 14px; }
+.cph-label { font-size: 0.82rem; font-weight: 600; color: var(--text); font-family: var(--sans); }
+.cph-track { height: 24px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.cph-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); display: flex; align-items: center; padding-left: 10px; }
+.briu-chart.visible .cph-fill { width: var(--target); }
+.cph-price { font-family: var(--serif); font-size: 1.2rem; color: var(--text); text-align: right; line-height: 1; }
+.cph-savings { margin-top: 16px; padding: 14px 18px; background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); text-align: center; }
+.cph-savings-num { font-family: var(--serif); font-size: 1.6rem; color: var(--forest); line-height: 1; }
+.cph-savings-label { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ---- Chart 11: Intelligence Timeline ---- */
+.intel-timeline { position: relative; padding: 16px 0; }
+.intel-track { height: 4px; background: var(--surface-2); border-radius: 2px; position: relative; }
+.intel-track-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--river), var(--gold), var(--coral)); width: 0%; transition: width 2s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .intel-track-fill { width: 100%; }
+.intel-events { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
+.intel-event { opacity: 0; transform: translateY(10px); transition: all 0.5s ease; text-align: center; }
+.briu-chart.visible .intel-event { opacity: 1; transform: translateY(0); }
+.briu-chart.visible .intel-event:nth-child(2) { transition-delay: 0.25s; }
+.briu-chart.visible .intel-event:nth-child(3) { transition-delay: 0.5s; }
+.briu-chart.visible .intel-event:nth-child(4) { transition-delay: 0.75s; }
+.briu-chart.visible .intel-event:nth-child(5) { transition-delay: 1s; }
+.intel-event-year { font-family: var(--serif); font-size: 1.2rem; line-height: 1; margin-bottom: 6px; }
+.intel-event-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+.intel-event-source { font-size: 0.68rem; color: var(--text-muted); opacity: 0.6; margin-top: 4px; }
+
+/* ---- Chart 12: Ownership Risk ---- */
+.own-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.own-col { padding: 24px 20px; border-top: 3px solid; }
+.own-col.risk { background: rgba(224,123,95,0.04); border-color: var(--coral); border: 1px solid rgba(224,123,95,0.12); border-top: 3px solid var(--coral); }
+.own-col.safe { background: rgba(77,128,112,0.04); border-color: var(--forest); border: 1px solid rgba(77,128,112,0.12); border-top: 3px solid var(--forest); }
+.own-col-title { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 16px; }
+.own-items { display: flex; flex-direction: column; gap: 10px; }
+.own-item { display: flex; align-items: flex-start; gap: 10px; font-size: 0.85rem; line-height: 1.5; }
+.own-item-icon { flex-shrink: 0; font-size: 0.9rem; margin-top: 1px; }
+.own-col.risk .own-item { color: var(--text-muted); }
+.own-col.safe .own-item { color: var(--text-muted); }
+.own-col.risk .own-item-icon { color: var(--coral); }
+.own-col.safe .own-item-icon { color: var(--forest); }
+.own-bottom { margin-top: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; font-style: italic; line-height: 1.5; }
+.own-col.risk .own-bottom { color: var(--coral); }
+.own-col.safe .own-bottom { color: var(--forest); }
+
+/* ---- Chart 13: Compound Loop ---- */
+.compound-loop { position: relative; }
+.compound-loop-ring { display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); gap: 12px; }
+.cl-step { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.06); padding: 18px 16px; position: relative; opacity: 0; transform: scale(0.95); transition: all 0.5s ease; }
+.briu-chart.visible .cl-step { opacity: 1; transform: scale(1); }
+.briu-chart.visible .cl-step:nth-child(2) { transition-delay: 0.15s; }
+.briu-chart.visible .cl-step:nth-child(3) { transition-delay: 0.3s; }
+.briu-chart.visible .cl-step:nth-child(4) { transition-delay: 0.45s; }
+.briu-chart.visible .cl-step:nth-child(5) { transition-delay: 0.6s; }
+.briu-chart.visible .cl-step:nth-child(6) { transition-delay: 0.75s; }
+.cl-step:hover { border-color: rgba(212,160,90,0.2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.cl-step-num { font-family: var(--serif); font-size: 1.6rem; color: rgba(212,160,90,0.2); line-height: 1; margin-bottom: 8px; }
+.cl-step-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.cl-step-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.cl-step-example { font-size: 0.72rem; color: var(--gold); margin-top: 8px; font-style: italic; }
+.cl-arrow { position: absolute; color: var(--gold); opacity: 0.4; font-size: 1rem; }
+.cl-center { grid-column: 1 / -1; text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(212,160,90,0.06), rgba(77,128,112,0.04)); border: 1px solid rgba(212,160,90,0.15); }
+.cl-center-num { font-family: var(--serif); font-size: 2rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 4px; }
+.cl-center-label { font-size: 0.82rem; color: var(--text-muted); }
+
+/* ---- Responsive ---- */
+@media (max-width: 640px) {
+  .auto-bar-row { grid-template-columns: 100px 1fr 50px; gap: 10px; }
+  .auto-bar-pct { font-size: 1.3rem; }
+  .leverage-rings { grid-template-columns: 1fr; gap: 32px; }
+  .adopt-milestones { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+  .infra-grid { grid-template-columns: 1fr; }
+  .compress-stats { grid-template-columns: 1fr; }
+  .compress-bar-label { min-width: 70px; font-size: 0.75rem; }
+  .week-donut { grid-template-columns: 1fr; }
+  .week-donut-ring { width: 160px; height: 160px; }
+  .agent-org-level { flex-direction: column; align-items: center; }
+  .agent-org-node { min-width: 160px; }
+  .cph-row { grid-template-columns: 90px 1fr 60px; gap: 10px; }
+  .intel-events { grid-template-columns: repeat(2, 1fr); }
+  .own-compare { grid-template-columns: 1fr; }
+  .compound-loop-ring { grid-template-columns: repeat(2, 1fr); }
+}

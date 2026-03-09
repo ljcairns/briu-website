@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/charts.css">
 <style>
 /* Hero */
 .hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
@@ -286,6 +287,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <h2 class="reveal">Agent-driven vs. traditional.</h2>
   <p class="reveal">Everything below was done by one person with agents. No employees, no contractors, no agencies.</p>
 
+  <div id="build-cost-per-hour"></div>
+
   <table class="cost-compare">
     <thead>
       <tr>
@@ -443,6 +446,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/charts.js"></script>
+<script>Briu.charts.costPerHour('build-cost-per-hour');</script>
 <script src="/dynamic-stats.js"></script>
 <script>
 /* Timeline filter */

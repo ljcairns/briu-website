@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu Chart Library Preview</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/charts.css">
+<style>
+.preview-section { max-width: 1060px; margin: 0 auto; padding: 4rem 2rem; }
+.preview-section h2 { font-family: var(--serif); font-size: 1.6rem; color: var(--text); margin-bottom: 0.5rem; }
+.preview-section p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.5rem; }
+.preview-section code { font-size: 0.8rem; color: var(--gold); background: var(--surface); padding: 2px 8px; }
+hr { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0; }
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+
+<div class="preview-section" style="padding-top: 6rem;">
+  <h1 style="font-family: var(--serif); font-size: 2.4rem; color: var(--text); margin-bottom: 1rem;">Chart Library Preview</h1>
+  <p>All 7 chart components rendered with live data. Scroll to trigger animations.</p>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>1. Automation Bars</h2>
+  <p><code>Briu.charts.automationBars('demo-auto')</code></p>
+  <div id="demo-auto"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>2. Leverage Rings</h2>
+  <p><code>Briu.charts.leverageRings('demo-rings')</code></p>
+  <div id="demo-rings"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>3. Adoption Timeline</h2>
+  <p><code>Briu.charts.adoptionTimeline('demo-adopt')</code></p>
+  <div id="demo-adopt"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>4. Infrastructure Scale</h2>
+  <p><code>Briu.charts.infraScale('demo-infra')</code></p>
+  <div id="demo-infra"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>5. Compression Meter</h2>
+  <p><code>Briu.charts.compressionMeter('demo-compress')</code></p>
+  <div id="demo-compress"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>6. Salary Crossover</h2>
+  <p><code>Briu.charts.salaryCrossover('demo-salary')</code></p>
+  <div id="demo-salary"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>7. Migration Curve</h2>
+  <p><code>Briu.charts.migrationCurve('demo-migrate')</code></p>
+  <div id="demo-migrate"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>8. Week Breakdown (Donut)</h2>
+  <p><code>Briu.charts.weekBreakdown('demo-week')</code></p>
+  <div id="demo-week"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>9. Agent Team Org</h2>
+  <p><code>Briu.charts.agentTeam('demo-org')</code></p>
+  <div id="demo-org"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>10. Cost Per Hour</h2>
+  <p><code>Briu.charts.costPerHour('demo-cph')</code></p>
+  <div id="demo-cph"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>11. Intelligence Timeline</h2>
+  <p><code>Briu.charts.intelligenceTimeline('demo-intel')</code></p>
+  <div id="demo-intel"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>12. Ownership Risk</h2>
+  <p><code>Briu.charts.ownershipRisk('demo-own')</code></p>
+  <div id="demo-own"></div>
+</div>
+<hr>
+
+<div class="preview-section">
+  <h2>13. Compound Loop</h2>
+  <p><code>Briu.charts.compoundLoop('demo-loop')</code></p>
+  <div id="demo-loop"></div>
+</div>
+
+<script src="/charts.js"></script>
+<script>
+Briu.charts.automationBars('demo-auto');
+Briu.charts.leverageRings('demo-rings');
+Briu.charts.adoptionTimeline('demo-adopt');
+Briu.charts.infraScale('demo-infra');
+Briu.charts.compressionMeter('demo-compress');
+Briu.charts.salaryCrossover('demo-salary');
+Briu.charts.migrationCurve('demo-migrate');
+Briu.charts.weekBreakdown('demo-week');
+Briu.charts.agentTeam('demo-org');
+Briu.charts.costPerHour('demo-cph');
+Briu.charts.intelligenceTimeline('demo-intel');
+Briu.charts.ownershipRisk('demo-own');
+Briu.charts.compoundLoop('demo-loop');
+</script>
+</body>
+</html>

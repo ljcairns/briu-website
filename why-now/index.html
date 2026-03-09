@@ -21,6 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/charts.css">
 <style>
 .hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
@@ -39,55 +40,6 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 .quote-card p { font-family: var(--sans); font-size: 1.02rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0; }
 .quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
 .quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
-.chart-tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-.chart-tab { padding: 8px 20px; font-size: 13px; font-weight: 600; font-family: var(--sans); cursor: pointer; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s; letter-spacing: 0.02em; }
-.chart-tab.active { background: rgba(212,160,90,0.15); color: var(--gold); border-color: rgba(212,160,90,0.3); }
-.chart-view { display: none; }
-.chart-view.active { display: block; }
-.cost-stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; margin-bottom: 16px; }
-.cost-stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; border-top: 2px solid var(--coral); transition: all 0.3s ease; }
-.cost-stat-box:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-.cost-stat-box .csl { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.cost-stat-box .csn { font-family: var(--serif); font-size: 34px; color: var(--text); line-height: 1; }
-.cost-stat-box .csn span { font-size: 15px; color: var(--text-muted); }
-.cost-stat-box .csd { font-size: 12px; color: var(--text); margin-top: 6px; }
-.chart-surface { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 24px 18px 18px; }
-.chart-label { font-size: 11px; color: var(--text-muted); font-weight: 500; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.1em; }
-.chart-legend { display: flex; gap: 20px; margin-top: 12px; flex-wrap: wrap; }
-.chart-legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-muted); }
-.chart-source { font-size: 11px; color: var(--text-muted); opacity: 0.5; margin-top: 10px; }
-.math-card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 14px; margin-bottom: 24px; }
-.math-card { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 22px 18px; transition: all 0.3s ease; }
-.math-card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
-.math-card .mc-year { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 10px; }
-.math-card .mc-num { font-family: var(--serif); font-size: 36px; color: var(--text); line-height: 1; margin-bottom: 4px; }
-.math-card .mc-num span { font-size: 14px; color: var(--text-muted); }
-.math-card .mc-cost { font-size: 13px; font-weight: 600; margin-bottom: 10px; }
-.math-card .mc-note { font-size: 12px; color: var(--text); line-height: 1.5; }
-.trust-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin: 2.5rem 0 3rem; }
-.trust-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 28px 24px; transition: all 0.4s ease; display: flex; flex-direction: column; }
-.trust-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
-.trust-card .tc-phase { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
-.trust-card h4 { font-family: var(--serif); font-size: 1.05rem; color: var(--text); margin-bottom: 10px; font-weight: 400; }
-.trust-card .tc-desc { font-size: 0.86rem; color: var(--text); line-height: 1.6; margin-bottom: 14px; }
-.trust-card .tc-desc { flex: 1; }
-.trust-card .tc-security { font-size: 0.78rem; color: #6DB89E; line-height: 1.4; padding: 8px 10px; background: rgba(77,128,112,0.1); border: 1px solid rgba(77,128,112,0.18); }
-.compound-item { display: flex; gap: 16px; align-items: flex-start; margin-bottom: 20px; }
-.compound-num { min-width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: rgba(212,160,90,0.1); color: var(--gold); font-family: var(--serif); font-size: 14px; border: 1px solid rgba(212,160,90,0.2); flex-shrink: 0; }
-.compound-item .ci-title { color: var(--text); font-weight: 600; }
-.cost-journey { display: flex; align-items: center; justify-content: center; gap: 2rem; margin: 3rem 0 0.5rem; padding: 2.5rem 0; border-top: 1px solid rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.05); flex-wrap: wrap; }
-.cost-journey-point { text-align: center; min-width: 200px; }
-.stat-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 0.5rem; }
-.stat-label.good { color: var(--forest); }
-.stat-number { font-family: var(--serif); font-size: 2.2rem; background: linear-gradient(135deg, var(--coral), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 0.5rem; }
-.stat-number.good { background: linear-gradient(135deg, var(--forest), var(--river)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
-.stat-desc { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
-.cost-journey-point .stat-number { font-size: 2.5rem; }
-.cost-journey-point .stat-desc { max-width: 260px; margin: 0 auto; }
-.cost-journey-arrow { display: flex; flex-direction: column; align-items: center; gap: 6px; }
-.cost-journey-label { font-size: 0.72rem; font-weight: 600; color: var(--gold); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; }
-.callout-box { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 20px 24px; margin: 1.5rem 0; }
-.callout-box p { color: var(--text); margin-bottom: 0; }
 .essay-links { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; margin-top: 2rem; }
 .hero-cta-primary { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.4); transition: all 0.35s ease; }
 .hero-cta-primary:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); box-shadow: 0 0 30px rgba(212,160,90,0.1); }
@@ -98,9 +50,6 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 @media (max-width: 640px) {
   .hero { padding: 7rem 1.25rem 2rem; }
   section { padding: 3rem 1.25rem 4rem; }
-  .cost-stat-grid, .math-card-grid, .trust-grid { grid-template-columns: 1fr; }
-  .chart-tabs { gap: 6px; }
-  .chart-tab { padding: 6px 14px; font-size: 12px; }
   .footer-links { justify-content: center; }
 }
 </style>
@@ -182,74 +131,8 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 
   <p class="reveal">Cuban's math is a snapshot. Here is the trajectory.</p>
 
-  <div class="chart-tabs reveal">
-    <button class="chart-tab active" onclick="switchChart('cost', this)">Cost vs Capability</button>
-    <button class="chart-tab" onclick="switchChart('math', this)">The $300/Day Math</button>
-  </div>
-
-  <div id="chart-cost" class="chart-view active">
-    <div class="cost-stat-grid">
-      <div class="cost-stat-box" style="border-top-color: var(--coral);">
-        <div class="csl" style="color: var(--coral);">Best model, Mar 2023</div>
-        <div class="csn">$60<span>/M output</span></div>
-        <div class="csd">GPT-4 · 8K context</div>
-      </div>
-      <div class="cost-stat-box" style="border-top-color: var(--forest);">
-        <div class="csl" style="color: var(--forest);">Same intelligence, today</div>
-        <div class="csn">$0.60<span>/M output</span></div>
-        <div class="csd">GPT-4o mini · 99% cheaper</div>
-      </div>
-      <div class="cost-stat-box" style="border-top-color: var(--gold);">
-        <div class="csl" style="color: var(--gold);">Best model, Mar 2026</div>
-        <div class="csn">$14<span>/M output</span></div>
-        <div class="csd">GPT-5.2 · far more capable</div>
-      </div>
-    </div>
-
-    <div class="chart-surface">
-      <div class="chart-label">Frontier output price vs capability (MMLU %)</div>
-      <div style="position: relative; height: 280px;"><canvas id="costChart"></canvas></div>
-      <div class="chart-legend">
-        <div class="chart-legend-item"><div style="width:18px;height:2px;background:var(--gold);"></div>Output cost ($/M tokens)</div>
-        <div class="chart-legend-item"><div style="width:18px;height:0;border-top:2px dashed var(--river);"></div>Capability (MMLU %)</div>
-      </div>
-    </div>
-
-    <div class="callout-box" style="margin-top: 16px;">
-      <p>Two things happening simultaneously. Yesterday's breakthrough becomes today's commodity. And today's frontier keeps getting smarter. The cost line trends down. The capability line trends up. They never reverse.</p>
-    </div>
-
-    <div class="chart-source">Sources: OpenAI, Anthropic official pricing. MMLU via Artificial Analysis. GPT-4o mini ($0.60/M) omitted to preserve scale.</div>
-  </div>
-
-  <div id="chart-math" class="chart-view">
-    <div class="chart-surface" style="margin-bottom: 16px;">
-      <div class="chart-label">What $300/day buys over time</div>
-      <p style="font-size: 0.88rem; margin-bottom: 24px; max-width: 540px;">$300/day is today's cost for full autonomous capacity. Here's where that number goes as models get cheaper and more capable.</p>
-      <div class="math-card-grid">
-        <div class="math-card" style="border-top: 2px solid var(--coral);">
-          <div class="mc-year" style="color: var(--coral);">Jan 2026</div>
-          <div class="mc-num">7<span> agents</span></div>
-          <div class="mc-cost" style="color: var(--coral);">$300/day each</div>
-          <div class="mc-note">Early benchmark. Partial autonomous capacity.</div>
-        </div>
-        <div class="math-card" style="border-top: 2px solid var(--gold);">
-          <div class="mc-year" style="color: var(--gold);">2027 est.</div>
-          <div class="mc-num">7<span> agents</span></div>
-          <div class="mc-cost" style="color: var(--gold);">$150/day each</div>
-          <div class="mc-note">Same agents, half the cost. Smarter models.</div>
-        </div>
-        <div class="math-card" style="border-top: 2px solid var(--forest);">
-          <div class="mc-year" style="color: var(--forest);">2028 est.</div>
-          <div class="mc-num">7<span> agents</span></div>
-          <div class="mc-cost" style="color: var(--forest);">$75/day each</div>
-          <div class="mc-note">Or 28 agents for the original budget.</div>
-        </div>
-      </div>
-      <p style="color: var(--text); font-size: 0.93rem; line-height: 1.75; margin-bottom: 0;">Every day between now and then, the agents have been learning your business. The company that started earlier has institutional knowledge in its agents that a competitor cannot buy at any price.</p>
-    </div>
-    <div class="chart-source">Projections based on observed 50%+ annual decline in frontier pricing 2023-2026.</div>
-  </div>
+  <div id="wn-compression-meter"></div>
+  <div id="wn-salary-crossover"></div>
 
   <p class="wuc-highlight reveal" style="margin-top: 2rem;">$300 per day is the most you will ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
 
@@ -268,32 +151,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 
   <p class="wuc-highlight reveal">The progression for most businesses looks like this:</p>
 
-  <div class="trust-grid">
-    <div class="trust-card">
-      <div class="tc-phase" style="color: var(--river);">$2-5/day</div>
-      <h4>Read, learn, brief</h4>
-      <div class="tc-desc">Agent connects to email, calendar, CRM with read-only access. Morning briefings in Slack or Discord. Your team sees what it can do.</div>
-      <div class="tc-security">No write access. No send permissions.</div>
-    </div>
-    <div class="trust-card">
-      <div class="tc-phase" style="color: var(--forest);">$5-15/day</div>
-      <h4>Draft and suggest</h4>
-      <div class="tc-desc">Agent drafts email responses, prepares CRM updates, flags stale deals. Everything waits for your review. You approve, edit, or reject.</div>
-      <div class="tc-security">Every action requires explicit approval.</div>
-    </div>
-    <div class="trust-card">
-      <div class="tc-phase" style="color: var(--gold);">$15-30/day</div>
-      <h4>Approve and execute</h4>
-      <div class="tc-desc">Approval gates go live. Agent proposes, you tap a button, it executes. Draft, review, send. Your team builds trust on your schedule.</div>
-      <div class="tc-security">Approval buttons with full audit logging.</div>
-    </div>
-    <div class="trust-card">
-      <div class="tc-phase" style="color: var(--gold-bright);">$30+/day</div>
-      <h4>Let it ride</h4>
-      <div class="tc-desc">Low-risk actions auto-execute. High-stakes still gated. Overnight prospecting, reporting, follow-ups. Your team wakes up to work already done.</div>
-      <div class="tc-security">Budget ceilings. Daily alerts. Revoke anytime.</div>
-    </div>
-  </div>
+  <div id="wn-leverage-rings"></div>
 
   <p class="reveal">The $300/day fully autonomous setup is a destination, not a starting point. And by the time you get there, the cost to run it will be significantly lower than it is today.</p>
 
@@ -307,39 +165,10 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 
   <p class="wuc-highlight reveal">The businesses that start now get three advantages that compound over time:</p>
 
-  <div style="margin: 1.5rem 0 2rem;">
-    <div class="compound-item reveal">
-      <div class="compound-num">1</div>
-      <div><span class="ci-title">Institutional knowledge.</span> <span style="color: var(--text-muted);">Every workflow your agents learn is permanent. Six months of agent learning is six months your competitor has to make up. That gap does not close by itself.</span></div>
-    </div>
-    <div class="compound-item reveal">
-      <div class="compound-num">2</div>
-      <div><span class="ci-title">A team that knows how to work with AI.</span> <span style="color: var(--text-muted);">Your employees build the skill of structuring work for agents. That capability comes from months of working alongside the tools, not from a training seminar.</span></div>
-    </div>
-    <div class="compound-item reveal">
-      <div class="compound-num">3</div>
-      <div><span class="ci-title">A cost curve in your favor.</span> <span style="color: var(--text-muted);">The infrastructure you build today runs on tomorrow's better, cheaper models with no migration required. You are locked into today's learning, not today's pricing.</span></div>
-    </div>
-  </div>
+  <div id="wn-ownership-risk"></div>
+  <div id="wn-infra-scale"></div>
 
   <p class="reveal">You do not need to wait for a big corporation to build this for you. The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>
-
-  <div class="cost-journey reveal">
-    <div class="cost-journey-point">
-      <div class="stat-label good">Start here</div>
-      <div class="stat-number good">$2-5/day</div>
-      <div class="stat-desc">Personal assistant. Email, calendar, CRM. Proper architecture.</div>
-    </div>
-    <div class="cost-journey-arrow">
-      <svg width="60" height="24" viewBox="0 0 60 24"><path d="M0,12 L50,12 M42,4 L52,12 L42,20" stroke="var(--gold)" stroke-width="2" fill="none" opacity="0.5"/></svg>
-      <span class="cost-journey-label">Both numbers only go down</span>
-    </div>
-    <div class="cost-journey-point">
-      <div class="stat-label" style="color: var(--coral);">The destination</div>
-      <div class="stat-number">$300/day</div>
-      <div class="stat-desc">Fully autonomous operations. Agents across your team, 24/7.</div>
-    </div>
-  </div>
 
   <div style="text-align: center; margin-top: 2rem;" class="reveal">
     <a href="#" onclick="openContactForm();return false" class="hero-cta-primary">See What This Looks Like For Your Business</a>
@@ -407,96 +236,13 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/charts.js"></script>
 <script>
-function switchChart(view, btn) {
-  document.querySelectorAll('.chart-view').forEach(function(el) { el.classList.remove('active'); });
-  document.querySelectorAll('.chart-tab').forEach(function(el) { el.classList.remove('active'); });
-  document.getElementById('chart-' + view).classList.add('active');
-  btn.classList.add('active');
-}
-
-var ctx = document.getElementById('costChart');
-if (ctx) {
-  new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: ["Mar '23", "Nov '23", "Mar '24", "May '24", "Apr '25", "Nov '25", "Feb '26"],
-      datasets: [
-        {
-          label: 'Output cost ($/M)',
-          data: [60, 30, 75, 15, 12, 25, 14],
-          borderColor: '#D4A05A',
-          backgroundColor: 'rgba(212,160,90,0.06)',
-          fill: true,
-          borderWidth: 2.5,
-          pointBackgroundColor: '#0E1219',
-          pointBorderColor: '#D4A05A',
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          tension: 0.3,
-          yAxisID: 'y'
-        },
-        {
-          label: 'Capability (MMLU %)',
-          data: [86, 87, 87, 86, 90, 91, 92],
-          borderColor: '#5A9DAC',
-          borderWidth: 2.5,
-          borderDash: [6, 3],
-          pointBackgroundColor: '#0E1219',
-          pointBorderColor: '#5A9DAC',
-          pointBorderWidth: 2,
-          pointRadius: 4,
-          fill: false,
-          tension: 0.3,
-          yAxisID: 'y1'
-        }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      interaction: { mode: 'index', intersect: false },
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#0E1219',
-          borderColor: 'rgba(212,160,90,0.3)',
-          borderWidth: 1,
-          titleColor: '#D4A05A',
-          bodyColor: '#EAE7E3',
-          padding: 12,
-          callbacks: {
-            label: function(context) {
-              if (context.datasetIndex === 0) return '$' + context.parsed.y + '/M output tokens';
-              return '~' + context.parsed.y + '% MMLU';
-            }
-          }
-        }
-      },
-      scales: {
-        x: {
-          ticks: { color: '#94909A', font: { size: 11 } },
-          grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-          border: { color: 'rgba(255,255,255,0.06)' }
-        },
-        y: {
-          position: 'left',
-          min: 0, max: 80,
-          ticks: { color: '#D4A05A', font: { size: 11 }, callback: function(v) { return '$' + v; } },
-          grid: { color: 'rgba(255,255,255,0.04)', drawBorder: false },
-          border: { display: false }
-        },
-        y1: {
-          position: 'right',
-          min: 75, max: 100,
-          ticks: { color: '#5A9DAC', font: { size: 11 }, callback: function(v) { return v + '%'; } },
-          grid: { drawOnChartArea: false },
-          border: { display: false }
-        }
-      }
-    }
-  });
-}
+Briu.charts.compressionMeter('wn-compression-meter');
+Briu.charts.salaryCrossover('wn-salary-crossover');
+Briu.charts.leverageRings('wn-leverage-rings');
+Briu.charts.ownershipRisk('wn-ownership-risk');
+Briu.charts.infraScale('wn-infra-scale');
 </script>
 </body>
 </html>

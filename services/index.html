@@ -20,6 +20,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/charts.css">
 <style>
 .hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
@@ -218,20 +219,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   <p class="section-label reveal">What operators are seeing</p>
   <h2 class="reveal">This is already happening at real companies.</h2>
 
-  <div class="quotes-row">
-    <div class="quote-card quote-decorated">
-      <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
-      <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E259</p>
-    </div>
-    <div class="quote-card quote-decorated">
-      <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
-      <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E261</p>
-    </div>
-    <div class="quote-card quote-decorated">
-      <p>"People told me they have a small business and they've been struggling and OpenClaw helped them automate a few of the tedious tasks, from collecting invoices to answering customer emails, that then freed them up and gave them a bit more joy in their life."</p>
-      <p class="quote-attr"><span class="quote-speaker">Peter Steinberger</span>, creator of OpenClaw — Lex Fridman Podcast #491</p>
-    </div>
-  </div>
+  <div id="svc-automation-bars"></div>
 </section>
 
 <section>
@@ -449,6 +437,8 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 </footer>
 
 <script src="/shared.js"></script>
+<script src="/charts.js"></script>
+<script>Briu.charts.automationBars('svc-automation-bars');</script>
 <script>
 /* Expandable capability cards */
 function toggleCapability(el) {
