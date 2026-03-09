@@ -739,15 +739,15 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="constellation">' +
 
     /* SVG lines — desktop only */
-    '<svg class="constellation-lines" viewBox="0 0 700 420" preserveAspectRatio="xMidYMid meet">' +
-    '<line x1="350" y1="72" x2="160" y2="200" />' +
-    '<line x1="350" y1="72" x2="350" y2="200" />' +
-    '<line x1="350" y1="72" x2="540" y2="200" />' +
-    '<line x1="350" y1="72" x2="620" y2="100" />' +
-    '<line x1="350" y1="72" x2="620" y2="160" />' +
-    '<line x1="160" y1="200" x2="70" y2="340" />' +
-    '<line x1="160" y1="200" x2="190" y2="340" />' +
-    '<line x1="160" y1="200" x2="310" y2="340" />' +
+    '<svg class="constellation-lines" viewBox="0 0 700 440" preserveAspectRatio="xMidYMid meet">' +
+    '<line x1="350" y1="65" x2="160" y2="195" />' +
+    '<line x1="350" y1="65" x2="350" y2="195" />' +
+    '<line x1="350" y1="65" x2="540" y2="195" />' +
+    '<line x1="350" y1="65" x2="600" y2="60" />' +
+    '<line x1="350" y1="65" x2="600" y2="110" />' +
+    '<line x1="160" y1="240" x2="160" y2="355" />' +
+    '<line x1="160" y1="240" x2="350" y2="355" />' +
+    '<line x1="160" y1="240" x2="540" y2="355" />' +
     '</svg>' +
 
     /* Row 1: Founder */
