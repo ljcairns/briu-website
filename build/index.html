@@ -93,6 +93,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 
 /* Service cross-links */
 .card-service-link { display: block; font-size: 0.68rem; font-weight: 500; color: var(--text-muted); text-decoration: none; margin-top: 0.5rem; transition: color 0.2s; }
+.card-service-link::after { content: ' \2192'; }
 .card-service-link:hover { color: var(--gold); }
 
 /* Section override (base in shared.css — shared has padding-bottom: 6rem) */
@@ -166,8 +167,11 @@ section { padding-bottom: 2rem; }
 .article-card .card-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--forest); margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; }
 .card-category { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.2rem 0.55rem; border: 1px solid; }
 .card-category[data-cat="agent"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
+.card-category[data-cat="operations"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
 .card-category[data-cat="brand"] { color: var(--forest); border-color: rgba(77,128,112,0.25); }
 .card-category[data-cat="website"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
+.card-category[data-cat="infrastructure"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
+.card-category[data-cat="security"] { color: var(--coral); border-color: rgba(224,123,95,0.25); }
 .card-category[data-cat="business"] { color: var(--coral); border-color: rgba(224,123,95,0.25); }
 .article-card h4 { font-family: var(--sans); font-size: 0.82rem; color: var(--text-muted); font-weight: 400; margin-bottom: 0.75rem; line-height: 1.5; }
 .article-card h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.65rem; line-height: 1.25; }
@@ -566,64 +570,73 @@ section { padding-bottom: 2rem; }
   <div class="articles-grid">
 
     <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
-      <h3>One Agent, 12 Skills, 26 Days</h3>
-      <h4>Architecture, security, what broke, and what it cost</h4>
-      <p>From first skill to 12 production capabilities. The full implementation journey — multi-model routing, cost controls, approval gates, and the real numbers behind every decision.</p>
+      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
+      <h3>Agent Architecture</h3>
+      <h4>12 skills, multi-model routing, and the real cost breakdown</h4>
+      <p>From first skill to 12 production capabilities. Multi-model routing, cost controls, approval gates, and the real numbers behind every decision.</p>
       <a href="/build/the-real-numbers/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service →</a>
+      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
     </div>
 
     <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
-      <h3>Starting a Company with Agents</h3>
-      <h4>From first agent skill to company launch</h4>
+      <div class="card-tag"><span class="card-category" data-cat="infrastructure">Infrastructure</span> Live</div>
+      <h3>Full Build Story</h3>
+      <h4>One person, multiple agents, everything documented</h4>
       <p>The full story of building Briu. Toolchain, costs, security architecture, and what the agent can't do. One person, multiple agents, everything documented.</p>
       <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
-      <a href="/services/#personal-assistants" class="card-service-link">See this as a service →</a>
+      <a href="/services/#personal-assistants" class="card-service-link">See this as a service</a>
     </div>
 
     <div class="article-card">
       <div class="card-tag"><span class="card-category" data-cat="brand">Brand</span> Live</div>
-      <h3>Brand in a Session</h3>
+      <h3>Brand Creation</h3>
       <h4>400+ generations, hundreds of name candidates, one logo</h4>
-      <p>How agents + founder taste produced a brand identity in hours, not months. Midjourney directed by Claude, automated trademark screening, domain search across seven languages.</p>
+      <p>How agents and founder taste produced a brand identity in hours, not months. Midjourney directed by Claude, automated trademark screening, domain search across seven languages.</p>
       <a href="/build/brand-in-a-session/" class="card-link">Read</a>
-      <a href="/services/#capabilities" class="card-service-link">See this as a service →</a>
+      <a href="/services/#capabilities" class="card-service-link">See this as a service</a>
     </div>
 
     <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
-      <h3>From Comment to Fix in One Loop</h3>
-      <h4>How we automated the full cycle from customer feedback to live fix to client email</h4>
+      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
+      <h3>Customer Feedback Automation</h3>
+      <h4>From customer comment to live fix to client email, one loop</h4>
       <p>The hardest part of servicing a customer isn't the fix. It's the 20-minute context reload. We built a loop that handles notification to resolution to client communication, so the context switch disappears.</p>
       <a href="/build/from-comment-to-fix-in-one-loop/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service →</a>
+      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
     </div>
 
     <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
-      <h3>Six Layers Deep</h3>
+      <div class="card-tag"><span class="card-category" data-cat="security">Security</span> Live</div>
+      <h3>Security Architecture</h3>
       <h4>Zero-trust security for an AI agent handling real client data</h4>
       <p>Network isolation, permission boundaries, a sandbox agent for untrusted content, exec-guardrails, automated CVE monitoring, and a kill switch. Each layer assumes the others failed.</p>
       <a href="/build/six-layers-deep/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service →</a>
+      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
     </div>
 
     <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="agent">Agent</span> Live</div>
-      <h3>We Tried to Break Our Own Sanitizer</h3>
+      <div class="card-tag"><span class="card-category" data-cat="security">Security</span> Live</div>
+      <h3>Red Team Testing</h3>
       <h4>15 attack categories, 96% bypass rate, and everything we fixed</h4>
-      <p>We pointed DeepSeek at our own security layer and told it to find every way through. Automated red team testing across 15 bypass categories — then published the results and the fixes.</p>
+      <p>We pointed DeepSeek at our own security layer and told it to find every way through. Automated red team testing across 15 bypass categories, then published the results and the fixes.</p>
       <a href="/build/we-tried-to-break-our-own-sanitizer/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service →</a>
+      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
+    </div>
+
+    <div class="article-card">
+      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
+      <h3>Voice Profile</h3>
+      <h4>34,000 lines of writing, one voice the agent matches</h4>
+      <p>Your agent drafts emails and talks to customers. If it doesn't sound like you, none of it works. How we built a voice profile from real writing that closes the uncanny valley.</p>
+      <a href="/build/voice-profile/" class="card-link">Read</a>
+      <a href="/services/#personal-assistants" class="card-service-link">See this as a service</a>
     </div>
 
   </div>
 </section>
 
 <div class="build-cta">
-  <p>If you read this and thought "I could do this" — you're right.</p>
+  <p>If you read this and thought "I could do this," you're right.</p>
   <a href="#" onclick="openContactForm();return false" class="cta-btn">Book a Call</a>
 </div>
 </main>

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | From Comment to Fix in One Loop</title>
-<meta name="description" content="How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client — without re-learning the account.">
+<meta name="description" content="How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client. No re-learning the account.">
 <meta property="og:title" content="Briu | From Comment to Fix in One Loop">
 <meta property="og:description" content="How we automated the full cycle from customer feedback to live fix to client email.">
 <meta property="og:type" content="website">
@@ -67,7 +67,7 @@ article li { margin-bottom: 0.4rem; }
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "From Comment to Fix in One Loop",
-  "description": "How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client — without re-learning the account.",
+  "description": "How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client. No re-learning the account.",
   "author": {"@type": "Person", "name": "Lucas Cairns"},
   "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
   "datePublished": "2026-03-09",
@@ -101,14 +101,14 @@ article li { margin-bottom: 0.4rem; }
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>From Comment to Fix in One Loop</h1>
-  <p>How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client — without us re-learning the account.</p>
+  <p>How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client, without us re-learning the account.</p>
 </section>
 
 <article>
   <p class="section-label reveal">The Real Cost of a Customer Comment</p>
-  <p>We run chatbot deployments for clients through Subsights. A customer leaves a comment on one of their conversations — the opener is too narrow, a product line isn't triggering, the staff contact listed is someone who left last month. The fix itself is five minutes.</p>
+  <p>We run chatbot deployments for clients through Subsights. A customer leaves a comment on one of their conversations: the opener is too narrow, a product line isn't triggering, the staff contact listed is someone who left last month. The fix itself is five minutes.</p>
   <p>But the fix isn't what takes the time.</p>
-  <p><strong>The context reload is what kills you.</strong> Log into the Subsights dashboard. Find the right workspace — which client account was this again? Find the right chatbot. There might be three per workspace. Navigate through accordion menus to the prompt editor. Re-read the configuration to remember what you set up two months ago. Parse the customer's comment to understand what they're actually asking for. Make the change in the right textarea. Test it. Then figure out who to email — was it the ops lead or the founder? Is that email address even current? Write the email. Send it. Mark the comment as handled so nobody else picks it up.</p>
+  <p><strong>The context reload is what kills you.</strong> Log into the Subsights dashboard. Find the right workspace. Which client account was this again? Find the right chatbot. There might be three per workspace. Navigate through accordion menus to the prompt editor. Re-read the configuration to remember what you set up two months ago. Parse the customer's comment to understand what they're actually asking for. Make the change in the right textarea. Test it. Then figure out who to email: the ops lead or the founder? Is that email address even current? Write the email. Send it. Mark the comment as handled so nobody else picks it up.</p>
   <p>That's not five minutes. That's twenty to thirty. And for a small team, that friction means comments sit for days. Not because the work is hard. Because starting the work is hard.</p>
 
   <div class="time-compare reveal">
@@ -134,19 +134,19 @@ article li { margin-bottom: 0.4rem; }
     </div>
     <div class="loop-step">
       <h3>Read Conversation</h3>
-      <p>Agent opens the actual customer conversation via browser automation. Reads the full thread — what the customer said, what the chatbot said, where it went wrong.</p>
+      <p>Agent opens the actual customer conversation via browser automation. Reads the full thread: what the customer said, what the chatbot said, where it went wrong.</p>
     </div>
     <div class="loop-step">
       <h3>Read Live Config</h3>
-      <p>Navigates the Subsights dashboard — workspace switching, accordion menus, prompt editor. Reads the current chatbot configuration so it knows exactly what to change.</p>
+      <p>Navigates the Subsights dashboard: workspace switching, accordion menus, prompt editor. Reads the current chatbot configuration so it knows exactly what to change.</p>
     </div>
     <div class="loop-step">
       <h3>Make Changes</h3>
-      <p>Edits the prompts in the platform's textareas. Broader opener, new product triggers, updated staff contact — whatever the feedback requires.</p>
+      <p>Edits the prompts in the platform's textareas. Broader opener, new product triggers, updated staff contact, whatever the feedback requires.</p>
     </div>
     <div class="loop-step">
       <h3>Verify</h3>
-      <p>Saves, reloads the configuration page, confirms the changes persisted. No "I think I saved it" — the agent checks.</p>
+      <p>Saves, reloads the configuration page, confirms the changes persisted. No "I think I saved it." The agent checks.</p>
     </div>
     <div class="loop-step">
       <h3>Client Email</h3>
@@ -158,7 +158,7 @@ article li { margin-bottom: 0.4rem; }
     </div>
   </div>
 
-  <p>The whole cycle runs from a single heartbeat cron. The agent already knows the workspace structure, the contact database, the navigation pattern for each platform section. It doesn't need to re-learn the account because the account context lives in queryable database tables — not in someone's head.</p>
+  <p>The whole cycle runs from a single heartbeat cron. The agent already knows the workspace structure, the contact database, the navigation pattern for each platform section. It doesn't need to re-learn the account because the account context lives in queryable database tables, not in someone's head.</p>
 
   <h2 class="reveal">What Broke and What We Documented</h2>
   <p>It didn't work cleanly the first time. Or the second. Every failure became a permanent upgrade to the system.</p>
@@ -181,25 +181,25 @@ article li { margin-bottom: 0.4rem; }
     </div>
   </div>
 
-  <p>Each failure became a permanent system upgrade. The <code>client_chatbots</code> table, the <code>client_contacts</code> database, the browser navigation guide, the comment processing script — they all get more reliable with every cycle. <strong>The system learns from its mistakes once. A human re-learns them every time they context-switch back into an account.</strong></p>
+  <p>Each failure became a permanent system upgrade. The <code>client_chatbots</code> table, the <code>client_contacts</code> database, the browser navigation guide, the comment processing script. They all get more reliable with every cycle. <strong>The system learns from its mistakes once. A human re-learns them every time they context-switch back into an account.</strong></p>
 
   <h2 class="reveal">What It Feels Like Now</h2>
   <p>The heartbeat cron runs every 30 minutes. Comments come in. The loop runs. Changes go live. The client gets an email explaining exactly what was updated and why. A status update posts back to the Discord thread.</p>
-  <p>The account context that used to live in someone's head — which chatbot, which workspace, who's the contact, what did we configure last time — now lives in shared database tables (<code>client_chatbots</code>, <code>client_contacts</code>) and a browser navigation guide. The agent queries them every time. It doesn't have good days and bad days. It doesn't forget that the contact changed last month. It doesn't dread the small task that takes longer to start than to finish.</p>
+  <p>The account context that used to live in someone's head, like which chatbot, which workspace, who's the contact, what did we configure last time, now lives in shared database tables (<code>client_chatbots</code>, <code>client_contacts</code>) and a browser navigation guide. The agent queries them every time. It doesn't have good days and bad days. It doesn't forget that the contact changed last month. It doesn't dread the small task that takes longer to start than to finish.</p>
   <p>The human role shifted from "do the whole thing" to "review the email before it sends." That's the right division. The agent handles the mechanical recall and execution. The human handles the judgment call on tone and correctness.</p>
 
   <h2 class="reveal">The Knowledge Coherence Problem</h2>
   <p>Before the loop, operational context was scattered. Chatbot IDs were hardcoded across 6 different files. Client contacts lived in email threads. Navigation patterns lived in muscle memory. Every time the agent (or a human) needed to service an account, they had to reconstruct this context from scratch.</p>
-  <p>The loop forced us to consolidate. We built shared database tables — <code>client_chatbots</code> maps every workspace to its correct chatbot ID. <code>client_contacts</code> stores the current point of contact for each account, validated against real email history. The browser navigation guide documents the exact click sequence for each workspace type.</p>
-  <p><strong>This is the real output of the project.</strong> Not just the automation — the structured knowledge that makes the automation possible. The loop runs because the context is encoded. And once it's encoded, it's available to every other process that touches that account. The comment loop was the forcing function. The knowledge system is the lasting asset.</p>
+  <p>The loop forced us to consolidate. We built shared database tables. <code>client_chatbots</code> maps every workspace to its correct chatbot ID. <code>client_contacts</code> stores the current point of contact for each account, validated against real email history. The browser navigation guide documents the exact click sequence for each workspace type.</p>
+  <p><strong>This is the real output of the project.</strong> Not just the automation, but the structured knowledge that makes the automation possible. The loop runs because the context is encoded. And once it's encoded, it's available to every other process that touches that account. The comment loop was the forcing function. The knowledge system is the lasting asset.</p>
 
   <h2 class="reveal">Why This Matters Beyond Us</h2>
   <p>Every service business has this pattern. Small customer requests that are easy to do but painful to start. The fix is never the bottleneck. The context reload is.</p>
-  <p>Think about the tasks your team dreads — not because they're hard, but because they require re-acquainting with an account, a platform, a relationship. Those are the tasks that sit in a queue for days. Those are the tasks that make customers feel forgotten.</p>
+  <p>Think about the tasks your team dreads, not because they're hard, but because they require re-acquainting with an account, a platform, a relationship. Those are the tasks that sit in a queue for days. Those are the tasks that make customers feel forgotten.</p>
   <p>The pattern is straightforward:</p>
   <ul>
     <li><strong>Encode the context.</strong> Contacts, credentials, navigation patterns, preferences, configuration history. Get it out of people's heads and into structured reference documents.</li>
-    <li><strong>Wire the trigger.</strong> Notification, email, form submission, webhook — whatever event signals "a customer needs something."</li>
+    <li><strong>Wire the trigger.</strong> Notification, email, form submission, webhook, whatever event signals "a customer needs something."</li>
     <li><strong>Connect trigger to resolution.</strong> The agent reads the trigger, consults the context, executes the fix, communicates the result.</li>
   </ul>
   <p>The loop eliminates the context switch. The human stays in the loop for judgment. The customer gets a response in minutes instead of days.</p>

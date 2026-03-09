@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | How We Built a Voice Profile From 34,000 Lines of Writing</title>
+<meta name="description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile that catches the difference between correct and right.">
+<meta property="og:title" content="Briu | Voice Profile">
+<meta property="og:description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/build/voice-profile/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Briu | Voice Profile">
+<meta name="twitter:description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile.">
+<link rel="canonical" href="https://briu.ai/build/voice-profile/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260309w">
+<style>
+/* Hero/section base now in shared.css */
+.hero { max-width: 980px; }
+.hero::before { background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
+.hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; }
+.hero p { max-width: 760px; }
+article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
+.section-label { margin-bottom: 1.5rem; }
+article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
+article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
+article strong { color: var(--text); }
+article ul { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; padding-left: 1.5rem; }
+article li { margin-bottom: 0.5rem; }
+article code { font-size: 0.88rem; background: rgba(255,255,255,0.04); padding: 0.15rem 0.4rem; border-radius: 3px; }
+.voice-example { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
+.voice-example-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
+.voice-example-label.bad { color: var(--coral); }
+.voice-example-label.good { color: var(--forest); }
+.voice-example p { font-size: 0.92rem; margin-bottom: 0; font-style: italic; }
+.pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
+.pattern-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; }
+.pattern-card h4 { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.5rem; }
+.pattern-card p { font-size: 0.88rem; margin-bottom: 0; }
+@media (max-width: 640px) {
+  article { padding: 2rem 1.25rem 4rem; }
+  article h2 { margin-top: 2rem; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How We Built a Voice Profile From 34,000 Lines of Writing",
+  "description": "Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile that catches the difference between correct and right.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-09",
+  "dateModified": "2026-03-09",
+  "url": "https://briu.ai/build/voice-profile/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/voice-profile/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "Voice Profile", "item": "https://briu.ai/build/voice-profile/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main>
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>How We Built a Voice Profile From 34,000 Lines of Writing</h1>
+  <p>Your agent drafts emails, writes website copy, and talks to customers on your behalf. If it doesn't sound like you, none of it works. Here's how we built a voice profile that catches the difference between "correct" and "right."</p>
+</section>
+
+<article>
+  <h2 class="reveal">The Problem</h2>
+
+  <p>AI-generated content has a voice. It's polished, safe, and sounds like every other AI-generated content on the internet. Em dashes everywhere. "I'd love to" and "I'm excited to" in every email. Paragraphs that restate what the previous paragraph just said. No contractions in places where any real person would use them.</p>
+
+  <p>When your agent drafts a client email and it reads like ChatGPT wrote it, the client notices. Maybe not consciously. But the trust erodes. The whole point of an agent handling your communication is that it sounds like you handled it. If it doesn't, you're just adding a review step to content you'll rewrite anyway.</p>
+
+  <h2 class="reveal">The Source Material</h2>
+
+  <p>We started with everything the founder had written. Not curated samples. Everything.</p>
+
+  <ul>
+    <li>Emails: thousands of sent messages across work and personal accounts</li>
+    <li>Chat: Slack messages, Discord messages, iMessages</li>
+    <li>Long-form: website copy, proposals, internal docs</li>
+    <li>Short-form: social posts, comments, text threads</li>
+  </ul>
+
+  <p>34,000 lines of real writing. Different registers, different audiences, different levels of formality. That range is the point. A voice profile that only captures how you write proposals misses how you write to your best client at 11pm on a Tuesday.</p>
+
+  <h2 class="reveal">What We Extracted</h2>
+
+  <p>The profile isn't a list of rules. It's a structured document that captures patterns across several dimensions:</p>
+
+  <div class="pattern-grid reveal">
+    <div class="pattern-card">
+      <h4>Contractions</h4>
+      <p>Always. "Don't" not "do not." "It's" not "it is." "We're" not "we are." The founder never writes without contractions unless quoting someone else.</p>
+    </div>
+    <div class="pattern-card">
+      <h4>Punctuation</h4>
+      <p>Periods and commas. Never em dashes. Never semicolons. Colons only for lists. The founder treats em dashes the same way some people treat Comic Sans.</p>
+    </div>
+    <div class="pattern-card">
+      <h4>Sentence Structure</h4>
+      <p>Short. Subject-verb-object. Fragments are fine. Paragraphs rarely exceed 3 sentences. The style gets more formal in proposals but never loses the directness.</p>
+    </div>
+    <div class="pattern-card">
+      <h4>Vocabulary</h4>
+      <p>No consultant jargon. Never "orchestrate," "leverage," "synergy," "holistic." Plain English. "Run" not "orchestrate." "Use" not "leverage." "Help" not "empower."</p>
+    </div>
+    <div class="pattern-card">
+      <h4>Tone Markers</h4>
+      <p>Confident without being performative. Never "honestly" or "to be completely transparent" (both signal the opposite). Humor is dry, not clever. Self-deprecating occasionally.</p>
+    </div>
+    <div class="pattern-card">
+      <h4>Formality Register</h4>
+      <p>Three levels detected: client-facing (direct but warm), internal (casual, fragments), personal (loose, humor, abbreviations). The agent needs to match context.</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Before and After</h2>
+
+  <p>The difference is immediate. Here's the same email drafted with and without the voice profile:</p>
+
+  <div class="voice-example reveal">
+    <div class="voice-example-label bad">Without voice profile</div>
+    <p>"I'd love to schedule a time to discuss how we might be able to help streamline your team's workflows. We've had great success with organizations similar to yours, and I believe there's a significant opportunity for operational improvement. Would you be open to a brief call this week?"</p>
+  </div>
+
+  <div class="voice-example reveal">
+    <div class="voice-example-label good">With voice profile</div>
+    <p>"Your team's doing a lot of manual CRM work that an agent could handle. We built something similar for a 15-person sales team last month. Want to see what it'd look like for yours? Happy to jump on a call this week."</p>
+  </div>
+
+  <p>Same intent. Completely different feel. The first reads like AI. The second reads like a person who knows what they're talking about and respects your time.</p>
+
+  <h2 class="reveal">How It Works in Practice</h2>
+
+  <p>The voice profile lives as a system prompt component. Every time the agent drafts an email, writes website copy, or responds in chat, the profile is injected alongside the task instructions.</p>
+
+  <p>It's not a rigid template. The agent still adapts to context. A follow-up email to an existing client sounds different from a first-touch cold outreach. But the underlying voice stays consistent. The contractions stay. The jargon stays out. The sentence length stays short.</p>
+
+  <p><strong>The profile also includes anti-patterns.</strong> Things the agent must never do, because they're the clearest tells that AI wrote it:</p>
+
+  <ul>
+    <li>Never start an email with "I hope this email finds you well"</li>
+    <li>Never use "I'd love to" or "I'm excited to"</li>
+    <li>Never restate a paragraph in different words right after it</li>
+    <li>Never use em dashes for parenthetical information</li>
+    <li>Never use "leverage" as a verb</li>
+    <li>Never use performative honesty ("to be candid," "frankly")</li>
+  </ul>
+
+  <h2 class="reveal">The Process</h2>
+
+  <p>Building a voice profile takes about 2-3 hours of focused work:</p>
+
+  <ul>
+    <li><strong>Collect:</strong> gather 3-6 months of sent emails, chat messages, and any long-form writing. More is better. Different contexts are essential.</li>
+    <li><strong>Analyze:</strong> Claude reads through the corpus and identifies patterns. Not just what you write, but what you consistently avoid.</li>
+    <li><strong>Structure:</strong> the patterns get organized into a profile document with positive patterns (do this), negative patterns (never do this), and register variations (formal vs. casual vs. internal).</li>
+    <li><strong>Test:</strong> the agent drafts 10-15 emails across different scenarios. The founder reviews and flags anything that doesn't sound right. Those flags feed back into the profile.</li>
+    <li><strong>Iterate:</strong> the profile improves over time as the agent produces more content and gets more feedback. Corrections are permanent.</li>
+  </ul>
+
+  <h2 class="reveal">Why This Matters</h2>
+
+  <p>Every business that deploys an agent for communication faces this problem. The agent can be technically competent, make zero mistakes, and still feel wrong. Customers can tell. Colleagues can tell. The uncanny valley of AI writing is real, and it undermines the trust you've built through years of personal communication.</p>
+
+  <p>A voice profile closes that gap. It turns the agent from a generic AI writer into something that sounds like you on your best day. Not a perfect copy. But close enough that the people receiving those emails don't think twice.</p>
+
+  <p><strong>Cost: a few hours of setup and 34,000 lines of source material you already have. The result is an agent that sounds like you for every email, every draft, every customer interaction, forever.</strong></p>
+
+  <div style="text-align: center; margin-top: 3rem;" class="reveal">
+    <a href="#" onclick="openContactForm();return false" class="cta-button">Build Your Voice Profile</a>
+  </div>
+</article>
+</main>
+
+<div id="site-modal"></div>
+
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260309w"></script>
+<script src="/shared.js?v=20260309w"></script>
+<script src="/chat-bubble.js?v=20260309w"></script>
+</body>
+</html>
