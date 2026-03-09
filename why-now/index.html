@@ -19,7 +19,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/charts.css?v=20260310b">
 <style>
 /* Hero override */
 .hero { padding-bottom: 2.5rem; }
@@ -56,10 +58,10 @@
 
 /* Center dot */
 .tl-dot { position: absolute; left: 50%; top: 0.35rem; width: 14px; height: 14px; border-radius: 50%; transform: translateX(-50%); z-index: 2; border: 2px solid var(--bg); }
-.tl-dot.cat-industry { background: #3B82F6; box-shadow: 0 0 8px rgba(59,130,246,0.3); }
-.tl-dot.cat-openclaw { background: #F97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
-.tl-dot.cat-cost { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.3); }
-.tl-dot.cat-briu { background: #EF4444; box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+.tl-dot.cat-industry { background: var(--river); box-shadow: 0 0 8px rgba(90,157,172,0.3); }
+.tl-dot.cat-openclaw { background: var(--gold); box-shadow: 0 0 8px rgba(212,160,90,0.3); }
+.tl-dot.cat-cost { background: var(--forest); box-shadow: 0 0 8px rgba(106,174,156,0.3); }
+.tl-dot.cat-briu { background: var(--coral); box-shadow: 0 0 8px rgba(224,123,95,0.3); }
 
 /* Connector from dot to content */
 .tl-connector { position: absolute; top: 0.7rem; height: 1px; width: calc(6% - 7px); }
@@ -70,10 +72,10 @@
 /* Content card */
 .tl-date { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.15rem; }
 .tl-relative { font-size: 0.72rem; font-weight: 700; margin-bottom: 0.4rem; }
-.tl-relative.cat-industry { color: #3B82F6; }
-.tl-relative.cat-openclaw { color: #F97316; }
-.tl-relative.cat-cost { color: #10B981; }
-.tl-relative.cat-briu { color: #EF4444; }
+.tl-relative.cat-industry { color: var(--river); }
+.tl-relative.cat-openclaw { color: var(--gold); }
+.tl-relative.cat-cost { color: var(--forest); }
+.tl-relative.cat-briu { color: var(--coral); }
 .tl-title { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.3rem; line-height: 1.3; }
 .tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
 .tl-projected-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 0.3rem; }
@@ -112,18 +114,23 @@
 
 /* Live counters */
 .tl-counters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
-.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; text-align: center; }
-.tl-counter-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.25rem; }
-.tl-counter-label { font-size: 0.78rem; color: var(--text-muted); }
+.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1.25rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; }
+.tl-counter::before { content: ''; position: absolute; inset: 0; opacity: 0; background: linear-gradient(135deg, rgba(212,160,90,0.04), rgba(90,157,172,0.02)); transition: opacity 0.4s ease; }
+.tl-counter:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
+.tl-counter:hover::before { opacity: 1; }
+.tl-counter-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.35rem; position: relative; }
+.tl-counter-label { font-size: 0.78rem; color: var(--text-muted); position: relative; }
+.tl-counter-detail { font-size: 0.7rem; color: var(--text-muted); opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease; position: relative; }
+.tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
 
 /* Timeline legend */
 .tl-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
 .tl-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
 .tl-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
-.tl-legend-dot.cat-industry { background: #3B82F6; }
-.tl-legend-dot.cat-openclaw { background: #F97316; }
-.tl-legend-dot.cat-cost { background: #10B981; }
-.tl-legend-dot.cat-briu { background: #EF4444; }
+.tl-legend-dot.cat-industry { background: var(--river); }
+.tl-legend-dot.cat-openclaw { background: var(--gold); }
+.tl-legend-dot.cat-cost { background: var(--forest); }
+.tl-legend-dot.cat-briu { background: var(--coral); }
 
 /* Footer links */
 .footer-links { display: flex; gap: 2rem; }
@@ -185,18 +192,22 @@
     <div class="tl-counter reveal">
       <div class="tl-counter-num" id="counterOCLaunch">--</div>
       <div class="tl-counter-label">days since OpenClaw launched</div>
+      <div class="tl-counter-detail">Jan 27, 2026 — 60k stars in 72 hours</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
       <div class="tl-counter-num" id="counterCommits">--</div>
       <div class="tl-counter-label">total commits across repos</div>
+      <div class="tl-counter-detail">Public + private, updated every 6 hours</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num" id="counterBuildCost">$711</div>
-      <div class="tl-counter-label">total build cost — domain to deployment</div>
+      <div class="tl-counter-num">$3.20</div>
+      <div class="tl-counter-label">baseline cost per day</div>
+      <div class="tl-counter-detail">Email, CRM, research, reporting, security</div>
     </div>
     <div class="tl-counter reveal reveal-delay-3">
       <div class="tl-counter-num">1</div>
       <div class="tl-counter-label">founder. OpenClaw + Claude Code + Claude Max.</div>
+      <div class="tl-counter-detail">No employees. Agents handle the ops.</div>
     </div>
   </div>
 </div>
@@ -225,6 +236,7 @@
 <script src="/ambient.js?v=20260310b"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
 <script src="/interactive.js?v=20260310b"></script>
+<script src="/charts.js?v=20260310b"></script>
 <script>
 (function() {
   'use strict';
@@ -254,11 +266,7 @@
       id: 'what-happened',
       html: '<h2>What Happened</h2>' +
         '<p>In early 2026, Jason Calacanis deployed AI agents across his 20-person venture firm. Every employee got an agent with its own email, Slack, and CRM accounts. A master agent manages the others, checks their work, summarizes everything daily.</p>' +
-        '<div class="quote-card quote-decorated">' +
-          '<p>\u201COut of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%.\u201D</p>' +
-          '<p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> \u2014 All-In Podcast E259</p>' +
-        '</div>' +
-        '<p>His assistant\u2019s workload dropped 30%. The agents took the repetitive tasks. The humans moved up.</p>'
+        '<p>The results: <span class="wn-highlight">40 of 50 weekly producer hours automated. 95% of SDR work handled by agents.</span> His assistant\u2019s workload dropped 30%. The agents took the repetitive tasks. The humans moved up. <span style="font-size:0.82rem;color:var(--text-muted);">(Calacanis, All-In E259)</span></p>'
     },
     {
       after: '2026-02-22',
@@ -274,7 +282,8 @@
       html: '<h2>The Cost Question</h2>' +
         '<p>Mark Cuban responded publicly to Calacanis. He called agents \u201Ccollege interns that come in hungover, make mistakes, and don\u2019t take responsibility for them.\u201D His math: eight agents at $300/day each cost more than the employee they support.</p>' +
         '<p>He\u2019s asking the right question. But he\u2019s treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>' +
-        '<p class="wn-highlight"><strong>Wrong frame.</strong></p>'
+        '<p class="wn-highlight"><strong>Wrong frame.</strong></p>' +
+        '<div id="wn-salary-chart" style="margin-top:2rem;"></div>'
     },
     {
       after: '2026-03-01',
@@ -282,7 +291,8 @@
       html: '<h2>Every Dollar Builds Something Permanent</h2>' +
         '<p>The agent isn\u2019t doing today\u2019s work and forgetting it. Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer.</p>' +
         '<p>That knowledge doesn\u2019t leave when an employee quits. Doesn\u2019t need retraining when you hire someone new. Doesn\u2019t forget over the weekend.</p>' +
-        '<p class="wn-highlight">This isn\u2019t an operating cost. It\u2019s infrastructure that appreciates.</p>'
+        '<p class="wn-highlight">This isn\u2019t an operating cost. It\u2019s infrastructure that appreciates.</p>' +
+        '<div id="wn-compound-chart" style="margin-top:2rem;"></div>'
     },
     {
       after: '2026-03-01',
@@ -337,11 +347,7 @@
             '</div>' +
           '</div>' +
         '</div>' +
-        '<div class="chart-source" style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>' +
-        '<div class="quote-card quote-decorated" style="margin-top:2rem;">' +
-          '<p>\u201CWhen do tokens outpace the salary of the employee? Because you\u2019re about to hit it.\u201D</p>' +
-          '<p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> \u2014 All-In Podcast E261</p>' +
-        '</div>'
+        '<div class="chart-source" style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>'
     },
     {
       after: '2026-03-09',
@@ -521,6 +527,12 @@
     }
   }
   updateCounters();
+
+  // ===== Init charts =====
+  if (Briu && Briu.charts) {
+    if (document.getElementById('wn-salary-chart')) Briu.charts.salaryCrossover('wn-salary-chart');
+    if (document.getElementById('wn-compound-chart')) Briu.charts.compoundLoop('wn-compound-chart');
+  }
 
   // ===== Init calculator if present =====
   if (document.getElementById('calcHours') && window.updateCalc) {
