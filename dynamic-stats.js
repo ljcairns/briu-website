@@ -86,9 +86,14 @@
   }
 
   function applyStats(data) {
-    updateEls('commits', data.totalCommits);
-    if (data.websiteCommits) updateEls('website-commits', data.websiteCommits);
-    if (data.privateAgentCommits) updateEls('agent-commits', data.privateAgentCommits);
+    updateEls('commits', data.totalCommits.toLocaleString());
+    if (data.websiteCommits) updateEls('website-commits', data.websiteCommits.toLocaleString());
+    if (data.privateAgentCommits) updateEls('agent-commits', data.privateAgentCommits.toLocaleString());
+    if (data.linesOfCode) updateEls('lines-of-code', data.linesOfCode.toLocaleString());
+    if (data.chartCount) updateEls('chart-count', data.chartCount.toLocaleString());
+    if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
+    if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());
+    if (data.pageCount) updateEls('page-count', data.pageCount.toLocaleString());
   }
 
   function init() {

@@ -10,31 +10,31 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260309w">
 <style>
-:root {
-  --bg: #07090E;
-  --surface: #0E1219;
-  --text: #EAE7E3;
-  --text-muted: #C4B9A8;
-  --gold: #D4A05A;
-  --gold-light: #E2B574;
-  --serif: 'DM Serif Display', Georgia, serif;
-  --sans: 'DM Sans', -apple-system, sans-serif;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2rem; }
-.logo { margin-bottom: 3rem; }
-.logo img { height: 80px; width: auto; }
-h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
-p { color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem; max-width: 440px; }
-a { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
-a:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
+.error-content { min-height: 60vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 8rem 2rem 4rem; }
+.error-content .logo { margin-bottom: 3rem; }
+.error-content .logo img { height: 80px; width: auto; }
+.error-content h1 { font-family: var(--serif); font-size: clamp(2rem, 4vw, 3rem); margin-bottom: 1rem; }
+.error-content p { color: var(--text-muted); font-size: 1rem; margin-bottom: 2rem; max-width: 440px; }
+.error-content a.back-link { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
+.error-content a.back-link:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 </style>
 </head>
 <body>
+<div id="site-nav"></div>
+
+<div class="error-content">
 <div class="logo"><a href="/" style="border:none;padding:0;"><img src="/briu-logo-transparent.png" alt="Briu"></a></div>
 <h1>Page not found.</h1>
 <p>The page you're looking for doesn't exist or has been moved.</p>
-<a href="/">Back to Home</a>
+<a href="/" class="back-link">Back to Home</a>
+</div>
+
+<div id="site-modal"></div>
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260309w"></script>
+<script src="/shared.js?v=20260309w"></script>
 </body>
 </html>

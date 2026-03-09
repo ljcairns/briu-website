@@ -528,18 +528,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <div class="ambient-orb ambient-orb-2"></div>
 <div class="ambient-orb ambient-orb-3"></div>
 
-<nav>
-  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
-  <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
-  <div class="nav-links">
-    <a href="/why-now/">Why Now</a>
-    <a href="/build/">Build</a>
-    <a href="/services/">Services</a>
-    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
-  </div>
-  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
-  <div class="nav-progress" id="navProgress"></div>
-</nav>
+<div id="site-nav"></div>
 
 <main>
 <!-- HERO -->
@@ -885,7 +874,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <div class="proof-summary-label">Custom skills in production</div>
     </div>
     <div class="proof-summary-stat">
-      <div class="proof-summary-num" data-dynamic="commits">354</div>
+      <div class="proof-summary-num" data-dynamic="commits">480+</div>
       <div class="proof-summary-label">Total commits</div>
     </div>
     <div class="proof-summary-stat">
@@ -1069,65 +1058,11 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 </section>
 </main>
 
-<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeContactForm()" aria-label="Close">&times;</button>
+<div id="site-modal"></div>
 
-    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>
+<div id="site-footer"></div>
 
-    <div class="q-step active" id="q-step-1">
-      <h3>How does your business use AI today?</h3>
-      <p>This helps us tailor the conversation to where you are.</p>
-      <button class="q-option" onclick="selectAI('We use free tools like ChatGPT')">
-        <div class="q-opt-label">Getting started</div>
-        <div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div>
-      </button>
-      <button class="q-option" onclick="selectAI('Enterprise AI accounts with multiple vendors')">
-        <div class="q-opt-label">Enterprise accounts</div>
-        <div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div>
-      </button>
-      <button class="q-option" onclick="selectAI('Already building agents or significant automation')">
-        <div class="q-opt-label">Building with AI</div>
-        <div class="q-opt-desc">We're already building agents or automating significant business processes</div>
-      </button>
-    </div>
-
-    <div class="q-step" id="q-step-2">
-      <h3>What would you most like to automate?</h3>
-      <p>No wrong answers. Just tell us what takes up your team's time.</p>
-      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
-      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
-      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
-    </div>
-
-    <div class="q-step" id="q-step-3">
-      <h3>Where should we send our thoughts?</h3>
-      <p>We'll get back within 24 hours with specific ideas for your business.</p>
-      <form id="contactForm" action="https://formsubmit.co/ajax/hi@briu.ai" method="POST">
-        <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_subject" value="New inquiry from briu.ai">
-        <input type="hidden" name="ai_usage" id="q-ai-usage">
-        <input type="hidden" name="automate" id="q-automate-val">
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="Your email" required>
-        <input type="text" name="company" placeholder="Company (optional)">
-        <button type="submit" class="modal-btn cta-shimmer">Send</button>
-      </form>
-      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
-    </div>
-
-    <div class="form-success" id="formSuccess">
-      <h3>Message sent</h3>
-      <p>We'll be in touch within 24 hours.</p>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <p>&copy; 2026 Briu. All rights reserved.</p>
-  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
-</footer>
-
+<script src="/components.js?v=20260309w"></script>
 <script src="/shared.js?v=20260309w"></script>
 <script src="/chat-bubble.js?v=20260309w"></script>
 <script src="/interactive.js?v=20260309w"></script>

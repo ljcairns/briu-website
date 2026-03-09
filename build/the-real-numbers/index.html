@@ -26,17 +26,15 @@
   --haiku: #5a8a6a;
 }
 
-/* Hero */
-.hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
-.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 760px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
-.hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
-.hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.1; margin-bottom: 0.5rem; max-width: 820px; position: relative; }
-.hero h1 em { color: var(--gold); font-style: italic; }
+/* Hero overrides (base in shared.css) */
+.hero::before { width: 760px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
+.hero h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); margin-bottom: 0.5rem; }
+.hero h1 em { color: var(--gold); font-style: italic; -webkit-text-fill-color: unset; background: none; }
 .hero .hero-sub { max-width: 640px; color: var(--text-muted); font-size: 1rem; line-height: 1.8; position: relative; margin-top: 1rem; }
 
 /* Content sections */
 .content { max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
-.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
+.section-label { margin-bottom: 1.5rem; }
 article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 3rem 0 1rem; }
 article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
 article p strong { color: var(--text); font-weight: 600; }
@@ -153,7 +151,6 @@ article p strong { color: var(--text); font-weight: 600; }
   .wf-arrow { font-size: 0.9rem; }
 }
 @media (max-width: 640px) {
-  .hero { padding: 7rem 1.25rem 2rem; }
   .content { padding: 0 1.25rem; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .inv-table td, .inv-table th { padding: 0.6rem 0.75rem; font-size: 0.82rem; }
@@ -192,18 +189,7 @@ article p strong { color: var(--text); font-weight: 600; }
 <div class="ambient-orb ambient-orb-2"></div>
 <div class="ambient-orb ambient-orb-3"></div>
 
-<nav>
-  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
-  <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
-  <div class="nav-links">
-    <a href="/why-now/">Why Now</a>
-    <a href="/build/" class="active">Build</a>
-    <a href="/services/">Services</a>
-    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
-  </div>
-  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
-  <div class="nav-progress" id="navProgress"></div>
-</nav>
+<div id="site-nav"></div>
 
 <main>
 <section class="hero hero-breathe">
@@ -396,14 +382,14 @@ article p strong { color: var(--text); font-weight: 600; }
   <p>Claude Max handles strategic thinking and code generation. The OpenClaw agent (running Sonnet) handles autonomous daily operations. GPT reviews output for blind spots. Gemini validates facts. The human sits in the center, orchestrating which model handles what, and making every decision that requires judgment.</p>
 
   <!-- Commit Velocity -->
-  <h2 class="reveal">Commit velocity: <span data-dynamic="commits">91</span> commits in <span data-dynamic="build-days">26</span> days</h2>
+  <h2 class="reveal">Commit velocity: <span data-dynamic="commits">480+</span> commits in <span data-dynamic="build-days">27</span> days</h2>
   <p>Every commit in the OpenClaw repository, plotted by day. Commit density tracks closely with API spend — the heaviest build days are also the most expensive. Day one (Feb 12) had 36 commits. The Briu launch day (Mar 5) had 28.</p>
 
   <div class="chart-box">
     <div id="commit-chart" style="height:260px;position:relative"></div>
     <div class="chart-summary">
-      <span class="big" data-dynamic="commits">91</span>
-      <span class="sub">commits across <span data-dynamic="build-days">26</span> days</span>
+      <span class="big" data-dynamic="commits">480+</span>
+      <span class="sub">commits across <span data-dynamic="build-days">27</span> days</span>
     </div>
   </div>
 
@@ -431,48 +417,11 @@ article p strong { color: var(--text); font-weight: 600; }
 </main>
 
 <!-- Modal -->
-<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
-  <div class="modal">
-    <button class="modal-close" onclick="closeContactForm()" aria-label="Close">&times;</button>
-    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>
-    <div class="q-step active" id="q-step-1">
-      <h3>How does your business use AI today?</h3>
-      <p>This helps us tailor the conversation to where you are.</p>
-      <button class="q-option" onclick="selectAI('We use free tools like ChatGPT')"><div class="q-opt-label">Getting started</div><div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div></button>
-      <button class="q-option" onclick="selectAI('Enterprise AI accounts with multiple vendors')"><div class="q-opt-label">Enterprise accounts</div><div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div></button>
-      <button class="q-option" onclick="selectAI('Already building agents or significant automation')"><div class="q-opt-label">Building with AI</div><div class="q-opt-desc">We're already building agents or automating significant business processes</div></button>
-    </div>
-    <div class="q-step" id="q-step-2">
-      <h3>What would you most like to automate?</h3>
-      <p>No wrong answers. Just tell us what takes up your team's time.</p>
-      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
-      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
-      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
-    </div>
-    <div class="q-step" id="q-step-3">
-      <h3>Where should we send our thoughts?</h3>
-      <p>We'll get back within 24 hours with specific ideas for your business.</p>
-      <form id="contactForm" action="https://formsubmit.co/ajax/hi@briu.ai" method="POST">
-        <input type="text" name="_honey" style="display:none">
-        <input type="hidden" name="_subject" value="New inquiry from briu.ai (The Real Numbers)">
-        <input type="hidden" name="ai_usage" id="q-ai-usage">
-        <input type="hidden" name="automate" id="q-automate-val">
-        <input type="text" name="name" placeholder="Your name" required>
-        <input type="email" name="email" placeholder="Your email" required>
-        <input type="text" name="company" placeholder="Company (optional)">
-        <button type="submit" class="modal-btn cta-shimmer">Send</button>
-      </form>
-      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
-    </div>
-    <div class="form-success" id="formSuccess"><h3>Message sent</h3><p>We'll be in touch within 24 hours.</p></div>
-  </div>
-</div>
+<div id="site-modal"></div>
 
-<footer>
-  <p>&copy; 2026 Briu. All rights reserved.</p>
-  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
-</footer>
+<div id="site-footer"></div>
 
+<script src="/components.js?v=20260309w"></script>
 <script src="/shared.js?v=20260309w"></script>
 <script src="/chat-bubble.js?v=20260309w"></script>
 <script src="/dynamic-stats.js"></script>

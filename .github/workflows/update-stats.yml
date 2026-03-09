@@ -73,11 +73,48 @@ jobs:
           TOTAL=$((WEBSITE_COMMITS + AGENT_COMMITS))
           UPDATED=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
+          # Lines of code across .html, .js, .css (excluding node_modules, .wrangler, package-lock.json)
+          LINES_OF_CODE=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' \) \
+            -not -path '*/node_modules/*' -not -path '*/.wrangler/*' -not -name 'package-lock.json' \
+            -exec cat {} + | wc -l | tr -d ' ')
+          echo "Lines of code: ${LINES_OF_CODE}"
+
+          # Chart count (Briu.charts. assignments in charts.js)
+          CHART_COUNT=0
+          if [ -f charts.js ]; then
+            CHART_COUNT=$(grep -c 'Briu\.charts\.' charts.js || true)
+          fi
+          echo "Chart count: ${CHART_COUNT}"
+
+          # Article count (directories under /build/ with index.html)
+          ARTICLE_COUNT=0
+          if [ -d build ]; then
+            ARTICLE_COUNT=$(find build -mindepth 1 -name 'index.html' | wc -l | tr -d ' ')
+          fi
+          echo "Article count: ${ARTICLE_COUNT}"
+
+          # Words of content across all build article HTML files
+          WORDS_OF_CONTENT=0
+          if [ -d build ]; then
+            WORDS_OF_CONTENT=$(find build -name 'index.html' -exec cat {} + | sed 's/<[^>]*>//g' | wc -w | tr -d ' ')
+          fi
+          echo "Words of content: ${WORDS_OF_CONTENT}"
+
+          # Total HTML pages on the site
+          PAGE_COUNT=$(find . -name 'index.html' \
+            -not -path '*/node_modules/*' -not -path '*/.wrangler/*' | wc -l | tr -d ' ')
+          echo "Page count: ${PAGE_COUNT}"
+
           cat > stats.json << EOF
           {
             "websiteCommits": ${WEBSITE_COMMITS},
             "privateAgentCommits": ${AGENT_COMMITS},
             "totalCommits": ${TOTAL},
+            "linesOfCode": ${LINES_OF_CODE},
+            "chartCount": ${CHART_COUNT},
+            "articleCount": ${ARTICLE_COUNT},
+            "wordsOfContent": ${WORDS_OF_CONTENT},
+            "pageCount": ${PAGE_COUNT},
             "lastUpdated": "${UPDATED}"
           }
           EOF

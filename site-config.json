@@ -1,0 +1,37 @@
+{
+  "pricing": {
+    "founder_kickoff": 3500,
+    "team_kickoff": 5000,
+    "retainer_from": 500,
+    "implementation_single": "8-20K",
+    "implementation_multi": "20-50K+",
+    "claude_max": 200
+  },
+  "costs": {
+    "agent_api_total": 376,
+    "brand_total": 30,
+    "domain": 85,
+    "total_month_one": 711,
+    "total_with_agents": 1391,
+    "daily_operating": "2-5",
+    "traditional_equivalent": "40-75K+"
+  },
+  "build": {
+    "skills": 12,
+    "tools": 8,
+    "charts": 22,
+    "agents": 3,
+    "midjourney_generations": 400,
+    "name_candidates": 50,
+    "days_to_first_agent": 3,
+    "launch_date": "2026-02-10"
+  },
+  "meta": {
+    "company": "Briu",
+    "tagline_catalan": "energy, push, courage",
+    "email": "hi@briu.ai",
+    "founder": "Lucas Cairns",
+    "year": 2026,
+    "copyright_year": 2026
+  }
+}
