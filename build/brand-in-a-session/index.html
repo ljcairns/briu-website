@@ -31,8 +31,6 @@ article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: r
 article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
 article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
 article strong { color: var(--text); }
-.callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
-.callout p { color: var(--text); margin: 0; }
 /* Phase filmstrip */
 .phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 2rem 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
 .phase-strip::-webkit-scrollbar { height: 4px; }
@@ -53,12 +51,6 @@ article strong { color: var(--text); }
 .cost-table tr:last-child td { border-bottom: 1px solid rgba(212,160,90,0.3); font-weight: 600; color: var(--gold); }
 .cost-table td:last-child { text-align: right; }
 .cost-table th:last-child { text-align: right; }
-/* Links */
-.article-links { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; }
-.primary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
-.primary-link:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); }
-.secondary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.12); transition: all 0.3s ease; }
-.secondary-link:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
 .mj-link { display: inline-block; font-size: 0.82rem; font-weight: 600; color: var(--gold); text-decoration: none; margin-top: 1.5rem; transition: color 0.2s; }
 .mj-link:hover { color: var(--gold-light); }
 .mj-link::after { content: ' \2192'; }
@@ -66,7 +58,6 @@ article strong { color: var(--text); }
   .hero { padding: 7rem 1.25rem 2rem; }
   article { padding: 2rem 1.25rem 4rem; }
   article h2 { margin-top: 2rem; }
-  .callout { padding: 1.15rem; margin: 1.5rem 0; }
   .phase-strip { padding-left: 1.25rem; padding-right: 1.25rem; }
   .phase-card { flex: 0 0 260px; }
   .phase-img { height: 300px; }

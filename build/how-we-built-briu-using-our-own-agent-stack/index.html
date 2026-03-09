@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/shared.css?v=20260309t">
 <style>
 .hero { padding: 8rem 2rem 2rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
@@ -30,17 +30,10 @@ article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: r
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
 article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
 article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
-.callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
-.callout p { color: var(--text); margin: 0; }
 .mini-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1rem; margin: 1.75rem 0 2rem; }
 .mini-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; }
 .mini-card h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; font-weight: 400; }
 .mini-card p { margin: 0; font-size: 0.9rem; }
-.article-links { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; margin-top: 3rem; }
-.primary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
-.primary-link:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); }
-.secondary-link { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.12); transition: all 0.3s ease; }
-.secondary-link:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.2); }
 @media (max-width: 640px) {
   .hero { padding: 7rem 1.25rem 2rem; }
   article { padding: 2rem 1.25rem 4rem; }

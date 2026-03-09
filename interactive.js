@@ -622,6 +622,8 @@
 
   // ─── Email domain pitch ───
   window.submitCollected = function(field) {
+    var validFields = ['company', 'name', 'email', 'website', 'workflow'];
+    if (validFields.indexOf(field) === -1) return;
     var input = document.getElementById('convCollect_' + field);
     if (!input) return;
     var val = input.value.trim();
@@ -796,12 +798,16 @@
     }
 
     if (action.type === 'collect') {
-      var inputId = 'convCollect_' + action.field;
+      var VALID_FIELDS = ['company', 'name', 'email', 'website', 'workflow'];
+      var safeField = VALID_FIELDS.indexOf(action.field) !== -1 ? action.field : 'workflow';
+      var inputId = 'convCollect_' + safeField;
       card.innerHTML = '<label class="conv-card-label" for="' + inputId + '">' + escapeHtml(action.label) + '</label>' +
         '<div class="conv-collect-row">' +
         '<input type="text" class="conv-input conv-collect-input" id="' + inputId + '" placeholder="' + escapeHtml(action.placeholder || '') + '">' +
-        '<button class="conv-send conv-collect-send" onclick="submitCollected(\'' + action.field + '\')">&#8593;</button>' +
+        '<button class="conv-send conv-collect-send" data-field="' + safeField + '">&#8593;</button>' +
         '</div>';
+      var collectBtn = card.querySelector('.conv-collect-send');
+      collectBtn.addEventListener('click', function() { window.submitCollected(this.getAttribute('data-field')); });
     }
 
     if (action.type === 'handoff') {
