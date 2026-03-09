@@ -146,7 +146,8 @@ jobs:
               if echo "$COST_DATA" | jq -e '.data' >/dev/null 2>&1; then
                 # Each day: .data[].results[].amount (USD string)
                 # Sum results per day, then compute stats
-                DAILY_TOTALS=$(echo "$COST_DATA" | jq '[.data[] | {day: .starting_at, total: ([.results[].amount | tonumber] | add // 0)}]')
+                # API amounts are in cents despite currency:USD — divide by 100
+                DAILY_TOTALS=$(echo "$COST_DATA" | jq '[.data[] | {day: .starting_at, total: (([.results[].amount | tonumber] | add // 0) / 100)}]')
                 DAYS_WITH_DATA=$(echo "$DAILY_TOTALS" | jq '[.[] | select(.total > 0)] | length')
                 echo "Days with cost data: $DAYS_WITH_DATA"
                 echo "Daily totals: $(echo "$DAILY_TOTALS" | jq -c '[.[] | select(.total > 0) | {d: .day[0:10], t: (.total * 100 | round / 100)}]')"
