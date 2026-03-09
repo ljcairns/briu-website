@@ -1,7 +1,7 @@
 {
   "pricing": {
-    "founder_kickoff": 3500,
-    "team_kickoff": 5000,
+    "kickoff": 5000,
+    "workshop_addon": 2500,
     "retainer_from": 500,
     "implementation_single": "8-20K",
     "implementation_multi": "20-50K+",

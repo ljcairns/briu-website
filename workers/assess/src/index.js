@@ -26,7 +26,7 @@ The "actions" array contains UI components the frontend will render. Available a
 {"type":"page","title":"The Real Numbers","desc":"Every dollar we spent building our agent system","path":"/build/the-real-numbers/"}
 
 3. Estimate card — show a rough cost/scope:
-{"type":"estimate","label":"Your starting point","items":[{"name":"Founder Kickoff","cost":"$3,500"},{"name":"Email agent (API)","cost":"~$3-5/day"},{"name":"Platform","cost":"$200/mo"}]}
+{"type":"estimate","label":"Your starting point","items":[{"name":"Kickoff","cost":"$5,000"},{"name":"Email agent (API)","cost":"~$3-5/day"},{"name":"Platform","cost":"$200/mo"}]}
 
 4. Collect info — request specific information:
 {"type":"collect","field":"company","label":"What's your company name?","placeholder":"Company name"}
@@ -39,7 +39,7 @@ Fields: "company", "name", "email", "website", "workflow" (free text about their
 {"type":"handoff","message":"Ready to connect you with Lucas"}
 
 7. Company pitch — personalized pitch for a specific company (use after domain lookup):
-{"type":"pitch","company":"Acme Corp","domain":"acme.com","points":["Email triage across your support team","CRM automation for your sales pipeline","Weekly reporting dashboards"],"estimate":{"tier":"Team Kickoff","build":"$5,000","monthly":"$250-400/mo"}}
+{"type":"pitch","company":"Acme Corp","domain":"acme.com","points":["Email triage across your support team","CRM automation for your sales pipeline","Weekly reporting dashboards"],"estimate":{"tier":"Kickoff","build":"$5,000","monthly":"$250-400/mo"}}
 
 8. Chart — visual bar chart for comparisons or breakdowns:
 {"type":"chart","title":"Monthly Cost Estimate","format":"dollar","data":[{"label":"Email Agent API","value":90},{"label":"CRM Agent API","value":150},{"label":"Platform","value":200},{"label":"Retainer","value":500}],"total":{"label":"Total Monthly","value":940},"comparison":{"label":"vs Traditional Hire","value":6000}}
@@ -80,8 +80,8 @@ Never say "I'm an AI." Keep text under 120 words.`;
 // ─── Content chunks (selected by keyword matching) ───
 const CHUNKS = {
   pricing: `Services & Pricing:
-Founder Kickoff $3,500 — solo founders & small teams, 2-3hr working session, workflow mapping, first agent deployed, written architecture plan.
-Team Kickoff $5,000 — multiple stakeholders, 4-5hr engagement, full team AI briefing, exec sessions, live demos, first agent deployed.
+Kickoff $5,000 — half-day working session, workflow mapping, first agent built and deployed, written architecture plan.
+Workshop Add-on $2,500 — full team AI briefing, one-on-one exec sessions, live demos with your data. Pairs with the Kickoff.
 Implementation — quoted per project, scoped from kickoff, built on your infrastructure with your API keys.
 Partnership Retainer from $500/mo — maintenance, monitoring, cost optimization, model upgrades. Expanded: proactive development, strategy sessions, training.
 Trust: You own everything. No margin on costs. Approval gates on every action. If you stop working with Briu, everything keeps running.`,
@@ -941,8 +941,8 @@ async function handleCompanyLookup(body, corsHeaders) {
 // ─── Stripe Checkout ───
 // Product tiers — update prices here and in site-config.json
 const TIERS = {
-  founder: { name: 'Founder Kickoff', price: 3500, description: '2-3 hour working session, workflow mapping, first agent deployed, written architecture plan' },
-  team: { name: 'Team Kickoff', price: 5000, description: '4-5 hour engagement, full team AI briefing, exec sessions, first agent deployed, architecture plan' },
+  kickoff: { name: 'Kickoff', price: 5000, description: 'Half-day working session, workflow mapping, first agent built and deployed, written architecture plan' },
+  workshop: { name: 'Workshop Add-on', price: 2500, description: 'Full team AI briefing, one-on-one exec sessions, live demos with your data' },
 };
 
 async function handleCheckout(body, env, corsHeaders) {
@@ -955,7 +955,7 @@ async function handleCheckout(body, env, corsHeaders) {
 
   const { tier, email, name, company } = body;
   if (!tier || !TIERS[tier]) {
-    return new Response(JSON.stringify({ error: 'Invalid tier. Use "founder" or "team".' }), {
+    return new Response(JSON.stringify({ error: 'Invalid tier. Use "kickoff" or "workshop".' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });

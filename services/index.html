@@ -66,11 +66,13 @@
 /* Service tiers */
 .tiers { display: grid; gap: 1.5rem; margin-top: 3rem; }
 
-/* Kickoff pair */
-.kickoff-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-.kickoff-pair .tier { display: flex; flex-direction: column; grid-template-columns: unset; gap: 0; }
-.kickoff-pair .tier-header { margin-bottom: 1.5rem; }
-.kickoff-pair .tier-body { flex: 1; }
+/* Intro call card */
+.tier-intro { background: rgba(212,160,90,0.04); border: 1px solid rgba(212,160,90,0.12); padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; flex-wrap: wrap; }
+.tier-intro-text h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.25rem; font-weight: 400; }
+.tier-intro-text p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 0; line-height: 1.6; }
+.tier-intro-cta { flex-shrink: 0; }
+.tier-intro-cta a { display: inline-block; padding: 0.65rem 1.5rem; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); border: 1px solid var(--gold); text-decoration: none; font-family: var(--sans); transition: all 0.3s ease; }
+.tier-intro-cta a:hover { background: rgba(212,160,90,0.08); transform: translateY(-1px); }
 
 /* Tier Finder Mini-Quiz */
 .tier-finder { background: var(--surface); border: 1px solid rgba(212,160,90,0.15); padding: 2rem 2.5rem; margin-bottom: 2rem; }
@@ -145,7 +147,7 @@
 .reveal-scale { opacity: 1; transform: none; }
 
 @media (max-width: 900px) {
-  .kickoff-pair { grid-template-columns: 1fr; }
+  .tier-intro { flex-direction: column; text-align: center; }
   .fit-grid { grid-template-columns: 1fr; }
 }
 
@@ -233,7 +235,7 @@
         <div class="build-meta">
           <div class="build-meta-item"><strong>Time to production</strong>2-3 weeks</div>
           <div class="build-meta-item"><strong>Success metric</strong>Hours saved on admin per week</div>
-          <div class="build-meta-item"><strong>Starting point</strong>Founder Kickoff</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Kickoff</div>
         </div>
         <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
@@ -247,7 +249,7 @@
         <div class="build-meta">
           <div class="build-meta-item"><strong>Time to production</strong>3-4 weeks</div>
           <div class="build-meta-item"><strong>Success metric</strong>Qualified leads per week, CRM accuracy</div>
-          <div class="build-meta-item"><strong>Starting point</strong>Founder or Team Kickoff</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Kickoff</div>
         </div>
         <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
@@ -261,7 +263,7 @@
         <div class="build-meta">
           <div class="build-meta-item"><strong>Time to production</strong>2-3 weeks</div>
           <div class="build-meta-item"><strong>Success metric</strong>Time to first report, reporting accuracy</div>
-          <div class="build-meta-item"><strong>Starting point</strong>Founder Kickoff</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Kickoff</div>
         </div>
         <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
@@ -275,7 +277,7 @@
         <div class="build-meta">
           <div class="build-meta-item"><strong>Time to production</strong>4-6 weeks</div>
           <div class="build-meta-item"><strong>Success metric</strong>Tasks completed overnight, error rate</div>
-          <div class="build-meta-item"><strong>Starting point</strong>Team Kickoff</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Kickoff + Workshop</div>
         </div>
         <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
@@ -344,7 +346,7 @@
   <!-- Tier Finder Mini-Quiz -->
   <div class="tier-finder" id="tierFinder">
     <div class="tier-finder-header">
-      <h3>Not sure which kickoff fits?</h3>
+      <h3>Quick check: what do you need?</h3>
       <p>Two questions. Ten seconds.</p>
     </div>
     <div class="tier-finder-q" id="tfQ1">
@@ -368,78 +370,50 @@
 
   <div class="tiers">
 
-    <div class="kickoff-pair">
-      <div class="tier">
-        <div class="tier-header">
-          <div>
-            <div class="tier-number">01</div>
-            <div class="tier-name">Founder Kickoff</div>
-          </div>
-          <div>
-            <div class="tier-price"><span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></div>
-            <div class="tier-price-note">For solo founders & small teams</div>
-          </div>
+    <div class="tier-intro">
+      <div class="tier-intro-text">
+        <h3>Free Intro Call</h3>
+        <p>15 minutes. No pitch, no prep required — just scoping. We'll tell you honestly whether agents make sense for your situation and what a Kickoff would cover.</p>
+      </div>
+      <div class="tier-intro-cta">
+        <a href="#" onclick="openContactForm();return false">Book a Call</a>
+      </div>
+    </div>
+
+    <div class="tier tier-featured">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">01</div>
+          <div class="tier-name">Kickoff</div>
         </div>
-        <div class="tier-body">
-          <p>Straight to the decision maker. A 2-3 hour working session where we learn your business, identify the highest-leverage automation, and scope the first build.</p>
-          <p>No team-wide presentation needed. We get into the details fast, define the architecture, and start building. Your first agent is included in the price.</p>
-          <div class="tier-deliverables">
-            <h4>What's included</h4>
-            <div class="deliverable">Focused working session with the founder or leadership</div>
-            <div class="deliverable">Workflow mapping and first automation scoping</div>
-            <div class="deliverable">Live demos from our production systems</div>
-            <div class="deliverable">Written architecture plan with cost profile</div>
-            <div class="deliverable">Your first agent, built and deployed</div>
-          </div>
-          <div class="tier-expect">
-            <h4>What to expect</h4>
-            <div class="expect-item"><strong>Hour 1:</strong> Workflow mapping — we identify your highest-leverage automation</div>
-            <div class="expect-item"><strong>Hour 2:</strong> Live build — your first agent deployed on your infrastructure</div>
-            <div class="expect-item"><strong>Hour 3:</strong> Architecture plan and roadmap for expansion</div>
-          </div>
-          <div class="tier-cta-row">
-            <button class="tier-book-btn" onclick="bookTier('founder')">Book Founder Kickoff</button>
-            <span class="tier-cta-or">or</span>
-            <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
-          </div>
+        <div>
+          <div class="tier-price"><span data-config="pricing.kickoff" data-config-format="dollar">$5,000</span></div>
+          <div class="tier-price-note">Flat fee, payment at booking</div>
         </div>
       </div>
-
-      <div class="tier tier-featured">
-        <div class="tier-header">
-          <div>
-            <div class="tier-number">01</div>
-            <div class="tier-name">Team Kickoff</div>
-          </div>
-          <div>
-            <div class="tier-price"><span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></div>
-            <div class="tier-price-note">For teams with multiple stakeholders</div>
-          </div>
+      <div class="tier-body">
+        <p>An executive working session where we learn your business, map your workflows, and deploy your first agent. We send a standard agenda in advance and customize it to your needs.</p>
+        <p>Payment is due at booking. We use the 2-week lead time to research your business, prepare your agent architecture, and have your first agent ready to deploy when we meet.</p>
+        <div class="tier-deliverables">
+          <h4>What's included</h4>
+          <div class="deliverable">Executive working session with founders and key decision-makers</div>
+          <div class="deliverable">Workflow mapping and highest-leverage automation scoping</div>
+          <div class="deliverable">Live demos from our production systems</div>
+          <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
+          <div class="deliverable">Written architecture plan: automation candidates ranked by ROI, security model, cost profile, rollout order</div>
+          <div class="deliverable">Your first agent, built and deployed</div>
         </div>
-        <div class="tier-body">
-          <p>A 4-5 hour engagement designed for organizations with multiple teams, executives, and workflows to consider. We align everyone on what's real, map the full landscape, and start the first build.</p>
-          <p>Includes a team-wide AI briefing, one-on-one sessions with key operators, and an honest review of any AI tools you're paying for or being pitched. We send a standard agenda in advance and customize it to your needs.</p>
-          <div class="tier-deliverables">
-            <h4>What's included</h4>
-            <div class="deliverable">Full team AI briefing: what's real, what's worth paying for, what to ignore</div>
-            <div class="deliverable">One-on-one sessions with executives and key team members</div>
-            <div class="deliverable">Live demos from our production systems</div>
-            <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
-            <div class="deliverable">Written architecture plan: automation candidates ranked by ROI, security model, cost profile, rollout order</div>
-            <div class="deliverable">Your first agent, built and deployed</div>
-          </div>
-          <div class="tier-expect">
-            <h4>What to expect</h4>
-            <div class="expect-item"><strong>Hour 1:</strong> Team AI briefing — what's real, what's hype, cost curves</div>
-            <div class="expect-item"><strong>Hours 2-3:</strong> One-on-one sessions with key operators</div>
-            <div class="expect-item"><strong>Hour 4:</strong> Current tooling audit and recommendations</div>
-            <div class="expect-item"><strong>Hour 5:</strong> Architecture plan, first agent deployed, implementation quote</div>
-          </div>
-          <div class="tier-cta-row">
-            <button class="tier-book-btn" onclick="bookTier('team')">Book Team Kickoff</button>
-            <span class="tier-cta-or">or</span>
-            <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
-          </div>
+        <div class="tier-expect">
+          <h4>What to expect</h4>
+          <div class="expect-item"><strong>Before we meet:</strong> 2-week lead time — we research your business, prepare your architecture, and pre-build your first agent</div>
+          <div class="expect-item"><strong>Hour 1:</strong> Workflow mapping — we identify your highest-leverage automation</div>
+          <div class="expect-item"><strong>Hour 2:</strong> Live build — your first agent deployed on your infrastructure</div>
+          <div class="expect-item"><strong>Hour 3:</strong> Architecture plan, tooling audit, and roadmap for expansion</div>
+        </div>
+        <div class="tier-cta-row">
+          <button class="tier-book-btn" onclick="bookTier('kickoff')">Book Kickoff &mdash; $5,000</button>
+          <span class="tier-cta-or">or</span>
+          <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
         </div>
       </div>
     </div>
@@ -448,6 +422,35 @@
       <div class="tier-header">
         <div>
           <div class="tier-number">02</div>
+          <div class="tier-name">Workshop Add-on</div>
+        </div>
+        <div>
+          <div class="tier-price">+<span data-config="pricing.workshop_addon" data-config-format="dollar">$2,500</span></div>
+          <div class="tier-price-note">Added to Kickoff</div>
+        </div>
+      </div>
+      <div class="tier-body">
+        <p>Staff training and team-wide AI briefing added to your Kickoff. Designed for organizations where multiple team members need to understand and operate agents day-to-day.</p>
+        <p>Includes hands-on sessions with your team members, an honest breakdown of what AI can and can't do for their specific roles, and a practical playbook they can reference after we leave.</p>
+        <div class="tier-deliverables">
+          <h4>What's included</h4>
+          <div class="deliverable">Team-wide AI briefing: what's real, what's worth paying for, what to ignore</div>
+          <div class="deliverable">Hands-on sessions with individual team members</div>
+          <div class="deliverable">Role-specific workflow recommendations</div>
+          <div class="deliverable">Practical playbook for day-to-day agent operation</div>
+        </div>
+        <div class="tier-cta-row">
+          <button class="tier-book-btn" onclick="bookTier('kickoff')">Book Kickoff + Workshop</button>
+          <span class="tier-cta-or">or</span>
+          <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Ask us about it</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number">03</div>
           <div class="tier-name">Implementation</div>
         </div>
         <div>
@@ -480,7 +483,7 @@
     <div class="tier">
       <div class="tier-header">
         <div>
-          <div class="tier-number">03</div>
+          <div class="tier-number">04</div>
           <div class="tier-name">Retainer</div>
         </div>
         <div>
@@ -631,9 +634,9 @@ function tfAnswer(q, val) {
     else if (tfAnswers.q2 === 'few') score += 1;
     var result = document.getElementById('tfResult');
     if (score >= 3) {
-      result.innerHTML = '<p class="tf-rec">Team Kickoff — <span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'team\')">Book & Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
+      result.innerHTML = '<p class="tf-rec">Kickoff + Workshop Add-on</p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Kickoff gets your architecture in place and the Workshop add-on (<span data-config="pricing.workshop_addon" data-config-format="dollar">$2,500</span>) ensures your whole team is aligned and trained. We recommend both.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'kickoff\')">Book Kickoff + Workshop</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     } else {
-      result.innerHTML = '<p class="tf-rec">Founder Kickoff — <span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'founder\')">Book & Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
+      result.innerHTML = '<p class="tf-rec">Kickoff — <span data-config="pricing.kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">You know what you want to build. The Kickoff gets straight to the architecture and delivers your first agent. Fast, focused, and we do the prep work before we even meet.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'kickoff\')">Book &amp; Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     }
     result.style.display = '';
   }
@@ -658,7 +661,7 @@ function tfAnswer(q, val) {
   var params = new URLSearchParams(location.search);
   var booked = params.get('booked');
   if (booked) {
-    var tierNames = { founder: 'Founder Kickoff', team: 'Team Kickoff' };
+    var tierNames = { kickoff: 'Kickoff', workshop: 'Workshop Add-on' };
     var name = tierNames[booked] || booked;
     var banner = document.createElement('div');
     banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--forest,#4D8070);color:white;text-align:center;padding:1rem;font-size:0.9rem;font-weight:600;animation:fadeUp 0.5s ease;';

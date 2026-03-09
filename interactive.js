@@ -403,10 +403,9 @@
     var pick = uc[answers.q4] || uc.email;
     r.push({ title: pick.t, desc: pick.d });
 
-    if (answers.q2 === 'solo' || answers.q2 === 'small')
-      r.push({ title: 'Founder Kickoff — $3,500', desc: 'One working session. Workflow mapping, first agent deployed, written architecture plan.' });
-    else
-      r.push({ title: 'Team Kickoff — $5,000', desc: 'Full team briefing, exec sessions, first agent deployed, and a roadmap your whole team can execute.' });
+    r.push({ title: 'Kickoff — $5,000', desc: 'Half-day working session. Workflow mapping, first agent built and deployed, written architecture plan.' });
+    if (answers.q2 !== 'solo' && answers.q2 !== 'small')
+      r.push({ title: 'Workshop Add-on — $2,500', desc: 'Full team AI briefing, one-on-one exec sessions, live demos with your data.' });
 
     if (answers.q3 === 'none' || answers.q3 === 'free')
       r.push({ title: 'Read: Why Now', desc: 'The economics, timing, and case for controlled early deployment.', link: '/why-now/' });
