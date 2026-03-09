@@ -34,6 +34,23 @@ section { padding: 4rem 2rem 6rem; max-width: 1060px; margin: 0 auto; position: 
 section h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); line-height: 1.2; margin-bottom: 1.5rem; }
 section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.25rem; }
 
+/* Engagement arc */
+.arc-steps { display: grid; gap: 0; margin-top: 2.5rem; }
+.arc-step { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; }
+.arc-step:first-child { padding-top: 0; }
+.arc-step:last-child { border-bottom: none; }
+.arc-num { font-family: var(--serif); font-size: 1.8rem; color: rgba(212,160,90,0.2); line-height: 1.2; }
+.arc-content h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 0.4rem; font-weight: 400; }
+.arc-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0; }
+.arc-step-highlight { padding-left: 1.5rem; border-left: 2px solid rgba(212,160,90,0.25); background: linear-gradient(90deg, rgba(212,160,90,0.03), transparent); }
+.arc-step-highlight .arc-num { color: rgba(212,160,90,0.4); }
+.arc-step-highlight .arc-content h3 { color: var(--gold-light); }
+.arc-proof { margin-top: 2rem; padding: 1.25rem 1.5rem; background: rgba(77,128,112,0.06); border-left: 2px solid var(--forest); }
+.arc-proof p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0; }
+.arc-proof strong { color: var(--text); }
+.arc-proof a { color: var(--gold); text-decoration: none; font-weight: 500; }
+.arc-proof a:hover { opacity: 0.7; }
+
 /* Quote cards */
 .quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; }
 .quote-card:hover { background: rgba(212,160,90,0.06); border-left-color: var(--gold-light); transform: translateX(4px); }
@@ -140,6 +157,9 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   .quotes-row { grid-template-columns: 1fr; }
   .build-grid { grid-template-columns: 1fr; }
   .tf-options { flex-direction: column; }
+  .arc-step { grid-template-columns: 40px 1fr; gap: 1rem; }
+  .arc-num { font-size: 1.4rem; }
+  .arc-step-highlight { padding-left: 1rem; }
 }
 </style>
 </head>
@@ -165,15 +185,55 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 <main>
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Services</p>
-  <h1>Get your team ready for agents. <em>Then we build the first one with you.</em></h1>
-  <p class="hero-subtitle">A paid kickoff that aligns your team, defines the architecture, and starts your first deployment.</p>
-  <p>Transparent pricing. No margin on your API costs. You own every agent, every skill, every configuration file. If you stop working with us tomorrow, your systems keep running.</p>
+  <h1>We deploy your agents. <em>Your team learns to orchestrate them.</em></h1>
+  <p class="hero-subtitle">From first session to running system — we build real agents on your infrastructure, teach your team to operate them, and stay as long as you want us.</p>
+  <p>Transparent pricing. No margin on API costs. You own every agent, every skill, every configuration file. No lock-in — just good reasons to keep working together.</p>
+</section>
+
+<section>
+  <p class="section-label reveal">The engagement</p>
+  <h2 class="reveal">How it actually works.</h2>
+
+  <div class="arc-steps">
+    <div class="arc-step">
+      <div class="arc-num">01</div>
+      <div class="arc-content">
+        <h3>Discovery</h3>
+        <p>We sit down, learn your business fast, and identify the highest-leverage automation. You leave with a working agent and a clear roadmap — not a slide deck.</p>
+      </div>
+    </div>
+    <div class="arc-step">
+      <div class="arc-num">02</div>
+      <div class="arc-content">
+        <h3>Build</h3>
+        <p>We build custom agents on contract — scoped, quoted, deployed on your infrastructure. Your most technical people start learning alongside us from day one.</p>
+      </div>
+    </div>
+    <div class="arc-step">
+      <div class="arc-num">03</div>
+      <div class="arc-content">
+        <h3>Transfer</h3>
+        <p>Your team learns to operate, extend, and build their own agents. Someone on your team becomes the point person — we make sure they're confident.</p>
+      </div>
+    </div>
+    <div class="arc-step arc-step-highlight">
+      <div class="arc-num">04</div>
+      <div class="arc-content">
+        <h3>Partnership</h3>
+        <p>Most clients stay. New capabilities, proactive improvements, model upgrades — we keep building as the technology evolves. Your agents get better every month.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="arc-proof">
+    <p>We built our own production agent, brand, and website using this exact stack — <strong>$376 in agent costs</strong>, <strong>3 days to production</strong>. <a href="/build/">See the full build log →</a></p>
+  </div>
 </section>
 
 <section>
   <p class="section-label reveal">What we build</p>
   <h2 class="reveal">Custom agents for the work that eats your team's time.</h2>
-  <p>Every agent runs on your infrastructure, connects to your existing tools, and ships with approval gates, cost controls, and audit logs. Built on OpenClaw, the open-source agent framework. Your systems run independently of Briu. If you stop working with us, everything keeps running.</p>
+  <p>Every agent runs on your infrastructure, connects to your existing tools, and ships with approval gates, cost controls, and audit logs. Built on OpenClaw, the open-source agent framework.</p>
 
   <div class="build-grid" id="capabilities">
     <div class="build-item" id="personal-assistants" onclick="toggleCapability(this)">
@@ -223,8 +283,8 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 </section>
 
 <section>
-  <p class="section-label reveal">How we work</p>
-  <h2 class="reveal">Choose your starting point. You own everything we build.</h2>
+  <p class="section-label reveal">Pricing</p>
+  <h2 class="reveal">Choose your starting point.</h2>
 
   <!-- Tier Finder Mini-Quiz -->
   <div class="tier-finder" id="tierFinder">
@@ -318,9 +378,9 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
         </div>
       </div>
       <div class="tier-body">
-        <p>After Kickoff, you have a running agent and a roadmap. Implementation is where we build out the rest.</p>
-        <p>Every project is scoped from what we learned together, quoted upfront, and built on your infrastructure with your API keys. You pay model providers directly. Each agent we deploy makes the next one easier to build because the architecture and integrations are already in place.</p>
-        <p>As our tools and processes improve, we pass those efficiencies directly to you. Projects that took weeks earlier this year take days now, and that trajectory continues.</p>
+        <p>After Kickoff, you have a running agent and a roadmap. Implementation is where we build out the rest — and where your team starts learning.</p>
+        <p>Every project is scoped, quoted upfront, and built on your infrastructure with your API keys. The most technical people on your team work alongside us — not watching a demo, but building context they'll use when they start extending agents themselves.</p>
+        <p>Each agent we deploy makes the next one easier. The architecture and integrations compound. And as our tools improve, those efficiencies go directly to you.</p>
         <div class="tier-deliverables">
           <h4>Typical projects</h4>
           <div class="deliverable">Email triage, CRM automation, and sales workflow agents</div>
@@ -340,20 +400,26 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
           <div class="tier-name">Retainer</div>
         </div>
         <div>
-          <div class="tier-price">$500/month</div>
-          <div class="tier-price-note">Base maintenance retainer</div>
+          <div class="tier-price">From $500/month</div>
+          <div class="tier-price-note">Ongoing partnership</div>
         </div>
       </div>
       <div class="tier-body">
-        <p>Ongoing context and availability. When something needs adjustment, when models update, when you want to expand, you're not starting from scratch with someone who doesn't know your system.</p>
-        <p>Covers system maintenance, small adjustments, model upgrades, and cost optimization. Your agents improve as the technology improves. Significant new capability work is quoted separately as an implementation project.</p>
+        <p>This is where the relationship compounds. We already know your systems, your team, and your goals — every improvement builds on the last.</p>
+        <p>Base retainer covers maintenance, monitoring, and small adjustments. For teams that want proactive development — new agents, skill expansion, workflow improvements — we offer expanded retainers scoped to your pace.</p>
         <div class="tier-deliverables">
-          <h4>What's included</h4>
-          <div class="deliverable">System maintenance and monitoring</div>
-          <div class="deliverable">Model upgrades and cost optimization as pricing changes</div>
+          <h4>Base retainer</h4>
+          <div class="deliverable">System maintenance, monitoring, and cost optimization</div>
+          <div class="deliverable">Model upgrades as providers ship improvements</div>
           <div class="deliverable">Small skill additions and workflow adjustments</div>
-          <div class="deliverable">Priority response when things need fixing</div>
-          <div class="deliverable">Continuous context so support is immediate, not a re-onboarding</div>
+          <div class="deliverable">Priority response — no re-onboarding, ever</div>
+        </div>
+        <div class="tier-deliverables" style="margin-top: 1rem;">
+          <h4>Expanded partnership</h4>
+          <div class="deliverable">Proactive capability development — new agents, new skills</div>
+          <div class="deliverable">Regular strategy sessions on what to automate next</div>
+          <div class="deliverable">Team training as your internal capacity grows</div>
+          <div class="deliverable">First access to new patterns from our work across industries</div>
         </div>
       </div>
     </div>
@@ -376,8 +442,13 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
     </div>
     <div class="principle">
       <h3>You own everything</h3>
-      <p>Every agent, every skill, every configuration file. If you stop working with us tomorrow, your systems keep running. No vendor lock-in.</p>
+      <p>Every agent, every skill, every configuration file. Your systems run independently. You stay because the partnership is valuable, not because you're locked in.</p>
     </div>
+  </div>
+
+  <div class="principle" style="margin-top: 1.5rem; padding: 1.5rem; border-top: 2px solid rgba(212,160,90,0.15); border-left: 2px solid rgba(212,160,90,0.15);">
+    <h3>Every engagement makes the next one better</h3>
+    <p>Every industry we work in, every workflow we automate, every problem we solve — it enters our pattern library. Your engagement benefits from everything we've learned. And our clear terms of service ensure both sides know exactly how that works.</p>
   </div>
 
   <div class="quote-block" style="margin-top: 3rem;">
@@ -388,8 +459,8 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 
 <section class="cta-section">
   <p class="section-label">Get Started</p>
-  <h2>Tell us what you're working on.</h2>
-  <p>Describe what your team does every day. We'll reply within 24 hours with specific ideas for your business — what an agent could handle, what it would cost, and what we'd build first.</p>
+  <h2>Tell us what your team does every day.</h2>
+  <p>We'll reply within 24 hours with specific ideas — what an agent could handle, what it would cost, and what we'd build first. That's how every engagement starts.</p>
   <a href="#" onclick="openContactForm();return false" class="cta-button">Start the Conversation</a>
 </section>
 </main>
