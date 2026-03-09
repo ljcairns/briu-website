@@ -264,37 +264,77 @@ revealEls.forEach(function(el) { revealObs.observe(el); });
   });
 })();
 
-/* ─── Stripe Checkout (shared across pages) ─── */
+/* ─── Booking (Invoice / Crypto) ─── */
 window.bookTier = function(tier) {
-  var btn = event.target;
+  var tierNames = { kickoff: 'Kickoff — $5,000', 'kickoff+workshop': 'Kickoff + Workshop — $7,500' };
+  window._bookingTier = tier;
+  var modal = document.getElementById('bookingModal');
+  if (!modal) return;
+  var label = modal.querySelector('.booking-tier-label');
+  if (label) label.textContent = tierNames[tier] || tier;
+  modal.classList.add('active');
+  document.body.style.overflow = 'hidden';
+  var nameInput = modal.querySelector('#book-name');
+  if (nameInput) nameInput.focus();
+};
+
+window.closeBookingModal = function() {
+  var modal = document.getElementById('bookingModal');
+  if (modal) modal.classList.remove('active');
+  document.body.style.overflow = '';
+};
+
+window.submitBooking = function(e) {
+  e.preventDefault();
+  var form = e.target;
+  var btn = form.querySelector('.booking-submit-btn');
   var origText = btn.textContent;
-  btn.textContent = 'Redirecting...';
+  btn.textContent = 'Submitting...';
   btn.disabled = true;
 
-  fetch('https://briu-assess.briu.workers.dev/api/checkout', {
+  var data = {
+    tier: window._bookingTier || 'kickoff',
+    name: form.querySelector('#book-name').value,
+    email: form.querySelector('#book-email').value,
+    company: form.querySelector('#book-company').value,
+    payment_method: form.querySelector('input[name="payment_method"]:checked')?.value || 'invoice',
+    message: form.querySelector('#book-message')?.value || '',
+  };
+
+  fetch('https://briu-assess.briu.workers.dev/api/book', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ tier: tier }),
+    body: JSON.stringify(data),
   })
   .then(function(r) { return r.json(); })
-  .then(function(data) {
-    if (data.url) {
-      window.location.href = data.url;
-    } else {
-      btn.textContent = origText;
-      btn.disabled = false;
-      if (window.openContactForm) {
-        openContactForm();
-      } else {
-        alert('Payment not available right now. Please reach out to hi@briu.ai');
+  .then(function(res) {
+    if (res.success) {
+      form.style.display = 'none';
+      var success = document.getElementById('bookingSuccess');
+      if (success) {
+        var method = data.payment_method === 'crypto' ? 'crypto wallet details' : 'an invoice';
+        success.querySelector('.booking-success-method').textContent = method;
+        success.style.display = 'block';
       }
+      setTimeout(function() {
+        closeBookingModal();
+        form.style.display = '';
+        if (success) success.style.display = 'none';
+        form.reset();
+        btn.textContent = origText;
+        btn.disabled = false;
+      }, 5000);
+    } else {
+      btn.textContent = res.error || 'Error — try again';
+      btn.disabled = false;
     }
   })
   .catch(function() {
-    btn.textContent = origText;
+    btn.textContent = 'Error — try again';
     btn.disabled = false;
-    if (window.openContactForm) {
-      openContactForm();
-    }
   });
 };
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') { if (window.closeBookingModal) closeBookingModal(); }
+});

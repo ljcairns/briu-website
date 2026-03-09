@@ -411,7 +411,7 @@
           <div class="expect-item"><strong>Hour 3:</strong> Architecture plan, tooling audit, and roadmap for expansion</div>
         </div>
         <div class="tier-cta-row">
-          <button class="tier-book-btn" onclick="bookTier('kickoff')">Book Kickoff &mdash; $5,000</button>
+          <button class="tier-book-btn" onclick="bookTier('kickoff')">Reserve Kickoff &mdash; $5,000</button>
           <span class="tier-cta-or">or</span>
           <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
         </div>
@@ -440,7 +440,7 @@
           <div class="deliverable">Practical playbook for day-to-day agent operation</div>
         </div>
         <div class="tier-cta-row">
-          <button class="tier-book-btn" onclick="bookTier('kickoff')">Book Kickoff + Workshop</button>
+          <button class="tier-book-btn" onclick="bookTier('kickoff+workshop')">Reserve Kickoff + Workshop &mdash; $7,500</button>
           <span class="tier-cta-or">or</span>
           <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Ask us about it</a>
         </div>
@@ -661,15 +661,12 @@ function tfAnswer(q, val) {
   var params = new URLSearchParams(location.search);
   var booked = params.get('booked');
   if (booked) {
-    var tierNames = { kickoff: 'Kickoff', workshop: 'Workshop Add-on' };
+    var tierNames = { kickoff: 'Kickoff', 'kickoff+workshop': 'Kickoff + Workshop' };
     var name = tierNames[booked] || booked;
     var banner = document.createElement('div');
     banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--forest,#4D8070);color:white;text-align:center;padding:1rem;font-size:0.9rem;font-weight:600;animation:fadeUp 0.5s ease;';
-    banner.innerHTML = '✓ ' + name + ' booked successfully. We\'ll be in touch within 24 hours to schedule your session. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;margin-left:1rem;cursor:pointer;">&times;</button>';
+    banner.innerHTML = '✓ ' + name + ' reserved. We\'ll send your invoice within 24 hours. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;margin-left:1rem;cursor:pointer;">&times;</button>';
     document.body.prepend(banner);
-    history.replaceState(null, '', location.pathname);
-  }
-  if (params.get('cancelled')) {
     history.replaceState(null, '', location.pathname);
   }
 })();

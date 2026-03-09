@@ -11,8 +11,6 @@ MAIL_DESTINATION = "hi@briu.ai"
 # DISCORD_WEBHOOK (optional)
 # OPENCLAW_WEBHOOK (optional)
 # OPENCLAW_WEBHOOK_TOKEN (optional)
-# STRIPE_SECRET_KEY (for Stripe Checkout)
-# STRIPE_WEBHOOK_SECRET (for Stripe webhook signature verification)
 
 # Conversation storage
 [[kv_namespaces]]

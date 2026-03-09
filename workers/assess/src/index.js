@@ -80,10 +80,11 @@ Never say "I'm an AI." Keep text under 120 words.`;
 // ─── Content chunks (selected by keyword matching) ───
 const CHUNKS = {
   pricing: `Services & Pricing:
-Kickoff $5,000 — half-day working session, workflow mapping, first agent built and deployed, written architecture plan.
-Workshop Add-on $2,500 — full team AI briefing, one-on-one exec sessions, live demos with your data. Pairs with the Kickoff.
+Kickoff $5,000 — half-day working session, workflow mapping, first agent built and deployed, written architecture plan. 2-week lead time — we research the business and pre-build their first agent before the session.
+Workshop Add-on +$2,500 — full team AI briefing, one-on-one exec sessions, live demos with your data. Pairs with the Kickoff ($7,500 total).
 Implementation — quoted per project, scoped from kickoff, built on your infrastructure with your API keys.
 Partnership Retainer from $500/mo — maintenance, monitoring, cost optimization, model upgrades. Expanded: proactive development, strategy sessions, training.
+Payment: invoice (bank transfer/wire) or cryptocurrency. No payment processors, no fees. We send an invoice within 24 hours of booking.
 Trust: You own everything. No margin on costs. Approval gates on every action. If you stop working with Briu, everything keeps running.`,
 
   economics: `Economics:
@@ -414,9 +415,10 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Stripe webhook — must read raw body before JSON parse for signature verification
-    if (path === '/api/stripe-webhook') {
-      return await handleStripeWebhook(request, env, corsHeaders);
+    // Booking endpoint — must be before JSON parse to handle its own body
+    if (path === '/api/book') {
+      const body = await request.json();
+      return await handleBooking(body, env, corsHeaders);
     }
 
     // Rate limiting (uses KV if bound, otherwise in-memory Map)
@@ -461,9 +463,7 @@ export default {
         return await handleCompanyLookup(body, corsHeaders);
       }
 
-      if (path === '/api/checkout') {
-        return await handleCheckout(body, env, corsHeaders);
-      }
+      // /api/checkout removed — using /api/book (invoice flow) instead
 
       return new Response(JSON.stringify({ error: 'Not found' }), {
         status: 404,
@@ -938,198 +938,107 @@ async function handleCompanyLookup(body, corsHeaders) {
   });
 }
 
-// ─── Stripe Checkout ───
+// ─── Booking (Invoice Flow) ───
 // Product tiers — update prices here and in site-config.json
 const TIERS = {
-  kickoff: { name: 'Kickoff', price: 5000, description: 'Half-day working session, workflow mapping, first agent built and deployed, written architecture plan' },
-  workshop: { name: 'Workshop Add-on', price: 2500, description: 'Full team AI briefing, one-on-one exec sessions, live demos with your data' },
+  kickoff: { name: 'Kickoff', price: 5000 },
+  'kickoff+workshop': { name: 'Kickoff + Workshop', price: 7500 },
 };
 
-async function handleCheckout(body, env, corsHeaders) {
-  if (!env.STRIPE_SECRET_KEY) {
-    return new Response(JSON.stringify({ error: 'Payment system not configured' }), {
-      status: 503,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-  }
+async function handleBooking(body, env, corsHeaders) {
+  const { tier, name, email, company, payment_method, message } = body;
 
-  const { tier, email, name, company } = body;
-  if (!tier || !TIERS[tier]) {
-    return new Response(JSON.stringify({ error: 'Invalid tier. Use "kickoff" or "workshop".' }), {
+  if (!name || !email) {
+    return new Response(JSON.stringify({ error: 'Name and email are required.' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 
-  const product = TIERS[tier];
-  const origin = env.ALLOWED_ORIGIN || 'https://briu.ai';
-
-  // Create Stripe Checkout Session via API (no SDK needed in Workers)
-  const params = new URLSearchParams();
-  params.append('mode', 'payment');
-  params.append('success_url', origin + '/services/?booked=' + tier);
-  params.append('cancel_url', origin + '/services/?cancelled=1');
-  params.append('line_items[0][price_data][currency]', 'usd');
-  params.append('line_items[0][price_data][product_data][name]', product.name);
-  params.append('line_items[0][price_data][product_data][description]', product.description);
-  params.append('line_items[0][price_data][unit_amount]', String(product.price * 100)); // cents
-  params.append('line_items[0][quantity]', '1');
-  params.append('payment_method_types[0]', 'card');
-  if (email) params.append('customer_email', email);
-  // Store metadata for webhook processing
-  params.append('metadata[tier]', tier);
-  params.append('metadata[name]', name || '');
-  params.append('metadata[company]', company || '');
-
-  const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
-    method: 'POST',
-    headers: {
-      'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':'),
-      'Content-Type': 'application/x-www-form-urlencoded',
-    },
-    body: params.toString(),
-  });
-
-  if (!stripeRes.ok) {
-    const err = await stripeRes.text();
-    console.error('Stripe error:', stripeRes.status, err);
-    return new Response(JSON.stringify({ error: 'Payment service error. Please try again.' }), {
-      status: 502,
+  if (tier && !TIERS[tier]) {
+    return new Response(JSON.stringify({ error: 'Invalid tier.' }), {
+      status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }
 
-  const session = await stripeRes.json();
+  const product = tier ? TIERS[tier] : null;
+  const bookingId = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 
-  return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
+  const booking = {
+    type: 'booking',
+    id: bookingId,
+    tier: tier || 'inquiry',
+    tierName: product?.name || 'General inquiry',
+    amount: product?.price || null,
+    name,
+    email,
+    company: company || '',
+    payment_method: payment_method || 'invoice',
+    message: message || '',
+    createdAt: new Date().toISOString(),
+  };
+
+  // Store in KV
+  if (env.CONVERSATIONS) {
+    await env.CONVERSATIONS.put(
+      'booking:' + bookingId,
+      JSON.stringify(booking),
+      { expirationTtl: 7776000 } // 90 days
+    );
+  }
+
+  // Notify via OpenClaw webhook
+  if (env.OPENCLAW_WEBHOOK) {
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (env.OPENCLAW_WEBHOOK_TOKEN) headers['Authorization'] = 'Bearer ' + env.OPENCLAW_WEBHOOK_TOKEN;
+      await fetch(env.OPENCLAW_WEBHOOK, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify(booking),
+        signal: AbortSignal.timeout(10000),
+      });
+    } catch (e) {
+      console.error('OpenClaw booking notification error:', e);
+    }
+  }
+
+  // Discord notification
+  if (env.DISCORD_WEBHOOK) {
+    try {
+      const payLabel = payment_method === 'crypto' ? '₿ Crypto' : '🏦 Invoice/Wire';
+      await fetch(env.DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `📋 **NEW BOOKING: ${booking.tierName}**`,
+          embeds: [{
+            color: 0xd4a05a,
+            fields: [
+              { name: 'Customer', value: name, inline: true },
+              { name: 'Tier', value: booking.tierName, inline: true },
+              { name: 'Amount', value: product ? ('$' + product.price.toLocaleString()) : 'TBD', inline: true },
+              { name: 'Payment', value: payLabel, inline: true },
+              { name: 'Company', value: company || 'Not provided', inline: true },
+              { name: 'Email', value: email, inline: false },
+              ...(message ? [{ name: 'Note', value: message, inline: false }] : []),
+            ],
+          }],
+        }),
+      });
+    } catch (e) {
+      console.error('Discord booking notification error:', e);
+    }
+  }
+
+  return new Response(JSON.stringify({
+    success: true,
+    bookingId,
+    tier: booking.tierName,
+    message: 'Booking received. We\'ll send your invoice within 24 hours.',
+  }), {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-  });
-}
-
-// ─── Stripe Webhook ───
-async function verifyStripeSignature(payload, sigHeader, secret) {
-  // Stripe signature: t=timestamp,v1=signature
-  const parts = {};
-  for (const item of sigHeader.split(',')) {
-    const [key, val] = item.split('=');
-    parts[key] = val;
-  }
-  const signedPayload = parts.t + '.' + payload;
-  const key = await crypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(secret),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
-  const expected = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
-  // Constant-time comparison
-  if (expected.length !== parts.v1.length) return false;
-  let match = true;
-  for (let i = 0; i < expected.length; i++) {
-    if (expected[i] !== parts.v1[i]) match = false;
-  }
-  return match;
-}
-
-async function handleStripeWebhook(request, env, corsHeaders) {
-  if (!env.STRIPE_WEBHOOK_SECRET) {
-    return new Response('Webhook not configured', { status: 503 });
-  }
-
-  const payload = await request.text();
-  const sigHeader = request.headers.get('Stripe-Signature') || '';
-
-  const valid = await verifyStripeSignature(payload, sigHeader, env.STRIPE_WEBHOOK_SECRET);
-  if (!valid) {
-    console.error('Invalid Stripe signature');
-    return new Response('Invalid signature', { status: 400 });
-  }
-
-  const event = JSON.parse(payload);
-
-  if (event.type === 'checkout.session.completed') {
-    const session = event.data.object;
-    const tier = session.metadata?.tier || 'unknown';
-    const customerEmail = session.customer_email || session.customer_details?.email || '';
-    const customerName = session.metadata?.name || '';
-    const company = session.metadata?.company || '';
-
-    // Store booking in KV
-    if (env.CONVERSATIONS) {
-      const booking = {
-        type: 'booking',
-        tier,
-        name: customerName,
-        email: customerEmail,
-        company,
-        amount: session.amount_total / 100,
-        currency: session.currency,
-        stripeSessionId: session.id,
-        paymentStatus: session.payment_status,
-        createdAt: new Date().toISOString(),
-      };
-      await env.CONVERSATIONS.put(
-        'booking:' + Date.now() + '_' + customerEmail,
-        JSON.stringify(booking),
-        { expirationTtl: 7776000 } // 90 days
-      );
-    }
-
-    // Notify via OpenClaw webhook
-    if (env.OPENCLAW_WEBHOOK) {
-      try {
-        const headers = { 'Content-Type': 'application/json' };
-        if (env.OPENCLAW_WEBHOOK_TOKEN) headers['Authorization'] = 'Bearer ' + env.OPENCLAW_WEBHOOK_TOKEN;
-        await fetch(env.OPENCLAW_WEBHOOK, {
-          method: 'POST',
-          headers,
-          body: JSON.stringify({
-            type: 'booking',
-            tier,
-            name: customerName,
-            email: customerEmail,
-            company,
-            amount: session.amount_total / 100,
-            createdAt: new Date().toISOString(),
-          }),
-          signal: AbortSignal.timeout(10000),
-        });
-      } catch (e) {
-        console.error('OpenClaw booking notification error:', e);
-      }
-    }
-
-    // Discord notification fallback
-    if (env.DISCORD_WEBHOOK) {
-      try {
-        await fetch(env.DISCORD_WEBHOOK, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            content: `💰 **NEW BOOKING: ${TIERS[tier]?.name || tier}**`,
-            embeds: [{
-              color: 0xd4a05a,
-              fields: [
-                { name: 'Customer', value: customerName || customerEmail || 'Unknown', inline: true },
-                { name: 'Tier', value: TIERS[tier]?.name || tier, inline: true },
-                { name: 'Amount', value: '$' + (session.amount_total / 100).toLocaleString(), inline: true },
-                { name: 'Company', value: company || 'Not provided', inline: true },
-                { name: 'Email', value: customerEmail || 'Not provided', inline: false },
-              ],
-            }],
-          }),
-        });
-      } catch (e) {
-        console.error('Discord booking notification error:', e);
-      }
-    }
-  }
-
-  return new Response(JSON.stringify({ received: true }), {
-    status: 200,
-    headers: { 'Content-Type': 'application/json' },
   });
 }

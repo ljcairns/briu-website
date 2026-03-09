@@ -88,6 +88,13 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
 .q-back:hover { color: var(--text); }
 
+/* Booking modal */
+.booking-tier-label { color: var(--gold); }
+.booking-payment-methods { margin-bottom: 1.25rem; }
+.booking-payment-opt { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-muted); cursor: pointer; padding: 0.5rem 0; }
+.booking-payment-opt input[type="radio"] { accent-color: var(--gold); width: auto; margin-bottom: 0; }
+.booking-payment-opt span { margin-bottom: 0; }
+
 /* Gradient Borders */
 .card-gradient-border { border: 1px solid transparent; background-clip: padding-box; position: relative; }
 .card-gradient-border::before { content: ''; position: absolute; inset: -1px; z-index: -1; background: linear-gradient(135deg, rgba(212,160,90,0.12), rgba(90,157,172,0.08), rgba(255,255,255,0.04)); pointer-events: none; }
