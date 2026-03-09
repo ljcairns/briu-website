@@ -243,7 +243,7 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
   function onScroll() {
     var scrollTop = window.scrollY || document.documentElement.scrollTop;
-    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
     if (docHeight > 0) bar.style.width = (scrollTop / docHeight) * 100 + '%';
   }
   window.addEventListener('scroll', onScroll, { passive: true });
