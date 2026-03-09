@@ -38,7 +38,7 @@
     // Update commit-days labels
     var labels = document.querySelectorAll('[data-dynamic-label="commit-days"]');
     for (var i = 0; i < labels.length; i++) {
-      labels[i].textContent = 'Total Commits';
+      labels[i].textContent = 'Changes Shipped';
     }
 
     // Add "Today" to timeline
