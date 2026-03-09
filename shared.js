@@ -233,15 +233,17 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
 
-/* Scroll Progress Bar — sits in header, below nav, no positioning tricks */
+/* Scroll Progress Bar — sits in header, below nav */
 (function() {
   var bar = document.getElementById('navProgress');
   if (!bar) return;
-  window.addEventListener('scroll', function() {
-    var scrollTop = window.scrollY;
-    var docHeight = Math.max(document.body.scrollHeight, document.documentElement.scrollHeight) - window.innerHeight;
+  function onScroll() {
+    var scrollTop = window.scrollY || document.documentElement.scrollTop;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
     if (docHeight > 0) bar.style.width = (scrollTop / docHeight) * 100 + '%';
-  }, { passive: true });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 })();
 
 /* Scroll Reveal */
