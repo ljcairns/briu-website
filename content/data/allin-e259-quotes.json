@@ -1,0 +1,379 @@
+{
+  "source": {
+    "podcast": "All-In Podcast",
+    "episode": 259,
+    "title": "All-In E259",
+    "date": "2025-01-31",
+    "speakers": [
+      { "name": "Jason Calacanis", "short": "Calacanis", "role": "Host / LAUNCH CEO" },
+      { "name": "Chamath Palihapitiya", "short": "Chamath", "role": "Host / Social Capital CEO" },
+      { "name": "David Sacks", "short": "Sacks", "role": "Host / Craft Ventures" },
+      { "name": "David Friedberg", "short": "Friedberg", "role": "Host / The Production Board CEO" }
+    ],
+    "context": "Calacanis revealed he deployed AI agents (using open-source Claudebot/Maltbot framework) across his venture firm in 72 hours, creating virtual employees called 'replicants'. Episode also covers Kimi K2.5 open-source model launch and implications for AI costs and deployment.",
+    "url": null,
+    "vtt_file": "allin-e259.en.vtt"
+  },
+  "quotes": [
+    {
+      "id": "e259-01",
+      "quote": "I've spent the last 72 hours doing this. I'm going to explain to you what we did at the company. It's mind-blowing.",
+      "speaker": "Calacanis",
+      "timestamp": "00:47:05",
+      "categories": ["adoption_deployment"],
+      "briu_use": "Validates Briu's rapid deployment promise. A sophisticated VC firm went from zero to operational agents in 72 hours. Proves this isn't theoretical — it's happening now at real companies.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-02",
+      "quote": "You run this like a server. Then you start authenticating it with your services. So, Gmail, Notion, Slack, WhatsApp, maybe even your password manager.",
+      "speaker": "Calacanis",
+      "timestamp": "00:47:15",
+      "categories": ["adoption_deployment", "compute_infrastructure"],
+      "briu_use": "Maps directly to Briu's integration story — connecting agents to existing business tools (Gmail, Notion, Slack). Shows the integration layer is the real value.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-03",
+      "quote": "We created like basically a virtual employee. We put it together and we made it the producer for my new This Week in AI podcast.",
+      "speaker": "Calacanis",
+      "timestamp": "00:48:06",
+      "categories": ["adoption_deployment", "empowerment_transformation"],
+      "briu_use": "Frames agents as virtual employees with real personas and real accounts — exactly how Briu positions agent deployment. Not a chatbot, a colleague.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-04",
+      "quote": "We said make a CRM for all potential guests and suggest other guests and it vibe coded a CRM for itself.",
+      "speaker": "Calacanis",
+      "timestamp": "00:48:36",
+      "categories": ["productivity_multipliers", "quotable_lines"],
+      "briu_use": "Powerful proof point: the agent didn't just use existing tools — it built its own tooling. Supports Briu's narrative that agents create compounding value.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-05",
+      "quote": "This is as good as like Nick or Lisa would do at a first pass, but it did it instantly.",
+      "speaker": "Calacanis",
+      "timestamp": "00:48:55",
+      "categories": ["productivity_multipliers", "quotable_lines"],
+      "briu_use": "Named-quality comparison to real employees. 'As good at first pass, but instant.' Perfect for Briu's speed-vs-quality messaging.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-06",
+      "quote": "All the stuff that a producer would do over a day or two — do a timeline, give suggested questions. So I teach it this.",
+      "speaker": "Calacanis",
+      "timestamp": "00:49:09",
+      "categories": ["productivity_multipliers", "adoption_deployment"],
+      "briu_use": "Shows the teaching/prompting workflow. A day or two of human work compressed into minutes. Supports Briu's efficiency claims.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-07",
+      "quote": "It guessed his email, sent it. I said, 'CC Heidi.' I haven't given it access to my stuff. And it said, 'Oh, do you want to get his top three times?' It's crazy what's going on here, folks.",
+      "speaker": "Calacanis",
+      "timestamp": "00:56:30",
+      "categories": ["productivity_multipliers", "quotable_lines"],
+      "briu_use": "Shows agents proactively anticipating needs — not just executing commands but thinking ahead. Supports Briu's 'agents that learn' positioning.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-08",
+      "quote": "Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%.",
+      "speaker": "Calacanis",
+      "timestamp": "00:56:55",
+      "categories": ["productivity_multipliers", "chart_worthy_data", "quotable_lines"],
+      "briu_use": "The headline stat. Producer: 80% automated (40/50 hours). SDR: 95% automated. Perfect for comparison charts and hero stats on the Briu site.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-09",
+      "quote": "We created a group called replicants. So now we've made five replicants at the company. And today is like replicant day or replicant week.",
+      "speaker": "Calacanis",
+      "timestamp": "00:50:19",
+      "categories": ["adoption_deployment", "empowerment_transformation"],
+      "briu_use": "Shows a real company going from one agent to five in days. Supports Briu's phased rollout approach — start with one, scale fast.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-10",
+      "quote": "So we started one to be an SDR and then we are giving it access to our CRM there. But it built its own CRM, David. It's building its own SaaS tools to solve its problems.",
+      "speaker": "Calacanis",
+      "timestamp": "00:51:04",
+      "categories": ["productivity_multipliers", "quotable_lines", "empowerment_transformation"],
+      "briu_use": "Agents that build their own tools. This is the compounding intelligence story — each integration makes the agent smarter and more capable.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-11",
+      "quote": "Every time you add it to something, it gets smarter.",
+      "speaker": "Calacanis",
+      "timestamp": "00:51:14",
+      "categories": ["quotable_lines", "empowerment_transformation"],
+      "briu_use": "Perfect tagline-quality quote. Supports Briu's 'compounding value' narrative — agents improve with each new connection and task.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-12",
+      "quote": "The LinkedIn is going to start adding people. People don't know that these aren't humans.",
+      "speaker": "Calacanis",
+      "timestamp": "00:51:21",
+      "categories": ["quotable_lines", "security_trust"],
+      "briu_use": "Use carefully — highlights both the power and the ethical edge. Briu can position as the responsible deployment partner that sets appropriate boundaries.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-13",
+      "quote": "I told it every time you do work for me in the replicant room, say what you did and then also put it on your calendar. So now it's putting on its calendar what it did in timestamps.",
+      "speaker": "Calacanis",
+      "timestamp": "00:50:25",
+      "categories": ["adoption_deployment", "security_trust"],
+      "briu_use": "Self-documenting agents with audit trails. Maps to Briu's transparency and trust messaging — you can see everything the agent does.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-14",
+      "quote": "The crazy thing is you can start talking to it directly. I can have a direct conversation with Producer X and it learns and now it knows everything.",
+      "speaker": "Calacanis",
+      "timestamp": "00:51:00",
+      "categories": ["empowerment_transformation", "quotable_lines"],
+      "briu_use": "Natural language interaction with agents. Employees don't need technical skills — they just talk to the agent like a colleague.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-15",
+      "quote": "This will be the year of the rise of the personal AI assistant. Until now, AI has mainly come in the form factor of a chatbot and it's been used as a research tool. Now, we're moving to a completely different form factor — an AI assistant that's an agent that can do things for you.",
+      "speaker": "Sacks",
+      "timestamp": "00:51:47",
+      "categories": ["quotable_lines", "adoption_deployment"],
+      "briu_use": "Sacks framing the chatbot-to-agent transition. Validates Briu's core thesis: we're past the chatbot era, into the agent era. Coming from a policy-connected voice (now US CTO).",
+      "priority": "high"
+    },
+    {
+      "id": "e259-16",
+      "quote": "Everyone's going to have this amazing AI agent.",
+      "speaker": "Sacks",
+      "timestamp": "00:52:10",
+      "categories": ["quotable_lines"],
+      "briu_use": "Simple, declarative prediction from someone now in government. Supports Briu's urgency messaging — this is inevitable, the question is when you start.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-17",
+      "quote": "It's not just the assistant in the way that you might otherwise be thinking about it — it's like this super worker. The super worker does scheduling, calendaring, ideation, knowledge work, creates new code, creates CRM tools, books your travel. It does everything.",
+      "speaker": "Chamath",
+      "timestamp": "00:54:54",
+      "categories": ["quotable_lines", "empowerment_transformation", "productivity_multipliers"],
+      "briu_use": "Chamath's 'super worker' framing is premium Briu content. Enumerate capabilities to show breadth. The word 'everything' lands hard.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-18",
+      "quote": "If you start thinking about having an army of super workers, you're like, 'Oh my god, what's possible?'",
+      "speaker": "Chamath",
+      "timestamp": "00:55:08",
+      "categories": ["quotable_lines", "empowerment_transformation"],
+      "briu_use": "The scaling vision. One agent is interesting. An army of agents is transformative. Supports Briu's 'start with one, scale to many' approach.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-19",
+      "quote": "That's the future where everyone has a super workforce and you put two Optimuses in your garage and they build and run a business for you and then everyone becomes an entrepreneur.",
+      "speaker": "Chamath",
+      "timestamp": "00:55:22",
+      "categories": ["quotable_lines", "empowerment_transformation"],
+      "briu_use": "The democratization vision. AI agents lower the barrier to running a business. Briu helps businesses get this future today — digital agents before physical ones arrive.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-20",
+      "quote": "It keeps learning. Now, your API bill is going to be nuts. The first day we did this, we hit like $100. I think it's going to be like $1,000 a day in API calls.",
+      "speaker": "Calacanis",
+      "timestamp": "00:57:07",
+      "categories": ["cost_data", "chart_worthy_data"],
+      "briu_use": "Real cost data from real deployment. $100/day on day one, projected $1,000/day at scale with closed-source APIs. Sets up the cost problem that open source and Briu's optimization solve.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-21",
+      "quote": "My team's like, 'Hey, this is a lot of API calls because people are going crazy inside Slack and making all of these agents.'",
+      "speaker": "Calacanis",
+      "timestamp": "00:57:14",
+      "categories": ["adoption_deployment", "cost_data"],
+      "briu_use": "Shows organic adoption — once people see agents work, they want more. Also highlights the cost management challenge that Briu helps solve.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-22",
+      "quote": "We are ordering Mac Studios, the really powerful ones with max memory, and we're putting Kimi on them. We're going to have it free. According to people online, 95% of all these queries can be done for free with Kimi.",
+      "speaker": "Calacanis",
+      "timestamp": "00:57:23",
+      "categories": ["cost_data", "compute_infrastructure", "chart_worthy_data"],
+      "briu_use": "The cost arbitrage play: route 95% of queries to local open-source models, pay API costs only for the hard 5%. This is the economics Briu can deliver for clients.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-23",
+      "quote": "You'll save 90%.",
+      "speaker": "Chamath",
+      "timestamp": "00:57:46",
+      "categories": ["cost_data", "chart_worthy_data", "quotable_lines"],
+      "briu_use": "Two-word cost reduction claim from Chamath. Chart-worthy: closed-source API costs vs. open-source local inference. 90% savings.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-24",
+      "quote": "You're going to cut the cost of AI by 90%. And when you do that, your bill is going to be 10 bucks a day.",
+      "speaker": "Chamath",
+      "timestamp": "01:01:42",
+      "categories": ["cost_data", "chart_worthy_data", "quotable_lines"],
+      "briu_use": "From $1,000/day to $10/day. That's the chart. Closed-source vs. optimized open-source deployment. This is Briu's value proposition in one stat.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-25",
+      "quote": "I cancelled all of my OpenAI accounts. $25,000 gone.",
+      "speaker": "Calacanis",
+      "timestamp": "01:02:36",
+      "categories": ["cost_data", "quotable_lines"],
+      "briu_use": "A VC spending $25K on OpenAI walked away. Shows the economic shift is real and happening at the top. Supports Briu's cost optimization narrative.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-26",
+      "quote": "This is independent of whatever LLM you want to use. You can swap out LLMs. You could route it to different LLMs. You can do whatever you want with it.",
+      "speaker": "Calacanis",
+      "timestamp": "00:57:52",
+      "categories": ["compute_infrastructure", "adoption_deployment"],
+      "briu_use": "Model-agnostic architecture. Maps directly to Briu's approach — no vendor lock-in, swap models as better ones emerge. Future-proof by design.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-27",
+      "quote": "I don't think people understand how important this Kimi K2.5 moment is.",
+      "speaker": "Calacanis",
+      "timestamp": "00:58:02",
+      "categories": ["quotable_lines"],
+      "briu_use": "General urgency quote. The open-source inflection point changes everything about cost, control, and deployment speed.",
+      "priority": "low"
+    },
+    {
+      "id": "e259-28",
+      "quote": "I wanted to set it up really badly, but I was too afraid of the security issues to do it.",
+      "speaker": "Sacks",
+      "timestamp": "00:51:40",
+      "categories": ["security_trust"],
+      "briu_use": "Even sophisticated tech investors hesitate on security. This is exactly the gap Briu fills — handling the security, permissions, and trust layer so clients don't have to worry.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-29",
+      "quote": "Nobody like Claude or XAI or Microsoft would ever allow you to do this because it's so dangerous, obviously.",
+      "speaker": "Calacanis",
+      "timestamp": "00:47:22",
+      "categories": ["security_trust"],
+      "briu_use": "Acknowledges the real risk. Briu's value is navigating this danger responsibly — setting up proper sandboxing, permissions, and approval gates.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-30",
+      "quote": "You're one terms of service update away from everything breaking. Because at one point, Anthropic didn't like what was going on and they said, 'No, this is not allowed.'",
+      "speaker": "Chamath",
+      "timestamp": "00:59:30",
+      "categories": ["security_trust", "quotable_lines"],
+      "briu_use": "Platform risk with closed-source. Supports Briu's approach of building on open-source and self-hosted infrastructure for resilience.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-31",
+      "quote": "Open source is important because it's transparent. It gives everybody their own sovereignty. It gives you control of your own speed. You can audit the weights of the models. It allows you to host it on your own hardware. And the most important thing is the data never leaves your control.",
+      "speaker": "Chamath",
+      "timestamp": "00:59:40",
+      "categories": ["security_trust", "compute_infrastructure"],
+      "briu_use": "Chamath's case for open source maps to Briu's data sovereignty pitch. 'The data never leaves your control' is a client-facing talking point.",
+      "priority": "high"
+    },
+    {
+      "id": "e259-32",
+      "quote": "People are starting to daisy chain the Mac Studios. This is commodity hardware running open source. We have control of all the data. We have it on our own hardware. We can run it infinitely.",
+      "speaker": "Calacanis",
+      "timestamp": "01:01:58",
+      "categories": ["compute_infrastructure", "cost_data"],
+      "briu_use": "The infrastructure play: commodity Apple hardware + open-source models = infinite inference at fixed cost. Briu can recommend this setup for appropriate clients.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-33",
+      "quote": "90% or 95% of our jobs are going to go to this local hardware we'll control. We don't have to worry about our information going up to Sam.",
+      "speaker": "Calacanis",
+      "timestamp": "01:02:12",
+      "categories": ["compute_infrastructure", "security_trust", "chart_worthy_data"],
+      "briu_use": "95% local / 5% cloud split. This is the hybrid architecture Briu can deploy. Privacy-first with cloud fallback for complex tasks only.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-34",
+      "quote": "There are papers that indicate we could probably go down by 70 to 100x in terms of compute need in how the model actually runs. So yeah, ultimately these things end up on the iPhone running locally.",
+      "speaker": "Friedberg",
+      "timestamp": "01:03:16",
+      "categories": ["compute_infrastructure", "chart_worthy_data"],
+      "briu_use": "70-100x compute reduction on the horizon. Supports Briu's message that costs are plummeting and now is the time to build the workflow layer while models get cheaper underneath.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-35",
+      "quote": "Somebody has to be able to take an open source model and sandbox it. We're going to run it under all these race conditions. We're going to get to all these corner cases so that we can tell you that it's actually good to go and then you can use it.",
+      "speaker": "Chamath",
+      "timestamp": "01:00:50",
+      "categories": ["security_trust"],
+      "briu_use": "The validation and trust gap Chamath identifies is a business opportunity. Briu can position as the team that does this work — vetting, sandboxing, and certifying agent deployments.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-36",
+      "quote": "You're going to need AI models to look for corrupted code and to do the security eval. And there's going to have to be continuous monitoring.",
+      "speaker": "Sacks",
+      "timestamp": "01:05:50",
+      "categories": ["security_trust"],
+      "briu_use": "Continuous monitoring as a requirement. Supports Briu's ongoing management proposition — deployment isn't the end, it's the beginning.",
+      "priority": "low"
+    },
+    {
+      "id": "e259-37",
+      "quote": "When you farm out work, the proprietary models keep that agentic layer kind of secret. Kimi K2.5 was like, 'Okay look, here's this thing called Agent Swarm' — a technology that allows you to create 100 sub-agents that solve any complicated multi-step problem in parallel.",
+      "speaker": "Chamath",
+      "timestamp": "01:00:00",
+      "categories": ["compute_infrastructure", "adoption_deployment"],
+      "briu_use": "Agent Swarm architecture — 100 parallel sub-agents. This is the orchestration layer Briu builds for clients. Multi-step, multi-agent workflows.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-38",
+      "quote": "The people I'm talking to in startups, which is where you always see the most efficient use of technology, they're all using Kimi.",
+      "speaker": "Calacanis",
+      "timestamp": "01:06:30",
+      "categories": ["adoption_deployment", "quotable_lines"],
+      "briu_use": "Startups as leading indicators. If the most efficient companies are already on open-source AI, larger companies need to follow. Briu bridges that gap.",
+      "priority": "low"
+    },
+    {
+      "id": "e259-39",
+      "quote": "It widens the aperture of what's possible. It's not just the assistant in the way that you might otherwise be thinking about it.",
+      "speaker": "Chamath",
+      "timestamp": "00:54:58",
+      "categories": ["quotable_lines", "empowerment_transformation"],
+      "briu_use": "Reframing what AI means. People think 'calendar assistant' but it's a full super worker. Briu helps clients see and capture the full aperture.",
+      "priority": "medium"
+    },
+    {
+      "id": "e259-40",
+      "quote": "It's a matter of time until the big model makers create an incremental revenue stream for guys like you to license back all your prompt and response data. And you'll probably make enough to pay for all the costs of hosting and running these models.",
+      "speaker": "Chamath",
+      "timestamp": "01:02:40",
+      "categories": ["cost_data"],
+      "briu_use": "Speculative but interesting — data as revenue. Supports Briu's advisory role in helping clients think about their AI data strategy long-term.",
+      "priority": "low"
+    }
+  ]
+}

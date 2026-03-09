@@ -1039,3 +1039,259 @@ Briu.charts.creationVsDestruction = function(containerId) {
     if (ratioEl) Briu.charts._countUp(ratioEl, 20000, 2200, '', 'x');
   });
 };
+
+
+/* ============================================
+   Chart 19: Cost Arbitrage
+   $1,000/day → $10/day with open-source
+   ============================================ */
+Briu.charts.costArbitrage = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var stages = [
+    { label: 'Closed-source APIs', cost: 1000, color: 'var(--coral)', detail: 'Full Claude/GPT API at scale — Calacanis E259' },
+    { label: 'Hybrid routing', cost: 100, color: 'var(--gold)', detail: '95% local, 5% cloud fallback — Calacanis E259' },
+    { label: 'Optimized local', cost: 10, color: 'var(--forest)', detail: 'Open-source on commodity hardware — Chamath E259' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">Daily agent cost by deployment model</div>' +
+    '<div class="arb-chart">';
+
+  stages.forEach(function(s, i) {
+    var pct = (s.cost / 1000) * 100;
+    html += '<div class="arb-row">' +
+      '<div class="arb-label">' + s.label + '</div>' +
+      '<div class="arb-track"><div class="arb-fill" style="--target:' + pct + '%;background:' + s.color + ';transition-delay:' + (i * 0.3) + 's"></div></div>' +
+      '<div class="arb-price" data-count="' + s.cost + '">$0</div>' +
+      '</div>' +
+      '<div class="arb-detail">' + s.detail + '</div>';
+  });
+
+  html += '<div class="arb-savings">' +
+    '<div class="arb-savings-num" data-count="100">0x</div>' +
+    '<div class="arb-savings-label">cost reduction possible</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201CYou\u2019re going to cut the cost of AI by 90%. And when you do that, your bill is going to be 10 bucks a day.\u201D</div>' +
+    '<div class="chart-source">Chamath Palihapitiya \u2014 All-In Podcast E259</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+    el.querySelectorAll('.arb-price').forEach(function(numEl) {
+      Briu.charts._countUp(numEl, parseInt(numEl.getAttribute('data-count')), 1400, '$', '/day');
+    });
+    var savEl = el.querySelector('.arb-savings-num');
+    if (savEl) Briu.charts._countUp(savEl, 100, 1800, '', 'x');
+  });
+};
+
+
+/* ============================================
+   Chart 20: Energy Bottleneck
+   Chip production vs power availability
+   ============================================ */
+Briu.charts.energyBottleneck = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var data = [
+    { year: '2024', chips: 15, power: 20, label: 'Balanced' },
+    { year: '2025', chips: 35, power: 22, label: 'Gap opens' },
+    { year: '2026', chips: 60, power: 25, label: 'Chips outpace power' },
+    { year: '2028', chips: 85, power: 40, label: 'Energy scramble' },
+    { year: '2030', chips: 100, power: 60, label: '100 GW target' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">AI chip production vs energy availability</div>' +
+    '<div class="enb-chart">' +
+    '<div class="enb-legend">' +
+    '<span class="enb-legend-item"><span class="enb-dot" style="background:var(--gold)"></span>Chip capacity</span>' +
+    '<span class="enb-legend-item"><span class="enb-dot" style="background:var(--forest)"></span>Power available</span>' +
+    '</div>' +
+    '<div class="enb-bars">';
+
+  data.forEach(function(d, i) {
+    html += '<div class="enb-col" style="--delay:' + (i * 0.15) + 's">' +
+      '<div class="enb-bar-pair">' +
+      '<div class="enb-bar enb-bar-chip" style="--target:' + d.chips + '%"></div>' +
+      '<div class="enb-bar enb-bar-power" style="--target:' + d.power + '%"></div>' +
+      '</div>' +
+      '<div class="enb-year">' + d.year + '</div>' +
+      '<div class="enb-label">' + d.label + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>' +
+    '<div class="enb-gap-callout">' +
+    '<div class="enb-gap-label">The Gap</div>' +
+    '<div class="enb-gap-desc">Businesses that deploy now lock in capacity before the energy crunch hits.</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201CTowards the end of this year, chip production will probably outpace the ability to turn chips on.\u201D</div>' +
+    '<div class="chart-source">Elon Musk \u2014 Stripe interview, 2026</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};
+
+
+/* ============================================
+   Chart 21: Time Compression
+   4 years = 40 years of change
+   ============================================ */
+Briu.charts.timeCompression = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var milestones = [
+    { year: '2022', event: 'ChatGPT launches', detail: 'First public LLM chatbot' },
+    { year: '2023', event: 'GPT-4 + agents emerge', detail: 'Autonomous tool use begins' },
+    { year: '2024', event: 'Open-source catches up', detail: 'Llama, Mistral close the gap' },
+    { year: '2025', event: 'Agent frameworks go viral', detail: 'OpenClaw: 175K GitHub stars' },
+    { year: '2026', event: 'Agents run businesses', detail: '24/7 autonomous operations' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">4 years of AI = 40 years of change</div>' +
+    '<div class="tc-chart">' +
+    '<div class="tc-track"><div class="tc-track-fill"></div></div>' +
+    '<div class="tc-milestones">';
+
+  milestones.forEach(function(m, i) {
+    html += '<div class="tc-milestone" style="--delay:' + (i * 0.2) + 's">' +
+      '<div class="tc-dot" style="background:' + (i === 4 ? 'var(--gold)' : 'var(--forest)') + ';box-shadow:0 0 12px ' + (i === 4 ? 'rgba(212,160,90,0.4)' : 'rgba(77,128,112,0.3)') + '"></div>' +
+      '<div class="tc-year">' + m.year + '</div>' +
+      '<div class="tc-event">' + m.event + '</div>' +
+      '<div class="tc-detail">' + m.detail + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>' +
+    '<div class="tc-punchline">' +
+    '<div class="tc-punchline-num" data-count="40">0</div>' +
+    '<div class="tc-punchline-label">years of change compressed into 4</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201CAI is accelerating at a rate where four years is like 40 years.\u201D</div>' +
+    '<div class="chart-source">Peter Diamandis \u2014 Moonshots #236</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+    var numEl = el.querySelector('.tc-punchline-num');
+    if (numEl) Briu.charts._countUp(numEl, 40, 1800, '', ' years');
+  });
+};
+
+
+/* ============================================
+   Chart 22: $200 to $5M
+   Subscription to company value
+   ============================================ */
+Briu.charts.subscriptionToCompany = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var steps = [
+    { label: 'Anthropic sub', value: '$200/mo', icon: '1', color: 'var(--text-muted)', desc: 'Claude Max subscription' },
+    { label: 'Pick a niche', value: '1 week', icon: '2', color: 'var(--river)', desc: 'CRM for grocery stores, marketing for lumberyards' },
+    { label: 'Build with agents', value: '2-4 weeks', icon: '3', color: 'var(--gold)', desc: 'Agents build your product' },
+    { label: 'Revenue', value: '$5M+', icon: '4', color: 'var(--forest)', desc: 'Vertical SaaS in weeks, not years' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">From subscription to company</div>' +
+    '<div class="s2c-chart">';
+
+  steps.forEach(function(s, i) {
+    html += '<div class="s2c-step" style="--delay:' + (i * 0.2) + 's">' +
+      '<div class="s2c-num" style="color:' + s.color + '">' + s.icon + '</div>' +
+      '<div class="s2c-content">' +
+      '<div class="s2c-label">' + s.label + '</div>' +
+      '<div class="s2c-value" style="color:' + s.color + '">' + s.value + '</div>' +
+      '<div class="s2c-desc">' + s.desc + '</div>' +
+      '</div>' +
+      '</div>';
+    if (i < steps.length - 1) {
+      html += '<div class="s2c-arrow">\u2192</div>';
+    }
+  });
+
+  html += '</div>' +
+    '<div class="s2c-multiplier">' +
+    '<div class="s2c-multiplier-num">25,000x</div>' +
+    '<div class="s2c-multiplier-label">potential return on $200/mo</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201CTake OpenClaw, find one very specific sliver \u2014 and build the OpenClaw version for that. I think that\u2019s a $5 million company overnight that only cost you $200 for your Anthropic subscription.\u201D</div>' +
+    '<div class="chart-source">Alex Finn \u2014 Moonshots #237</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};
+
+
+/* ============================================
+   Chart 23: Software Factory
+   5 agents building autonomously
+   ============================================ */
+Briu.charts.softwareFactory = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var agents = [
+    { name: 'Scout', role: 'Research', model: 'MiniMax', color: 'var(--river)', desc: 'Monitors web 24/7, finds opportunities' },
+    { name: 'Analyst', role: 'Evaluate', model: 'ChatGPT', color: 'var(--gold)', desc: 'Assesses market fit, prioritizes' },
+    { name: 'Charlie', role: 'Build', model: 'Qwen 3.5', color: 'var(--forest)', desc: 'Codes solutions autonomously' },
+    { name: 'Ralph', role: 'QA', model: 'ChatGPT', color: 'var(--coral)', desc: 'Reviews code, catches bugs' },
+    { name: 'Henry', role: 'Orchestrate', model: 'Opus 4.6', color: 'var(--gold-bright)', desc: 'Manages all agents, reports to human' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">The autonomous software factory</div>' +
+    '<div class="sf-chart">' +
+    '<div class="sf-pipeline">';
+
+  agents.forEach(function(a, i) {
+    html += '<div class="sf-node" style="--delay:' + (i * 0.15) + 's">' +
+      '<div class="sf-node-circle" style="border-color:' + a.color + ';box-shadow:0 0 16px ' + a.color.replace('var(', 'rgba(').replace(')', ',0.15)') + '">' +
+      '<span style="color:' + a.color + '">' + a.name.charAt(0) + '</span>' +
+      '</div>' +
+      '<div class="sf-node-name">' + a.name + '</div>' +
+      '<div class="sf-node-role" style="color:' + a.color + '">' + a.role + '</div>' +
+      '<div class="sf-node-model">' + a.model + '</div>' +
+      '<div class="sf-node-desc">' + a.desc + '</div>' +
+      '</div>';
+    if (i < agents.length - 1) {
+      html += '<div class="sf-connector">\u2192</div>';
+    }
+  });
+
+  html += '</div>' +
+    '<div class="sf-stats">' +
+    '<div class="sf-stat"><div class="sf-stat-num">5</div><div class="sf-stat-label">Agents</div></div>' +
+    '<div class="sf-stat"><div class="sf-stat-num">24/7</div><div class="sf-stat-label">Always on</div></div>' +
+    '<div class="sf-stat"><div class="sf-stat-num">1</div><div class="sf-stat-label">Human</div></div>' +
+    '<div class="sf-stat"><div class="sf-stat-num">$0</div><div class="sf-stat-label">Local inference</div></div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201CI\u2019ve pretty much built a software factory where I have five OpenClaws working together to build and improve software autonomously.\u201D</div>' +
+    '<div class="chart-source">Alex Finn \u2014 Moonshots #237</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};

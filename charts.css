@@ -290,6 +290,101 @@
   .cvd-label { font-size: 0.75rem; }
 }
 
+/* ---- Chart 19: Cost Arbitrage ---- */
+.arb-chart { padding: 8px 0; }
+.arb-row { display: grid; grid-template-columns: 160px 1fr 100px; align-items: center; gap: 14px; margin-bottom: 6px; }
+.arb-label { font-size: 0.82rem; font-weight: 600; color: var(--text); font-family: var(--sans); text-align: right; }
+.arb-track { height: 28px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.arb-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .arb-fill { width: var(--target); }
+.arb-price { font-family: var(--serif); font-size: 1.2rem; color: var(--text); text-align: right; line-height: 1; }
+.arb-detail { font-size: 0.72rem; color: var(--text-muted); margin-left: 176px; margin-bottom: 12px; opacity: 0.6; }
+.arb-savings { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+.arb-savings-num { font-family: var(--serif); font-size: 3.2rem; background: linear-gradient(135deg, var(--coral), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.arb-savings-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* ---- Chart 20: Energy Bottleneck ---- */
+.enb-chart { padding: 8px 0; }
+.enb-legend { display: flex; gap: 20px; justify-content: center; margin-bottom: 20px; }
+.enb-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--text-muted); }
+.enb-dot { width: 10px; height: 10px; border-radius: 2px; }
+.enb-bars { display: flex; gap: 8px; justify-content: center; align-items: flex-end; height: 200px; padding: 0 20px; }
+.enb-col { flex: 1; max-width: 120px; display: flex; flex-direction: column; align-items: center; gap: 6px; opacity: 0; transform: translateY(12px); transition: all 0.5s ease; transition-delay: var(--delay); }
+.briu-chart.visible .enb-col { opacity: 1; transform: translateY(0); }
+.enb-bar-pair { display: flex; gap: 4px; align-items: flex-end; height: 160px; width: 100%; }
+.enb-bar { flex: 1; border-radius: 3px 3px 0 0; height: 0%; transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
+.enb-bar-chip { background: linear-gradient(180deg, var(--gold), rgba(212,160,90,0.6)); }
+.enb-bar-power { background: linear-gradient(180deg, var(--forest), rgba(77,128,112,0.6)); }
+.briu-chart.visible .enb-bar { height: var(--target); }
+.enb-year { font-family: var(--serif); font-size: 0.95rem; color: var(--text); line-height: 1; }
+.enb-label { font-size: 0.65rem; color: var(--text-muted); text-align: center; line-height: 1.3; }
+.enb-gap-callout { text-align: center; margin-top: 20px; padding: 14px 18px; background: rgba(224,123,95,0.06); border: 1px solid rgba(224,123,95,0.12); }
+.enb-gap-label { font-family: var(--serif); font-size: 1.1rem; color: var(--coral); margin-bottom: 4px; }
+.enb-gap-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; }
+
+/* ---- Chart 21: Time Compression ---- */
+.tc-chart { padding: 8px 0; }
+.tc-track { height: 4px; background: var(--surface-2); border-radius: 2px; position: relative; margin: 0 10px; }
+.tc-track-fill { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--forest), var(--gold)); width: 0%; transition: width 2s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .tc-track-fill { width: 100%; }
+.tc-milestones { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 20px; }
+.tc-milestone { opacity: 0; transform: translateY(10px); transition: all 0.5s ease; transition-delay: var(--delay); text-align: center; }
+.briu-chart.visible .tc-milestone { opacity: 1; transform: translateY(0); }
+.tc-dot { width: 10px; height: 10px; border-radius: 50%; margin: 0 auto 8px; }
+.tc-year { font-family: var(--serif); font-size: 1.1rem; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.tc-event { font-size: 0.78rem; font-weight: 600; color: var(--text); line-height: 1.3; margin-bottom: 2px; }
+.tc-detail { font-size: 0.7rem; color: var(--text-muted); line-height: 1.4; }
+.tc-punchline { text-align: center; margin-top: 24px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+.tc-punchline-num { font-family: var(--serif); font-size: 3.2rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.tc-punchline-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* ---- Chart 22: Subscription to Company ---- */
+.s2c-chart { display: flex; align-items: center; justify-content: center; gap: 0; flex-wrap: wrap; padding: 16px 0; }
+.s2c-step { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 110px; max-width: 140px; opacity: 0; transform: translateY(12px); transition: all 0.5s ease; transition-delay: var(--delay); }
+.briu-chart.visible .s2c-step { opacity: 1; transform: translateY(0); }
+.s2c-num { font-family: var(--serif); font-size: 1.8rem; line-height: 1; margin-bottom: 8px; opacity: 0.3; }
+.s2c-label { font-size: 0.78rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+.s2c-value { font-family: var(--serif); font-size: 1.3rem; line-height: 1; margin-bottom: 6px; }
+.s2c-desc { font-size: 0.7rem; color: var(--text-muted); line-height: 1.4; }
+.s2c-arrow { color: var(--gold); opacity: 0.3; font-size: 1.4rem; padding: 0 8px; margin-top: -20px; }
+.s2c-multiplier { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+.s2c-multiplier-num { font-family: var(--serif); font-size: 2.8rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.s2c-multiplier-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+/* ---- Chart 23: Software Factory ---- */
+.sf-chart { padding: 8px 0; }
+.sf-pipeline { display: flex; align-items: flex-start; justify-content: center; gap: 0; flex-wrap: wrap; }
+.sf-node { display: flex; flex-direction: column; align-items: center; text-align: center; min-width: 90px; max-width: 110px; opacity: 0; transform: scale(0.9); transition: all 0.5s ease; transition-delay: var(--delay); }
+.briu-chart.visible .sf-node { opacity: 1; transform: scale(1); }
+.sf-node-circle { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--surface-2); border: 1.5px solid; margin-bottom: 8px; transition: transform 0.3s ease; }
+.sf-node:hover .sf-node-circle { transform: scale(1.1); }
+.sf-node-circle span { font-size: 1rem; font-weight: 700; }
+.sf-node-name { font-family: var(--serif); font-size: 0.88rem; color: var(--text); line-height: 1; margin-bottom: 2px; }
+.sf-node-role { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+.sf-node-model { font-size: 0.65rem; color: var(--text-muted); opacity: 0.6; margin-bottom: 4px; }
+.sf-node-desc { font-size: 0.68rem; color: var(--text-muted); line-height: 1.3; }
+.sf-connector { color: var(--gold); opacity: 0.25; font-size: 1.2rem; padding: 0 6px; margin-top: 14px; }
+.sf-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 24px; }
+.sf-stat { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.04); padding: 14px 10px; text-align: center; }
+.sf-stat-num { font-family: var(--serif); font-size: 1.6rem; color: var(--text); line-height: 1; margin-bottom: 4px; }
+.sf-stat-label { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+@media (max-width: 640px) {
+  .arb-row { grid-template-columns: 110px 1fr 80px; gap: 10px; }
+  .arb-label { font-size: 0.75rem; }
+  .arb-detail { margin-left: 0; }
+  .enb-bars { height: 160px; gap: 4px; padding: 0; }
+  .enb-label { font-size: 0.58rem; }
+  .tc-milestones { grid-template-columns: repeat(3, 1fr); }
+  .tc-milestone:nth-child(4), .tc-milestone:nth-child(5) { grid-column: span 1; }
+  .s2c-chart { flex-direction: column; gap: 16px; }
+  .s2c-arrow { transform: rotate(90deg); padding: 0; margin: 0; }
+  .s2c-step { max-width: 100%; flex-direction: row; gap: 12px; text-align: left; }
+  .sf-pipeline { flex-direction: column; align-items: center; gap: 8px; }
+  .sf-connector { transform: rotate(90deg); padding: 0; }
+  .sf-stats { grid-template-columns: repeat(2, 1fr); }
+}
+
 /* ---- Chart 14: Constellation Org ---- */
 .constellation { position: relative; width: 100%; height: 480px; margin: 0 auto; }
 .constellation-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }

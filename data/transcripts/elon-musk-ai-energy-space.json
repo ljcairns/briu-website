@@ -1,0 +1,415 @@
+{
+  "source": {
+    "title": "In 36 months, the cheapest place to put AI will be space",
+    "speaker": "Elon Musk",
+    "interviewer": "Patrick Collison, John Collison (Stripe)",
+    "platform": "YouTube",
+    "video_id": "BYXbuik3dgA",
+    "date_approximate": "2026-03",
+    "duration_minutes": 149,
+    "topics": ["AI infrastructure", "energy/compute scaling", "space-based AI", "humanoid robots", "chip manufacturing", "digital human emulation"],
+    "note": "Auto-caption transcript, cleaned. Speakers inferred from context — interviewers are the Collison brothers (Stripe founders)."
+  },
+  "quotes": [
+    {
+      "id": 1,
+      "text": "The output of chips is growing pretty much exponentially, but the output of electricity is flat. So how are you going to turn the chips on? Magical power sources? Magical electricity fairies?",
+      "speaker": "Elon Musk",
+      "timestamp": "00:01:12",
+      "categories": ["compute_infrastructure", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "Perfect for the 'why now' narrative — the gap between AI capability and infrastructure is the defining constraint. Businesses that move now lock in access before the crunch."
+    },
+    {
+      "id": 2,
+      "text": "All of the United States currently uses only half a terawatt on average.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:04:51",
+      "categories": ["chart_worthy_data", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "Scale reference point — AI ambitions dwarf current US energy consumption. Good for a comparison chart."
+    },
+    {
+      "id": 3,
+      "text": "Those who have lived in software land don't realize they're about to have a hard lesson in hardware.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:05:15",
+      "categories": ["quotable_lines"],
+      "priority": "high",
+      "briu_use": "Punchy one-liner for the 'why now' page. Underscores that AI deployment is no longer just a software problem — the companies that understand real-world constraints win."
+    },
+    {
+      "id": 4,
+      "text": "You need the electrical transformers to run the AI transformers.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:05:30",
+      "categories": ["quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Clever wordplay that lands well in a 'why now' context about infrastructure bottlenecks."
+    },
+    {
+      "id": 5,
+      "text": "Every 110,000 GB300s — inclusive of networking, CPU, storage, cooling, margin for servicing power — is roughly 300 megawatts. What you probably need at the generation level to service 330,000 GB300s is roughly a gigawatt.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:11:18",
+      "categories": ["chart_worthy_data", "compute_infrastructure", "cost_data"],
+      "priority": "medium",
+      "briu_use": "Specific hardware-to-power ratio. Useful for a chart showing the real cost of scaling AI infrastructure — supports Briu's argument that outsourcing AI ops is more efficient than building in-house."
+    },
+    {
+      "id": 6,
+      "text": "The number of miracles in series that the xAI team had to accomplish in order to get a gigawatt of power online was crazy.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:09:19",
+      "categories": ["quotable_lines", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "Even the best-resourced teams find infrastructure brutally hard. Reinforces Briu's value prop: let us handle the hard deployment work."
+    },
+    {
+      "id": 7,
+      "text": "You're going to have a 40% increase on your power just for cooling. That's assuming you don't want your data center to turn off on hot days.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:10:34",
+      "categories": ["chart_worthy_data", "compute_infrastructure"],
+      "priority": "low",
+      "briu_use": "Hidden cost of AI infrastructure — supports the argument that the real cost of AI is much higher than naive estimates."
+    },
+    {
+      "id": 8,
+      "text": "Towards the end of this year, chip production will probably outpace the ability to turn chips on.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:30:48",
+      "categories": ["timelines_predictions", "compute_infrastructure"],
+      "priority": "high",
+      "briu_use": "Key timeline prediction. The constraint is shifting from 'can we build AI?' to 'can we power AI?' — businesses should deploy now while capacity exists."
+    },
+    {
+      "id": 9,
+      "text": "The turbines are sold out through 2030.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:12:44",
+      "categories": ["timelines_predictions", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "Gas turbine backlog through 2030 means power constraints are structural, not temporary. Chart-worthy data point for infrastructure bottleneck visualization."
+    },
+    {
+      "id": 10,
+      "text": "There are only three casting companies in the world that make these [turbine blades and vanes], and they're massively backlogged.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:13:17",
+      "categories": ["compute_infrastructure", "chart_worthy_data"],
+      "priority": "low",
+      "briu_use": "Supply chain depth — the bottleneck goes deeper than most people realize. Supports 'why now' urgency."
+    },
+    {
+      "id": 11,
+      "text": "Both SpaceX and Tesla are building towards 100 gigawatts a year of solar cell production.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:07:40",
+      "categories": ["chart_worthy_data", "compute_infrastructure", "timelines_predictions"],
+      "priority": "medium",
+      "briu_use": "Scale of investment in AI-adjacent infrastructure. 100 GW/year is a staggering number — useful for comparison charts."
+    },
+    {
+      "id": 12,
+      "text": "Right now the world has maybe 20-25 gigawatts of compute.",
+      "speaker": "Interviewer (Patrick Collison)",
+      "timestamp": "00:23:22",
+      "categories": ["chart_worthy_data"],
+      "priority": "medium",
+      "briu_use": "Current baseline for global compute capacity. Useful denominator for growth charts."
+    },
+    {
+      "id": 13,
+      "text": "I'd be surprised by the end of this year if digital human emulation has not been solved. Can you do anything that a human with access to a computer could do?",
+      "speaker": "Elon Musk",
+      "timestamp": "01:00:39",
+      "categories": ["timelines_predictions", "ai_capability_progress"],
+      "priority": "high",
+      "briu_use": "Core prediction that maps directly to Briu's value prop. If digital human emulation is solved in 2026, every business needs an AI deployment strategy immediately. This is the 'why now' moment."
+    },
+    {
+      "id": 14,
+      "text": "The best you can do is a digital Optimus. You can move electrons and you can amplify the productivity of humans. But that's the most you can do until you have physical robots.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:01:12",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "Defines the current era perfectly — AI can amplify human productivity through digital work. This is exactly what Briu deploys: digital agents that amplify teams."
+    },
+    {
+      "id": 15,
+      "text": "As soon as you unlock the digital human, you basically have access to trillions of dollars of revenue.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:07:02",
+      "categories": ["ai_capability_progress", "cost_data", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The economic prize of AI deployment is measured in trillions. Businesses that deploy AI agents now are positioning for this wave."
+    },
+    {
+      "id": 16,
+      "text": "If AI can simply take whatever is given to the outsourced customer service company that they already use and do customer service using the apps that they already use, then you can make tremendous headway in customer service, which is close to a trillion dollars all in.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:09:00",
+      "categories": ["ai_capability_progress", "cost_data", "chart_worthy_data"],
+      "priority": "high",
+      "briu_use": "This is Briu's exact model — AI that works with your existing tools, no massive integration needed. Customer service alone is ~$1T. The 'no barriers to entry' framing is gold for Briu's messaging."
+    },
+    {
+      "id": 17,
+      "text": "The differences between the various AI labs are smaller than just the temporal differences. They're all much further ahead than anyone was 24 months ago.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:00:16",
+      "categories": ["ai_capability_progress"],
+      "priority": "medium",
+      "briu_use": "All frontier models are converging — what matters now is deployment speed, not picking the 'best' model. Supports Briu's model-agnostic approach."
+    },
+    {
+      "id": 18,
+      "text": "I think maybe in five or six years, AI will exceed the sum of all human intelligence.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:38:39",
+      "categories": ["timelines_predictions", "ai_capability_progress"],
+      "priority": "high",
+      "briu_use": "5-6 year timeline to AI surpassing all human intelligence. The window to build competitive advantage with AI is closing fast."
+    },
+    {
+      "id": 19,
+      "text": "Humanoid robots will improve by three things that are growing exponentially multiplied by each other recursively: exponential increase in digital intelligence, exponential increase in the AI chip capability, and exponential increase in the electromechanical dexterity. This is a supernova.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:02:28",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Triple-exponential framing. Even before robots, this same recursive improvement applies to digital AI agents. The improvement curve is accelerating."
+    },
+    {
+      "id": 20,
+      "text": "I call AI the supersonic tsunami.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:15:03",
+      "categories": ["quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Vivid metaphor for the speed and scale of AI disruption. Could work as a pull quote on the 'why now' page."
+    },
+    {
+      "id": 21,
+      "text": "Amplifying the productivity of human corporations is simply a short-term thing.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:15:22",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "medium",
+      "briu_use": "The current window for human-AI collaboration is temporary. Businesses that don't adopt now will face pure-AI competitors later."
+    },
+    {
+      "id": 22,
+      "text": "Corporations that are purely AI and robotics will vastly outperform any corporations that have people in the loop.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:15:58",
+      "categories": ["timelines_predictions", "ai_capability_progress", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The endgame framing — pure-AI corporations will win. The transition period is NOW. Briu helps businesses start that transition."
+    },
+    {
+      "id": 23,
+      "text": "An entire skyscraper of humans doing calculations can be replaced by a laptop with a spreadsheet. That spreadsheet can do vastly more calculations than an entire building full of human computers. What if only some of the cells in your spreadsheet were calculated by humans? Actually, that would be much worse than if all of the cells were calculated by the computer.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:16:15",
+      "categories": ["quotable_lines", "ai_capability_progress"],
+      "priority": "high",
+      "briu_use": "The spreadsheet analogy is powerful and accessible. Illustrates why partial AI adoption creates friction — you need to commit to the workflow, not just bolt AI onto one step."
+    },
+    {
+      "id": 24,
+      "text": "The labs are on track to spend over $50-200 billion. OpenAI is making $20B of revenue, Anthropic is at $10B.",
+      "speaker": "Elon Musk / Interviewer",
+      "timestamp": "01:06:24",
+      "categories": ["cost_data", "chart_worthy_data"],
+      "priority": "medium",
+      "briu_use": "Scale of AI investment from the majors. Useful context for why the capabilities are improving so fast — tens of billions pouring in annually."
+    },
+    {
+      "id": 25,
+      "text": "The current limiting factor that I see in the three to four year timeframe, it's chips. In the one year timeframe, it's energy, power production, electricity.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:45:47",
+      "categories": ["timelines_predictions", "compute_infrastructure"],
+      "priority": "high",
+      "briu_use": "Clear timeline for bottleneck shifts. Right now (2026): energy is the constraint. By 2029-2030: chips are the constraint. Businesses should deploy AI while capacity is still accessible."
+    },
+    {
+      "id": 26,
+      "text": "It's not clear to me that there's enough usable electricity to turn on all the AI chips that are being made.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:46:02",
+      "categories": ["compute_infrastructure", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The AI chip surplus / energy deficit is coming this year. Cloud compute pricing will likely increase. Move now."
+    },
+    {
+      "id": 27,
+      "text": "I think you sort of hit the hardware wall and then whichever company can scale hardware the fastest will be the leader.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:47:04",
+      "categories": ["ai_capability_progress", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "The AI race is now a hardware race. Software ideas travel in ~6 months between companies. Differentiation comes from deployment and infrastructure, not algorithms."
+    },
+    {
+      "id": 28,
+      "text": "Generally, the innovations from the corporations that call themselves labs, the ideas tend to flow... It's rare to see that there's more than about a six-month difference.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:46:45",
+      "categories": ["ai_capability_progress"],
+      "priority": "high",
+      "briu_use": "Critical insight for Briu's model-agnostic positioning. All frontier labs are within 6 months of each other. The differentiator is not which model you use — it's how fast you deploy."
+    },
+    {
+      "id": 29,
+      "text": "We are 1000% going to go bankrupt as a country, and fail as a country, without AI and robots. Nothing else will solve the national debt.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:21:21",
+      "categories": ["quotable_lines", "timelines_predictions"],
+      "priority": "medium",
+      "briu_use": "Dramatic framing of AI as existential necessity, not luxury. Supports the 'why now' urgency — AI adoption isn't optional, it's survival."
+    },
+    {
+      "id": 30,
+      "text": "I think the way that Tesla solved self-driving is the way to do it. Instead of driving a car, it's driving a computer screen. It's a self-driving computer, essentially.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:04:54",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The 'self-driving computer' metaphor is exactly what AI agents are. Briu deploys self-driving computers for your business. Powerful framing."
+    },
+    {
+      "id": 31,
+      "text": "Take something as simple as customer service. If you have to integrate with the APIs of existing corporations — many of which don't even have an API, so you've got to make one, and you've got to wade through legacy software — that's extremely slow. However, if AI can simply take whatever is given to the outsourced customer service company and do customer service using the apps that they already use, then you can make tremendous headway.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:08:39",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The API-less deployment model. AI agents that use existing tools rather than requiring deep integration. This is Briu's approach — work with what you have, deploy fast."
+    },
+    {
+      "id": 32,
+      "text": "Once you have effectively digital Optimus working, you can then run any application. You could run conventional apps, stuff from Cadence and Synopsys. You can run 1,000 or 10,000 simultaneously. You march up the difficulty curve.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:10:57",
+      "categories": ["ai_capability_progress", "timelines_predictions"],
+      "priority": "medium",
+      "briu_use": "The AI capability ladder — start with simple tasks, march up the difficulty curve. This is Briu's engagement model: start with quick wins, expand to harder workflows."
+    },
+    {
+      "id": 33,
+      "text": "In the absence of breakthrough innovations in the US, China will utterly dominate.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:41:35",
+      "categories": ["quotable_lines", "timelines_predictions"],
+      "priority": "low",
+      "briu_use": "Geopolitical urgency angle — AI adoption is a competitive necessity at the national level, which filters down to the business level."
+    },
+    {
+      "id": 34,
+      "text": "China is extremely competitive in manufacturing. This year China will exceed three times US electricity output. Electricity output is a reasonable proxy for the economy.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:40:22",
+      "categories": ["chart_worthy_data", "compute_infrastructure"],
+      "priority": "low",
+      "briu_use": "Electricity as economic proxy — useful framing for energy/compute charts."
+    },
+    {
+      "id": 35,
+      "text": "Nvidia's output is FTPing files to Taiwan. Apple doesn't make phones — they send files to China. Microsoft doesn't manufacture anything. Their output is digital. So if you have a human emulator, you can basically create one of the most valuable companies in the world overnight.",
+      "speaker": "Elon Musk",
+      "timestamp": "01:07:16",
+      "categories": ["ai_capability_progress", "quotable_lines"],
+      "priority": "high",
+      "briu_use": "The most valuable companies in the world produce digital output. AI agents produce digital output. The value creation opportunity is enormous and immediate."
+    },
+    {
+      "id": 36,
+      "text": "Better to err on the side of optimism and be wrong than err on the side of pessimism and be right, for quality of life.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:48:45",
+      "categories": ["quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Closing sentiment that aligns with Briu's tone — calm confidence, not hype. Act optimistically, move forward."
+    },
+    {
+      "id": 37,
+      "text": "Fab production from start to finish is a five-year period. So the limiting factor is chips. The limiting factor once you can get to space is chips, but the limiting factor before you can get to space is power.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:29:59",
+      "categories": ["timelines_predictions", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "Five-year fab timeline means today's chip shortage is baked in through ~2031. Businesses can't wait for supply to catch up — deploy with what's available now."
+    },
+    {
+      "id": 38,
+      "text": "100 gigawatts of power and chips that can take 100 gigawatts by 2030.",
+      "speaker": "Elon Musk",
+      "timestamp": "02:43:00",
+      "categories": ["chart_worthy_data", "timelines_predictions", "compute_infrastructure"],
+      "priority": "medium",
+      "briu_use": "2030 target: 100 GW of AI compute. Current global compute is ~20-25 GW. A 4-5x increase in 4 years. Chart-worthy growth trajectory."
+    },
+    {
+      "id": 39,
+      "text": "I just repeatedly tackle the limiting factor. Whatever the limiting factor is on speed, I'm going to tackle that.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:20:42",
+      "categories": ["quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Limiting-factor thinking is Briu's operational philosophy too. Identify the bottleneck, solve it, move on."
+    },
+    {
+      "id": 40,
+      "text": "Most of the time, what you're doing is engineering, not coming up with a fundamentally new algorithm. The vast majority of what will be done in the future is engineering. It rounds up to 100%.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:55:43",
+      "categories": ["quotable_lines", "ai_capability_progress"],
+      "priority": "high",
+      "briu_use": "AI deployment is engineering, not research. The breakthroughs have happened. Now it's about building and deploying — which is exactly what Briu does."
+    },
+    {
+      "id": 41,
+      "text": "Reality is the best verifier.",
+      "speaker": "Elon Musk",
+      "timestamp": "00:52:18",
+      "categories": ["quotable_lines"],
+      "priority": "medium",
+      "briu_use": "Short, punchy. Aligns with Briu's build-and-test ethos — deploy agents, measure results, iterate."
+    }
+  ],
+  "chart_data_summary": {
+    "energy_comparison": {
+      "us_average_power": "500 GW",
+      "us_peak_power": "1,000+ GW",
+      "xai_colossus_power": "~1 GW",
+      "cooling_overhead": "40% additional power",
+      "servicing_margin": "20-25% additional power",
+      "gb300_per_gigawatt": "~330,000 GB300s",
+      "china_vs_us_electricity": "3x US output (2026)"
+    },
+    "timeline": {
+      "2026_end": "Chip production outpaces ability to power them",
+      "2026_end_2": "Digital human emulation likely solved",
+      "2028_2029": "Space-based AI cheapest option (36 months)",
+      "2029_2030": "Chip fabs become main bottleneck",
+      "2030": "100 GW compute target",
+      "2031_2032": "AI exceeds sum of all human intelligence"
+    },
+    "investment_scale": {
+      "openai_revenue": "$20B/year",
+      "anthropic_revenue": "$10B/year",
+      "xai_revenue": "$1B/year",
+      "industry_capex": "$50-200B planned",
+      "customer_service_tam": "~$1T globally"
+    },
+    "global_compute": {
+      "current": "20-25 GW",
+      "target_2030": "100 GW",
+      "growth_factor": "4-5x in 4 years"
+    }
+  }
+}

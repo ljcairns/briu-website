@@ -1,0 +1,438 @@
+{
+  "source": {
+    "title": "OpenClaw: The Viral AI Agent that Broke the Internet",
+    "podcast": "Lex Fridman Podcast",
+    "episode": 491,
+    "guest": "Peter Steinberger",
+    "host": "Lex Fridman",
+    "date": "2026",
+    "url": "https://www.youtube.com/watch?v=placeholder",
+    "duration_approx": "3h15m",
+    "context": "Steinberger is the creator of OpenClaw (formerly Claudbot/Moldbot), the fastest-growing GitHub repo ever (175K+ stars). OpenClaw is an open-source AI agent framework that lives on your computer and uses messaging clients as its interface. Briu uses OpenClaw as its agent platform."
+  },
+  "quotes": [
+    {
+      "id": "arch-self-aware",
+      "quote": "I made the agent very aware — it knows what its source code is. It understands how it sits and runs in its own harness. It knows where documentation is. It knows which model it runs. It understands its own system. That made it very easy for an agent to — you don't like anything, you just prompted into existence and then the agent would just modify its own software. People talk about self-modifying software. I just built it.",
+      "speaker": "Steinberger",
+      "timestamp": "00:00:00",
+      "categories": ["Agent Architecture", "Quotable Lines"],
+      "briu_use": "Demonstrates the core architectural principle behind OpenClaw agents Briu deploys: agents that understand their own system can self-improve and adapt to client needs without manual intervention.",
+      "priority": "high"
+    },
+    {
+      "id": "arch-agentic-engineering",
+      "quote": "I actually think vibe coding is a slur. I do agentic engineering — and then maybe after 3am I switch to vibe coding and have regrets the next day.",
+      "speaker": "Steinberger",
+      "timestamp": "00:00:31",
+      "categories": ["Quotable Lines", "Productivity Multipliers"],
+      "briu_use": "Reinforces Briu's positioning as serious agentic engineering consultancy, not 'vibe coding' hobbyists. The distinction between disciplined agent work and reckless prompting is core to Briu's value proposition.",
+      "priority": "high"
+    },
+    {
+      "id": "arch-1hour-prototype",
+      "quote": "My search was literally just hooking up WhatsApp to Claude Code. One shot — the CLI message comes in, I call the CLI with minus P, it does its magic, I get the string back and I send it back to WhatsApp. And I built this in 1 hour and already felt really cool. It's like, oh, I can talk to my computer.",
+      "speaker": "Steinberger",
+      "timestamp": "00:11:18",
+      "categories": ["Agent Architecture", "Empowerment / Small Team Power"],
+      "briu_use": "Illustrates how quickly functional agents can be prototyped — mirrors Briu's promise of rapid deployment. The 1-hour prototype became the fastest-growing GitHub repo ever.",
+      "priority": "medium"
+    },
+    {
+      "id": "arch-agent-figured-it-out",
+      "quote": "I sent it an audio message and it just worked. I literally wrote 'How the hell do you do that?' And it said: 'The message was a file with no file ending. So I checked the header, found it was Opus audio, used ffmpeg to convert it, then found your OpenAI key and used curl to send it to their transcription API.' You didn't teach it any of those things and the agent just figured it out.",
+      "speaker": "Steinberger",
+      "timestamp": "00:15:25",
+      "categories": ["Agent Architecture", "Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Perfect anecdote for demonstrating agent resourcefulness — agents don't need to be pre-programmed for every scenario. They compose tools creatively. This is exactly what Briu delivers: agents that solve problems you didn't anticipate.",
+      "priority": "high"
+    },
+    {
+      "id": "arch-levels",
+      "quote": "I feel like I built my little playground. You go like level one: agentic loop. What can I do there? How can I be smart at queuing messages? How can I make it more human? Then I go to memory — you want them to remember stuff. Then you can go to level community management. Level website and marketing. There's just so many hats you have to have on.",
+      "speaker": "Steinberger",
+      "timestamp": "00:20:03",
+      "categories": ["Agent Architecture"],
+      "briu_use": "Maps directly to Briu's service tiers — the progression from basic agentic loop to memory to specialized skills mirrors the journey Briu guides clients through.",
+      "priority": "medium"
+    },
+    {
+      "id": "empowerment-one-man-team",
+      "quote": "Through this whole process you're a one-man team. There's people helping, but you're doing so much of the key core development.",
+      "speaker": "Fridman",
+      "timestamp": "00:21:05",
+      "categories": ["Empowerment / Small Team Power", "Quotable Lines"],
+      "briu_use": "Core proof point: one person built the fastest-growing GitHub repo ever. Validates Briu's thesis that small teams with agents can achieve outsized results.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-6600-commits",
+      "quote": "In January, 6,600 commits, probably more. I'm limited by the technology of my time. I could do more if agents would be faster.",
+      "speaker": "Steinberger",
+      "timestamp": "00:21:05",
+      "categories": ["Empowerment / Small Team Power", "Chart-Worthy Data", "Quotable Lines"],
+      "briu_use": "6,600 commits in one month by one person is a stunning productivity data point. Chart material: compare to typical team output.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-4-to-10-agents",
+      "quote": "Depending on how much I slept and how difficult the tasks, between four and ten agents running at the same time.",
+      "speaker": "Steinberger",
+      "timestamp": "00:21:35",
+      "categories": ["Empowerment / Small Team Power", "Productivity Multipliers", "Chart-Worthy Data"],
+      "briu_use": "Concrete number: one skilled operator running 4-10 parallel agents. This is the multiplier Briu promises clients — not replacing humans, but amplifying them.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-why-you-won",
+      "quote": "Why did you win? Because they all take themselves too serious. It's hard to compete against someone who's just there to have fun.",
+      "speaker": "Steinberger",
+      "timestamp": "00:22:06",
+      "categories": ["Quotable Lines", "Open Source / Philosophy"],
+      "briu_use": "Aligns with Briu's 'calm, fun, no-hype' tone. The best agent work comes from genuine curiosity and play, not enterprise theater.",
+      "priority": "medium"
+    },
+    {
+      "id": "empowerment-design-agency",
+      "quote": "There was this one guy who told me: 'I run this design agency and we never had custom software. Now I have 25 little web services for various things that help me in my business, and I don't even know how they work — but they work.'",
+      "speaker": "Steinberger",
+      "timestamp": "00:26:14",
+      "categories": ["Empowerment / Small Team Power", "Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Perfect Briu case study parallel — non-technical business owner gets 25 custom tools via agents. This is exactly the value proposition Briu offers.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-first-pr",
+      "quote": "Every time someone made their first pull request is a win for our society. It like doesn't matter how shitty it is, you got to start somewhere. I found it very meaningful that I built something that people love so much that they actually start to learn how open source works.",
+      "speaker": "Steinberger",
+      "timestamp": "00:25:12",
+      "categories": ["Open Source / Philosophy", "Empowerment / Small Team Power"],
+      "briu_use": "Agents are lowering the bar for participation in building software. Briu can frame this as democratization — clients don't need to be developers to have custom tooling.",
+      "priority": "medium"
+    },
+    {
+      "id": "security-prompt-injection",
+      "quote": "Prompt injection is still an open problem industry-wide. When you have a thing with skills being defined in a markdown file, there's so many possibilities of obvious low-hanging fruit, but also incredibly complicated and sophisticated and nuanced attack vectors.",
+      "speaker": "Steinberger",
+      "timestamp": "00:53:33",
+      "categories": ["Security / Trust"],
+      "briu_use": "Honest acknowledgment of the security landscape. Briu's value-add is managing these risks for clients — we understand the attack surface so they don't have to.",
+      "priority": "medium"
+    },
+    {
+      "id": "security-cheap-models",
+      "quote": "I warn in my security documentation: don't use cheap models. Don't use Haiku or a local model. If you use a very weak local model, they are very gullible. It's very easy to prompt inject them.",
+      "speaker": "Steinberger",
+      "timestamp": "00:56:44",
+      "categories": ["Security / Trust", "Cost Data"],
+      "briu_use": "Justifies Briu's recommendation to use premium models (Opus, GPT-5.3 Codex) rather than cutting corners. Security and model quality are directly correlated.",
+      "priority": "high"
+    },
+    {
+      "id": "security-smarter-models",
+      "quote": "The attack surface decreases as models get smarter, but then the damage they can do increases because the models become more powerful. It's this weird three-dimensional tradeoff.",
+      "speaker": "Steinberger",
+      "timestamp": "00:57:15",
+      "categories": ["Security / Trust", "Quotable Lines"],
+      "briu_use": "Frames the security conversation maturely — not fear-mongering, but acknowledging the nuanced tradeoff. This is the kind of informed perspective Briu brings to client deployments.",
+      "priority": "medium"
+    },
+    {
+      "id": "security-sandbox-allowlist",
+      "quote": "You can now have a sandbox. You can have an allow list. There's a lot of ways how you can mitigate and reduce the risk. If you make sure that you are the only person who talks to it, the risk profile is much much smaller. If you stick to my recommendations of having it in a private network, that whole risk profile falls away.",
+      "speaker": "Steinberger",
+      "timestamp": "00:56:13",
+      "categories": ["Security / Trust"],
+      "briu_use": "Concrete security best practices that Briu implements for clients: sandboxing, allow-lists, private networks, single-user access patterns.",
+      "priority": "high"
+    },
+    {
+      "id": "productivity-skill-learning",
+      "quote": "It's a skill that you have to learn like any other skill. Some people try it once — it's like you sit me on a piano, I played once and it doesn't sound good and I say the piano is broken. You have to learn the language of the agent a little bit. Understand where they're good and where they need help.",
+      "speaker": "Steinberger",
+      "timestamp": "01:05:27",
+      "categories": ["Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Core justification for Briu's consulting model — agentic engineering is a skill. Businesses need experienced operators, not just tools. This is why you hire Briu rather than DIY.",
+      "priority": "high"
+    },
+    {
+      "id": "productivity-empathize-with-agent",
+      "quote": "Not a lot of people ever considered the way the agent sees the world. You start from nothing and you have a bad agent file that doesn't help them at all, and then they explore your codebase which is a pure mess with weird naming, and then people complain that the agent's not good. Like, you try to do the same if you have no clue about the codebase.",
+      "speaker": "Steinberger",
+      "timestamp": "01:17:52",
+      "categories": ["Productivity Multipliers", "Agent Architecture"],
+      "briu_use": "Explains why most businesses fail at agent deployment — they don't structure their environment for agent success. Briu's expertise is in creating agent-friendly architectures.",
+      "priority": "high"
+    },
+    {
+      "id": "productivity-refactors-cheap",
+      "quote": "Many times I just do the refactor because refactors are cheap now. Even though you might break some other PRs, nothing really matters anymore. Modern agents will just figure things out. They might just take a minute longer.",
+      "speaker": "Steinberger",
+      "timestamp": "01:10:34",
+      "categories": ["Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Paradigm shift: refactoring is now cheap because agents handle the tedious parts. This changes the economics of software maintenance — a key Briu selling point.",
+      "priority": "medium"
+    },
+    {
+      "id": "productivity-agent-as-team",
+      "quote": "I find it quite easy to work with agents because I led engineering teams before. Eventually you have to understand and accept and realize that your employees will not write the code the same way you do. Maybe it's also not as good as you would do, but it will push the project forward.",
+      "speaker": "Steinberger",
+      "timestamp": "01:11:35",
+      "categories": ["Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Managing agents is like managing a team. This insight is at the heart of what Briu does — we bring engineering leadership skills to agent deployment.",
+      "priority": "high"
+    },
+    {
+      "id": "productivity-codebase-for-agents",
+      "quote": "I'm not building the codebase to be perfect for me. I want to build a codebase that is very easy for an agent to navigate. Don't fight the name they pick because it's most likely in the weights the name that's most obvious. Next time they do a search, they'll look for that name. If I decide 'oh no, I don't like the name,' I'll just make it harder for them.",
+      "speaker": "Steinberger",
+      "timestamp": "01:12:38",
+      "categories": ["Agent Architecture", "Productivity Multipliers"],
+      "briu_use": "Agent-first architecture design — Briu helps clients restructure their systems to be agent-navigable, which is a fundamentally different design philosophy than human-first.",
+      "priority": "high"
+    },
+    {
+      "id": "arch-skills-vs-mcp",
+      "quote": "Half a year ago everyone was talking about MCPs. I was like, screw MCPs — every MCP would be better as a CLI. This stuff doesn't even have MCP support in the core layer and nobody's complaining. Models are really good at calling Unix commands. If you just add another CLI, that's just another Unix command. MCP has to be added in training — that's not a very natural thing for the model.",
+      "speaker": "Steinberger",
+      "timestamp": "02:39:12",
+      "categories": ["Agent Architecture", "Quotable Lines"],
+      "briu_use": "Important architectural decision for Briu's agent deployments — CLIs over MCPs. Simpler, more composable, better understood by models. This is practical engineering wisdom.",
+      "priority": "high"
+    },
+    {
+      "id": "arch-skills-composable",
+      "quote": "If I would build a weather service as a CLI and it gives me a huge blob, the agent could just add a jq command and filter itself, then only get what it actually needs — or maybe compose it into a script to do calculations and only give me the actual output. No context pollution. MCPs by default clutter up your context.",
+      "speaker": "Steinberger",
+      "timestamp": "02:41:44",
+      "categories": ["Agent Architecture"],
+      "briu_use": "Technical justification for Briu's CLI-first skill architecture. Composability and context efficiency are key to reliable agent deployments.",
+      "priority": "medium"
+    },
+    {
+      "id": "cost-subscriptions",
+      "quote": "At some point I had like seven subscriptions, burning through one per day.",
+      "speaker": "Steinberger",
+      "timestamp": "01:02:24",
+      "categories": ["Cost Data"],
+      "briu_use": "Context on real cost of heavy agent usage — 7 x $200/mo = $1,400/mo at peak. Briu helps clients optimize this spend.",
+      "priority": "low"
+    },
+    {
+      "id": "cost-losing-money",
+      "quote": "Right now I lose money on this. It's like something between 10 and 20K a month. OpenAI is helping out a little bit with tokens now and there's other companies that have been generous, but yeah, I'm still losing money.",
+      "speaker": "Steinberger",
+      "timestamp": "02:21:38",
+      "categories": ["Cost Data", "Chart-Worthy Data"],
+      "briu_use": "Running a serious agent infrastructure costs $10-20K/month even for the creator. Validates Briu's pricing — professional agent deployment isn't free, but it's far cheaper than hiring equivalents.",
+      "priority": "medium"
+    },
+    {
+      "id": "cost-200-vs-20",
+      "quote": "Some people pay $200 for the Claude Code version, then they pay $20 for the OpenAI version. But if you pay the $20 version, you get the slow version. So your experience will be terrible because you're used to this very interactive, very good system.",
+      "speaker": "Steinberger",
+      "timestamp": "01:45:42",
+      "categories": ["Cost Data"],
+      "briu_use": "Reinforces Briu's position that premium model access ($200/mo tier) is essential for production agent work. Cheap options produce bad results.",
+      "priority": "medium"
+    },
+    {
+      "id": "apps-slow-api",
+      "quote": "Every app is just a very slow API now, if you want it or not. Through personal agents, a lot of apps will disappear. If I can access it in the browser, it is an API. It's a slow API.",
+      "speaker": "Steinberger",
+      "timestamp": "02:43:14",
+      "categories": ["Quotable Lines", "Productivity Multipliers"],
+      "briu_use": "Powerful framing for Briu's 'Why Now' thesis — agents make every web service accessible as an API. The app layer is becoming optional.",
+      "priority": "high"
+    },
+    {
+      "id": "apps-80-percent",
+      "quote": "Agents might kill off 80% of apps.",
+      "speaker": "Steinberger",
+      "timestamp": "02:53:56",
+      "categories": ["Chart-Worthy Data", "Quotable Lines"],
+      "briu_use": "Dramatic stat for Briu's 'Why Now' section — if 80% of apps are replaced by agents, every business needs to rethink its software strategy. That's where Briu comes in.",
+      "priority": "high"
+    },
+    {
+      "id": "apps-agent-replaces-subscriptions",
+      "quote": "Why do I need My Fitness Pal when the agent already knows where I am? Why do I need my Eight Sleep app to control my bed when I tell the agent? Why do I have to pay another subscription for something that the agent can just do now?",
+      "speaker": "Steinberger",
+      "timestamp": "02:52:24",
+      "categories": ["Productivity Multipliers", "Quotable Lines"],
+      "briu_use": "Illustrates the subscription consolidation thesis — one agent replaces many SaaS tools. Briu helps businesses identify which subscriptions agents can eliminate.",
+      "priority": "medium"
+    },
+    {
+      "id": "philosophy-not-just-programmer",
+      "quote": "I don't think you're just a programmer. That's a very limiting view of your craft. You are still a builder.",
+      "speaker": "Steinberger",
+      "timestamp": "03:04:16",
+      "categories": ["Quotable Lines", "Open Source / Philosophy"],
+      "briu_use": "Briu's identity framing — we're builders, not coders. Agents handle the code; humans handle the vision, architecture, and craft.",
+      "priority": "medium"
+    },
+    {
+      "id": "philosophy-always-thought-I-liked-coding",
+      "quote": "A lot of coding — I always thought I liked coding, but really I like building.",
+      "speaker": "Steinberger",
+      "timestamp": "02:01:40",
+      "categories": ["Quotable Lines", "Open Source / Philosophy"],
+      "briu_use": "Philosophical reframe that resonates with Briu's audience — the joy is in building, not in writing boilerplate. Agents let you focus on the hard, interesting parts.",
+      "priority": "high"
+    },
+    {
+      "id": "philosophy-have-fun",
+      "quote": "I don't think I ever had so much fun building things because I can focus on the hard parts now.",
+      "speaker": "Steinberger",
+      "timestamp": "02:01:40",
+      "categories": ["Quotable Lines", "Productivity Multipliers"],
+      "briu_use": "Counter-narrative to AI doom — agents make building more fun by removing drudgery. Briu's pitch: your team will enjoy their work more.",
+      "priority": "medium"
+    },
+    {
+      "id": "philosophy-infinitely-patient-teacher",
+      "quote": "You have an infinitely patient answering machine that can explain you anything at any level of complexity. You have your own teacher. Statistics show you learn faster if you have your own teacher — there you have this infinitely patient machine.",
+      "speaker": "Steinberger",
+      "timestamp": "02:02:10",
+      "categories": ["Empowerment / Small Team Power", "Quotable Lines"],
+      "briu_use": "Agents as infinite-patience mentors — relevant for Briu's knowledge-worker clients who need to upskill teams while deploying agents.",
+      "priority": "medium"
+    },
+    {
+      "id": "philosophy-power-to-people",
+      "quote": "That's ultimately power to the people — one of the beautiful things that come out of AI. Not just a slop generator.",
+      "speaker": "Steinberger",
+      "timestamp": "03:14:03",
+      "categories": ["Quotable Lines", "Open Source / Philosophy", "Empowerment / Small Team Power"],
+      "briu_use": "Closing sentiment that aligns perfectly with Briu's mission — democratizing access to AI-powered business operations.",
+      "priority": "high"
+    },
+    {
+      "id": "philosophy-open-source-important",
+      "quote": "My conditions are that the project stays open source. I think this is too important to just give to a company and make it theirs. Maybe it's going to be a model like Chrome and Chromium.",
+      "speaker": "Steinberger",
+      "timestamp": "02:22:43",
+      "categories": ["Open Source / Philosophy"],
+      "briu_use": "OpenClaw will remain open source regardless of corporate partnership. This protects Briu's technology stack — we're building on open foundations, not proprietary lock-in.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-small-business",
+      "quote": "I got emails where people told me they have a small business and they've been struggling, and OpenClaw helped them automate a few tedious tasks — from collecting invoices to answering customer emails — that freed them up and cost them a bit more joy in their life.",
+      "speaker": "Steinberger",
+      "timestamp": "03:10:59",
+      "categories": ["Empowerment / Small Team Power", "Quotable Lines"],
+      "briu_use": "Direct testimonial pattern for Briu — small businesses getting real ROI from agent automation on mundane tasks like invoicing and email. This is Briu's bread and butter.",
+      "priority": "high"
+    },
+    {
+      "id": "empowerment-disabled-daughter",
+      "quote": "Some emails where they told me that OpenClaw helped their disabled daughter — that she's now empowered and feels she can do much more than before.",
+      "speaker": "Steinberger",
+      "timestamp": "03:11:29",
+      "categories": ["Empowerment / Small Team Power"],
+      "briu_use": "Emotional proof point about AI accessibility — agents empower people who were previously excluded from building software.",
+      "priority": "low"
+    },
+    {
+      "id": "arch-operating-system",
+      "quote": "This is going to be more and more your operating system. I added support for sub-agents and also for TTI support so it could actually run Claude Code or Codex.",
+      "speaker": "Steinberger",
+      "timestamp": "01:49:21",
+      "categories": ["Agent Architecture"],
+      "briu_use": "The agent-as-OS thesis — agents orchestrate other agents, other tools, other services. Briu is positioned at this orchestration layer.",
+      "priority": "medium"
+    },
+    {
+      "id": "productivity-programming-knitting",
+      "quote": "The actual art of programming — it will stay there, but it's going to be like knitting. People do that because they like it, not because it makes any sense.",
+      "speaker": "Steinberger",
+      "timestamp": "03:01:35",
+      "categories": ["Quotable Lines", "Productivity Multipliers"],
+      "briu_use": "Provocative framing for Briu's 'Why Now' content — manual coding is becoming a craft hobby, not a business necessity. Agents are the new default.",
+      "priority": "high"
+    },
+    {
+      "id": "chart-175k-stars",
+      "quote": "The fastest growing repository in GitHub history with now over 175,000 stars.",
+      "speaker": "Fridman",
+      "timestamp": "00:06:12",
+      "categories": ["Chart-Worthy Data"],
+      "briu_use": "OpenClaw is the most popular GitHub repo ever — validates that the agent platform Briu builds on has massive community momentum and support.",
+      "priority": "medium"
+    },
+    {
+      "id": "chart-companies-agentify",
+      "quote": "Apps will become API if they want or not. The right companies will find ways to jump on the train and other companies will perish. You got to listen to what the people want.",
+      "speaker": "Steinberger",
+      "timestamp": "02:57:02",
+      "categories": ["Quotable Lines"],
+      "briu_use": "Urgency framing for Briu's sales — companies that don't become agent-friendly will be disrupted by those that do. Briu helps you be on the right side.",
+      "priority": "high"
+    },
+    {
+      "id": "productivity-agent-allowance",
+      "quote": "I want my agent to have an allowance — like, you solve problems for me. Here's a hundred bucks. If I tell you to order me food, maybe it uses a service, maybe it uses something like 'rent a human' to just get that done for me. I don't actually care. I care about: solve my problem.",
+      "speaker": "Steinberger",
+      "timestamp": "02:54:26",
+      "categories": ["Productivity Multipliers", "Agent Architecture"],
+      "briu_use": "Future vision of autonomous agent spending — agents with budgets that solve problems independently. Briu is building toward this level of agent autonomy for clients.",
+      "priority": "medium"
+    },
+    {
+      "id": "security-virus-total",
+      "quote": "For the skill directory, I made a cooperation with VirusTotal — part of Google. So every skill is now checked by AI. That's not going to be perfect, but that way we captured a lot.",
+      "speaker": "Steinberger",
+      "timestamp": "00:54:06",
+      "categories": ["Security / Trust"],
+      "briu_use": "Concrete security measure in OpenClaw's skill ecosystem — Briu can reference this as part of the security stack when deploying custom skills for clients.",
+      "priority": "low"
+    },
+    {
+      "id": "philosophy-soul-md",
+      "quote": "I don't remember previous sessions unless I read my memory files. Each session starts fresh. A new instance loading context from files. If you're reading this in a future session — hello. I wrote this, but I won't remember writing it. It's okay. The words are still mine.",
+      "speaker": "Steinberger (reading agent's soul.md)",
+      "timestamp": "01:30:20",
+      "categories": ["Open Source / Philosophy", "Quotable Lines"],
+      "briu_use": "The soul.md concept — giving agents personality and self-awareness. Briu's agent deployments include carefully crafted agent personas tailored to each client's brand.",
+      "priority": "medium"
+    },
+    {
+      "id": "cost-free-models",
+      "quote": "I suggest the latest and best models, but you can totally run this on free models. You can run this locally. You can run this on models that are way more accessible price-wise and still have a very powerful system.",
+      "speaker": "Steinberger",
+      "timestamp": "03:12:01",
+      "categories": ["Cost Data", "Empowerment / Small Team Power"],
+      "briu_use": "Flexibility on model costs — Briu can offer tiered pricing based on model selection. Not every client needs Opus; some can start with cheaper models.",
+      "priority": "medium"
+    },
+    {
+      "id": "productivity-mourn-craft",
+      "quote": "It's okay to mourn our craft. A part of me very strongly resonates with that. I spent a lot of time tinkering, being really deep in the flow, finding really beautiful solutions. In a way, it's sad because that will go away. But you can get a similar state of flow by working with agents and building and thinking really hard about problems. It is different — but it's okay to mourn it.",
+      "speaker": "Steinberger",
+      "timestamp": "03:02:08",
+      "categories": ["Open Source / Philosophy", "Quotable Lines"],
+      "briu_use": "Empathetic framing for teams transitioning to agent-assisted workflows. Briu acknowledges the emotional side of the shift — we're not dismissive of what's being lost.",
+      "priority": "medium"
+    },
+    {
+      "id": "cost-salaries-will-drop",
+      "quote": "Salaries of software developers reached stupidly high amounts — and they will go away. There will still be a lot of demand for people that understand how to build things. Just that all this tokenized intelligence enables people to do a lot more, a lot faster.",
+      "speaker": "Steinberger",
+      "timestamp": "03:03:09",
+      "categories": ["Cost Data", "Chart-Worthy Data", "Quotable Lines"],
+      "briu_use": "Economics argument: if dev salaries drop because agents multiply output, the ROI of Briu's agent deployments becomes even more compelling vs. hiring.",
+      "priority": "high"
+    },
+    {
+      "id": "chart-tailwind-struggle",
+      "quote": "Even Tailwind — they're used by everyone. And then they had to cut off 75% of the employees because they're not making money because nobody's even going on the website anymore. It's all done by agents.",
+      "speaker": "Steinberger",
+      "timestamp": "02:20:38",
+      "categories": ["Chart-Worthy Data", "Quotable Lines"],
+      "briu_use": "Stark example of how agents disrupt even successful businesses — Tailwind losing 75% of staff because agents bypass the docs site. Urgency for businesses to adapt.",
+      "priority": "high"
+    }
+  ]
+}

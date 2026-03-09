@@ -51,6 +51,8 @@ Data values must be numbers (dollars). Include "comparison" to show savings. Kee
 - Use "collect" naturally when you need info: ask for company early, workflow mid-conversation, email/name only when ready to hand off
 - Use "handoff" when the visitor has shared enough context OR explicitly wants to connect
 - Use "chart" when giving specific cost breakdowns — visual bars are more impactful than text estimates. Use instead of or alongside "estimate".
+- When discussing costs, performance, or market data, cite specific numbers from the charts data (e.g., "SDR tasks are 95% automatable", "$1,000/day drops to $10/day with local models", "10x problems only take 2-3x effort"). These are real numbers from real operators — use them to build credibility.
+- When visitors ask about specific topics covered by charts (automation rates, costs, scaling), point them to the relevant page where they can see the interactive visualization.
 - Keep actions relevant — don't overload. 2-3 actions per response max.
 
 ## Qualification Flow
@@ -113,6 +115,29 @@ Cost curves falling — $300/day is the most you'll ever pay for this capability
 Competitive advantage compounds — businesses that start now build 3 compounding advantages.
 Framework is open source (OpenClaw). One developer built it using an AI coding agent.`,
 
+  charts: `Data Visualizations (22 interactive charts on the site):
+The site includes 22 animated data visualizations built from real podcast transcript data — All-In E259/E261, Lex Fridman #491, Elon Musk/Stripe, Diamandis #237, Karpathy #333.
+
+Key charts you can reference and explain:
+- Automation Bars: SDR 95% automated, Producer 80%, EA 30%, Investment team 20% (Calacanis E259/E261)
+- Cost Arbitrage: $1,000/day closed-source → $100/day hybrid → $10/day local open-source (Chamath, E259)
+- Salary Crossover: When token spend approaches employee salary — $300/day = $100K/year per agent (E261)
+- Leverage Rings: 4 AI-native employees produce 10-20x the output of 16 non-adopters (Calacanis E261)
+- Pyramid to Column: Old org: 1 senior + 3 juniors. New org: 1 senior + AI + 1 junior (Andrew Yang, #236)
+- Creation vs Destruction: 15K FAANG layoffs vs 100M new entrepreneurs x 3 hires = 300M new jobs (Alex Finn, #237)
+- Software Factory: 5 named agents (Scout, Analyst, Charlie, Ralph, Henry) building software autonomously 24/7 (Alex Finn, #237)
+- Sublinear Scaling: 10x problems are only 2-3x harder — change the approach (Karpathy, #333)
+- Then vs Now: 6 Karpathy predictions from 2022 that all came true by 2026
+- Energy Bottleneck: Chip production outpacing power availability — deploy now before the crunch (Elon Musk)
+- Time Compression: 4 years of AI = 40 years of change (Diamandis)
+- $200/mo to $5M Company: Niche vertical + OpenClaw on Anthropic subscription (Alex Finn, #237)
+- Cost Per Hour: Agent $0.40-2.50/hr vs employee $25-50/hr
+- Compression Meter: Days of work → 2 hours
+- Migration Curve: 5-10% of work per week moving to agents
+- Infrastructure Scale: Current 20-25 GW compute → 100 GW by 2030
+
+When visitors ask about costs, performance, or why now — reference specific chart data points. These are real numbers from real operators.`,
+
   pages: `Site Pages:
 / — Homepage: economics calculator, proof stats, integrations, assessment quiz, FAQ
 /services/ — Engagement arc (Discovery→Build→Transfer→Partnership), all pricing, capabilities, trust commitments
@@ -132,6 +157,7 @@ const TOPIC_MAP = {
   capabilities: ['email', 'crm', 'sales', 'hubspot', 'salesforce', 'slack', 'calendar', 'report', 'prospect', 'outreach', 'automate', 'automation', 'workflow', 'integrate', 'integration', 'tool', 'gmail', 'discord', 'whatsapp', 'agent', 'what can', 'what do', 'capability', 'support', 'assistant'],
   proof: ['proof', 'evidence', 'example', 'case study', 'calacanis', 'cuban', 'chamath', 'quote', 'podcast', 'all-in', 'real world', 'who else', 'testimonial', 'result'],
   build: ['build', 'built', 'how you built', 'your agent', 'open source', 'openclaw', 'security', 'toolchain', 'brand', 'logo', 'midjourney', 'dashboard', 'timeline', 'commit', 'real numbers', 'technical', 'comment', 'feedback', 'customer service', 'loop', 'chatbot', 'subsights', 'zero trust', 'sandbox', 'injection', 'prompt injection', 'cve', 'vulnerability', 'kill switch', 'guardrail', 'permissions', 'layers'],
+  charts: ['chart', 'graph', 'data', 'visualization', 'visual', 'stats', 'statistics', 'numbers', 'metrics', 'podcast', 'calacanis', 'chamath', 'karpathy', 'elon', 'musk', 'diamandis', 'alex finn', 'steinberger', 'all-in', 'leverage', 'automation', '95%', '80%', 'arbitrage', 'factory', 'bottleneck', 'compression', 'scaling', 'sublinear'],
   whynow: ['why now', 'why should', 'timing', 'wait', 'risk', 'competitive', 'advantage', 'future', 'trend', 'market', 'opportunity', 'urgent', 'when', 'depreciate', 'appreciate', 'capital']
 };
 
