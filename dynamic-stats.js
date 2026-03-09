@@ -90,6 +90,8 @@
     if (data.websiteCommits) updateEls('website-commits', data.websiteCommits.toLocaleString());
     if (data.privateAgentCommits) updateEls('agent-commits', data.privateAgentCommits.toLocaleString());
     if (data.linesOfCode) updateEls('lines-of-code', data.linesOfCode.toLocaleString());
+    if (data.websiteLinesOfCode) updateEls('website-loc', data.websiteLinesOfCode.toLocaleString());
+    if (data.agentLinesOfCode) updateEls('agent-loc', data.agentLinesOfCode.toLocaleString());
     if (data.chartCount) updateEls('chart-count', data.chartCount.toLocaleString());
     if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
     if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());

@@ -73,11 +73,29 @@ jobs:
           TOTAL=$((WEBSITE_COMMITS + AGENT_COMMITS))
           UPDATED=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
-          # Lines of code across .html, .js, .css (excluding node_modules, .wrangler, package-lock.json)
-          LINES_OF_CODE=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' \) \
-            -not -path '*/node_modules/*' -not -path '*/.wrangler/*' -not -name 'package-lock.json' \
+          # Lines of code — public repo (local checkout)
+          WEBSITE_LOC=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' -o -name '*.json' \) \
+            -not -path '*/node_modules/*' -not -path '*/.wrangler/*' -not -path '*/.github/*' \
+            -not -name 'package-lock.json' -not -name 'stats.json' \
             -exec cat {} + | wc -l | tr -d ' ')
-          echo "Lines of code: ${LINES_OF_CODE}"
+          echo "Website lines of code: ${WEBSITE_LOC}"
+
+          # Lines of code — private repo (shallow clone)
+          AGENT_LOC=0
+          if [ -n "$PRIVATE_REPO_TOKEN" ]; then
+            TMPDIR=$(mktemp -d)
+            git clone --depth 1 "https://x-access-token:${PRIVATE_REPO_TOKEN}@github.com/${PRIVATE_REPO}.git" "$TMPDIR" 2>/dev/null || true
+            if [ -d "$TMPDIR" ]; then
+              AGENT_LOC=$(find "$TMPDIR" \( -name '*.js' -o -name '*.ts' -o -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.toml' -o -name '*.md' \) \
+                -not -path '*/node_modules/*' -not -path '*/.git/*' -not -name 'package-lock.json' \
+                -exec cat {} + 2>/dev/null | wc -l | tr -d ' ')
+              rm -rf "$TMPDIR"
+            fi
+            echo "Agent lines of code: ${AGENT_LOC}"
+          fi
+
+          LINES_OF_CODE=$((WEBSITE_LOC + AGENT_LOC))
+          echo "Total lines of code: ${LINES_OF_CODE}"
 
           # Chart count (Briu.charts. assignments in charts.js)
           CHART_COUNT=0
@@ -110,6 +128,8 @@ jobs:
             "websiteCommits": ${WEBSITE_COMMITS},
             "privateAgentCommits": ${AGENT_COMMITS},
             "totalCommits": ${TOTAL},
+            "websiteLinesOfCode": ${WEBSITE_LOC},
+            "agentLinesOfCode": ${AGENT_LOC},
             "linesOfCode": ${LINES_OF_CODE},
             "chartCount": ${CHART_COUNT},
             "articleCount": ${ARTICLE_COUNT},
