@@ -137,7 +137,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .tiers { display: grid; gap: 1.5rem; margin-top: 3rem; }
 
 /* Kickoff grid */
-.kickoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.kickoff-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; align-items: start; }
 .kickoff-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.4s ease; }
 .kickoff-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
 .kickoff-card-featured { border-color: rgba(212,160,90,0.25); background: linear-gradient(135deg, var(--surface) 0%, rgba(212,160,90,0.03) 100%); }
@@ -666,7 +666,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <div class="deliverable">Written architecture plan with cost profile &amp; rollout order</div>
         <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
         <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0;">We use the lead time to research your business and pre-build your first agent — so the session is hands-on, not theoretical.</p>
-        <button class="cta" style="width:100%; margin-top:1.25rem; font-size:0.78rem;" onclick="bookTier('kickoff')">Reserve Your Kickoff</button>
+        <button class="cta" style="width:100%; margin-top:1.25rem; font-size:0.78rem; background:none; border:1px solid rgba(212,160,90,0.3); color:var(--gold);" onclick="bookTier('kickoff')">Reserve Your Kickoff</button>
       </div>
     </div>
     <div class="kickoff-card">
