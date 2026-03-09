@@ -859,3 +859,183 @@ Briu.charts.briuOrg = function(containerId) {
     el.classList.add('visible');
   });
 };
+
+
+/* ============================================
+   Chart 15: Pyramid to Column
+   Yang's org structure shift — AI replaces junior layers
+   ============================================ */
+Briu.charts.pyramidToColumn = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var html = '<div class="chart-surface"><div class="chart-label">The new org chart</div>' +
+    '<div class="p2c-compare">' +
+
+    '<div class="p2c-side p2c-before">' +
+    '<div class="p2c-title">Before AI</div>' +
+    '<div class="p2c-pyramid">' +
+    '<div class="p2c-block p2c-senior" style="width:40%"><span>1 Senior</span></div>' +
+    '<div class="p2c-block p2c-junior" style="width:65%"><span>Junior</span></div>' +
+    '<div class="p2c-block p2c-junior" style="width:85%"><span>Junior</span></div>' +
+    '<div class="p2c-block p2c-junior" style="width:100%"><span>Junior</span></div>' +
+    '</div>' +
+    '<div class="p2c-ratio">1 : 3</div>' +
+    '</div>' +
+
+    '<div class="p2c-arrow">&rarr;</div>' +
+
+    '<div class="p2c-side p2c-after">' +
+    '<div class="p2c-title">With AI Agents</div>' +
+    '<div class="p2c-column">' +
+    '<div class="p2c-block p2c-senior" style="width:60%"><span>1 Senior</span></div>' +
+    '<div class="p2c-block p2c-ai" style="width:60%"><span>AI Agents</span></div>' +
+    '<div class="p2c-block p2c-junior-kept" style="width:60%"><span>1 Junior</span></div>' +
+    '</div>' +
+    '<div class="p2c-ratio p2c-ratio-gold">1 : 1 + AI</div>' +
+    '</div>' +
+
+    '</div>' +
+    '<div class="p2c-quote">\u201CYou used to have pyramids \u2014 three juniors for every senior. Now you have columns. A senior and one junior and you\u2019re good.\u201D</div>' +
+    '<div class="chart-source">Andrew Yang \u2014 Moonshots #236</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};
+
+
+/* ============================================
+   Chart 16: Sublinear Scaling
+   Karpathy's 10x problems = 2-3x effort
+   ============================================ */
+Briu.charts.sublinearScaling = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var html = '<div class="chart-surface"><div class="chart-label">Sublinear scaling of difficulty</div>' +
+    '<div class="sublinear">' +
+    '<div class="sublinear-bars">' +
+    '<div class="sublinear-row">' +
+    '<div class="sublinear-label">Ambition</div>' +
+    '<div class="sublinear-track"><div class="sublinear-fill sublinear-ambition" style="--target:100%"><span>10x</span></div></div>' +
+    '</div>' +
+    '<div class="sublinear-row">' +
+    '<div class="sublinear-label">Effort</div>' +
+    '<div class="sublinear-track"><div class="sublinear-fill sublinear-effort" style="--target:25%"><span>2\u20133x</span></div></div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="sublinear-center">' +
+    '<div class="sublinear-multiplier" data-count="10">0x</div>' +
+    '<div class="sublinear-sub">the outcome</div>' +
+    '</div>' +
+    '<div class="sublinear-insight">When you change the approach \u2014 not just scale the effort \u2014 the economics flip. A 10x more ambitious project costs 2\u20133x more, because you fundamentally redesign how you do it.</div>' +
+    '</div>' +
+    '<div class="p2c-quote">\u201C10x problems are not 10x hard. Usually a 10x harder problem is like 2 or 3x harder to execute on. Because you fundamentally change the approach.\u201D</div>' +
+    '<div class="chart-source">Andrej Karpathy \u2014 Lex Fridman #333 (2022)</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+    var numEl = el.querySelector('.sublinear-multiplier');
+    if (numEl) Briu.charts._countUp(numEl, 10, 1600, '', 'x');
+  });
+};
+
+
+/* ============================================
+   Chart 17: Then vs Now
+   Karpathy 2022 predictions vs 2026 reality
+   ============================================ */
+Briu.charts.thenVsNow = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var rows = [
+    { then: '\u201CGPTs can solve problems when prompted\u201D', now: 'GPT-4 and Claude run entire business operations autonomously' },
+    { then: '\u201CCopilot is helpful when the pattern is clear\u201D', now: 'AI agents build full applications, deploy code, manage infrastructure' },
+    { then: '\u201CWe might share digital space with synthetic beings\u201D', now: 'AI agents operate in Slack, email, CRM, and Discord daily' },
+    { then: '\u201CWe might need proof of personhood\u201D', now: 'Content authentication, AI watermarking, and digital signing are shipping' },
+    { then: '\u201CHumans are not very good at writing software\u201D', now: 'AI writes, tests, and deploys code faster than human teams' },
+    { then: '\u201CFew-shot learning from a handful of examples\u201D', now: 'Zero-shot instruction following \u2014 no examples needed at all' }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">What the experts knew was coming</div>' +
+    '<div class="tvn-table">' +
+    '<div class="tvn-header"><div class="tvn-col-head tvn-then-head">Karpathy, October 2022</div><div class="tvn-col-head tvn-now-head">Reality, March 2026</div></div>';
+
+  rows.forEach(function(r, i) {
+    html += '<div class="tvn-row" style="--delay:' + (i * 0.12) + 's">' +
+      '<div class="tvn-cell tvn-then">' + r.then + '</div>' +
+      '<div class="tvn-cell tvn-now">' + r.now + '</div>' +
+      '</div>';
+  });
+
+  html += '</div>' +
+    '<div class="p2c-quote">\u201CThis is an explosion. We\u2019re living in a firecracker.\u201D</div>' +
+    '<div class="chart-source">Andrej Karpathy \u2014 Lex Fridman #333, recorded before ChatGPT launched</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};
+
+
+/* ============================================
+   Chart 18: Creation vs Destruction
+   100M entrepreneurs vs 15K FAANG layoffs
+   ============================================ */
+Briu.charts.creationVsDestruction = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var html = '<div class="chart-surface"><div class="chart-label">Net effect of AI on jobs</div>' +
+    '<div class="cvd-chart">' +
+
+    '<div class="cvd-row cvd-destroy">' +
+    '<div class="cvd-label">FAANG layoffs</div>' +
+    '<div class="cvd-track"><div class="cvd-fill cvd-fill-destroy" style="--target:5%"></div></div>' +
+    '<div class="cvd-value cvd-value-destroy">15K</div>' +
+    '</div>' +
+
+    '<div class="cvd-row cvd-create">' +
+    '<div class="cvd-label">New entrepreneurs</div>' +
+    '<div class="cvd-track"><div class="cvd-fill cvd-fill-create" style="--target:100%"></div></div>' +
+    '<div class="cvd-value cvd-value-create" data-count="100">0M</div>' +
+    '</div>' +
+
+    '<div class="cvd-row cvd-create">' +
+    '<div class="cvd-label">Jobs they create (x3)</div>' +
+    '<div class="cvd-track"><div class="cvd-fill cvd-fill-jobs" style="--target:100%"></div></div>' +
+    '<div class="cvd-value cvd-value-create" data-count="300">0M</div>' +
+    '</div>' +
+
+    '<div class="cvd-punchline">' +
+    '<div class="cvd-ratio" data-count="20000">0x</div>' +
+    '<div class="cvd-ratio-label">more creation than destruction</div>' +
+    '</div>' +
+    '</div>' +
+
+    '<div class="p2c-quote">\u201CWhat happens when 100 million people get their hands on this and they all start their own businesses and they each hire three people? That\u2019s a lot more creation than destruction.\u201D</div>' +
+    '<div class="chart-source">Alex Finn \u2014 Moonshots #237</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+    el.querySelectorAll('.cvd-value-create').forEach(function(numEl) {
+      Briu.charts._countUp(numEl, parseInt(numEl.getAttribute('data-count')), 1800, '', 'M');
+    });
+    var ratioEl = el.querySelector('.cvd-ratio');
+    if (ratioEl) Briu.charts._countUp(ratioEl, 20000, 2200, '', 'x');
+  });
+};

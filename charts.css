@@ -204,6 +204,92 @@
   /* constellation mobile is in a separate block below the base styles */
 }
 
+/* ---- Chart 15: Pyramid to Column ---- */
+.p2c-compare { display: flex; align-items: center; gap: 16px; justify-content: center; }
+.p2c-side { flex: 1; max-width: 280px; }
+.p2c-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-align: center; margin-bottom: 16px; }
+.p2c-before .p2c-title { color: var(--text-muted); }
+.p2c-after .p2c-title { color: var(--gold); }
+.p2c-pyramid, .p2c-column { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.p2c-block { height: 36px; display: flex; align-items: center; justify-content: center; transition: all 0.8s cubic-bezier(0.22, 1, 0.36, 1); opacity: 0; transform: scaleX(0); }
+.briu-chart.visible .p2c-block { opacity: 1; transform: scaleX(1); }
+.briu-chart.visible .p2c-block:nth-child(2) { transition-delay: 0.15s; }
+.briu-chart.visible .p2c-block:nth-child(3) { transition-delay: 0.3s; }
+.briu-chart.visible .p2c-block:nth-child(4) { transition-delay: 0.45s; }
+.p2c-block span { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.04em; }
+.p2c-senior { background: rgba(90,157,172,0.2); border: 1px solid rgba(90,157,172,0.3); }
+.p2c-senior span { color: var(--river); }
+.p2c-junior { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.06); }
+.p2c-junior span { color: var(--text-muted); }
+.p2c-ai { background: rgba(212,160,90,0.15); border: 1px solid rgba(212,160,90,0.3); box-shadow: 0 0 20px rgba(212,160,90,0.08); }
+.p2c-ai span { color: var(--gold); }
+.p2c-junior-kept { background: rgba(77,128,112,0.12); border: 1px solid rgba(77,128,112,0.25); }
+.p2c-junior-kept span { color: var(--forest); }
+.p2c-ratio { text-align: center; margin-top: 12px; font-family: var(--serif); font-size: 1.4rem; color: var(--text-muted); }
+.p2c-ratio-gold { color: var(--gold); }
+.p2c-arrow { font-size: 2rem; color: var(--gold); opacity: 0.3; flex-shrink: 0; padding: 0 8px; margin-top: 20px; }
+.p2c-quote { font-size: 0.85rem; color: var(--text-muted); font-style: italic; line-height: 1.6; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); text-align: center; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+/* ---- Chart 16: Sublinear Scaling ---- */
+.sublinear { padding: 8px 0; }
+.sublinear-bars { display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px; }
+.sublinear-row { display: grid; grid-template-columns: 90px 1fr; align-items: center; gap: 16px; }
+.sublinear-label { font-size: 0.82rem; font-weight: 600; color: var(--text); text-align: right; font-family: var(--sans); }
+.sublinear-track { height: 32px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.sublinear-fill { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 14px; font-size: 0.82rem; font-weight: 600; width: 0%; transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .sublinear-fill { width: var(--target); }
+.sublinear-ambition { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.sublinear-ambition span { color: var(--bg); }
+.sublinear-effort { background: linear-gradient(90deg, var(--forest), rgba(77,128,112,0.8)); }
+.sublinear-effort span { color: var(--bg); }
+.sublinear-center { text-align: center; margin: 8px 0 20px; }
+.sublinear-multiplier { font-family: var(--serif); font-size: 3.2rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.sublinear-sub { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+.sublinear-insight { font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; text-align: center; max-width: 560px; margin: 0 auto; }
+
+/* ---- Chart 17: Then vs Now ---- */
+.tvn-table { display: flex; flex-direction: column; gap: 0; }
+.tvn-header { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; margin-bottom: 2px; }
+.tvn-col-head { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 10px 14px; }
+.tvn-then-head { color: var(--text-muted); background: rgba(255,255,255,0.02); }
+.tvn-now-head { color: var(--gold); background: rgba(212,160,90,0.04); }
+.tvn-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; opacity: 0; transform: translateY(8px); transition: opacity 0.5s ease, transform 0.5s ease; transition-delay: var(--delay); }
+.briu-chart.visible .tvn-row { opacity: 1; transform: translateY(0); }
+.tvn-cell { padding: 12px 14px; font-size: 0.85rem; line-height: 1.5; border-bottom: 1px solid rgba(255,255,255,0.03); }
+.tvn-then { color: var(--text-muted); background: rgba(255,255,255,0.01); font-style: italic; }
+.tvn-now { color: var(--text); background: rgba(212,160,90,0.03); font-weight: 500; }
+
+/* ---- Chart 18: Creation vs Destruction ---- */
+.cvd-chart { padding: 8px 0; }
+.cvd-row { display: grid; grid-template-columns: 140px 1fr 70px; align-items: center; gap: 14px; margin-bottom: 14px; }
+.cvd-label { font-size: 0.82rem; font-weight: 600; color: var(--text); font-family: var(--sans); text-align: right; }
+.cvd-track { height: 28px; background: var(--surface-2); border-radius: 4px; overflow: hidden; }
+.cvd-fill { height: 100%; border-radius: 4px; width: 0%; transition: width 1.6s cubic-bezier(0.22, 1, 0.36, 1); }
+.briu-chart.visible .cvd-fill { width: var(--target); }
+.cvd-fill-destroy { background: var(--coral); transition-delay: 0s; }
+.cvd-fill-create { background: linear-gradient(90deg, var(--gold), var(--gold-light)); transition-delay: 0.3s; }
+.cvd-fill-jobs { background: linear-gradient(90deg, var(--forest), rgba(77,128,112,0.8)); transition-delay: 0.6s; }
+.cvd-value { font-family: var(--serif); font-size: 1.3rem; line-height: 1; }
+.cvd-value-destroy { color: var(--coral); opacity: 0.7; }
+.cvd-value-create { color: var(--gold); }
+.cvd-punchline { text-align: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(255,255,255,0.04); }
+.cvd-ratio { font-family: var(--serif); font-size: 2.8rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; }
+.cvd-ratio-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; margin-top: 4px; }
+
+@media (max-width: 640px) {
+  .p2c-compare { flex-direction: column; gap: 24px; }
+  .p2c-side { max-width: 100%; }
+  .p2c-arrow { transform: rotate(90deg); margin: 0; padding: 0; }
+  .sublinear-row { grid-template-columns: 70px 1fr; gap: 10px; }
+  .sublinear-label { font-size: 0.75rem; }
+  .tvn-header, .tvn-row { grid-template-columns: 1fr; gap: 0; }
+  .tvn-then-head { border-bottom: none; }
+  .tvn-now-head { display: none; }
+  .tvn-now { border-left: 2px solid rgba(212,160,90,0.2); }
+  .cvd-row { grid-template-columns: 100px 1fr 60px; gap: 10px; }
+  .cvd-label { font-size: 0.75rem; }
+}
+
 /* ---- Chart 14: Constellation Org ---- */
 .constellation { position: relative; width: 100%; height: 480px; margin: 0 auto; }
 .constellation-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
