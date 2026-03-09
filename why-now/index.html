@@ -113,15 +113,19 @@
 .advantages li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 0.55rem; }
 
 /* Live counters */
-.tl-counters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
-.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1.25rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; }
+.tl-counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0; }
+.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; }
 .tl-counter::before { content: ''; position: absolute; inset: 0; opacity: 0; background: linear-gradient(135deg, rgba(212,160,90,0.04), rgba(90,157,172,0.02)); transition: opacity 0.4s ease; }
 .tl-counter:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
 .tl-counter:hover::before { opacity: 1; }
-.tl-counter-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.35rem; position: relative; }
-.tl-counter-label { font-size: 0.78rem; color: var(--text-muted); position: relative; }
-.tl-counter-detail { font-size: 0.7rem; color: var(--text-muted); opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease; position: relative; }
+.tl-counter-num { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); margin-bottom: 0.35rem; position: relative; }
+.tl-counter-label { font-size: 0.72rem; color: var(--text-muted); position: relative; line-height: 1.5; }
+.tl-counter-detail { font-size: 0.68rem; color: var(--text-muted); opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease; position: relative; }
 .tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
+
+/* Water divider */
+.water-divider { width: 100%; max-width: 1060px; margin: 0 auto; padding: 2rem 0; text-align: center; overflow: hidden; }
+.water-divider svg { width: 100%; height: auto; opacity: 0.6; }
 
 /* Timeline legend */
 .tl-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
@@ -146,7 +150,7 @@
   .tl-connector { display: none; }
   .tl-here { left: 1.25rem; }
   .tl-here-label { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); }
-  .tl-counters { grid-template-columns: 1fr; }
+  .tl-counters { grid-template-columns: repeat(2, 1fr); }
   .tl-legend { gap: 1rem; }
 }
 
@@ -176,18 +180,8 @@
   </div>
 </section>
 
-<!-- Timeline legend -->
+<!-- Live counters + legend -->
 <div class="timeline-wrapper" style="padding-bottom:0;">
-  <div class="tl-legend">
-    <span class="tl-legend-item"><span class="tl-legend-dot cat-industry"></span> Industry</span>
-    <span class="tl-legend-item"><span class="tl-legend-dot cat-openclaw"></span> OpenClaw</span>
-    <span class="tl-legend-item"><span class="tl-legend-dot cat-briu"></span> Briu</span>
-    <span class="tl-legend-item"><span class="tl-legend-dot cat-cost"></span> Cost</span>
-  </div>
-</div>
-
-<!-- Live counters -->
-<div class="tl-content-section">
   <div class="tl-counters" id="tlCounters">
     <div class="tl-counter reveal">
       <div class="tl-counter-num" id="counterOCLaunch">--</div>
@@ -206,10 +200,52 @@
     </div>
     <div class="tl-counter reveal reveal-delay-3">
       <div class="tl-counter-num">1</div>
-      <div class="tl-counter-label">founder. OpenClaw + Claude Code + Claude Max.</div>
-      <div class="tl-counter-detail">No employees. Agents handle the ops.</div>
+      <div class="tl-counter-label">founder + agents</div>
+      <div class="tl-counter-detail">OpenClaw + Claude Code + Claude Max</div>
     </div>
   </div>
+  <div class="tl-legend" style="margin-top:2rem;">
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-industry"></span> Industry</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-openclaw"></span> OpenClaw</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-briu"></span> Briu</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-cost"></span> Cost</span>
+  </div>
+</div>
+
+<!-- Water-inspired Gaudi divider -->
+<div class="water-divider" aria-hidden="true">
+  <svg viewBox="0 0 1060 120" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <!-- Flowing water arches — Gaudi mosaic inspired -->
+    <path d="M0,80 C80,30 160,100 265,50 C370,0 430,90 530,60 C630,30 700,95 795,45 C890,-5 960,70 1060,40" stroke="url(#waterGrad1)" stroke-width="1.5" fill="none" opacity="0.4"/>
+    <path d="M0,90 C100,50 200,110 330,65 C460,20 500,100 600,70 C700,40 780,105 880,55 C980,5 1020,80 1060,50" stroke="url(#waterGrad2)" stroke-width="1" fill="none" opacity="0.25"/>
+    <path d="M0,70 C60,40 140,95 240,55 C340,15 420,85 530,50 C640,15 720,90 830,45 C940,0 1000,65 1060,35" stroke="url(#waterGrad1)" stroke-width="0.8" fill="none" opacity="0.15"/>
+    <!-- Mosaic dots along the curves -->
+    <circle cx="265" cy="50" r="3" fill="url(#waterGrad1)" opacity="0.5"/>
+    <circle cx="530" cy="60" r="2.5" fill="url(#waterGrad2)" opacity="0.4"/>
+    <circle cx="795" cy="45" r="3" fill="url(#waterGrad1)" opacity="0.5"/>
+    <circle cx="130" cy="65" r="1.5" fill="#D4A05A" opacity="0.3"/>
+    <circle cx="400" cy="40" r="1.5" fill="#5A9DAC" opacity="0.3"/>
+    <circle cx="660" cy="55" r="1.5" fill="#6AAE9C" opacity="0.25"/>
+    <circle cx="930" cy="30" r="1.5" fill="#D4A05A" opacity="0.3"/>
+    <!-- Ripple rings -->
+    <circle cx="530" cy="60" r="12" stroke="#5A9DAC" stroke-width="0.5" fill="none" opacity="0.15"/>
+    <circle cx="530" cy="60" r="20" stroke="#5A9DAC" stroke-width="0.3" fill="none" opacity="0.08"/>
+    <circle cx="265" cy="50" r="10" stroke="#D4A05A" stroke-width="0.5" fill="none" opacity="0.12"/>
+    <circle cx="795" cy="45" r="10" stroke="#6AAE9C" stroke-width="0.5" fill="none" opacity="0.12"/>
+    <defs>
+      <linearGradient id="waterGrad1" x1="0" y1="0" x2="1060" y2="0">
+        <stop offset="0%" stop-color="#D4A05A" stop-opacity="0.6"/>
+        <stop offset="40%" stop-color="#5A9DAC" stop-opacity="0.8"/>
+        <stop offset="70%" stop-color="#6AAE9C" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#D4A05A" stop-opacity="0.4"/>
+      </linearGradient>
+      <linearGradient id="waterGrad2" x1="0" y1="0" x2="1060" y2="0">
+        <stop offset="0%" stop-color="#5A9DAC" stop-opacity="0.4"/>
+        <stop offset="50%" stop-color="#D4A05A" stop-opacity="0.6"/>
+        <stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.3"/>
+      </linearGradient>
+    </defs>
+  </svg>
 </div>
 
 <!-- Timeline + content sections rendered by JS -->
@@ -522,7 +558,7 @@
     // Pull commit count from stats.json (same source as /build/ page)
     if (el2) {
       fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.total_commits) el2.textContent = data.total_commits.toLocaleString();
+        if (data.totalCommits) el2.textContent = data.totalCommits.toLocaleString();
       }).catch(function() { el2.textContent = '244+'; });
     }
   }
