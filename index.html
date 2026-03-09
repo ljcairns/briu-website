@@ -240,7 +240,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 @keyframes shimmerSlide { 0%,100% { left: -100%; } 50% { left: 100%; } }
 .assess-teaser-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.75rem; }
 .assess-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem; max-width: 640px; margin: 0 auto; display: none; }
-.assess-container.assess-open { display: block; animation: fadeUp 0.5s ease; }
+.assess-container.assess-open { display: block; animation: fadeUp 0.5s ease; position: relative; }
+.assess-close { position: absolute; top: 0.75rem; right: 0.75rem; background: none; border: none; color: var(--text-muted); font-size: 1.4rem; cursor: pointer; padding: 0.25rem 0.5rem; line-height: 1; transition: color 0.2s; }
+.assess-close:hover { color: var(--text); }
 .assess-progress { height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 2rem; overflow: hidden; }
 .assess-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0%; transition: width 0.4s ease; }
 .assess-step { display: none; }
@@ -463,10 +465,12 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
   <div class="assess-teaser reveal" id="assessTeaser" onclick="document.getElementById('assessTeaser').style.display='none';document.getElementById('assessBox').classList.add('assess-open');">
     <div class="assess-teaser-btn">See What Fits Your Business</div>
+
     <div class="assess-teaser-sub">4 questions &middot; 30 seconds &middot; personalized recommendation</div>
   </div>
 
   <div class="assess-container" id="assessBox">
+    <button class="assess-close" onclick="document.getElementById('assessBox').classList.remove('assess-open');document.getElementById('assessTeaser').style.display=''">&times;</button>
     <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
 
     <div class="assess-step active" id="assess-1">
