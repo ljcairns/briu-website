@@ -19,14 +19,16 @@
 
 /* Reset & Base */
 * { margin: 0; padding: 0; box-sizing: border-box; }
-html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: clip; overflow-x: hidden; width: 100%; }
 @media (min-width: 768px) { html { font-size: 19px; } }
-body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.6; -webkit-font-smoothing: antialiased; overflow-x: clip; overflow-x: hidden; width: 100%; max-width: 100%; }
 body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.02; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E"); }
 /* Dot grid overlay */
 body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: 0.35; background-image: radial-gradient(circle, rgba(212,160,90,0.06) 1px, transparent 1px); background-size: 24px 24px; }
 /* Vignette */
 .vignette { position: fixed; inset: 0; pointer-events: none; z-index: 1; background: radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.3) 100%); }
+
+main { overflow-x: hidden; width: 100%; }
 
 /* Navigation */
 nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); overflow: visible; }

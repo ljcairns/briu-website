@@ -102,12 +102,12 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 2rem; }
 
 /* Horizontal Timeline */
-.vtl { position: relative; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 0; padding: 2rem 0 1.5rem; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: calc(50vw - 50%); padding-right: 2rem; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
+.vtl { position: relative; display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 0; padding: 2rem 0 1.5rem; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
 .vtl::-webkit-scrollbar { height: 4px; }
 .vtl::-webkit-scrollbar-track { background: transparent; }
 .vtl::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.25); border-radius: 2px; }
 .vtl-entry { flex: 0 0 220px; scroll-snap-align: start; position: relative; padding-top: 2.5rem; text-align: left; }
-.vtl-entry:last-child { padding-right: calc(50vw - 50%); }
+.vtl-entry:last-child { padding-right: 2rem; }
 /* Horizontal line through all entries */
 .vtl::before { content: ''; position: absolute; top: 2rem; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, rgba(212,160,90,0.05), rgba(212,160,90,0.35) 10%, rgba(212,160,90,0.35) 90%, rgba(212,160,90,0.05)); }
 /* Dot on horizontal line */
@@ -182,7 +182,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
 @media (max-width: 640px) {
-  .vtl { margin-left: 0; margin-right: 0; padding-left: 1.25rem; padding-right: 1.25rem; width: 100%; }
+  .vtl { padding-left: 1.25rem; padding-right: 1.25rem; }
   .vtl-entry { flex: 0 0 180px; }
   .vtl-entry:last-child { padding-right: 1.25rem; }
   .hero { padding: 7rem 1.25rem 2rem; }
