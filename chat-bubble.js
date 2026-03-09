@@ -65,6 +65,7 @@
       '.briu-chat-bubble .bubble-badge{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);border:1.5px solid #07090E;box-shadow:0 0 6px rgba(212,160,90,0.4);}',
       '@keyframes spiralPulse{0%,100%{opacity:0.7;r:2;}50%{opacity:1;r:2.5;}}',
       '@keyframes spiralDraw{0%{stroke-dashoffset:120;}100%{stroke-dashoffset:0;}}',
+      '@keyframes spiralBreathe{0%,100%{stroke-dashoffset:0;opacity:0.85;}50%{stroke-dashoffset:12;opacity:1;}}',
       // Panel
       '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease,width 0.4s cubic-bezier(0.22,1,0.36,1),max-height 0.4s cubic-bezier(0.22,1,0.36,1);pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
       '.briu-chat-panel.bc-expanded{width:480px;max-height:620px;}',
@@ -190,7 +191,7 @@
       '<stop offset="45%" stop-color="#e07b5f"/>' +
       '<stop offset="100%" stop-color="#5a9dac"/>' +
       '</linearGradient></defs>' +
-      '<path class="spiral-path" d="M20,20 C20,18.5 21.5,17 23,17 C25.5,17 27,19 27,21 C27,24 24,27 20,27 C15,27 12,23 12,19 C12,14 16,10 21,10 C27,10 31,15 31,21 C31,27.5 26,33 20,33 C13,33 8,27 8,20 C8,12 14,6 22,6" style="stroke-dasharray:140;animation:spiralDraw 1.2s ease-out forwards;"/>' +
+      '<path class="spiral-path" d="M20,20 C20,18.5 21.5,17 23,17 C25.5,17 27,19 27,21 C27,24 24,27 20,27 C15,27 12,23 12,19 C12,14 16,10 21,10 C27,10 31,15 31,21 C31,27.5 26,33 20,33 C13,33 8,27 8,20 C8,12 14,6 22,6" style="stroke-dasharray:140;animation:spiralDraw 1.2s ease-out forwards, spiralBreathe 4s ease-in-out 1.2s infinite;"/>' +
       '<circle class="spiral-dot" cx="20" cy="20" r="1.8"/>' +
       '</svg>' +
       (conversation.length > 0 ? '<div class="bubble-badge"></div>' : '');
