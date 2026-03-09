@@ -40,7 +40,7 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-.nav-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; z-index: 101; pointer-events: none; }
+.nav-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; z-index: 999; pointer-events: none; }
 
 /* Ambient Orbs */
 @keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
