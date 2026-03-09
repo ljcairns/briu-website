@@ -52,47 +52,73 @@
     '  <div class="modal">\n' +
     '    <button class="modal-close" onclick="closeContactForm()" aria-label="Close">&times;</button>\n' +
     '\n' +
-    '    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>\n' +
+    '    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div><div class="q-dot"></div></div>\n' +
     '\n' +
     '    <div class="q-step active" id="q-step-1">\n' +
     '      <h3>How does your business use AI today?</h3>\n' +
     '      <p>This helps us tailor the conversation to where you are.</p>\n' +
-    '      <button class="q-option" onclick="selectAI(\'We use free tools like ChatGPT\')">\n' +
+    '      <button class="q-option" onclick="selectAI(\'Getting started — free tools\')" data-ai-level="starter">\n' +
     '        <div class="q-opt-label">Getting started</div>\n' +
-    '        <div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div>\n' +
+    '        <div class="q-opt-desc">Free tools like ChatGPT for ad-hoc tasks</div>\n' +
     '      </button>\n' +
-    '      <button class="q-option" onclick="selectAI(\'Enterprise AI accounts with multiple vendors\')">\n' +
-    '        <div class="q-opt-label">Enterprise accounts</div>\n' +
-    '        <div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div>\n' +
+    '      <button class="q-option" onclick="selectAI(\'Paid AI accounts across the team\')" data-ai-level="paid">\n' +
+    '        <div class="q-opt-label">Paid accounts</div>\n' +
+    '        <div class="q-opt-desc">Team or enterprise AI accounts with one or more vendors</div>\n' +
     '      </button>\n' +
-    '      <button class="q-option" onclick="selectAI(\'Already building agents or significant automation\')">\n' +
+    '      <button class="q-option" onclick="selectAI(\'Already building agents or automation\')" data-ai-level="building">\n' +
     '        <div class="q-opt-label">Building with AI</div>\n' +
-    '        <div class="q-opt-desc">We\'re already building agents or automating significant business processes</div>\n' +
+    '        <div class="q-opt-desc">Building agents, automating workflows, or evaluating platforms</div>\n' +
     '      </button>\n' +
     '    </div>\n' +
     '\n' +
     '    <div class="q-step" id="q-step-2">\n' +
-    '      <h3>What would you most like to automate?</h3>\n' +
-    '      <p>No wrong answers. Just tell us what takes up your team\'s time.</p>\n' +
-    '      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>\n' +
-    '      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>\n' +
+    '      <h3>How big is your team?</h3>\n' +
+    '      <p>This helps us recommend the right engagement.</p>\n' +
+    '      <button class="q-option" onclick="selectTeam(\'solo\')">\n' +
+    '        <div class="q-opt-label">Just me</div>\n' +
+    '        <div class="q-opt-desc">Solo founder or individual</div>\n' +
+    '      </button>\n' +
+    '      <button class="q-option" onclick="selectTeam(\'small\')">\n' +
+    '        <div class="q-opt-label">2–10 people</div>\n' +
+    '        <div class="q-opt-desc">Small team, everyone wears multiple hats</div>\n' +
+    '      </button>\n' +
+    '      <button class="q-option" onclick="selectTeam(\'medium\')">\n' +
+    '        <div class="q-opt-label">11–50 people</div>\n' +
+    '        <div class="q-opt-desc">Dedicated roles, some process overhead</div>\n' +
+    '      </button>\n' +
+    '      <button class="q-option" onclick="selectTeam(\'large\')">\n' +
+    '        <div class="q-opt-label">50+ people</div>\n' +
+    '        <div class="q-opt-desc">Multiple departments, established workflows</div>\n' +
+    '      </button>\n' +
     '      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>\n' +
     '    </div>\n' +
     '\n' +
     '    <div class="q-step" id="q-step-3">\n' +
+    '      <h3>What takes the most time?</h3>\n' +
+    '      <p id="q-step-3-sub">Pick one, or describe in your own words.</p>\n' +
+    '      <div id="q-focus-picks"></div>\n' +
+    '      <textarea id="q-automate" placeholder="Or describe what you\'d like to automate..."></textarea>\n' +
+    '      <button class="modal-btn cta-shimmer" onclick="goToStep(4)">Continue</button>\n' +
+    '      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>\n' +
+    '    </div>\n' +
+    '\n' +
+    '    <div class="q-step" id="q-step-4">\n' +
+    '      <div id="q-recommendation" style="margin-bottom:1.25rem;"></div>\n' +
     '      <h3>Where should we send our thoughts?</h3>\n' +
-    '      <p>We\'ll get back within 24 hours with specific ideas for your business.</p>\n' +
+    '      <p>We\'ll reply within 24 hours with specific ideas for your business.</p>\n' +
     '      <form id="contactForm" action="https://formsubmit.co/ajax/hi@briu.ai" method="POST">\n' +
     '        <input type="text" name="_honey" style="display:none">\n' +
     '        <input type="hidden" name="_subject" value="' + getSubjectLine() + '">\n' +
     '        <input type="hidden" name="ai_usage" id="q-ai-usage">\n' +
+    '        <input type="hidden" name="team_size" id="q-team-size">\n' +
+    '        <input type="hidden" name="focus" id="q-focus-val">\n' +
     '        <input type="hidden" name="automate" id="q-automate-val">\n' +
-    '        <input type="text" name="name" placeholder="Your name" required>\n' +
-    '        <input type="email" name="email" placeholder="Your email" required>\n' +
+    '        <input type="text" name="name" id="q-name" placeholder="Your name" required>\n' +
+    '        <input type="email" name="email" id="q-email" placeholder="Your email" required>\n' +
     '        <input type="text" name="company" placeholder="Company (optional)">\n' +
     '        <button type="submit" class="modal-btn cta-shimmer">Send</button>\n' +
     '      </form>\n' +
-    '      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>\n' +
+    '      <button class="q-back" onclick="goToStep(3)">&larr; Back</button>\n' +
     '    </div>\n' +
     '\n' +
     '    <div class="form-success" id="formSuccess">\n' +

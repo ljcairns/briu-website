@@ -87,6 +87,8 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .q-dot.filled { background: var(--gold); }
 .q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
 .q-back:hover { color: var(--text); }
+.q-option-selected { border-color: rgba(212,160,90,0.4) !important; background: rgba(212,160,90,0.08) !important; }
+.q-focus-opt { margin-bottom: 0.5rem; }
 
 /* Booking modal */
 .booking-tier-label { color: var(--gold); }
