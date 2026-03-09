@@ -46,6 +46,18 @@
 .stat-box:hover .stat-label { color: var(--text); }
 @keyframes statPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; text-shadow: 0 0 8px rgba(212,160,90,0.3); } }
 .stat-pulse .stat-value { animation: statPulse 3s ease-in-out infinite; }
+/* Cost spectrum */
+.cost-spectrum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.spectrum-tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; }
+.spectrum-tier:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.spectrum-baseline { border-color: rgba(77,128,112,0.25); }
+.spectrum-marker { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.75rem; }
+.spectrum-value { font-family: var(--serif); font-size: 1.6rem; color: var(--text); line-height: 1.2; margin-bottom: 0.25rem; }
+.spectrum-value span { font-size: 0.85rem; color: var(--text-muted); }
+.spectrum-breakdown { font-size: 0.75rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+.spectrum-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+.spectrum-quote { font-size: 0.78rem; color: var(--gold); font-style: italic; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); line-height: 1.5; }
+
 .stats-coming .stat-box { opacity: 0.4; }
 .stats-coming .stat-box:hover { transform: none; box-shadow: none; background: var(--surface); }
 .stat-soon { color: var(--text-muted); font-size: 1.6rem; }
@@ -158,6 +170,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   .stats-group { padding: 0 1.25rem; }
   .stats { grid-template-columns: 1fr; }
   .stats.stats-4 { grid-template-columns: repeat(2, 1fr); }
+  .cost-spectrum { grid-template-columns: 1fr; }
   section { padding: 3rem 1.25rem 2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
 }
@@ -234,19 +247,27 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </div>
 
 <div class="stats-group">
-  <div class="stats-group-label">Monthly Operating Cost</div>
-  <div class="stats stats-3">
-    <div class="stat-box reveal-scale">
-      <div class="stat-value">$200<span style="font-size: 0.9rem; color: var(--text-muted)">/mo</span></div>
-      <div class="stat-label">Claude Max (shared platform)</div>
+  <div class="stats-group-label">Operating Cost Spectrum</div>
+  <div class="cost-spectrum">
+    <div class="spectrum-tier spectrum-baseline reveal-scale">
+      <div class="spectrum-marker" style="color: var(--forest);">Briu Today</div>
+      <div class="spectrum-value">~$310<span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo Claude Max + $2-5/day API</div>
+      <div class="spectrum-desc">Daily reports, security self-checks, ad-hoc scheduling, email triage. Baseline operations — not heavy production yet.</div>
     </div>
-    <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value">$2-5<span style="font-size: 0.9rem; color: var(--text-muted)">/day</span></div>
-      <div class="stat-label">Agent API Costs</div>
+    <div class="spectrum-tier reveal-scale reveal-delay-1">
+      <div class="spectrum-marker" style="color: var(--gold);">Active Production</div>
+      <div class="spectrum-value">$30-100<span>/day</span></div>
+      <div class="spectrum-breakdown">Dedicated agent workflows running continuously</div>
+      <div class="spectrum-desc">Full CRM automation, overnight prospecting, multi-agent orchestration. Where token spend starts to match real productivity gains.</div>
+      <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
     </div>
-    <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value">~$310<span style="font-size: 0.9rem; color: var(--text-muted)">/mo</span></div>
-      <div class="stat-label">All-In Operating Cost</div>
+    <div class="spectrum-tier reveal-scale reveal-delay-2">
+      <div class="spectrum-marker" style="color: var(--coral);">Frontier</div>
+      <div class="spectrum-value">$300<span>/day &times; 7</span></div>
+      <div class="spectrum-breakdown">$2,100/day — autonomous Opus-class agents, 24/7</div>
+      <div class="spectrum-desc">Calacanis's deployment: 7 agents across a 20-person firm. Each agent on its own email, Slack, and CRM. A meta-agent managing the others.</div>
+      <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
     </div>
   </div>
 </div>
