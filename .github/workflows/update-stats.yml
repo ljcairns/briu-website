@@ -129,41 +129,62 @@ jobs:
           PEAK_DAILY_COST="8.40"
           TOTAL_API_SPEND="0"
           if [ -n "$ANTHROPIC_ADMIN_KEY" ]; then
-            # Fetch last 30 days of cost data
+            # Fetch last 30 days of cost data (paginated)
             START_DATE=$(date -u -d '30 days ago' +"%Y-%m-%dT00:00:00Z" 2>/dev/null || date -u -v-30d +"%Y-%m-%dT00:00:00Z" 2>/dev/null || echo "")
             END_DATE=$(date -u +"%Y-%m-%dT23:59:59Z")
             echo "Cost API: start=$START_DATE end=$END_DATE"
             if [ -n "$START_DATE" ]; then
-              # Try the admin API endpoint (uses starting_at/ending_before params)
-              COST_DATA=$(curl -s -w "\n%{http_code}" -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
-                -H "anthropic-version: 2023-06-01" \
-                "https://api.anthropic.com/v1/organizations/cost_report?starting_at=${START_DATE}&ending_at=${END_DATE}" 2>/dev/null || echo "{}")
-
-              HTTP_CODE=$(echo "$COST_DATA" | tail -1)
-              COST_DATA=$(echo "$COST_DATA" | sed '$d')
-              echo "Cost API response code: $HTTP_CODE"
-
-              if echo "$COST_DATA" | jq -e '.data' >/dev/null 2>&1; then
-                # Each day: .data[].results[].amount (USD string)
-                # Sum results per day, then compute stats
-                # API amounts are in cents despite currency:USD — divide by 100
-                DAILY_TOTALS=$(echo "$COST_DATA" | jq '[.data[] | {day: .starting_at, total: (([.results[].amount | tonumber] | add // 0) / 100)}]')
-                DAYS_WITH_DATA=$(echo "$DAILY_TOTALS" | jq '[.[] | select(.total > 0)] | length')
-                echo "Days with cost data: $DAYS_WITH_DATA"
-                echo "Daily totals: $(echo "$DAILY_TOTALS" | jq -c '[.[] | select(.total > 0) | {d: .day[0:10], t: (.total * 100 | round / 100)}]')"
-                if [ "$DAYS_WITH_DATA" -gt 0 ]; then
-                  TOTAL_USD=$(echo "$DAILY_TOTALS" | jq '[.[].total] | add')
-                  PEAK_USD=$(echo "$DAILY_TOTALS" | jq '[.[].total] | max')
-                  AVG_DAILY_COST=$(echo "$DAILY_TOTALS" | jq "([.[] | select(.total > 0) | .total] | add) / $DAYS_WITH_DATA | . * 100 | round / 100")
-                  PEAK_DAILY_COST=$(echo "$DAILY_TOTALS" | jq '[.[] | .total] | max | . * 100 | round / 100')
-                  TOTAL_API_SPEND=$(echo "$DAILY_TOTALS" | jq '[.[].total] | add | . * 100 | round / 100')
-                  echo "Anthropic costs: avg=$AVG_DAILY_COST/day, peak=$PEAK_DAILY_COST/day, total=$TOTAL_API_SPEND"
+              # Paginate through all results
+              ALL_DATA="[]"
+              NEXT_PAGE=""
+              PAGE_NUM=0
+              while true; do
+                PAGE_NUM=$((PAGE_NUM + 1))
+                API_URL="https://api.anthropic.com/v1/organizations/cost_report?starting_at=${START_DATE}&ending_at=${END_DATE}"
+                if [ -n "$NEXT_PAGE" ]; then
+                  API_URL="${API_URL}&next_page=${NEXT_PAGE}"
                 fi
-              else
-                echo "No .data field in response"
-                if echo "$COST_DATA" | jq -e '.error' >/dev/null 2>&1; then
-                  echo "API error: $(echo "$COST_DATA" | jq -r '.error')"
+
+                RESPONSE=$(curl -s -w "\n%{http_code}" -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
+                  -H "anthropic-version: 2023-06-01" \
+                  "$API_URL" 2>/dev/null || echo "{}")
+
+                HTTP_CODE=$(echo "$RESPONSE" | tail -1)
+                BODY=$(echo "$RESPONSE" | sed '$d')
+                echo "Cost API page $PAGE_NUM: HTTP $HTTP_CODE, days=$(echo "$BODY" | jq '.data | length' 2>/dev/null || echo 0)"
+
+                if ! echo "$BODY" | jq -e '.data' >/dev/null 2>&1; then
+                  echo "Cost API error: $(echo "$BODY" | jq -r '.error' 2>/dev/null || echo "$BODY")"
+                  break
                 fi
+
+                # Merge this page's data into ALL_DATA
+                ALL_DATA=$(echo "$ALL_DATA" "$BODY" | jq -s '.[0] + (.[1].data)')
+
+                HAS_MORE=$(echo "$BODY" | jq -r '.has_more // false')
+                if [ "$HAS_MORE" = "true" ]; then
+                  NEXT_PAGE=$(echo "$BODY" | jq -r '.next_page // empty')
+                  if [ -z "$NEXT_PAGE" ]; then break; fi
+                else
+                  break
+                fi
+
+                # Safety: max 10 pages
+                if [ "$PAGE_NUM" -ge 10 ]; then break; fi
+              done
+
+              echo "Total day buckets fetched: $(echo "$ALL_DATA" | jq 'length')"
+
+              # API amounts are in cents — divide by 100 for USD
+              DAILY_TOTALS=$(echo "$ALL_DATA" | jq '[.[] | {day: .starting_at, total: (([.results[].amount | tonumber] | add // 0) / 100)}]')
+              DAYS_WITH_DATA=$(echo "$DAILY_TOTALS" | jq '[.[] | select(.total > 0)] | length')
+              echo "Days with cost data: $DAYS_WITH_DATA"
+              echo "Daily totals: $(echo "$DAILY_TOTALS" | jq -c '[.[] | select(.total > 0) | {d: .day[0:10], t: (.total * 100 | round / 100)}]')"
+              if [ "$DAYS_WITH_DATA" -gt 0 ]; then
+                AVG_DAILY_COST=$(echo "$DAILY_TOTALS" | jq "([.[] | select(.total > 0) | .total] | add) / $DAYS_WITH_DATA | . * 100 | round / 100")
+                PEAK_DAILY_COST=$(echo "$DAILY_TOTALS" | jq '[.[] | .total] | max | . * 100 | round / 100')
+                TOTAL_API_SPEND=$(echo "$DAILY_TOTALS" | jq '[.[].total] | add | . * 100 | round / 100')
+                echo "Anthropic costs: avg=$AVG_DAILY_COST/day, peak=$PEAK_DAILY_COST/day, total=$TOTAL_API_SPEND"
               fi
             fi
           else
