@@ -782,7 +782,30 @@ Briu.charts.briuOrg = function(containerId) {
     return h;
   }
 
-  var html = '<div class="chart-surface" style="padding:24px 18px 14px">' +
+  var html = '<div class="chart-surface sb-surface" style="padding:24px 18px 14px">' +
+    /* Gaudi-inspired organic background */
+    '<svg class="sb-bg" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">' +
+    '<defs>' +
+    '<linearGradient id="sbGrad1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A05A" stop-opacity="0.06"/><stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.03"/></linearGradient>' +
+    '<linearGradient id="sbGrad2" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#E07B5F" stop-opacity="0.04"/><stop offset="100%" stop-color="#D4A05A" stop-opacity="0.02"/></linearGradient>' +
+    '</defs>' +
+    /* Organic arches — Gaudi cathedral windows */
+    '<path d="M80,600 Q80,350 200,280 Q320,210 320,600" fill="none" stroke="url(#sbGrad1)" stroke-width="1"/>' +
+    '<path d="M120,600 Q120,380 220,320 Q320,260 320,600" fill="none" stroke="url(#sbGrad1)" stroke-width="0.5"/>' +
+    '<path d="M680,600 Q680,300 800,250 Q920,200 920,600" fill="none" stroke="url(#sbGrad2)" stroke-width="1"/>' +
+    '<path d="M720,600 Q720,340 810,290 Q900,240 900,600" fill="none" stroke="url(#sbGrad2)" stroke-width="0.5"/>' +
+    /* Flowing horizontal curves */
+    '<path d="M0,150 Q250,100 500,150 Q750,200 1000,130" fill="none" stroke="url(#sbGrad1)" stroke-width="0.6"/>' +
+    '<path d="M0,450 Q300,400 600,460 Q850,510 1000,440" fill="none" stroke="url(#sbGrad2)" stroke-width="0.6"/>' +
+    /* Scattered mosaic dots */
+    '<circle cx="150" cy="180" r="2" fill="#D4A05A" opacity="0.08"/>' +
+    '<circle cx="850" cy="120" r="1.5" fill="#5A9DAC" opacity="0.06"/>' +
+    '<circle cx="500" cy="500" r="2" fill="#E07B5F" opacity="0.06"/>' +
+    '<circle cx="300" cy="80" r="1" fill="#D4A05A" opacity="0.1"/>' +
+    '<circle cx="700" cy="400" r="1.5" fill="#5A9DAC" opacity="0.08"/>' +
+    '<circle cx="50" cy="350" r="1" fill="#E07B5F" opacity="0.07"/>' +
+    '<circle cx="950" cy="500" r="1" fill="#D4A05A" opacity="0.09"/>' +
+    '</svg>' +
     '<div class="chart-label">How this company actually runs</div>' +
     '<div class="sb-grid">' +
 
@@ -808,8 +831,8 @@ Briu.charts.briuOrg = function(containerId) {
     /* Right: Agents */
     '<div class="sb-col sb-col-agents">' +
     '<div class="sb-col-label">Specialist Agents</div>' +
-    card({ name: 'Email &amp; CRM', accent: 'forest', status: 'active', tools: 'Gmail &middot; HubSpot &middot; Apollo', metric: '~50 emails/day &middot; 2 accounts' }) +
-    card({ name: 'Research', accent: 'teal', status: 'active', tools: 'Web &middot; LinkedIn &middot; Docs', metric: 'Overnight prospect runs' }) +
+    card({ name: 'Email &amp; CRM', accent: 'forest', status: 'active', tools: 'Gmail &middot; HubSpot &middot; Apollo', metric: '100% of email/CRM &middot; 2 accounts' }) +
+    card({ name: 'Research', accent: 'teal', status: 'active', tools: 'Web &middot; LinkedIn &middot; Docs', metric: 'Overnight &middot; parallel &middot; continuous' }) +
     card({ name: 'Daily Ops', accent: 'forest', status: 'active', tools: 'Reports &middot; Security &middot; Cron', metric: 'Morning briefing &middot; cost monitor' }) +
     card({ name: 'Your Agent', status: 'open', future: true, tools: 'Custom-built for your business', metric: 'We build it, you own it' }) +
     '</div>' +
