@@ -182,7 +182,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
 @media (max-width: 640px) {
-  .vtl { margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: 1.25rem; padding-right: 1.25rem; }
+  .vtl { margin-left: 0; margin-right: 0; padding-left: 1.25rem; padding-right: 1.25rem; width: 100%; }
   .vtl-entry { flex: 0 0 180px; }
   .vtl-entry:last-child { padding-right: 1.25rem; }
   .hero { padding: 7rem 1.25rem 2rem; }
@@ -392,7 +392,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </div>
 
 
-<section>
+<section style="overflow:hidden">
   <p class="section-label reveal">Timeline</p>
   <div class="vtl-filters">
     <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
