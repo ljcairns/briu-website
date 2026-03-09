@@ -55,16 +55,17 @@
     var style = document.createElement('style');
     style.id = 'briuChatStyles';
     style.textContent = [
-      // Bubble
-      '.briu-chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:56px;height:56px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;box-shadow:0 4px 20px rgba(0,0,0,0.3);background:linear-gradient(135deg,rgba(212,160,90,0.15),rgba(90,157,172,0.1));border:1px solid rgba(212,160,90,0.25);}',
-      '.briu-chat-bubble:hover{transform:scale(1.08);box-shadow:0 6px 28px rgba(212,160,90,0.2);border-color:rgba(212,160,90,0.4);}',
-      '.briu-chat-bubble .fractal-mini{position:relative;width:28px;height:28px;}',
+      // Bubble — Gaudí fractal with gold→coral→river gradient
+      '.briu-chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:60px;height:60px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;box-shadow:0 4px 24px rgba(0,0,0,0.4),0 0 40px rgba(212,160,90,0.08);background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));border:1.5px solid rgba(212,160,90,0.3);animation:bubbleRotateBg 12s linear infinite;}',
+      '.briu-chat-bubble:hover{transform:scale(1.12);box-shadow:0 6px 32px rgba(212,160,90,0.25),0 0 60px rgba(224,123,95,0.1);border-color:rgba(212,160,90,0.5);}',
+      '.briu-chat-bubble .fractal-mini{position:relative;width:32px;height:32px;}',
       '.briu-chat-bubble .fractal-mini .fr{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;}',
-      '.briu-chat-bubble .fr-1{border-top-color:#d4a05a;animation:fractalSpin1 2.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-2{inset:4px;border-top-color:rgba(90,157,172,0.8);animation:fractalSpin2 3.2s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-3{inset:8px;border-bottom-color:rgba(77,128,112,0.8);animation:fractalSpin3 1.8s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-dot{position:absolute;top:50%;left:50%;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:#d4a05a;animation:fractalPulse 2s ease-in-out infinite;}',
-      '.briu-chat-bubble .bubble-badge{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#d4a05a;border:2px solid #1a1a2e;}',
+      '.briu-chat-bubble .fr-1{border-top-color:#d4a05a;border-right-color:rgba(224,123,95,0.4);animation:fractalSpin1 2.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
+      '.briu-chat-bubble .fr-2{inset:5px;border-top-color:#e07b5f;border-left-color:rgba(90,157,172,0.4);animation:fractalSpin2 3.2s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
+      '.briu-chat-bubble .fr-3{inset:10px;border-bottom-color:#5a9dac;border-right-color:rgba(212,160,90,0.4);animation:fractalSpin3 1.8s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
+      '.briu-chat-bubble .fr-dot{position:absolute;top:50%;left:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);animation:fractalPulse 2s ease-in-out infinite;}',
+      '.briu-chat-bubble .bubble-badge{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);border:2px solid #0E1219;box-shadow:0 0 8px rgba(212,160,90,0.4);}',
+      '@keyframes bubbleRotateBg{0%{background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}100%{background:conic-gradient(from 360deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}}',
       // Panel
       '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease;pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
       '.briu-chat-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}',
@@ -72,6 +73,9 @@
       '.briu-chat-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}',
       '.briu-chat-title{font-size:0.85rem;color:#e8e6e1;font-weight:600;display:flex;align-items:center;gap:0.5rem;}',
       '.briu-chat-title::before{content:"";width:8px;height:8px;border-radius:50%;background:#d4a05a;animation:fractalPulse 2s ease-in-out infinite;}',
+      '.briu-chat-header-actions{display:flex;align-items:center;gap:0.25rem;}',
+      '.briu-chat-reset{background:none;border:none;color:#555;font-size:0.65rem;cursor:pointer;padding:4px 8px;line-height:1;text-transform:uppercase;letter-spacing:0.06em;font-family:inherit;transition:color 0.2s;}',
+      '.briu-chat-reset:hover{color:#d4a05a;}',
       '.briu-chat-close{background:none;border:none;color:#888;font-size:1.2rem;cursor:pointer;padding:4px 8px;line-height:1;}',
       '.briu-chat-close:hover{color:#e8e6e1;}',
       // Thread
@@ -107,6 +111,16 @@
       '.bc-est-label{font-size:0.8rem;color:#e8e6e1;margin-bottom:0.4rem;font-weight:600;}',
       '.bc-est-row{display:flex;justify-content:space-between;font-size:0.8rem;color:#a8a598;padding:0.15rem 0;}',
       '.bc-est-cost{color:#d4a05a;}',
+      // Page card
+      '.bc-page{display:block;margin:0.5rem 0;padding:0.75rem;border:1px solid rgba(90,157,172,0.2);background:rgba(90,157,172,0.04);text-decoration:none;transition:all 0.2s;}',
+      '.bc-page:hover{border-color:rgba(90,157,172,0.4);background:rgba(90,157,172,0.08);}',
+      '.bc-page-title{font-size:0.82rem;color:#e8e6e1;font-weight:600;margin-bottom:0.2rem;}',
+      '.bc-page-desc{font-size:0.75rem;color:#a8a598;}',
+      // Progress bar
+      '.bc-progress{margin:0.5rem 0;padding:0.5rem 0.75rem;}',
+      '.bc-progress-label{font-size:0.72rem;color:#a8a598;margin-bottom:0.3rem;}',
+      '.bc-progress-bar{height:3px;background:rgba(255,255,255,0.06);overflow:hidden;}',
+      '.bc-progress-fill{height:100%;background:linear-gradient(90deg,#d4a05a,#e07b5f,#5a9dac);transition:width 0.6s ease;}',
       // Mobile
       '@media(max-width:480px){.briu-chat-panel{right:0;left:0;bottom:0;width:100%;max-height:100vh;max-height:100dvh;}.briu-chat-bubble{bottom:16px;right:16px;}}',
       '@keyframes convFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}',
@@ -126,19 +140,20 @@
       '<div class="fr fr-1"></div><div class="fr fr-2"></div><div class="fr fr-3"></div><div class="fr-dot"></div>' +
       '</div>' +
       (conversation.length > 0 ? '<div class="bubble-badge"></div>' : '');
-    bubble.addEventListener('click', togglePanel);
+    bubble.addEventListener('click', window.briuToggleChatPanel);
 
     // Panel
     var panel = document.createElement('div');
     panel.className = 'briu-chat-panel';
     panel.id = 'briuChatPanel';
 
-    var companyLabel = companyData && companyData.name ? companyData.name : 'Briu Agent';
     panel.innerHTML =
       '<div class="briu-chat-header">' +
-      '<div class="briu-chat-title">' + escapeHtml(companyLabel) + '</div>' +
-      '<button class="briu-chat-close" onclick="document.getElementById(\'briuChatPanel\').classList.remove(\'open\')">&times;</button>' +
-      '</div>' +
+      '<div class="briu-chat-title">Briu</div>' +
+      '<div class="briu-chat-header-actions">' +
+      '<button class="briu-chat-reset" onclick="window.briuChatReset()">New chat</button>' +
+      '<button class="briu-chat-close" onclick="window.briuToggleChatPanel()">&times;</button>' +
+      '</div></div>' +
       '<div class="briu-chat-thread" id="bcThread"></div>' +
       '<div class="bc-replies" id="bcReplies"></div>' +
       '<div class="bc-input-row">' +
@@ -169,7 +184,7 @@
     });
   }
 
-  function togglePanel() {
+  window.briuToggleChatPanel = function() {
     var panel = document.getElementById('briuChatPanel');
     if (!panel) return;
     isOpen = !panel.classList.contains('open');
@@ -181,7 +196,7 @@
       var input = document.getElementById('bcInput');
       if (input) setTimeout(function() { input.focus(); }, 100);
     }
-  }
+  };
 
   // ─── Thread rendering ───
   function restoreThread() {
@@ -237,6 +252,21 @@
         }
         card.innerHTML = h;
         thread.appendChild(card);
+      }
+      if (a.type === 'page' && a.path) {
+        var pcard = document.createElement('a');
+        pcard.className = 'bc-page';
+        pcard.href = safeHref(a.path);
+        pcard.innerHTML = '<div class="bc-page-title">' + escapeHtml(a.title || '') + '</div>' +
+          (a.desc ? '<div class="bc-page-desc">' + escapeHtml(a.desc) + '</div>' : '');
+        thread.appendChild(pcard);
+      }
+      if (a.type === 'progress' && a.value != null) {
+        var pbar = document.createElement('div');
+        pbar.className = 'bc-progress';
+        pbar.innerHTML = '<div class="bc-progress-label">' + escapeHtml(a.label || 'Understanding your needs') + '</div>' +
+          '<div class="bc-progress-bar"><div class="bc-progress-fill" style="width:' + Math.min(100, Math.max(0, a.value)) + '%"></div></div>';
+        thread.appendChild(pbar);
       }
       if (a.type === 'handoff') {
         var hcard = document.createElement('div');
@@ -383,6 +413,7 @@
       body: JSON.stringify(payload)
     })
     .then(function(r) {
+      if (r.status === 429) throw { rateLimit: true };
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
@@ -393,21 +424,67 @@
       sessionId = data.sessionId || sessionId;
       callback(data);
     })
-    .catch(function() {
+    .catch(function(err) {
       if (timedOut) return;
       clearTimeout(timer);
       isWaiting = false;
-      callback(null);
+      if (err && err.rateLimit) {
+        callback({ text: 'You\'ve reached the message limit for now. Reach us directly at hi@briu.ai or try again in an hour.', actions: [{ type: 'handoff', message: 'Or send your details to the Briu team' }] });
+      } else {
+        callback(null);
+      }
     });
   }
 
   // ─── Handoff to Discord ───
   window.briuChatHandoff = function(btn) {
     if (!btn) return;
+
+    // If no email, prompt for it first
+    if (!userEmail) {
+      var parent = btn.parentElement;
+      if (parent) {
+        parent.innerHTML =
+          '<div class="bc-handoff-label">Share your email so Lucas can follow up</div>' +
+          '<div style="display:flex;gap:0.5rem;margin-top:0.5rem;">' +
+          '<input type="email" class="bc-input" id="bcHandoffEmail" placeholder="you@company.com" style="flex:1;">' +
+          '<button class="bc-send" onclick="window.briuSubmitHandoff()">&#8593;</button>' +
+          '</div>';
+        var emailInput = document.getElementById('bcHandoffEmail');
+        if (emailInput) {
+          emailInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); window.briuSubmitHandoff(); }
+          });
+          emailInput.focus();
+        }
+      }
+      return;
+    }
+
     btn.disabled = true;
     btn.textContent = 'Sending...';
+    sendBubbleHandoff(btn);
+  };
 
-    var summary = 'Chat handoff from ' + (userEmail || 'unknown visitor');
+  window.briuSubmitHandoff = function() {
+    var input = document.getElementById('bcHandoffEmail');
+    if (!input) return;
+    var email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.style.borderColor = 'rgba(220,80,80,0.5)';
+      return;
+    }
+    userEmail = email;
+    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    var card = input.closest('.bc-handoff');
+    if (card) {
+      card.innerHTML = '<div class="bc-handoff-label">Sending...</div>';
+      sendBubbleHandoff(card);
+    }
+  };
+
+  function sendBubbleHandoff(container) {
+    var summary = 'Chat handoff from ' + userEmail;
     if (companyData && companyData.name) summary += ' at ' + companyData.name;
     if (answers.q1) summary += ' | Role: ' + answers.q1;
     if (answers.q4) summary += ' | Focus: ' + answers.q4;
@@ -416,8 +493,8 @@
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        name: userEmail ? userEmail.split('@')[0] : '',
-        email: userEmail || 'not-provided@briu.ai',
+        name: userEmail.split('@')[0],
+        email: userEmail,
         summary: summary,
         messages: conversation,
         company: companyData || undefined,
@@ -426,13 +503,37 @@
     })
     .then(function() {
       if (window.briuSetStage) window.briuSetStage('contacted');
-      var parent = btn.parentElement;
-      if (parent) parent.innerHTML = '<div class="bc-handoff-sent">Sent to the Briu team. Lucas will follow up within 24 hours.</div>';
+      var el = container.parentElement || container;
+      if (el.classList && el.classList.contains('bc-handoff')) el = container;
+      else el = container.parentElement || container;
+      el.innerHTML = '<div class="bc-handoff-sent">Sent to the Briu team. Lucas will follow up within 24 hours.</div>';
     })
     .catch(function() {
-      btn.textContent = 'Failed — try hi@briu.ai';
-      btn.disabled = false;
+      var el = container.parentElement || container;
+      el.innerHTML = '<div class="bc-handoff-label">Could not send — reach us at <a href="mailto:hi@briu.ai" style="color:#d4a05a;">hi@briu.ai</a></div>';
     });
+  }
+
+  // ─── Reset conversation ───
+  window.briuChatReset = function() {
+    conversation = [];
+    sessionId = null;
+    try {
+      localStorage.removeItem(CONV_KEY);
+      localStorage.removeItem('briu_session');
+    } catch(e) {}
+    // Bridge reset to inline chat if it exists
+    if (window.briuResetInlineChat) window.briuResetInlineChat();
+    // Clear and re-render thread
+    var thread = document.getElementById('bcThread');
+    if (thread) {
+      thread.innerHTML = '';
+      restoreThread();
+    }
+    var replies = document.getElementById('bcReplies');
+    if (replies) replies.innerHTML = '';
+    // Show default replies for fresh start
+    showReplies(getDefaultReplies());
   };
 
   // ─── Utilities ───
@@ -462,11 +563,13 @@
     var d = document.createElement('div');
     d.textContent = text;
     var safe = d.innerHTML;
-    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
-      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
-    });
+    // Auto-link bare paths FIRST (before markdown links consume them)
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
       return pre + '<a href="' + path + '">' + path + '</a>' + post;
+    });
+    // Convert [text](url) markdown links
+    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
+      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
     });
     safe = safe.replace(/\n\n/g, '</p><p>');
     return safe;

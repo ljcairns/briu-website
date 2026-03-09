@@ -21,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css">
-<link rel="stylesheet" href="/charts.css?v=20260309p">
+<link rel="stylesheet" href="/charts.css?v=20260309t">
 <style>
 /* Homepage nav overrides */
 nav { position: fixed; }
@@ -612,14 +612,13 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <p class="section-label reveal">Find Your Starting Point</p>
   <h2 class="reveal">What could an agent handle for your business?</h2>
 
-  <div class="assess-teaser reveal" id="assessTeaser" onclick="document.getElementById('assessTeaser').style.display='none';document.getElementById('assessBox').classList.add('assess-open');">
-    <div class="assess-teaser-btn">See What Fits Your Business</div>
-
-    <div class="assess-teaser-sub">4 questions &middot; 30 seconds &middot; personalized recommendation</div>
+  <div class="assess-teaser reveal" id="assessTeaser" onclick="window.openAssessment()">
+    <div class="assess-teaser-btn" id="assessTeaserBtn">See What Fits Your Business</div>
+    <div class="assess-teaser-sub" id="assessTeaserSub">4 questions &middot; 30 seconds &middot; personalized recommendation</div>
   </div>
 
   <div class="assess-container" id="assessBox">
-    <button class="assess-close" onclick="document.getElementById('assessBox').classList.remove('assess-open');document.getElementById('assessTeaser').style.display=''">&times;</button>
+    <button class="assess-close" onclick="window.closeAssessment()">&times;</button>
     <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
 
     <div class="assess-step active" id="assess-0">
@@ -640,7 +639,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="ic" onclick="assessSelect(1,this)">Individual Contributor</button>
         <button class="assess-opt" data-value="exploring" onclick="assessSelect(1,this)">Exploring for my company</button>
       </div>
-      <button class="assess-back" onclick="assessBack(1)">&larr; Back</button>
+      <!-- No back to email step -->
     </div>
 
     <div class="assess-step" id="assess-2">
@@ -1161,10 +1160,10 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309p"></script>
-<script src="/chat-bubble.js?v=20260309p"></script>
-<script src="/interactive.js?v=20260309p"></script>
-<script src="/dynamic-stats.js?v=20260309p"></script>
+<script src="/shared.js?v=20260309t"></script>
+<script src="/chat-bubble.js?v=20260309t"></script>
+<script src="/interactive.js?v=20260309t"></script>
+<script src="/dynamic-stats.js?v=20260309t"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {
@@ -1186,7 +1185,7 @@ function filterFAQ(query) {
   noResults.style.display = (q && visible === 0) ? 'block' : 'none';
 }
 </script>
-<script src="/charts.js?v=20260309p"></script>
+<script src="/charts.js?v=20260309t"></script>
 <script>
 /* Initialize chart library components */
 Briu.charts.adoptionTimeline('hp-adoption-timeline');

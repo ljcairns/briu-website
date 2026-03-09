@@ -11,6 +11,7 @@
   var SESSION_KEY = 'briu_session';
   var API_BASE = 'https://briu-assess.briu.workers.dev';
   var STEPS = 4;
+  var currentStep = 0; // track which quiz step is active
   var answers = {};
   var conversation = []; // { role, content, actions }
   var sessionId = null;
@@ -62,23 +63,29 @@
       var cur = document.getElementById('assess-' + step);
       if (cur) cur.classList.remove('active');
       if (step < STEPS) {
+        currentStep = step + 1;
         var nxt = document.getElementById('assess-' + (step + 1));
         if (nxt) nxt.classList.add('active');
       } else {
         try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch(e) {}
         if (window.briuSetStage) window.briuSetStage('assessed');
+        // Ensure bubble is available as fallback if they close inline chat
+        if (window.briuShowChatBubble) window.briuShowChatBubble();
         showResults(false);
       }
     }, 250);
   };
 
   window.assessBack = function(fromStep) {
+    // Don't go back to email step (step 0) — email is already captured
+    if (fromStep <= 1) return;
     var cur = document.getElementById('assess-' + fromStep);
     if (cur) cur.classList.remove('active');
-    var prev = document.getElementById('assess-' + (fromStep - 1));
+    currentStep = fromStep - 1;
+    var prev = document.getElementById('assess-' + currentStep);
     if (prev) prev.classList.add('active');
     var bar = document.getElementById('assessProgress');
-    if (bar) bar.style.width = (((fromStep - 1) / STEPS) * 100) + '%';
+    if (bar) bar.style.width = ((currentStep / STEPS) * 100) + '%';
     delete answers['q' + fromStep];
   };
 
@@ -95,6 +102,7 @@
     sessionId = null;
     userEmail = '';
     companyData = null;
+    currentStep = 0;
     inputBound = false;
     var r = document.getElementById('assessResult');
     if (r) { r.classList.remove('active'); r.innerHTML = ''; }
@@ -112,9 +120,63 @@
       lookupPanel.style.display = 'none';
       lookupPanel.classList.remove('chat-expanded');
     }
+    // Reset teaser text
+    var teaserBtn = document.getElementById('assessTeaserBtn');
+    var teaserSub = document.getElementById('assessTeaserSub');
+    if (teaserBtn) teaserBtn.textContent = 'See What Fits Your Business';
+    if (teaserSub) teaserSub.textContent = '4 questions \u00b7 30 seconds \u00b7 personalized recommendation';
     removePersonalization();
     // Notify bubble to clear state
     if (window.briuSyncConversation) window.briuSyncConversation([], null);
+  };
+
+  // Allow bubble to reset inline chat state
+  window.briuResetInlineChat = function() {
+    conversation = [];
+    sessionId = null;
+    inputBound = false;
+    var thread = document.getElementById('convThread');
+    if (thread) thread.innerHTML = '';
+    var replies = document.getElementById('convReplies');
+    if (replies) replies.innerHTML = '';
+  };
+
+  // ─── Assessment open/close ───
+  window.openAssessment = function() {
+    var teaser = document.getElementById('assessTeaser');
+    var box = document.getElementById('assessBox');
+    if (teaser) teaser.style.display = 'none';
+    if (box) box.classList.add('assess-open');
+    // If already completed, jump to results
+    if (answers.q1 && answers.q2 && answers.q3 && answers.q4) {
+      showResults(true);
+    } else if (currentStep > 0) {
+      // Restore mid-quiz position
+      for (var i = 0; i <= STEPS; i++) {
+        var step = document.getElementById('assess-' + i);
+        if (step) step.classList.remove('active');
+      }
+      var target = document.getElementById('assess-' + currentStep);
+      if (target) target.classList.add('active');
+      var bar = document.getElementById('assessProgress');
+      if (bar) bar.style.width = ((currentStep / STEPS) * 100) + '%';
+    }
+  };
+
+  window.closeAssessment = function() {
+    var box = document.getElementById('assessBox');
+    var teaser = document.getElementById('assessTeaser');
+    if (box) box.classList.remove('assess-open');
+    if (teaser) {
+      teaser.style.display = '';
+      // Update teaser text if quiz was completed
+      var btn = document.getElementById('assessTeaserBtn');
+      var sub = document.getElementById('assessTeaserSub');
+      if (answers.q1 && answers.q2 && answers.q3 && answers.q4) {
+        if (btn) btn.textContent = 'Reopen Your Results';
+        if (sub) sub.textContent = 'Your assessment is saved — click to see it again';
+      }
+    }
   };
 
   // ─── Email step ───
@@ -141,9 +203,12 @@
     input.style.borderColor = ''; // clear error state
     userEmail = email;
     try { localStorage.setItem('briu_email', email); } catch(e) {}
+    // Bubble becomes available once we have an email
+    if (window.briuShowChatBubble) window.briuShowChatBubble();
     var domain = email.split('@')[1].toLowerCase();
 
     // Advance to step 1
+    currentStep = 1;
     var s0 = document.getElementById('assess-0');
     if (s0) s0.classList.remove('active');
     var s1 = document.getElementById('assess-1');
@@ -529,6 +594,7 @@
       body: JSON.stringify(payload)
     })
     .then(function(r) {
+      if (r.status === 429) throw { rateLimit: true };
       if (!r.ok) throw new Error('HTTP ' + r.status);
       return r.json();
     })
@@ -542,11 +608,15 @@
       }
       callback(data);
     })
-    .catch(function() {
+    .catch(function(err) {
       if (timedOut) return;
       clearTimeout(timer);
       isWaiting = false;
-      callback(null);
+      if (err && err.rateLimit) {
+        callback({ text: 'You\'ve reached the message limit for now. Reach us directly at hi@briu.ai or try again in an hour.', actions: [{ type: 'handoff', message: 'Or send your details to the Briu team' }] });
+      } else {
+        callback(null);
+      }
     });
   }
 
@@ -773,12 +843,13 @@
     var div = document.createElement('div');
     div.textContent = text;
     var safe = div.innerHTML;
-    // Convert [text](url) links — only allow safe hrefs
-    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
-      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
-    });
+    // Auto-link bare paths FIRST (before markdown links consume them)
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
       return pre + '<a href="' + path + '">' + path + '</a>' + post;
+    });
+    // Convert [text](url) markdown links — only allow safe hrefs
+    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
+      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
     });
     safe = safe.replace(/\n\n/g, '</p><p>');
     return '<p>' + safe + '</p>';
