@@ -281,6 +281,25 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-chat-btn:hover { border-color: rgba(212,160,90,0.3); color: var(--gold); background: rgba(212,160,90,0.04); }
 .assess-chat-arrow { font-size: 0.75rem; transition: transform 0.2s; }
 .assess-chat-panel { margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem; animation: fadeUp 0.4s ease; }
+/* Persistent lookup panel */
+.assess-lookup-panel { margin-top: 1.25rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); animation: fadeUp 0.4s ease; transition: all 0.3s ease; }
+.lookup-loading { display: flex; align-items: center; gap: 1rem; }
+.conv-fractal-sm { width: 36px; height: 36px; flex-shrink: 0; }
+.conv-fractal-sm .fractal-ring-2 { inset: 5px; }
+.conv-fractal-sm .fractal-ring-3 { inset: 10px; }
+.conv-fractal-sm .fractal-dot { width: 4px; height: 4px; margin: -2px 0 0 -2px; }
+.lookup-status { font-size: 0.85rem; color: var(--text-muted); font-style: italic; }
+.lookup-ready { animation: fadeUp 0.4s ease; }
+.lookup-company { font-size: 0.85rem; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.lookup-company::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; animation: fractalPulse 2s ease-in-out infinite; }
+.lookup-chat-mini { display: flex; gap: 0.5rem; }
+.lookup-chat-input { flex: 1; }
+/* Expanded chat state */
+.assess-lookup-panel.chat-expanded { padding: 1rem 0 0; background: none; border: none; border-top: 1px solid rgba(255,255,255,0.06); margin-top: 1.5rem; }
+.assess-lookup-panel.chat-expanded .lookup-ready { display: none !important; }
+.assess-lookup-panel.chat-expanded .lookup-loading { display: none !important; }
+.assess-lookup-panel.chat-expanded .conv-thread { max-height: 300px; overflow-y: auto; margin-bottom: 0.75rem; }
+.assess-cta-group-bottom { margin-top: 1rem; text-align: center; }
 .rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
 
 /* Conversation UI */
@@ -620,6 +639,26 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="reporting" onclick="assessSelect(4,this)">Reporting &amp; data</button>
         <button class="assess-opt" data-value="ops" onclick="assessSelect(4,this)">Operations &amp; admin</button>
         <button class="assess-opt" data-value="support" onclick="assessSelect(4,this)">Customer support</button>
+      </div>
+    </div>
+
+    <!-- Persistent email lookup panel (shows during quiz, becomes chat) -->
+    <div class="assess-lookup-panel" id="assessLookupPanel" style="display:none;">
+      <div class="lookup-loading" id="lookupLoading">
+        <div class="conv-fractal-loader conv-fractal-sm">
+          <div class="fractal-ring fractal-ring-1"></div>
+          <div class="fractal-ring fractal-ring-2"></div>
+          <div class="fractal-ring fractal-ring-3"></div>
+          <div class="fractal-dot"></div>
+        </div>
+        <div class="lookup-status" id="lookupStatus">Loading your business profile&hellip;</div>
+      </div>
+      <div class="lookup-ready" id="lookupReady" style="display:none;">
+        <div class="lookup-company" id="lookupCompany"></div>
+        <div class="lookup-chat-mini" id="lookupChatMini">
+          <input type="text" class="conv-input lookup-chat-input" id="lookupChatInput" placeholder="Ask a question about agents for your business..." autocomplete="off">
+          <button class="conv-send" id="lookupChatSend" aria-label="Send">&#8593;</button>
+        </div>
       </div>
     </div>
 
@@ -1061,9 +1100,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309g"></script>
-<script src="/interactive.js?v=20260309g"></script>
-<script src="/dynamic-stats.js?v=20260309g"></script>
+<script src="/shared.js?v=20260309h"></script>
+<script src="/interactive.js?v=20260309h"></script>
+<script src="/dynamic-stats.js?v=20260309h"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {

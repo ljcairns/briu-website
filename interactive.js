@@ -21,7 +21,7 @@
   var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   // Restore saved state
-  var CONV_VERSION = 5; // bump to clear stale conversations
+  var CONV_VERSION = 6; // bump to clear stale conversations
   try {
     var savedEmail = localStorage.getItem('briu_email');
     if (savedEmail) userEmail = savedEmail;
@@ -124,9 +124,12 @@
     var s1 = document.getElementById('assess-1');
     if (s1) s1.classList.add('active');
 
-    // If work email, start company lookup in background
+    // If work email, show lookup panel and fetch company
     if (FREE_PROVIDERS.indexOf(domain) === -1) {
+      var panel = document.getElementById('assessLookupPanel');
+      if (panel) panel.style.display = '';
       companyFetching = true;
+
       fetch(API_BASE + '/api/company', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -138,20 +141,70 @@
         if (data && data.found) {
           companyData = data;
           try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
-          // Show badge on current step if still in quiz
-          var activeStep = document.querySelector('.assess-step.active');
-          if (activeStep && !document.getElementById('companyBadge')) {
-            var badge = document.createElement('div');
-            badge.className = 'assess-company-badge';
-            badge.id = 'companyBadge';
-            badge.textContent = 'Personalizing for ' + data.name;
-            activeStep.appendChild(badge);
-          }
+          showLookupReady(data);
+        } else {
+          // Hide panel if no data found
+          if (panel) panel.style.display = 'none';
         }
       })
-      .catch(function() { companyFetching = false; });
+      .catch(function() {
+        companyFetching = false;
+        if (panel) panel.style.display = 'none';
+      });
     }
   };
+
+  function showLookupReady(data) {
+    var loading = document.getElementById('lookupLoading');
+    var ready = document.getElementById('lookupReady');
+    var companyEl = document.getElementById('lookupCompany');
+    if (loading) loading.style.display = 'none';
+    if (ready) ready.style.display = '';
+    if (companyEl) companyEl.textContent = data.name + ' — ' + (data.industries || []).join(', ');
+
+    // Bind mini chat input
+    var chatInput = document.getElementById('lookupChatInput');
+    var chatSend = document.getElementById('lookupChatSend');
+    if (chatInput) {
+      chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); sendFromLookup(); }
+      });
+    }
+    if (chatSend) chatSend.addEventListener('click', sendFromLookup);
+  }
+
+  function sendFromLookup() {
+    var input = document.getElementById('lookupChatInput');
+    if (!input) return;
+    var text = input.value.trim();
+    if (!text || isWaiting) return;
+    input.value = '';
+
+    // Expand into full chat
+    expandLookupToChat(text);
+  }
+
+  function expandLookupToChat(initialMessage) {
+    var panel = document.getElementById('assessLookupPanel');
+    if (!panel) return;
+    panel.classList.add('chat-expanded');
+
+    // Build full chat UI inside the panel
+    var h = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:25%"></div><span class="conv-progress-label">Chatting</span></div>' +
+      '<div class="conv-thread" id="convThread"></div>' +
+      '<div class="conv-quick-replies" id="convReplies"></div>' +
+      '<div class="conv-input-row" id="convInputRow">' +
+      '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
+      '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
+      '</div>';
+    panel.innerHTML = h;
+    bindInput();
+
+    // Send the initial message
+    if (initialMessage) {
+      submitMessage(initialMessage);
+    }
+  }
 
   window.assessEmailSkip = function() {
     var s0 = document.getElementById('assess-0');
@@ -294,24 +347,26 @@
         '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
         '<a href="#services" class="hero-cta-secondary">See pricing</a></div>';
 
-      // Chat section — expandable
-      h += '<div class="assess-chat-toggle">' +
-        '<button class="assess-chat-btn" onclick="toggleAssessChat()">' +
-        'Have questions? Chat with our agent' +
-        '<span class="assess-chat-arrow" id="chatArrow">↓</span></button></div>' +
-        '<div class="assess-chat-panel" id="assessChatPanel" style="display:none;">' +
-        '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Getting started</span></div>' +
-        '<div class="conv-thread" id="convThread"></div>' +
-        '<div class="conv-quick-replies" id="convReplies"></div>' +
-        '<div class="conv-input-row" id="convInputRow">' +
-        '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
-        '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
-        '</div></div>';
-
-      h += '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
+      h += '</div><div class="assess-cta-group-bottom">' +
+        '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button></div>';
 
       el.innerHTML = h;
       el.classList.add('active');
+
+      // Convert lookup panel into chat
+      var lookupPanel = document.getElementById('assessLookupPanel');
+      if (lookupPanel) {
+        lookupPanel.style.display = '';
+        lookupPanel.classList.add('chat-expanded');
+        // Build chat UI inside lookup panel
+        var chatHtml = '<div class="conv-thread" id="convThread"></div>' +
+          '<div class="conv-quick-replies" id="convReplies"></div>' +
+          '<div class="conv-input-row" id="convInputRow">' +
+          '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
+          '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
+          '</div>';
+        lookupPanel.innerHTML = chatHtml;
+      }
 
       // Animate score
       if (!instant) {
@@ -319,12 +374,8 @@
         if (scoreEl) countUp(scoreEl, 0, s, 1200);
       }
 
-      // If conversation exists, auto-open chat and restore
+      // If conversation exists, restore it
       if (conversation.length > 0) {
-        var panel = document.getElementById('assessChatPanel');
-        if (panel) panel.style.display = '';
-        var arrow = document.getElementById('chatArrow');
-        if (arrow) arrow.textContent = '↑';
         var thread = document.getElementById('convThread');
         for (var ci = 0; ci < conversation.length; ci++) {
           var msg = conversation[ci];
@@ -337,7 +388,7 @@
         }
         if (lastA && lastA.actions) renderActions(lastA.actions);
       } else {
-        // Pre-populate quick replies for the chat
+        // Pre-populate quick replies
         var replies = document.getElementById('convReplies');
         if (replies) {
           var suggestions = buildReadinessActions();
@@ -373,19 +424,6 @@
     }
   }
 
-  window.toggleAssessChat = function() {
-    var panel = document.getElementById('assessChatPanel');
-    var arrow = document.getElementById('chatArrow');
-    if (!panel) return;
-    if (panel.style.display === 'none') {
-      panel.style.display = '';
-      if (arrow) arrow.textContent = '↑';
-      scrollThread();
-    } else {
-      panel.style.display = 'none';
-      if (arrow) arrow.textContent = '↓';
-    }
-  };
 
   function bindInput() {
     var input = document.getElementById('convInput');
