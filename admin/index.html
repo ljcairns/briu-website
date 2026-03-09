@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Briu Dashboard</title>
+<style>
+:root {
+  --bg: #07090E;
+  --surface: #0d1117;
+  --surface-2: #161b22;
+  --gold: #d4a05a;
+  --gold-dim: rgba(212,160,90,0.15);
+  --forest: #5a9dac;
+  --text: #e6e1d9;
+  --text-muted: #8b8578;
+  --red: #e85d5d;
+  --green: #5eb85e;
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+  --serif: 'Playfair Display', Georgia, serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.5; }
+
+/* Auth gate */
+#auth-gate { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
+#auth-gate form { display: flex; flex-direction: column; gap: 1rem; width: 320px; }
+#auth-gate input { padding: 0.75rem 1rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-size: 14px; }
+#auth-gate input:focus { outline: none; border-color: var(--gold); }
+#auth-gate button { padding: 0.75rem; background: var(--gold); color: var(--bg); border: none; font-weight: 600; cursor: pointer; }
+#auth-gate .error { color: var(--red); font-size: 12px; text-align: center; }
+#auth-gate h2 { font-family: var(--serif); font-size: 1.25rem; text-align: center; color: var(--gold); }
+
+/* Dashboard layout */
+#dashboard { display: none; }
+.dash-header { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+.dash-header h1 { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); }
+.dash-header .refresh { background: none; border: 1px solid var(--gold-dim); color: var(--gold); padding: 0.4rem 0.8rem; font-size: 12px; cursor: pointer; }
+.dash-header .refresh:hover { background: var(--gold-dim); }
+
+.dash-body { padding: 2rem; max-width: 1200px; margin: 0 auto; }
+
+/* Stat cards */
+.stat-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 2rem; }
+.stat-card { background: var(--surface); padding: 1.25rem; border: 1px solid rgba(255,255,255,0.04); }
+.stat-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 0.35rem; }
+.stat-card .value { font-size: 1.8rem; font-weight: 600; color: var(--gold); }
+.stat-card .sub { font-size: 11px; color: var(--text-muted); margin-top: 0.25rem; }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.05); margin-bottom: 1.5rem; }
+.tab { padding: 0.6rem 1.25rem; font-size: 13px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all 0.2s; }
+.tab:hover { color: var(--text); }
+.tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.06); }
+td { padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+.badge { display: inline-block; padding: 0.15rem 0.5rem; font-size: 11px; border-radius: 2px; }
+.badge-new { background: rgba(212,160,90,0.15); color: var(--gold); }
+.badge-contacted { background: rgba(90,157,172,0.15); color: var(--forest); }
+.badge-qualified { background: rgba(94,184,94,0.15); color: var(--green); }
+.badge-won { background: rgba(94,184,94,0.25); color: var(--green); }
+.badge-lost { background: rgba(232,93,93,0.15); color: var(--red); }
+.badge-visitor { background: rgba(255,255,255,0.05); color: var(--text-muted); }
+.badge-assessed { background: rgba(212,160,90,0.1); color: var(--gold); }
+.badge-chatting { background: rgba(90,157,172,0.1); color: var(--forest); }
+.badge-booked { background: rgba(94,184,94,0.2); color: var(--green); }
+.badge-pending { background: rgba(212,160,90,0.15); color: var(--gold); }
+.badge-paid { background: rgba(94,184,94,0.2); color: var(--green); }
+
+.clickable { cursor: pointer; }
+.clickable:hover td { background: rgba(212,160,90,0.04); }
+.empty { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+/* Conversation detail panel */
+#conv-detail { display: none; background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1.5rem; margin-bottom: 1.5rem; }
+#conv-detail .detail-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+#conv-detail .detail-header h3 { font-family: var(--serif); font-size: 1rem; color: var(--text); }
+#conv-detail .close-detail { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 18px; }
+.message-thread { max-height: 400px; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; }
+.msg { padding: 0.6rem 0.8rem; max-width: 80%; font-size: 13px; line-height: 1.5; }
+.msg-user { background: rgba(212,160,90,0.1); align-self: flex-end; border-radius: 8px 8px 0 8px; }
+.msg-assistant { background: var(--surface-2); align-self: flex-start; border-radius: 8px 8px 8px 0; }
+.msg-time { font-size: 10px; color: var(--text-muted); margin-top: 0.2rem; }
+.detail-meta { display: flex; gap: 1.5rem; font-size: 12px; color: var(--text-muted); margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+
+/* Stages bar */
+.stage-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 2rem; gap: 2px; }
+.stage-bar .segment { transition: width 0.5s ease; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .stat-grid { grid-template-columns: repeat(2, 1fr); }
+  .dash-body { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="auth-gate">
+  <form onsubmit="return authenticate(event)">
+    <h2>Briu Dashboard</h2>
+    <input type="password" id="token-input" placeholder="Admin token" autocomplete="off">
+    <button type="submit">Sign in</button>
+    <div class="error" id="auth-error"></div>
+  </form>
+</div>
+
+<div id="dashboard">
+  <div class="dash-header">
+    <h1>Briu Dashboard</h1>
+    <button class="refresh" onclick="loadAll()">Refresh</button>
+  </div>
+
+  <div class="dash-body">
+    <!-- Stats -->
+    <div class="stat-grid" id="stat-grid">
+      <div class="stat-card"><div class="label">Visitors</div><div class="value" id="s-visitors">0</div></div>
+      <div class="stat-card"><div class="label">Conversations</div><div class="value" id="s-conversations">0</div></div>
+      <div class="stat-card"><div class="label">Messages</div><div class="value" id="s-messages">0</div></div>
+      <div class="stat-card"><div class="label">Leads</div><div class="value" id="s-leads">0</div></div>
+      <div class="stat-card"><div class="label">Bookings</div><div class="value" id="s-bookings">0</div></div>
+    </div>
+
+    <!-- Stage funnel bar -->
+    <div class="stage-bar" id="stage-bar"></div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+      <div class="tab active" data-tab="conversations" onclick="switchTab('conversations')">Conversations</div>
+      <div class="tab" data-tab="leads" onclick="switchTab('leads')">Leads</div>
+      <div class="tab" data-tab="bookings" onclick="switchTab('bookings')">Bookings</div>
+    </div>
+
+    <!-- Conversation detail panel -->
+    <div id="conv-detail">
+      <div class="detail-header">
+        <h3 id="detail-title">Conversation</h3>
+        <button class="close-detail" onclick="closeDetail()">&times;</button>
+      </div>
+      <div class="detail-meta" id="detail-meta"></div>
+      <div class="message-thread" id="message-thread"></div>
+    </div>
+
+    <!-- Conversations -->
+    <div class="tab-panel active" id="panel-conversations">
+      <table>
+        <thead><tr><th>Time</th><th>Visitor</th><th>Company</th><th>Page</th><th>Messages</th><th>Stage</th><th>Handoff</th></tr></thead>
+        <tbody id="conv-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Leads -->
+    <div class="tab-panel" id="panel-leads">
+      <table>
+        <thead><tr><th>Time</th><th>Name</th><th>Email</th><th>Company</th><th>Quality</th><th>Status</th><th>Summary</th></tr></thead>
+        <tbody id="leads-tbody"></tbody>
+      </table>
+    </div>
+
+    <!-- Bookings -->
+    <div class="tab-panel" id="panel-bookings">
+      <table>
+        <thead><tr><th>Time</th><th>Name</th><th>Email</th><th>Tier</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
+        <tbody id="bookings-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'https://briu-assess.briu.workers.dev';
+let TOKEN = localStorage.getItem('briu_admin_token') || '';
+
+async function api(path) {
+  const res = await fetch(API + path, {
+    headers: { 'Authorization': 'Bearer ' + TOKEN }
+  });
+  if (res.status === 401) {
+    localStorage.removeItem('briu_admin_token');
+    location.reload();
+    return null;
+  }
+  return res.json();
+}
+
+async function apiPost(path, body) {
+  const res = await fetch(API + path, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + TOKEN, 'Content-Type': 'application/json' },
+    body: JSON.stringify(body)
+  });
+  return res.json();
+}
+
+function authenticate(e) {
+  e.preventDefault();
+  TOKEN = document.getElementById('token-input').value.trim();
+  if (!TOKEN) return false;
+  api('/api/admin/stats').then(data => {
+    if (!data) {
+      document.getElementById('auth-error').textContent = 'Invalid token';
+      return;
+    }
+    localStorage.setItem('briu_admin_token', TOKEN);
+    showDashboard();
+    loadAll();
+  });
+  return false;
+}
+
+function showDashboard() {
+  document.getElementById('auth-gate').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'block';
+}
+
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === 'panel-' + name));
+  closeDetail();
+}
+
+function timeAgo(ts) {
+  if (!ts) return '';
+  const d = new Date(ts + (ts.includes('Z') ? '' : 'Z'));
+  const diff = (Date.now() - d.getTime()) / 1000;
+  if (diff < 60) return 'just now';
+  if (diff < 3600) return Math.floor(diff / 60) + 'm ago';
+  if (diff < 86400) return Math.floor(diff / 3600) + 'h ago';
+  return Math.floor(diff / 86400) + 'd ago';
+}
+
+function badge(val, type) {
+  return '<span class="badge badge-' + (val || type || 'visitor') + '">' + (val || 'unknown') + '</span>';
+}
+
+async function loadAll() {
+  const [stats, convos, leads, bookings] = await Promise.all([
+    api('/api/admin/stats'),
+    api('/api/admin/conversations'),
+    api('/api/admin/leads'),
+    api('/api/admin/bookings'),
+  ]);
+
+  if (!stats) return;
+
+  // Stats
+  document.getElementById('s-visitors').textContent = stats.totals.visitors;
+  document.getElementById('s-conversations').textContent = stats.totals.conversations;
+  document.getElementById('s-messages').textContent = stats.totals.messages;
+  document.getElementById('s-leads').textContent = stats.totals.leads;
+  document.getElementById('s-bookings').textContent = stats.totals.bookings;
+
+  // Stage funnel
+  const total = Object.values(stats.stages).reduce((a, b) => a + b, 0);
+  const stageBar = document.getElementById('stage-bar');
+  if (total > 0) {
+    const colors = { visitor: '#8b8578', assessed: '#d4a05a', chatting: '#5a9dac', contacted: '#7ab87a', booked: '#5eb85e' };
+    stageBar.innerHTML = Object.entries(colors).map(([stage, color]) => {
+      const pct = ((stats.stages[stage] || 0) / total * 100).toFixed(1);
+      return pct > 0 ? '<div class="segment" style="width:' + pct + '%;background:' + color + '" title="' + stage + ': ' + (stats.stages[stage] || 0) + '"></div>' : '';
+    }).join('');
+  } else {
+    stageBar.innerHTML = '<div class="segment" style="width:100%;background:rgba(255,255,255,0.03)"></div>';
+  }
+
+  // Conversations table
+  const ct = document.getElementById('conv-tbody');
+  if (!convos.conversations || convos.conversations.length === 0) {
+    ct.innerHTML = '<tr><td colspan="7" class="empty">No conversations yet. Data populates as visitors chat.</td></tr>';
+  } else {
+    ct.innerHTML = convos.conversations.map(c =>
+      '<tr class="clickable" onclick="viewConversation(' + c.id + ')">' +
+      '<td>' + timeAgo(c.created_at) + '</td>' +
+      '<td>' + (c.email || c.name || '<span style="color:var(--text-muted)">anonymous</span>') + '</td>' +
+      '<td>' + (c.company_name || '') + '</td>' +
+      '<td>' + (c.page || '/') + '</td>' +
+      '<td>' + c.message_count + '</td>' +
+      '<td>' + badge(c.stage) + '</td>' +
+      '<td>' + (c.has_handoff ? '<span style="color:var(--green)">Yes</span>' : '') + '</td>' +
+      '</tr>'
+    ).join('');
+  }
+
+  // Leads table
+  const lt = document.getElementById('leads-tbody');
+  if (!leads.leads || leads.leads.length === 0) {
+    lt.innerHTML = '<tr><td colspan="7" class="empty">No leads yet.</td></tr>';
+  } else {
+    lt.innerHTML = leads.leads.map(l =>
+      '<tr>' +
+      '<td>' + timeAgo(l.created_at) + '</td>' +
+      '<td>' + (l.name || '') + '</td>' +
+      '<td>' + l.email + '</td>' +
+      '<td>' + (l.company_name || '') + '</td>' +
+      '<td>' + (l.quality_score || 0) + '</td>' +
+      '<td>' + badge(l.status) + '</td>' +
+      '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (l.summary || '') + '</td>' +
+      '</tr>'
+    ).join('');
+  }
+
+  // Bookings table
+  const bt = document.getElementById('bookings-tbody');
+  if (!bookings.bookings || bookings.bookings.length === 0) {
+    bt.innerHTML = '<tr><td colspan="7" class="empty">No bookings yet.</td></tr>';
+  } else {
+    bt.innerHTML = bookings.bookings.map(b =>
+      '<tr>' +
+      '<td>' + timeAgo(b.created_at) + '</td>' +
+      '<td>' + b.name + '</td>' +
+      '<td>' + b.email + '</td>' +
+      '<td>' + (b.tier_name || b.tier) + '</td>' +
+      '<td>' + (b.amount ? '$' + b.amount.toLocaleString() : 'TBD') + '</td>' +
+      '<td>' + (b.payment_method || '') + '</td>' +
+      '<td>' + badge(b.status) + '</td>' +
+      '</tr>'
+    ).join('');
+  }
+}
+
+async function viewConversation(id) {
+  const data = await api('/api/admin/conversation/' + id);
+  if (!data || !data.conversation) return;
+
+  const panel = document.getElementById('conv-detail');
+  const conv = data.conversation;
+  panel.style.display = 'block';
+
+  document.getElementById('detail-title').textContent =
+    (conv.email || conv.name || 'Anonymous') + (conv.company_name ? ' (' + conv.company_name + ')' : '');
+
+  document.getElementById('detail-meta').innerHTML =
+    '<span>Page: ' + (conv.page || '/') + '</span>' +
+    '<span>Messages: ' + conv.message_count + '</span>' +
+    '<span>Stage: ' + badge(conv.stage) + '</span>' +
+    '<span>' + timeAgo(conv.created_at) + '</span>';
+
+  const thread = document.getElementById('message-thread');
+  if (data.messages.length === 0) {
+    thread.innerHTML = '<div class="empty">No messages recorded yet.</div>';
+  } else {
+    thread.innerHTML = data.messages.map(m =>
+      '<div class="msg msg-' + m.role + '">' +
+      '<div>' + escapeHtml(m.content) + '</div>' +
+      '<div class="msg-time">' + timeAgo(m.created_at) + '</div>' +
+      '</div>'
+    ).join('');
+    thread.scrollTop = thread.scrollHeight;
+  }
+}
+
+function closeDetail() {
+  document.getElementById('conv-detail').style.display = 'none';
+}
+
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// Auto-login if token stored
+if (TOKEN) {
+  showDashboard();
+  loadAll();
+}
+</script>
+</body>
+</html>

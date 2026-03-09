@@ -386,6 +386,253 @@ function generateSessionId() {
   return 'sess_' + Array.from(bytes, b => b.toString(16).padStart(2, '0')).join('');
 }
 
+// ─── D1 Analytics helpers ───
+function hashIP(ip) {
+  // Simple non-reversible hash for analytics grouping (not crypto-grade)
+  let h = 0;
+  for (let i = 0; i < ip.length; i++) {
+    h = ((h << 5) - h + ip.charCodeAt(i)) | 0;
+  }
+  return 'ip_' + (h >>> 0).toString(36);
+}
+
+async function d1GetOrCreateVisitor(db, sessionId, { email, company, quiz, page, ipHash } = {}) {
+  if (!db) return null;
+  try {
+    let row = await db.prepare('SELECT id, stage FROM visitors WHERE session_id = ?').bind(sessionId).first();
+    if (row) {
+      // Update if we have new info
+      if (email && !row.email) {
+        await db.prepare('UPDATE visitors SET email = ?, updated_at = datetime(\'now\') WHERE id = ?').bind(email, row.id).run();
+      }
+      return row.id;
+    }
+    const result = await db.prepare(
+      `INSERT INTO visitors (session_id, email, company_name, company_domain, company_industries, ip_hash, page_first, quiz_role, quiz_team, quiz_ai, quiz_focus, stage)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`
+    ).bind(
+      sessionId,
+      email || null,
+      company?.name || null,
+      company?.domain || null,
+      company?.industries ? JSON.stringify(company.industries) : null,
+      ipHash || null,
+      page || null,
+      quiz?.q1 || null,
+      quiz?.q2 || null,
+      quiz?.q3 || null,
+      quiz?.q4 || null,
+      quiz?.q1 ? 'assessed' : 'visitor'
+    ).run();
+    return result.meta?.last_row_id || null;
+  } catch (e) {
+    console.error('D1 visitor error:', e);
+    return null;
+  }
+}
+
+async function d1GetOrCreateConversation(db, visitorId, sessionId, page) {
+  if (!db || !visitorId) return null;
+  try {
+    let row = await db.prepare('SELECT id FROM conversations WHERE session_id = ? ORDER BY id DESC LIMIT 1').bind(sessionId).first();
+    if (row) return row.id;
+    const result = await db.prepare(
+      'INSERT INTO conversations (visitor_id, session_id, page) VALUES (?, ?, ?)'
+    ).bind(visitorId, sessionId, page || null).run();
+    // Update visitor stage
+    await db.prepare("UPDATE visitors SET stage = 'chatting', updated_at = datetime('now') WHERE id = ? AND stage != 'contacted' AND stage != 'booked'")
+      .bind(visitorId).run();
+    return result.meta?.last_row_id || null;
+  } catch (e) {
+    console.error('D1 conversation error:', e);
+    return null;
+  }
+}
+
+async function d1SaveMessage(db, conversationId, role, content, actions, chunks) {
+  if (!db || !conversationId) return;
+  try {
+    await db.prepare(
+      'INSERT INTO messages (conversation_id, role, content, actions, chunks_used) VALUES (?, ?, ?, ?, ?)'
+    ).bind(
+      conversationId, role,
+      (content || '').slice(0, 10000),
+      actions ? JSON.stringify(actions) : null,
+      chunks ? JSON.stringify(chunks) : null
+    ).run();
+    await db.prepare(
+      'UPDATE conversations SET message_count = message_count + 1, updated_at = datetime(\'now\') WHERE id = ?'
+    ).bind(conversationId).run();
+  } catch (e) {
+    console.error('D1 message error:', e);
+  }
+}
+
+async function d1SaveLead(db, visitorId, conversationId, { name, email, summary, company, qualityScore }) {
+  if (!db) return null;
+  try {
+    const result = await db.prepare(
+      'INSERT INTO leads (visitor_id, conversation_id, name, email, summary, company_name, company_domain, quality_score) VALUES (?, ?, ?, ?, ?, ?, ?, ?)'
+    ).bind(
+      visitorId || null, conversationId || null,
+      name || null, email,
+      summary || null,
+      company?.name || null, company?.domain || null,
+      qualityScore || 0
+    ).run();
+    if (visitorId) {
+      await db.prepare("UPDATE visitors SET stage = 'contacted', quality_score = ?, updated_at = datetime('now') WHERE id = ?")
+        .bind(qualityScore || 0, visitorId).run();
+    }
+    if (conversationId) {
+      await db.prepare("UPDATE conversations SET has_handoff = 1, quality_score = ?, updated_at = datetime('now') WHERE id = ?")
+        .bind(qualityScore || 0, conversationId).run();
+    }
+    return result.meta?.last_row_id || null;
+  } catch (e) {
+    console.error('D1 lead error:', e);
+    return null;
+  }
+}
+
+async function d1SaveBooking(db, visitorId, booking) {
+  if (!db) return;
+  try {
+    await db.prepare(
+      'INSERT INTO bookings (visitor_id, booking_id, tier, tier_name, amount, name, email, company, payment_method, message) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
+    ).bind(
+      visitorId || null, booking.id,
+      booking.tier, booking.tierName, booking.amount || null,
+      booking.name, booking.email, booking.company || null,
+      booking.payment_method, booking.message || null
+    ).run();
+    if (visitorId) {
+      await db.prepare("UPDATE visitors SET stage = 'booked', updated_at = datetime('now') WHERE id = ?")
+        .bind(visitorId).run();
+    }
+  } catch (e) {
+    console.error('D1 booking error:', e);
+  }
+}
+
+// ─── Admin API (auth-gated) ───
+function checkAdminAuth(request, env) {
+  const auth = request.headers.get('Authorization') || '';
+  const token = auth.replace('Bearer ', '');
+  return token && token === env.ADMIN_TOKEN;
+}
+
+async function handleAdmin(request, env, corsHeaders) {
+  if (!checkAdminAuth(request, env)) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+      status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  const url = new URL(request.url);
+  const path = url.pathname;
+  const db = env.DB;
+  if (!db) {
+    return new Response(JSON.stringify({ error: 'Database not configured' }), {
+      status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // GET /api/admin/stats — dashboard overview
+  if (path === '/api/admin/stats') {
+    const [visitors, conversations, messages, leads, bookings] = await Promise.all([
+      db.prepare('SELECT COUNT(*) as c FROM visitors').first(),
+      db.prepare('SELECT COUNT(*) as c FROM conversations').first(),
+      db.prepare('SELECT COUNT(*) as c FROM messages').first(),
+      db.prepare('SELECT COUNT(*) as c FROM leads').first(),
+      db.prepare('SELECT COUNT(*) as c FROM bookings').first(),
+    ]);
+    const recent = await db.prepare(
+      'SELECT date, total_visitors, total_conversations, total_messages, total_leads FROM daily_metrics ORDER BY date DESC LIMIT 30'
+    ).all();
+    const stageBreakdown = await db.prepare(
+      'SELECT stage, COUNT(*) as c FROM visitors GROUP BY stage'
+    ).all();
+    return new Response(JSON.stringify({
+      totals: {
+        visitors: visitors.c, conversations: conversations.c,
+        messages: messages.c, leads: leads.c, bookings: bookings.c,
+      },
+      stages: Object.fromEntries((stageBreakdown.results || []).map(r => [r.stage, r.c])),
+      daily: recent.results || [],
+    }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+  }
+
+  // GET /api/admin/conversations — recent conversations with messages
+  if (path === '/api/admin/conversations') {
+    const limit = parseInt(url.searchParams.get('limit') || '20');
+    const offset = parseInt(url.searchParams.get('offset') || '0');
+    const convos = await db.prepare(
+      `SELECT c.id, c.session_id, c.page, c.message_count, c.has_handoff, c.quality_score, c.created_at,
+              v.email, v.name, v.company_name, v.company_domain, v.stage, v.quiz_role, v.quiz_focus
+       FROM conversations c LEFT JOIN visitors v ON c.visitor_id = v.id
+       ORDER BY c.created_at DESC LIMIT ? OFFSET ?`
+    ).bind(limit, offset).all();
+    return new Response(JSON.stringify({ conversations: convos.results || [] }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // GET /api/admin/conversation/:id — full message thread
+  if (path.startsWith('/api/admin/conversation/')) {
+    const id = parseInt(path.split('/').pop());
+    const msgs = await db.prepare(
+      'SELECT role, content, actions, created_at FROM messages WHERE conversation_id = ? ORDER BY id ASC'
+    ).bind(id).all();
+    const conv = await db.prepare(
+      `SELECT c.*, v.email, v.name, v.company_name, v.stage
+       FROM conversations c LEFT JOIN visitors v ON c.visitor_id = v.id WHERE c.id = ?`
+    ).bind(id).first();
+    return new Response(JSON.stringify({ conversation: conv, messages: msgs.results || [] }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // GET /api/admin/leads — all leads
+  if (path === '/api/admin/leads') {
+    const leads = await db.prepare(
+      'SELECT * FROM leads ORDER BY created_at DESC LIMIT 50'
+    ).all();
+    return new Response(JSON.stringify({ leads: leads.results || [] }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // GET /api/admin/bookings — all bookings
+  if (path === '/api/admin/bookings') {
+    const bookings = await db.prepare(
+      'SELECT * FROM bookings ORDER BY created_at DESC LIMIT 50'
+    ).all();
+    return new Response(JSON.stringify({ bookings: bookings.results || [] }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // POST /api/admin/lead/:id/status — update lead status
+  if (path.match(/^\/api\/admin\/lead\/\d+\/status$/)) {
+    const id = parseInt(path.split('/')[4]);
+    const body = await request.json();
+    if (!['new', 'contacted', 'qualified', 'won', 'lost'].includes(body.status)) {
+      return new Response(JSON.stringify({ error: 'Invalid status' }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    await db.prepare('UPDATE leads SET status = ? WHERE id = ?').bind(body.status, id).run();
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  return new Response(JSON.stringify({ error: 'Not found' }), {
+    status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
 // ─── Main handler ───
 export default {
   async fetch(request, env) {
@@ -396,13 +643,21 @@ export default {
     const isAllowed = origin === allowed || (isDev && (origin === 'http://localhost:8788' || origin === 'http://localhost:3000'));
     const corsHeaders = {
       'Access-Control-Allow-Origin': isAllowed ? origin : allowed,
-      'Access-Control-Allow-Methods': 'POST, OPTIONS',
-      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type, Authorization',
       'Access-Control-Max-Age': '86400',
     };
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    // Admin endpoints (GET or POST, auth-gated)
+    if (path.startsWith('/api/admin/')) {
+      return await handleAdmin(request, env, corsHeaders);
     }
 
     if (request.method !== 'POST') {
@@ -411,9 +666,6 @@ export default {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
-
-    const url = new URL(request.url);
-    const path = url.pathname;
 
     // Booking endpoint — must be before JSON parse to handle its own body
     if (path === '/api/book') {
@@ -452,7 +704,7 @@ export default {
       const body = await request.json();
 
       if (path === '/api/chat' || path === '/') {
-        return await handleChat(body, env, corsHeaders);
+        return await handleChat(body, env, corsHeaders, ip);
       }
 
       if (path === '/api/send') {
@@ -480,7 +732,7 @@ export default {
   },
 };
 
-async function handleChat(body, env, corsHeaders) {
+async function handleChat(body, env, corsHeaders, ip) {
   const { messages = [], quiz, page, email, company } = body;
 
   // Build conversation messages
@@ -551,6 +803,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   }
 
   // Build system prompt with relevant chunks only
+  const chunkKeys = isFirstTurn ? DEFAULT_CHUNKS : selectChunks(lastText, 2);
   const dynamicContent = buildSystemPrompt(lastText, isFirstTurn)
     .replace(CORE_PROMPT + '\n\n', '') + companyContext;
 
@@ -664,7 +917,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       };
       await sse(result);
 
-      // Store conversation in KV
+      // Store conversation in KV (legacy, still used by frontend)
       if (env.CONVERSATIONS) {
         env.CONVERSATIONS.put('conv:' + sid, JSON.stringify({
           sessionId: sid,
@@ -674,6 +927,25 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
           messages: (messages || []).concat([{ role: 'assistant', content: result.text }]),
           updatedAt: new Date().toISOString(),
         }), { expirationTtl: 2592000 }).catch(e => console.error('KV write error:', e));
+      }
+
+      // Store in D1 analytics
+      if (env.DB) {
+        (async () => {
+          try {
+            const visitorId = await d1GetOrCreateVisitor(env.DB, sid, { email, company, quiz, page, ipHash: hashIP(ip || 'unknown') });
+            const convId = await d1GetOrCreateConversation(env.DB, visitorId, sid, page);
+            // Save the latest user message
+            const lastUserMsg = messages.length > 0 ? messages[messages.length - 1] : null;
+            if (lastUserMsg && lastUserMsg.role === 'user') {
+              await d1SaveMessage(env.DB, convId, 'user', lastUserMsg.content, null, null);
+            }
+            // Save assistant response
+            await d1SaveMessage(env.DB, convId, 'assistant', result.text, result.actions, chunkKeys);
+          } catch (e) {
+            console.error('D1 chat write error:', e);
+          }
+        })();
       }
     } catch(e) {
       console.error('Stream error:', e);
@@ -812,7 +1084,7 @@ ${conversationLog}`;
     }
   }
 
-  // Store lead in KV
+  // Store lead in KV (legacy)
   if (env.CONVERSATIONS) {
     const leadRecord = {
       type: 'lead',
@@ -832,6 +1104,14 @@ ${conversationLog}`;
     };
     env.CONVERSATIONS.put('lead:' + Date.now() + '_' + email, JSON.stringify(leadRecord), { expirationTtl: 2592000 }) // 30 days
       .catch(e => console.error('KV lead write error:', e));
+  }
+
+  // Store lead in D1
+  if (env.DB) {
+    const sessionId = body.sessionId;
+    const visitorId = sessionId ? await d1GetOrCreateVisitor(env.DB, sessionId, { email, company, quiz }) : null;
+    const convRow = sessionId ? await env.DB.prepare('SELECT id FROM conversations WHERE session_id = ? ORDER BY id DESC LIMIT 1').bind(sessionId).first() : null;
+    await d1SaveLead(env.DB, visitorId, convRow?.id || null, { name, email, summary, company, qualityScore });
   }
 
   return new Response(JSON.stringify({ sent: true }), {
@@ -979,13 +1259,20 @@ async function handleBooking(body, env, corsHeaders) {
     createdAt: new Date().toISOString(),
   };
 
-  // Store in KV
+  // Store in KV (legacy)
   if (env.CONVERSATIONS) {
     await env.CONVERSATIONS.put(
       'booking:' + bookingId,
       JSON.stringify(booking),
       { expirationTtl: 7776000 } // 90 days
     );
+  }
+
+  // Store in D1
+  if (env.DB) {
+    const sessionId = body.sessionId;
+    const visitorId = sessionId ? await d1GetOrCreateVisitor(env.DB, sessionId, { email }) : null;
+    await d1SaveBooking(env.DB, visitorId, booking);
   }
 
   // Notify via OpenClaw webhook
