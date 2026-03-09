@@ -189,9 +189,9 @@
       <div class="tl-counter-detail">Jan 27, 2026 — 60k stars in 72 hours</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
-      <div class="tl-counter-num" id="counterCommits">--</div>
-      <div class="tl-counter-label">total commits across repos</div>
-      <div class="tl-counter-detail">Public + private, updated every 6 hours</div>
+      <div class="tl-counter-num" id="counterLOC">--</div>
+      <div class="tl-counter-label">lines of code</div>
+      <div class="tl-counter-detail" id="counterCommitsDetail">across 577+ commits</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
       <div class="tl-counter-num">$3.20</div>
@@ -551,15 +551,17 @@
     var ocLaunch = daysBetween(new Date('2026-01-27'), NOW);
 
     var el1 = document.getElementById('counterOCLaunch');
-    var el2 = document.getElementById('counterCommits');
+    var el2 = document.getElementById('counterLOC');
+    var el2detail = document.getElementById('counterCommitsDetail');
 
     if (el1) el1.textContent = Math.max(0, ocLaunch).toLocaleString();
 
-    // Pull commit count from stats.json (same source as /build/ page)
+    // Pull lines of code + commits from stats.json
     if (el2) {
       fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.totalCommits) el2.textContent = data.totalCommits.toLocaleString();
-      }).catch(function() { el2.textContent = '244+'; });
+        if (data.linesOfCode) el2.textContent = data.linesOfCode.toLocaleString();
+        if (data.totalCommits && el2detail) el2detail.textContent = 'across ' + data.totalCommits.toLocaleString() + ' commits';
+      }).catch(function() { el2.textContent = '37,500+'; });
     }
   }
   updateCounters();
