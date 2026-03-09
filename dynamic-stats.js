@@ -61,7 +61,7 @@
 
     // Update "Last updated" timestamp
     var meta = document.querySelector('.stats-meta');
-    if (meta) meta.textContent = 'Live · ' + formatDate(pacificNow()) + ', ' + pacificNow().getFullYear() + ' PT';
+    if (meta) meta.textContent = 'Live dashboard · Updated ' + formatDate(pacificNow()) + ', ' + pacificNow().getFullYear() + ' PT';
   }
 
   function fetchStats() {

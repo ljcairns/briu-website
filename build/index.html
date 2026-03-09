@@ -75,7 +75,15 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .roi-vs { flex: 0 0 auto; text-align: center; padding: 1rem; }
 .roi-multiplier { font-family: var(--serif); font-size: 2.4rem; color: var(--gold); line-height: 1; }
 .roi-multiplier-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); margin-top: 0.25rem; }
-.stats-meta { text-align: center; margin-top: 1.25rem; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; max-width: 1060px; margin-left: auto; margin-right: auto; padding: 0 2rem; }
+/* Live badge */
+.stats-live-badge { display: flex; align-items: center; justify-content: center; gap: 0.5rem; max-width: 1060px; margin: 0 auto 1.5rem; padding: 0 2rem; }
+.live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forest); box-shadow: 0 0 8px rgba(77,128,112,0.4); animation: livePulse 2s ease-in-out infinite; flex-shrink: 0; }
+@keyframes livePulse { 0%,100% { opacity: 1; box-shadow: 0 0 8px rgba(77,128,112,0.4); } 50% { opacity: 0.5; box-shadow: 0 0 4px rgba(77,128,112,0.2); } }
+.stats-meta { text-align: center; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; }
+/* Commit tooltip */
+.stat-box[data-tooltip] { position: relative; }
+.stat-box[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 0.4rem 0.75rem; background: var(--surface-2); border: 1px solid rgba(212,160,90,0.15); font-size: 0.68rem; color: var(--text-muted); z-index: 10; box-shadow: 0 6px 20px rgba(0,0,0,0.3); pointer-events: none; }
+.stat-box[data-tooltip]:hover::before { content: ''; position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: rgba(212,160,90,0.15); z-index: 10; }
 
 /* Timeline filters */
 .vtl-filters { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
@@ -216,6 +224,11 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <p>One person, multiple agents. Agent, brand, website, sales, operations — all built and run on the same stack we deploy for clients. This is the live operating dashboard.</p>
 </section>
 
+<div class="stats-live-badge">
+  <span class="live-dot"></span>
+  <span class="stats-meta">Live dashboard · Updated every 6 hours from GitHub</span>
+</div>
+
 <!-- 1. Speed hook -->
 <div class="stats-group">
   <div class="stats-group-label">The Journey</div>
@@ -228,10 +241,10 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <div class="stat-value">1 session</div>
       <div class="stat-label">Brand Created</div>
     </a>
-    <div class="stat-box reveal-scale reveal-delay-2">
+    <a href="https://github.com/ljcairns/briu-website" target="_blank" rel="noopener" class="stat-box reveal-scale reveal-delay-2" data-tooltip="Pulled from GitHub every 6 hours">
       <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
       <div class="stat-label" data-dynamic-label="commit-days">Changes Shipped</div>
-    </div>
+    </a>
     <div class="stat-box reveal-scale reveal-delay-3 stat-pulse">
       <div class="stat-value" data-dynamic="build-days">26</div>
       <div class="stat-label">Days Since Day Zero</div>
@@ -378,7 +391,6 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   </div>
 </div>
 
-<div class="stats-meta">Last updated: Mar 8, 2026 PT</div>
 
 <section>
   <p class="section-label reveal">Timeline</p>
