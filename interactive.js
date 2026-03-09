@@ -24,7 +24,7 @@
   var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   // Restore saved state
-  var CONV_VERSION = 7; // bump to clear stale conversations
+  var CONV_VERSION = 8; // bump to clear stale conversations
   try {
     var savedEmail = localStorage.getItem('briu_email');
     if (savedEmail) userEmail = savedEmail;
@@ -32,6 +32,8 @@
     if (savedCompany) companyData = JSON.parse(savedCompany);
     var savedSession = localStorage.getItem(SESSION_KEY);
     if (savedSession) sessionId = savedSession;
+    var savedStep = localStorage.getItem('briu_step');
+    if (savedStep) currentStep = parseInt(savedStep) || 0;
     var saved = localStorage.getItem(KEY);
     if (saved) {
       answers = JSON.parse(saved);
@@ -64,6 +66,7 @@
       if (cur) cur.classList.remove('active');
       if (step < STEPS) {
         currentStep = step + 1;
+        try { localStorage.setItem('briu_step', String(currentStep)); } catch(e) {}
         var nxt = document.getElementById('assess-' + (step + 1));
         if (nxt) nxt.classList.add('active');
       } else {
@@ -82,6 +85,7 @@
     var cur = document.getElementById('assess-' + fromStep);
     if (cur) cur.classList.remove('active');
     currentStep = fromStep - 1;
+    try { localStorage.setItem('briu_step', String(currentStep)); } catch(e) {}
     var prev = document.getElementById('assess-' + currentStep);
     if (prev) prev.classList.add('active');
     var bar = document.getElementById('assessProgress');
@@ -96,6 +100,7 @@
       localStorage.removeItem('briu_email');
       localStorage.removeItem('briu_company');
       localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem('briu_step');
     } catch(e) {}
     answers = {};
     conversation = [];
@@ -154,8 +159,7 @@
         replies.appendChild(btn);
       }
     }
-    inputBound = false;
-    bindInput();
+    bindInput(); // only binds if not already bound
     var input = document.getElementById('convInput');
     if (input) setTimeout(function() { input.focus(); }, 100);
   };
@@ -239,6 +243,7 @@
 
     // Advance to step 1
     currentStep = 1;
+    try { localStorage.setItem('briu_step', String(currentStep)); } catch(e) {}
     var s0 = document.getElementById('assess-0');
     if (s0) s0.classList.remove('active');
     var s1 = document.getElementById('assess-1');
@@ -695,7 +700,7 @@
     div.innerHTML = formatMessage(text);
 
     var inlineActions = (actions || []).filter(function(a) {
-      return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff' || a.type === 'pitch';
+      return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff' || a.type === 'pitch' || a.type === 'chart';
     });
     for (var i = 0; i < inlineActions.length; i++) {
       div.appendChild(renderActionCard(inlineActions[i]));
@@ -859,6 +864,47 @@
       card.innerHTML = ph;
     }
 
+    if (action.type === 'chart' && action.data) {
+      var maxVal = 0;
+      for (var ci = 0; ci < action.data.length; ci++) {
+        if (action.data[ci].value > maxVal) maxVal = action.data[ci].value;
+      }
+      if (action.comparison && action.comparison.value > maxVal) maxVal = action.comparison.value;
+      if (action.total && action.total.value > maxVal) maxVal = action.total.value;
+
+      var ch = '<div class="bc-chart-title">' + escapeHtml(action.title || 'Cost Breakdown') + '</div>';
+      for (var cj = 0; cj < action.data.length; cj++) {
+        var cd = action.data[cj];
+        var cpct = maxVal > 0 ? Math.round((cd.value / maxVal) * 100) : 0;
+        ch += '<div class="bc-chart-row"><div class="bc-chart-label">' + escapeHtml(cd.label) + '</div>' +
+          '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + cpct + '%"></div></div>' +
+          '<div class="bc-chart-value">$' + cd.value.toLocaleString() + '</div></div>';
+      }
+      if (action.total) {
+        var tpct2 = maxVal > 0 ? Math.round((action.total.value / maxVal) * 100) : 0;
+        ch += '<div class="bc-chart-row bc-chart-total"><div class="bc-chart-label" style="font-weight:600">' + escapeHtml(action.total.label || 'Total') + '</div>' +
+          '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + tpct2 + '%"></div></div>' +
+          '<div class="bc-chart-value" style="font-weight:700">$' + action.total.value.toLocaleString() + '</div></div>';
+      }
+      if (action.comparison) {
+        var cpct2 = maxVal > 0 ? Math.round((action.comparison.value / maxVal) * 100) : 0;
+        ch += '<div class="bc-chart-row bc-chart-comparison"><div class="bc-chart-label">' + escapeHtml(action.comparison.label || 'Traditional') + '</div>' +
+          '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + cpct2 + '%"></div></div>' +
+          '<div class="bc-chart-value">$' + action.comparison.value.toLocaleString() + '</div></div>';
+        var csavings = action.comparison.value - (action.total ? action.total.value : 0);
+        if (csavings > 0) {
+          var csvPct = Math.round((csavings / action.comparison.value) * 100);
+          ch += '<div class="bc-chart-savings">Save $' + csavings.toLocaleString() + '/mo (' + csvPct + '% less)</div>';
+        }
+      }
+      card.className = 'bc-chart';
+      card.innerHTML = ch;
+      setTimeout(function() {
+        var fills = card.querySelectorAll('.bc-chart-fill');
+        for (var f = 0; f < fills.length; f++) fills[f].style.width = fills[f].getAttribute('data-width');
+      }, 50);
+    }
+
     return card;
   }
 
@@ -909,6 +955,13 @@
           '<input type="email" class="conv-input conv-collect-input" id="handoffEmail" placeholder="you@company.com">' +
           '<button class="conv-send conv-collect-send" onclick="submitHandoff()">&#8593;</button>' +
           '</div>';
+        var hInput = document.getElementById('handoffEmail');
+        if (hInput) {
+          hInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); window.submitHandoff(); }
+          });
+          hInput.focus();
+        }
       }
       return;
     }

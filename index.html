@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="/shared.css?v=20260309u">
-<link rel="stylesheet" href="/charts.css?v=20260309u">
+<link rel="stylesheet" href="/shared.css?v=20260309v">
+<link rel="stylesheet" href="/charts.css?v=20260309v">
 <style>
 /* Homepage nav overrides */
 nav { position: fixed; }
@@ -325,6 +325,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .conv-reply-btn::before { content: ''; position: absolute; inset: 0; background: conic-gradient(from 0deg, rgba(212,160,90,0.05), rgba(224,123,95,0.03), rgba(90,157,172,0.03), rgba(212,160,90,0.05)); opacity: 0; transition: opacity 0.3s; }
 .conv-reply-btn:hover { color: var(--gold); border-color: rgba(212,160,90,0.35); transform: translateY(-1px); box-shadow: 0 2px 12px rgba(212,160,90,0.08); }
 .conv-reply-btn:hover::before { opacity: 1; }
+.conv-reply-btn:focus-visible, .conv-send:focus-visible, .conv-action-btn:focus-visible { outline: 2px solid rgba(212,160,90,0.6); outline-offset: 2px; }
 /* Input */
 .conv-input-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
 .conv-input { flex: 1; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; }
@@ -1042,7 +1043,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     </div>
   </div>
   <div class="faq-no-results" id="faqNoResults">
-    We haven't answered that one yet. <a href="#" onclick="openContactForm();return false">Ask us directly →</a>
+    We haven't answered that one yet. <a href="#" onclick="askAIFromFAQ();return false">Ask our AI →</a>
   </div>
 </section>
 
@@ -1121,10 +1122,10 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309u"></script>
-<script src="/chat-bubble.js?v=20260309u"></script>
-<script src="/interactive.js?v=20260309u"></script>
-<script src="/dynamic-stats.js?v=20260309u"></script>
+<script src="/shared.js?v=20260309v"></script>
+<script src="/chat-bubble.js?v=20260309v"></script>
+<script src="/interactive.js?v=20260309v"></script>
+<script src="/dynamic-stats.js?v=20260309v"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {
@@ -1145,8 +1146,14 @@ function filterFAQ(query) {
   }
   noResults.style.display = (q && visible === 0) ? 'block' : 'none';
 }
+function askAIFromFAQ() {
+  var q = document.getElementById('faqSearch');
+  var question = q ? q.value.trim() : '';
+  if (!question) question = 'I have a question about your service';
+  if (window.briuAskQuestion) window.briuAskQuestion(question);
+}
 </script>
-<script src="/charts.js?v=20260309u"></script>
+<script src="/charts.js?v=20260309v"></script>
 <script>
 /* Initialize chart library components */
 Briu.charts.adoptionTimeline('hp-adoption-timeline');

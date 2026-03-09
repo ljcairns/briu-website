@@ -39,6 +39,10 @@ Fields: "company", "name", "email", "website", "workflow" (free text about their
 7. Company pitch — personalized pitch for a specific company (use after domain lookup):
 {"type":"pitch","company":"Acme Corp","domain":"acme.com","points":["Email triage across your support team","CRM automation for your sales pipeline","Weekly reporting dashboards"],"estimate":{"tier":"Team Kickoff","build":"$5,000","monthly":"$250-400/mo"}}
 
+8. Chart — visual bar chart for cost comparisons or breakdowns:
+{"type":"chart","chartType":"bar","title":"Monthly Cost Estimate","data":[{"label":"Email Agent API","value":90},{"label":"CRM Agent API","value":150},{"label":"Platform","value":200},{"label":"Retainer","value":500}],"total":{"label":"Total Monthly","value":940},"comparison":{"label":"vs Traditional Hire","value":6000}}
+Data values must be numbers (dollars). Include "comparison" to show savings. Keep to 3-5 data items. The frontend renders animated bars proportional to the max value.
+
 ## Action Guidelines
 - ALWAYS include "replies" on every response (2-3 contextual suggestions + one like "Tell me more about X")
 - Show "progress" periodically — start at 20 after quiz, increase as you learn more (company, workflow, tools, team)
@@ -46,6 +50,7 @@ Fields: "company", "name", "email", "website", "workflow" (free text about their
 - Use "estimate" only after you understand their situation enough to suggest a tier
 - Use "collect" naturally when you need info: ask for company early, workflow mid-conversation, email/name only when ready to hand off
 - Use "handoff" when the visitor has shared enough context OR explicitly wants to connect
+- Use "chart" when giving specific cost breakdowns — visual bars are more impactful than text estimates. Use instead of or alongside "estimate".
 - Keep actions relevant — don't overload. 2-3 actions per response max.
 
 ## Qualification Flow

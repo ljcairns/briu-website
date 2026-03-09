@@ -7,7 +7,7 @@
 
   var API_BASE = 'https://briu-assess.briu.workers.dev';
   var CONV_KEY = 'briu_conv';
-  var CONV_VERSION = 7;
+  var CONV_VERSION = 8;
   var conversation = [];
   var sessionId = null;
   var isWaiting = false;
@@ -44,9 +44,9 @@
     }
   } catch(e) {}
 
-  // Only show bubble if there's been a conversation or email captured
+  // Always show the bubble — email gate handles first interaction
   function shouldShow() {
-    return conversation.length > 0 || userEmail;
+    return true;
   }
 
   // ─── Inject CSS ───
@@ -123,8 +123,38 @@
       '.bc-progress-label{font-size:0.72rem;color:#a8a598;margin-bottom:0.3rem;}',
       '.bc-progress-bar{height:3px;background:rgba(255,255,255,0.06);overflow:hidden;}',
       '.bc-progress-fill{height:100%;background:linear-gradient(90deg,#d4a05a,#e07b5f,#5a9dac);transition:width 0.6s ease;}',
+      // Focus styles
+      '.bc-reply-btn:focus-visible,.bc-send:focus-visible,.bc-handoff-btn:focus-visible{outline:2px solid rgba(212,160,90,0.6);outline-offset:2px;}',
+      // Chart
+      '.bc-chart{margin:0.5rem 0;padding:0.75rem;border:1px solid rgba(212,160,90,0.15);background:rgba(212,160,90,0.03);animation:convFade 0.3s ease;}',
+      '.bc-chart-title{font-size:0.8rem;color:#e8e6e1;margin-bottom:0.6rem;font-weight:600;}',
+      '.bc-chart-row{display:flex;align-items:center;gap:0.5rem;margin-bottom:0.35rem;font-size:0.75rem;}',
+      '.bc-chart-label{min-width:70px;color:#a8a598;text-align:right;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+      '.bc-chart-track{flex:1;height:18px;background:rgba(255,255,255,0.03);overflow:hidden;position:relative;}',
+      '.bc-chart-fill{height:100%;background:linear-gradient(90deg,rgba(212,160,90,0.7),rgba(212,160,90,0.35));transition:width 0.8s ease;min-width:2px;}',
+      '.bc-chart-value{min-width:45px;color:#d4a05a;font-weight:600;font-size:0.78rem;}',
+      '.bc-chart-total{border-top:1px solid rgba(255,255,255,0.08);margin-top:0.4rem;padding-top:0.4rem;}',
+      '.bc-chart-total .bc-chart-value{color:#e8e6e1;}',
+      '.bc-chart-comparison .bc-chart-fill{background:linear-gradient(90deg,rgba(224,123,95,0.7),rgba(224,123,95,0.35));}',
+      '.bc-chart-comparison .bc-chart-value{color:#e07b5f;}',
+      '.bc-chart-savings{font-size:0.72rem;color:rgba(106,174,156,0.9);text-align:right;margin-top:0.3rem;font-weight:600;}',
+      // Email gate
+      '.bc-email-gate{padding:1.5rem 1rem;text-align:center;animation:convFade 0.3s ease;}',
+      '.bc-gate-icon{width:48px;height:48px;margin:0 auto 1rem;position:relative;}',
+      '.bc-gate-title{font-size:0.92rem;color:#e8e6e1;font-weight:600;margin-bottom:0.4rem;}',
+      '.bc-gate-sub{font-size:0.78rem;color:#a8a598;margin-bottom:1.25rem;line-height:1.5;}',
+      '.bc-gate-row{display:flex;gap:0.5rem;margin-bottom:0.75rem;}',
+      '.bc-gate-skip{font-size:0.72rem;color:#555;cursor:pointer;background:none;border:none;font-family:inherit;text-decoration:underline;transition:color 0.2s;}',
+      '.bc-gate-skip:hover{color:#a8a598;}',
+      // Reset confirmation
+      '.bc-confirm{padding:1.25rem;text-align:center;animation:convFade 0.3s ease;}',
+      '.bc-confirm-text{font-size:0.85rem;color:#e8e6e1;margin-bottom:1rem;}',
+      '.bc-confirm-btns{display:flex;gap:0.5rem;justify-content:center;}',
+      '.bc-confirm-btn{font-size:0.78rem;padding:0.5rem 1rem;border-radius:16px;cursor:pointer;font-family:inherit;transition:all 0.2s;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);color:#a8a598;}',
+      '.bc-confirm-btn:hover{color:#d4a05a;border-color:rgba(212,160,90,0.3);}',
+      '.bc-confirm-btn:focus-visible{outline:2px solid rgba(212,160,90,0.6);outline-offset:2px;}',
       // Mobile
-      '@media(max-width:480px){.briu-chat-panel{right:0;left:0;bottom:0;width:100%;max-height:100vh;max-height:100dvh;}.briu-chat-bubble{bottom:16px;right:16px;}}',
+      '@media(max-width:480px){.briu-chat-panel{right:0;left:0;bottom:0;width:100%;max-height:100vh;max-height:100dvh;border-radius:0;}.briu-chat-bubble{bottom:16px;right:16px;}}',
       '@keyframes convFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}',
     ].join('\n');
     document.head.appendChild(style);
@@ -181,24 +211,139 @@
     document.addEventListener('keydown', function(e) {
       if (e.key === 'Escape') {
         var p = document.getElementById('briuChatPanel');
-        if (p) p.classList.remove('open');
+        if (p && p.classList.contains('open')) {
+          p.classList.remove('open');
+          isOpen = false;
+          document.body.style.overflow = '';
+        }
       }
     });
   }
 
-  window.briuToggleChatPanel = function() {
+  window.briuToggleChatPanel = function(opts) {
     var panel = document.getElementById('briuChatPanel');
     if (!panel) return;
     isOpen = !panel.classList.contains('open');
     panel.classList.toggle('open');
+    // Mobile scroll lock
+    if (window.innerWidth <= 480) {
+      document.body.style.overflow = isOpen ? 'hidden' : '';
+    }
     if (isOpen) {
       var badge = document.querySelector('.bubble-badge');
       if (badge) badge.remove();
-      scrollThread();
+      // Email gate: if no email, show gate first
+      if (!userEmail) {
+        renderEmailGate(opts && opts.prefill ? opts.prefill : '');
+        return;
+      }
+      // Refresh thread from conversation array on open
+      refreshThread();
       var input = document.getElementById('bcInput');
       if (input) setTimeout(function() { input.focus(); }, 100);
     }
   };
+
+  // ─── Refresh thread from current conversation array ───
+  function refreshThread() {
+    var thread = document.getElementById('bcThread');
+    if (!thread) return;
+    thread.innerHTML = '';
+    restoreThread();
+    scrollThread();
+  }
+
+  // ─── Email gate ───
+  var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
+
+  function renderEmailGate(prefill) {
+    var thread = document.getElementById('bcThread');
+    var replies = document.getElementById('bcReplies');
+    var inputRow = document.querySelector('.bc-input-row');
+    if (thread) thread.innerHTML =
+      '<div class="bc-email-gate">' +
+      '<div class="bc-gate-icon"><div class="fractal-mini">' +
+      '<div class="fr fr-1"></div><div class="fr fr-2"></div><div class="fr fr-3"></div><div class="fr-dot"></div>' +
+      '</div></div>' +
+      '<div class="bc-gate-title">Before we chat</div>' +
+      '<div class="bc-gate-sub">Drop your email so we can personalize the conversation' + (prefill ? ' and answer your question' : '') + '.</div>' +
+      '<div class="bc-gate-row">' +
+      '<input type="email" class="bc-input" id="bcGateEmail" placeholder="you@company.com" autocomplete="email">' +
+      '<button class="bc-send" id="bcGateSubmit">&#8593;</button>' +
+      '</div>' +
+      '<button class="bc-gate-skip" id="bcGateSkip">Skip — just chat</button>' +
+      '</div>';
+    if (replies) replies.innerHTML = '';
+    if (inputRow) inputRow.style.display = 'none';
+
+    // Bind email gate events
+    var emailInput = document.getElementById('bcGateEmail');
+    var submitBtn = document.getElementById('bcGateSubmit');
+    var skipBtn = document.getElementById('bcGateSkip');
+
+    if (emailInput) {
+      emailInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); submitGateEmail(prefill); }
+      });
+      setTimeout(function() { emailInput.focus(); }, 100);
+    }
+    if (submitBtn) submitBtn.addEventListener('click', function() { submitGateEmail(prefill); });
+    if (skipBtn) skipBtn.addEventListener('click', function() { exitGate(prefill); });
+  }
+
+  function submitGateEmail(prefill) {
+    var input = document.getElementById('bcGateEmail');
+    if (!input) return;
+    var email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      input.style.borderColor = 'rgba(220,80,80,0.5)';
+      return;
+    }
+    userEmail = email;
+    try { localStorage.setItem('briu_email', email); } catch(e) {}
+
+    var domain = email.split('@')[1].toLowerCase();
+    if (FREE_PROVIDERS.indexOf(domain) === -1) {
+      // Work email — do company lookup
+      var thread = document.getElementById('bcThread');
+      if (thread) thread.innerHTML =
+        '<div class="bc-email-gate" style="padding:2rem 1rem;">' +
+        '<div class="bc-gate-icon"><div class="fractal-mini">' +
+        '<div class="fr fr-1"></div><div class="fr fr-2"></div><div class="fr fr-3"></div><div class="fr-dot"></div>' +
+        '</div></div>' +
+        '<div class="bc-gate-sub">Looking up ' + escapeHtml(domain) + '...</div>' +
+        '</div>';
+
+      fetch(API_BASE + '/api/company', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain: domain })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data && data.found) {
+          companyData = data;
+          try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
+        }
+        exitGate(prefill);
+      })
+      .catch(function() { exitGate(prefill); });
+    } else {
+      exitGate(prefill);
+    }
+  }
+
+  function exitGate(prefill) {
+    var inputRow = document.querySelector('.bc-input-row');
+    if (inputRow) inputRow.style.display = '';
+    refreshThread();
+    var input = document.getElementById('bcInput');
+    if (input) setTimeout(function() { input.focus(); }, 100);
+    // If there was a prefilled question (e.g. from FAQ), send it
+    if (prefill) {
+      setTimeout(function() { sendMessage(prefill); }, 300);
+    }
+  }
 
   // ─── Thread rendering ───
   function restoreThread() {
@@ -277,7 +422,60 @@
           '<button class="bc-handoff-btn" onclick="window.briuChatHandoff(this)">Hand off to Briu team</button>';
         thread.appendChild(hcard);
       }
+      if (a.type === 'chart' && a.data) {
+        thread.appendChild(renderChart(a));
+      }
     }
+  }
+
+  // ─── Chart rendering ───
+  function renderChart(action) {
+    var card = document.createElement('div');
+    card.className = 'bc-chart';
+    var maxVal = 0;
+    for (var i = 0; i < action.data.length; i++) {
+      if (action.data[i].value > maxVal) maxVal = action.data[i].value;
+    }
+    if (action.comparison && action.comparison.value > maxVal) maxVal = action.comparison.value;
+    if (action.total && action.total.value > maxVal) maxVal = action.total.value;
+
+    var h = '<div class="bc-chart-title">' + escapeHtml(action.title || 'Cost Breakdown') + '</div>';
+    for (var j = 0; j < action.data.length; j++) {
+      var d = action.data[j];
+      var pct = maxVal > 0 ? Math.round((d.value / maxVal) * 100) : 0;
+      h += '<div class="bc-chart-row">' +
+        '<div class="bc-chart-label">' + escapeHtml(d.label) + '</div>' +
+        '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + pct + '%"></div></div>' +
+        '<div class="bc-chart-value">$' + d.value.toLocaleString() + '</div></div>';
+    }
+    if (action.total) {
+      var tpct = maxVal > 0 ? Math.round((action.total.value / maxVal) * 100) : 0;
+      h += '<div class="bc-chart-row bc-chart-total">' +
+        '<div class="bc-chart-label" style="font-weight:600">' + escapeHtml(action.total.label || 'Total') + '</div>' +
+        '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + tpct + '%"></div></div>' +
+        '<div class="bc-chart-value" style="font-weight:700">$' + action.total.value.toLocaleString() + '</div></div>';
+    }
+    if (action.comparison) {
+      var cpct = maxVal > 0 ? Math.round((action.comparison.value / maxVal) * 100) : 0;
+      h += '<div class="bc-chart-row bc-chart-comparison">' +
+        '<div class="bc-chart-label">' + escapeHtml(action.comparison.label || 'Traditional') + '</div>' +
+        '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + cpct + '%"></div></div>' +
+        '<div class="bc-chart-value">$' + action.comparison.value.toLocaleString() + '</div></div>';
+      var savings = action.comparison.value - (action.total ? action.total.value : 0);
+      if (savings > 0) {
+        var savPct = Math.round((savings / action.comparison.value) * 100);
+        h += '<div class="bc-chart-savings">Save $' + savings.toLocaleString() + '/mo (' + savPct + '% less)</div>';
+      }
+    }
+    card.innerHTML = h;
+    // Animate bars after a tick
+    setTimeout(function() {
+      var fills = card.querySelectorAll('.bc-chart-fill');
+      for (var f = 0; f < fills.length; f++) {
+        fills[f].style.width = fills[f].getAttribute('data-width');
+      }
+    }, 50);
+    return card;
   }
 
   function showReplies(options) {
@@ -349,12 +547,23 @@
   // ─── Send message ───
   function sendMessage(text) {
     if (isWaiting) return;
+    // If inline chat is active on homepage, route through it instead
+    if (isInlineChatActive() && window.expandInlineChat) {
+      window.expandInlineChat();
+      var inlineInput = document.getElementById('convInput');
+      if (inlineInput && text) { inlineInput.value = text; }
+      // Close bubble panel
+      var panel = document.getElementById('briuChatPanel');
+      if (panel) { panel.classList.remove('open'); isOpen = false; }
+      if (window.innerWidth <= 480) document.body.style.overflow = '';
+      return;
+    }
     var input = document.getElementById('bcInput');
     if (!text && input) { text = input.value.trim(); if (input) input.value = ''; }
     if (!text) return;
 
     conversation.push({ role: 'user', content: text });
-    if (!isInlineChatActive()) saveConversation();
+    saveConversation();
 
     var thread = document.getElementById('bcThread');
     appendMsg(thread, 'user', text);
@@ -518,25 +727,61 @@
 
   // ─── Reset conversation ───
   window.briuChatReset = function() {
+    // Show confirmation if there's context to preserve
+    if (userEmail || companyData) {
+      var thread = document.getElementById('bcThread');
+      var replies = document.getElementById('bcReplies');
+      if (thread) thread.innerHTML =
+        '<div class="bc-confirm">' +
+        '<div class="bc-confirm-text">Start a new conversation?</div>' +
+        '<div class="bc-confirm-btns">' +
+        '<button class="bc-confirm-btn" id="bcResetKeep">Keep my info</button>' +
+        '<button class="bc-confirm-btn" id="bcResetFull">Start completely fresh</button>' +
+        '</div></div>';
+      if (replies) replies.innerHTML = '';
+      var keepBtn = document.getElementById('bcResetKeep');
+      var fullBtn = document.getElementById('bcResetFull');
+      if (keepBtn) keepBtn.addEventListener('click', function() { performReset(true); });
+      if (fullBtn) fullBtn.addEventListener('click', function() { performReset(false); });
+      return;
+    }
+    performReset(false);
+  };
+
+  function performReset(keepContext) {
     conversation = [];
     sessionId = null;
     try {
       localStorage.removeItem(CONV_KEY);
       localStorage.removeItem('briu_session');
+      if (!keepContext) {
+        localStorage.removeItem('briu_email');
+        localStorage.removeItem('briu_company');
+        localStorage.removeItem('briu_assess');
+      }
     } catch(e) {}
+    if (!keepContext) {
+      userEmail = '';
+      companyData = null;
+      answers = {};
+    }
     // Bridge reset to inline chat if it exists
     if (window.briuResetInlineChat) window.briuResetInlineChat();
     // Clear and re-render thread
     var thread = document.getElementById('bcThread');
     if (thread) {
       thread.innerHTML = '';
+      if (!keepContext && !userEmail) {
+        // Show email gate for fresh start
+        renderEmailGate('');
+        return;
+      }
       restoreThread();
     }
     var replies = document.getElementById('bcReplies');
     if (replies) replies.innerHTML = '';
-    // Show default replies for fresh start
     showReplies(getDefaultReplies());
-  };
+  }
 
   // ─── Utilities ───
   function scrollThread() {
@@ -626,6 +871,25 @@
       }
     }
   });
+
+  // Open bubble with a prefilled question (e.g. from FAQ)
+  window.briuAskQuestion = function(question) {
+    if (!document.getElementById('briuChatBubble')) {
+      injectStyles();
+      injectBubble();
+    }
+    var panel = document.getElementById('briuChatPanel');
+    if (panel && !panel.classList.contains('open')) {
+      window.briuToggleChatPanel({ prefill: question });
+    } else if (panel && panel.classList.contains('open')) {
+      // Already open, just send the message
+      if (userEmail) {
+        sendMessage(question);
+      } else {
+        renderEmailGate(question);
+      }
+    }
+  };
 
   // Expose for homepage to trigger bubble appearance
   window.briuShowChatBubble = function() {
