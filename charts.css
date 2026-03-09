@@ -201,4 +201,55 @@
   .intel-events { grid-template-columns: repeat(2, 1fr); }
   .own-compare { grid-template-columns: 1fr; }
   .compound-loop-ring { grid-template-columns: repeat(2, 1fr); }
+  .constellation { height: 340px; }
+  .constellation-lines { height: 340px; }
+  .c-node.c-secondary { display: none; }
+  .c-node.c-primary { top: 140px !important; }
+  .c-node.c-skill { top: 250px !important; }
+  .c-node.c-founder { top: 20px !important; }
 }
+
+/* ---- Chart 14: Constellation Org ---- */
+.constellation { position: relative; width: 100%; height: 420px; margin: 0 auto; }
+.constellation-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
+.constellation-lines line { stroke: rgba(212,160,90,0.15); stroke-width: 1; stroke-dasharray: 4 4; transition: stroke-opacity 1s ease; }
+.briu-chart.visible .constellation-lines line { animation: lineReveal 1.2s ease forwards; }
+@keyframes lineReveal { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
+
+.c-node { position: absolute; text-align: center; z-index: 1; opacity: 0; transform: scale(0.8); transition: opacity 0.6s ease, transform 0.6s ease; }
+.briu-chart.visible .c-node { opacity: 1; transform: scale(1); }
+.briu-chart.visible .c-node.c-founder { transition-delay: 0s; }
+.briu-chart.visible .c-node.c-primary { transition-delay: 0.2s; }
+.briu-chart.visible .c-node.c-secondary { transition-delay: 0.3s; }
+.briu-chart.visible .c-node.c-skill { transition-delay: 0.4s; }
+
+/* Restore original transform after reveal */
+.briu-chart.visible .c-node { transform: translateX(-50%) scale(1); }
+
+.c-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 6px; transition: all 0.3s ease; border: 1.5px solid rgba(255,255,255,0.08); }
+.c-circle span { font-size: 1rem; line-height: 1; }
+.c-node:hover .c-circle { transform: scale(1.12); }
+
+.c-circle.c-human { width: 68px; height: 68px; background: rgba(90,157,172,0.12); border-color: rgba(90,157,172,0.35); box-shadow: 0 0 20px rgba(90,157,172,0.1); }
+.c-circle.c-human span { font-size: 0.82rem; font-weight: 600; color: var(--river); }
+.c-node:hover .c-circle.c-human { box-shadow: 0 0 30px rgba(90,157,172,0.2); }
+
+.c-circle.c-orchestrator { background: rgba(212,160,90,0.1); border-color: rgba(212,160,90,0.3); box-shadow: 0 0 16px rgba(212,160,90,0.08); }
+.c-node:hover .c-circle.c-orchestrator { box-shadow: 0 0 24px rgba(212,160,90,0.18); }
+
+.c-circle.c-code { background: rgba(77,128,112,0.1); border-color: rgba(77,128,112,0.3); box-shadow: 0 0 16px rgba(77,128,112,0.08); }
+.c-node:hover .c-circle.c-code { box-shadow: 0 0 24px rgba(77,128,112,0.18); }
+
+.c-circle.c-web { background: rgba(90,157,172,0.08); border-color: rgba(90,157,172,0.25); box-shadow: 0 0 16px rgba(90,157,172,0.06); }
+.c-node:hover .c-circle.c-web { box-shadow: 0 0 24px rgba(90,157,172,0.15); }
+
+.c-circle.c-audit { width: 36px; height: 36px; background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
+.c-circle.c-audit span { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
+
+.c-circle.c-agent { width: 46px; height: 46px; background: rgba(77,128,112,0.08); border-color: rgba(77,128,112,0.2); }
+.c-node:hover .c-circle.c-agent { box-shadow: 0 0 20px rgba(77,128,112,0.15); }
+
+.c-label { font-family: var(--serif); font-size: 0.82rem; color: var(--text); line-height: 1.2; white-space: nowrap; }
+.c-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; white-space: nowrap; }
+.c-env { font-size: 0.58rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); margin-top: 3px; opacity: 0.6; }
+.c-secondary .c-label { font-size: 0.7rem; color: var(--text-muted); }

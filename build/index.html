@@ -214,6 +214,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <p>One person, multiple agents. Agent, brand, website, sales, operations — all built and run on the same stack we deploy for clients. This is the live operating dashboard.</p>
 </section>
 
+<!-- 1. Speed hook -->
 <div class="stats-group">
   <div class="stats-group-label">The Journey</div>
   <div class="stats stats-4" id="buildStats">
@@ -236,105 +237,55 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   </div>
 </div>
 
+<!-- 2. Project costs — immediate and concrete -->
 <div class="stats-group">
-  <div id="build-org-chart"></div>
-</div>
-
-<div class="stats-group">
-  <div class="stats-group-label">The Stack</div>
-  <div class="stats stats-4">
-    <div class="stat-box reveal-scale">
-      <div class="stat-value" data-count="12">12</div>
-      <div class="stat-label">Agent Skills</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value" data-count="8">8</div>
-      <div class="stat-label">Tools Integrated</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value" data-count="13">13</div>
-      <div class="stat-label">Data Visualizations</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value">4</div>
-      <div class="stat-label">Specialist Agents</div>
-    </div>
-  </div>
-</div>
-
-<div class="stats-group">
-  <div class="stats-group-label">What It Costs to Run</div>
-  <div class="cost-spectrum">
-    <div class="spectrum-tier spectrum-baseline reveal-scale">
-      <div class="spectrum-marker" style="color: var(--forest);">Where We Are Now</div>
-      <div class="spectrum-value">~$310<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
-      <div class="spectrum-desc">Daily reports, security self-checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
-    </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-1">
-      <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
-      <div class="spectrum-value">$1-3K<span>/mo</span></div>
-      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
-      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. This is where token spend starts matching real employee output.</div>
-      <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
-    </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-2">
-      <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
-      <div class="spectrum-value">$5-10K<span>/mo</span></div>
-      <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
-      <div class="spectrum-desc">Full deployment: 5-7 agents, each on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily. Still a fraction of equivalent headcount.</div>
-      <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
-    </div>
-  </div>
-</div>
-
-<div class="stats-group">
-  <div class="stats-group-label">Month One — Every Dollar</div>
+  <div class="stats-group-label">What Each Project Cost</div>
   <div class="stats stats-4">
     <div class="stat-box reveal-scale">
       <div class="stat-value">$376</div>
-      <div class="stat-label">Agent Build (API)</div>
+      <div class="stat-label">Production Agent</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value">$200</div>
-      <div class="stat-label">Claude Max</div>
+      <div class="stat-value">~$45</div>
+      <div class="stat-label">Brand, Logo &amp; Domain</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value">~$30</div>
-      <div class="stat-label">Brand &amp; Logo</div>
+      <div class="stat-value">$710</div>
+      <div class="stat-label">Trademark (3 Classes)</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value">~$105</div>
-      <div class="stat-label">Domain, LLC, Banking</div>
+      <div class="stat-value">$200<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
+      <div class="stat-label">Platform (Claude Max)</div>
     </div>
   </div>
 </div>
 
+<!-- 3. ROI punchlines -->
 <div class="stats-group">
   <div class="stats-group-label">Agent ROI</div>
   <div class="roi-compare">
     <div class="roi-col roi-agent reveal-scale">
-      <div class="roi-header">What We Spent</div>
-      <div class="roi-value">~$711</div>
+      <div class="roi-header">With Agents</div>
+      <div class="roi-value">~$1,331</div>
       <div class="roi-items">
-        <span>Production agent</span>
-        <span>Brand &amp; identity</span>
-        <span>Website</span>
-        <span>Company formation</span>
+        <span>Production agent — $376</span>
+        <span>Brand, logo &amp; domain — ~$45</span>
+        <span>Trademark (3 classes) — $710</span>
+        <span>Platform — $200/mo</span>
       </div>
     </div>
     <div class="roi-vs reveal-scale reveal-delay-1">
-      <div class="roi-multiplier" data-count="84" data-suffix="x">84x</div>
+      <div class="roi-multiplier" data-count="46" data-suffix="x">46x</div>
       <div class="roi-multiplier-label">less</div>
     </div>
     <div class="roi-col roi-trad reveal-scale reveal-delay-2">
-      <div class="roi-header">Traditional Equivalent</div>
+      <div class="roi-header">Traditional Route</div>
       <div class="roi-value">$40–75K+</div>
       <div class="roi-items">
-        <span>Dev agency or internal hire</span>
-        <span>Branding agency</span>
-        <span>Web dev shop</span>
-        <span>SaaS stack &amp; consultants</span>
+        <span>Dev agency — $15-30K</span>
+        <span>Branding agency — $15-25K</span>
+        <span>Web dev shop — $8-20K</span>
+        <span>SaaS stack — $2K+/mo</span>
       </div>
     </div>
   </div>
@@ -366,6 +317,61 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
         <span>Web dev shop — 4-6 weeks</span>
         <span>Sequential, not parallel</span>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. How it runs — org chart -->
+<div class="stats-group">
+  <div id="build-org-chart"></div>
+</div>
+
+<!-- 5. Capability numbers -->
+<div class="stats-group">
+  <div class="stats-group-label">The Stack</div>
+  <div class="stats stats-4">
+    <div class="stat-box reveal-scale">
+      <div class="stat-value" data-count="12">12</div>
+      <div class="stat-label">Agent Skills</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value" data-count="8">8</div>
+      <div class="stat-label">Tools Integrated</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-2">
+      <div class="stat-value" data-count="13">13</div>
+      <div class="stat-label">Data Visualizations</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-3">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Specialist Agents</div>
+    </div>
+  </div>
+</div>
+
+<!-- 6. Ongoing cost spectrum -->
+<div class="stats-group">
+  <div class="stats-group-label">What It Costs to Run</div>
+  <div class="cost-spectrum">
+    <div class="spectrum-tier spectrum-baseline reveal-scale">
+      <div class="spectrum-marker" style="color: var(--forest);">Baseline</div>
+      <div class="spectrum-value">~$310<span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
+      <div class="spectrum-desc">Daily reports, security checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
+    </div>
+    <div class="spectrum-tier reveal-scale reveal-delay-1">
+      <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
+      <div class="spectrum-value">$1-3K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
+      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
+      <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
+    </div>
+    <div class="spectrum-tier reveal-scale reveal-delay-2">
+      <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
+      <div class="spectrum-value">$5-10K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
+      <div class="spectrum-desc">Full deployment: 5-7 agents, each on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily. Still a fraction of equivalent headcount.</div>
+      <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
     </div>
   </div>
 </div>
@@ -521,8 +527,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     </tbody>
     <tfoot>
       <tr>
-        <td>Total (month one)</td>
-        <td><span class="agent-cost">~$711</span></td>
+        <td>Total (project costs)</td>
+        <td><span class="agent-cost">~$1,331</span></td>
         <td><span class="trad-cost">$40,000–75,000+</span></td>
       </tr>
     </tfoot>
