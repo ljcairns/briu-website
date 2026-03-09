@@ -187,16 +187,16 @@
       <div class="tl-counter-label">days since OpenClaw launched</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
-      <div class="tl-counter-num" id="counterFounder">--</div>
-      <div class="tl-counter-label">days founder building agentic AI</div>
-    </div>
-    <div class="tl-counter reveal reveal-delay-2">
       <div class="tl-counter-num" id="counterCommits">--</div>
       <div class="tl-counter-label">total commits across repos</div>
     </div>
-    <div class="tl-counter reveal reveal-delay-3">
+    <div class="tl-counter reveal reveal-delay-2">
       <div class="tl-counter-num" id="counterBuildCost">$711</div>
       <div class="tl-counter-label">total build cost — domain to deployment</div>
+    </div>
+    <div class="tl-counter reveal reveal-delay-3">
+      <div class="tl-counter-num">1</div>
+      <div class="tl-counter-label">founder. OpenClaw + Claude Code + Claude Max.</div>
     </div>
   </div>
 </div>
@@ -507,20 +507,17 @@
   // ===== Live counters =====
   function updateCounters() {
     var ocLaunch = daysBetween(new Date('2026-01-27'), NOW);
-    var founderDays = daysBetween(new Date('2024-06-01'), NOW); // building since Claude 3.5 era
 
     var el1 = document.getElementById('counterOCLaunch');
-    var el2 = document.getElementById('counterFounder');
-    var el3 = document.getElementById('counterCommits');
+    var el2 = document.getElementById('counterCommits');
 
     if (el1) el1.textContent = Math.max(0, ocLaunch).toLocaleString();
-    if (el2) el2.textContent = Math.max(0, founderDays).toLocaleString();
 
     // Pull commit count from stats.json (same source as /build/ page)
-    if (el3) {
+    if (el2) {
       fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.total_commits) el3.textContent = data.total_commits.toLocaleString();
-      }).catch(function() { el3.textContent = '244+'; });
+        if (data.total_commits) el2.textContent = data.total_commits.toLocaleString();
+      }).catch(function() { el2.textContent = '244+'; });
     }
   }
   updateCounters();
