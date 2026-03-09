@@ -227,13 +227,17 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     </div>
     <div class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
-      <div class="stat-label" data-dynamic-label="commit-days">Total Commits</div>
+      <div class="stat-label" data-dynamic-label="commit-days">Changes Shipped</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-3 stat-pulse">
       <div class="stat-value" data-dynamic="build-days">26</div>
       <div class="stat-label">Days Since Day Zero</div>
     </div>
   </div>
+</div>
+
+<div class="stats-group">
+  <div id="build-org-chart"></div>
 </div>
 
 <div class="stats-group">
@@ -252,8 +256,8 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <div class="stat-label">Data Visualizations</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value">1</div>
-      <div class="stat-label">Person</div>
+      <div class="stat-value">4</div>
+      <div class="stat-label">Specialist Agents</div>
     </div>
   </div>
 </div>
@@ -635,7 +639,10 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 
 <script src="/shared.js"></script>
 <script src="/charts.js"></script>
-<script>Briu.charts.costPerHour('build-cost-per-hour');</script>
+<script>
+Briu.charts.briuOrg('build-org-chart');
+Briu.charts.costPerHour('build-cost-per-hour');
+</script>
 <script src="/dynamic-stats.js"></script>
 <script>
 /* Timeline filter */

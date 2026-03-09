@@ -117,6 +117,7 @@
 .briu-chart.visible .agent-org-node:nth-child(4) { transition-delay: 0.45s; }
 .agent-org-tools { display: flex; gap: 6px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
 .agent-org-tool { font-size: 0.65rem; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 2px; }
+.agent-org-env { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); margin-top: 6px; margin-bottom: 2px; opacity: 0.7; }
 
 /* ---- Chart 10: Cost Per Hour ---- */
 .cph-bars { display: flex; flex-direction: column; gap: 14px; }

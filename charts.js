@@ -724,3 +724,54 @@ Briu.charts.compoundLoop = function(containerId) {
     el.classList.add('visible');
   });
 };
+
+
+/* ============================================
+   Chart 14: Briu Org Chart
+   Actual agent architecture — founder + orchestrator + specialists
+   ============================================ */
+Briu.charts.briuOrg = function(containerId) {
+  var container = document.getElementById(containerId);
+  if (!container) return;
+
+  var agents = [
+    { title: 'Email &amp; CRM', desc: 'Gmail triage, HubSpot pipeline, follow-ups', env: 'Sandboxed VPS', tools: ['Gmail', 'HubSpot', 'Apollo'] },
+    { title: 'Research', desc: 'Prospecting, competitive intel, lead scoring', env: 'Sandboxed VPS', tools: ['Web', 'LinkedIn', 'Docs'] },
+    { title: 'Daily Ops', desc: 'Reports, security self-checks, scheduled tasks', env: 'Sandboxed VPS', tools: ['Notion', 'Slack', 'Cron'] },
+    { title: 'Code &amp; Deploy', desc: 'Website, charts, CI/CD, pull requests', env: 'Local', tools: ['Claude Code', 'GitHub', 'Terminal'] }
+  ];
+
+  var html = '<div class="chart-surface"><div class="chart-label">Briu agent architecture — how this company actually runs</div>' +
+    '<div class="agent-org">' +
+    '<div class="agent-org-level"><div class="agent-org-node human">' +
+    '<div class="agent-org-icon">&#x1f464;</div>' +
+    '<div class="agent-org-title">Founder</div>' +
+    '<div class="agent-org-desc">Judgment, taste, approval, client relationships</div>' +
+    '</div></div>' +
+    '<div class="agent-org-connector"></div>' +
+    '<div class="agent-org-level"><div class="agent-org-node meta">' +
+    '<div class="agent-org-icon">&#x1f9e0;</div>' +
+    '<div class="agent-org-title">Claw</div>' +
+    '<div class="agent-org-desc">Discord orchestrator — delegates, checks work, summarizes daily</div>' +
+    '<div class="agent-org-tools"><span class="agent-org-tool">Discord</span><span class="agent-org-tool">OpenClaw</span><span class="agent-org-tool">Multi-model</span></div>' +
+    '</div></div>' +
+    '<div class="agent-org-connector"></div>' +
+    '<div class="agent-org-level">';
+  agents.forEach(function(a) {
+    html += '<div class="agent-org-node sub">' +
+      '<div class="agent-org-title">' + a.title + '</div>' +
+      '<div class="agent-org-desc">' + a.desc + '</div>' +
+      '<div class="agent-org-env">' + a.env + '</div>' +
+      '<div class="agent-org-tools">' + a.tools.map(function(t) { return '<span class="agent-org-tool">' + t + '</span>'; }).join('') + '</div>' +
+      '</div>';
+  });
+  html += '</div></div>' +
+    '<div class="chart-source">Live architecture. 1 person, 1 orchestrator, 4 specialist agents.</div></div>';
+
+  container.innerHTML = html;
+  container.classList.add('briu-chart');
+
+  Briu.charts._observe(container, function(el) {
+    el.classList.add('visible');
+  });
+};
