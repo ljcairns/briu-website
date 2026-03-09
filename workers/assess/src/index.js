@@ -118,16 +118,36 @@ const TOPIC_MAP = {
 };
 
 // Default chunks for first message (when we only have quiz context)
-const DEFAULT_CHUNKS = ['pricing', 'capabilities', 'pages'];
+const DEFAULT_CHUNKS = ['pricing', 'capabilities'];
 
 // ─── Domain lookup for work email pitches ───
 const DOMAIN_RE = /I work at ([\w.-]+\.\w{2,})/i;
 
+// SSRF protection: block private/reserved IP ranges and internal domains
+function isBlockedDomain(domain) {
+  const lower = domain.toLowerCase();
+  // Block common internal hostnames
+  if (['localhost', '127.0.0.1', '0.0.0.0', '[::1]', 'metadata.google.internal'].includes(lower)) return true;
+  // Block AWS metadata endpoint
+  if (lower === '169.254.169.254') return true;
+  // Block .internal, .local, .localhost TLDs
+  if (/\.(internal|local|localhost|test|invalid|example)$/i.test(lower)) return true;
+  // Block IP addresses entirely (only allow domain names)
+  if (/^[\d.]+$/.test(lower) || lower.startsWith('[')) return true;
+  return false;
+}
+
 async function fetchCompanyInfo(domain) {
   try {
+    // Validate domain before fetching
+    if (!domain || typeof domain !== 'string' || domain.length > 253) return null;
+    if (isBlockedDomain(domain)) return null;
+    // Only allow domains with valid TLD (at least 2 chars)
+    if (!/^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(domain)) return null;
+
     const res = await fetch('https://' + domain, {
       headers: { 'User-Agent': 'Briu-Agent/1.0' },
-      redirect: 'follow',
+      redirect: 'follow', // Cloudflare Workers don't follow to private IPs
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return null;
@@ -228,22 +248,78 @@ function summarizeHistory(messages) {
   if (messages.length <= 8) return messages;
 
   // Keep first message (quiz context) and last 4 exchanges
-  // Summarize the middle as a context note
+  // Summarize the middle preserving structured context
   const first = messages[0];
   const middle = messages.slice(1, -4);
   const recent = messages.slice(-4);
 
-  let summaryText = 'Previous discussion covered: ';
+  // Extract structured fields from the middle messages
+  let companyName = null;
+  const workflows = new Set();
+  const concerns = [];
+  let teamSize = null;
+  let budgetSignal = null;
   const topics = new Set();
+
   for (const msg of middle) {
-    const lower = msg.content.toLowerCase();
+    const text = msg.content;
+    const lower = text.toLowerCase();
+
+    // Company name — look for "at [Company]", "company is [X]", "we're [X]"
+    if (!companyName) {
+      const companyMatch = text.match(/(?:at|company is|we're|I'm with|work for|from)\s+([A-Z][\w&. ]{1,30})/i);
+      if (companyMatch) companyName = companyMatch[1].trim();
+    }
+
+    // Workflows discussed
+    if (lower.includes('email')) workflows.add('email');
+    if (lower.includes('crm') || lower.includes('salesforce') || lower.includes('hubspot')) workflows.add('CRM');
+    if (lower.includes('report')) workflows.add('reporting');
+    if (lower.includes('sales') || lower.includes('prospect') || lower.includes('outreach')) workflows.add('sales/prospecting');
+    if (lower.includes('support') || lower.includes('ticket')) workflows.add('support');
+    if (lower.includes('slack') || lower.includes('discord')) workflows.add('team messaging');
+    if (lower.includes('calendar') || lower.includes('scheduling')) workflows.add('scheduling');
+
+    // Budget/pricing signals
+    if (!budgetSignal) {
+      if (lower.includes('budget') || lower.includes('afford') || lower.includes('expensive')) budgetSignal = 'cost-sensitive';
+      else if (lower.match(/\$[\d,]+/) || lower.includes('willing to spend') || lower.includes('invest')) budgetSignal = 'has budget';
+      else if (lower.includes('cheap') || lower.includes('free')) budgetSignal = 'low-budget';
+    }
+
+    // Team size
+    if (!teamSize) {
+      const sizeMatch = lower.match(/(\d+)\s*(?:people|person|employees|team members|engineers|devs)/);
+      if (sizeMatch) teamSize = sizeMatch[1] + ' people';
+    }
+
+    // Concerns/objections
+    if (msg.role === 'user') {
+      if (lower.includes('concern') || lower.includes('worried') || lower.includes('risk') || lower.includes('security') || lower.includes('privacy')) {
+        concerns.push(lower.includes('security') || lower.includes('privacy') ? 'security/privacy' : 'general concerns');
+      }
+      if (lower.includes('not sure') || lower.includes('skeptic') || lower.includes("don't know if")) {
+        concerns.push('uncertainty');
+      }
+    }
+
+    // Topic coverage
     if (lower.includes('price') || lower.includes('cost') || lower.includes('$')) topics.add('pricing');
-    if (lower.includes('email') || lower.includes('agent') || lower.includes('automate')) topics.add('capabilities');
+    if (lower.includes('agent') || lower.includes('automate')) topics.add('capabilities');
     if (lower.includes('built') || lower.includes('build')) topics.add('build process');
-    if (lower.includes('team') || lower.includes('company')) topics.add('their business context');
   }
-  summaryText += Array.from(topics).join(', ') || 'general exploration';
-  summaryText += '. (' + middle.length + ' messages summarized)';
+
+  // Build structured summary
+  const parts = [];
+  if (companyName) parts.push('Company: ' + companyName);
+  if (teamSize) parts.push('Team: ' + teamSize);
+  if (workflows.size > 0) parts.push('Workflows discussed: ' + Array.from(workflows).join(', '));
+  if (budgetSignal) parts.push('Budget signal: ' + budgetSignal);
+  if (concerns.length > 0) parts.push('Concerns: ' + [...new Set(concerns)].join(', '));
+  parts.push('Topics covered: ' + (topics.size > 0 ? Array.from(topics).join(', ') : 'general exploration'));
+  parts.push('(' + middle.length + ' messages summarized)');
+
+  const summaryText = parts.join(' | ');
 
   return [
     first,
@@ -264,7 +340,7 @@ export default {
     const allowed = env.ALLOWED_ORIGIN || 'https://briu.ai';
 
     const corsHeaders = {
-      'Access-Control-Allow-Origin': origin === allowed || origin.startsWith('http://localhost') || origin.endsWith('.workers.dev') ? origin : allowed,
+      'Access-Control-Allow-Origin': origin === allowed || origin === 'http://localhost:8788' || origin === 'http://localhost:3000' ? origin : allowed,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',
@@ -284,18 +360,31 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    // Rate limiting
+    // Rate limiting (uses KV if bound, otherwise in-memory Map)
     const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
-    if (env.RATE_LIMIT) {
+    {
       const key = `rate:${ip}`;
-      const count = parseInt(await env.RATE_LIMIT.get(key) || '0');
-      if (count >= 30) {
+      let count = 0;
+      if (env.RATE_LIMIT) {
+        count = parseInt(await env.RATE_LIMIT.get(key) || '0');
+      } else {
+        // In-memory fallback (per-isolate, not perfect but better than nothing)
+        if (!globalThis._rateLimits) globalThis._rateLimits = new Map();
+        const entry = globalThis._rateLimits.get(key);
+        if (entry && Date.now() - entry.ts < 3600000) count = entry.count;
+        else globalThis._rateLimits.delete(key);
+      }
+      if (count >= 20) {
         return new Response(JSON.stringify({ error: 'Rate limit exceeded. Try again later.' }), {
           status: 429,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
       }
-      await env.RATE_LIMIT.put(key, String(count + 1), { expirationTtl: 3600 });
+      if (env.RATE_LIMIT) {
+        await env.RATE_LIMIT.put(key, String(count + 1), { expirationTtl: 3600 });
+      } else {
+        globalThis._rateLimits.set(key, { count: count + 1, ts: Date.now() });
+      }
     }
 
     try {
@@ -367,24 +456,30 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   const isFirstTurn = managedMessages.length <= 2;
   const lastText = lastUserMsg ? lastUserMsg.content : '';
 
+  // Check if an estimate or pitch was already given in previous messages
+  const estimateAlreadyGiven = managedMessages.some(m =>
+    m.role === 'assistant' && (m.content.includes('"type":"estimate"') || m.content.includes('"type":"pitch"'))
+  );
+
   // Company context — use pre-fetched data from frontend, or detect from message
   let companyContext = '';
+  const costPrompt = estimateAlreadyGiven ? '' : '\n' + COST_ESTIMATE_PROMPT;
   if (company && company.found) {
     companyContext = '\n\nCompany: ' + company.name + ' (' + company.domain + ')' +
       (company.description ? '\nDescription: ' + company.description : '') +
       (company.industries ? '\nIndustry: ' + company.industries.join(', ') : '') +
       (company.workflows ? '\nSuggested workflows: ' + company.workflows.join(', ') : '') +
       '\nVisitor email: ' + (email || 'not provided') +
-      '\n' + COST_ESTIMATE_PROMPT;
+      costPrompt;
   } else {
     const domainMatch = lastText.match(DOMAIN_RE);
     if (domainMatch) {
       const domain = domainMatch[1];
       const info = await fetchCompanyInfo(domain);
       if (info) {
-        companyContext = '\n\n' + info + '\n' + COST_ESTIMATE_PROMPT;
+        companyContext = '\n\n' + info + costPrompt;
       } else {
-        companyContext = '\n\n' + COST_ESTIMATE_PROMPT +
+        companyContext = (costPrompt ? '\n\n' + COST_ESTIMATE_PROMPT : '') +
           '\n\nNote: Could not fetch ' + domain + ' — ask the visitor to describe their business instead.';
       }
     }
@@ -423,7 +518,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   if (!response.ok) {
     const err = await response.text();
     console.error('Claude API error:', response.status, err);
-    return new Response(JSON.stringify({ error: 'AI service unavailable', status: response.status, detail: err.slice(0, 200) }), {
+    return new Response(JSON.stringify({ error: 'AI service temporarily unavailable. Please try again.' }), {
       status: 502,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -466,7 +561,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       updatedAt: new Date().toISOString(),
     };
     // Fire and forget — don't block the response
-    env.CONVERSATIONS.put('conv:' + sid, JSON.stringify(convRecord), { expirationTtl: 604800 }) // 7 days
+    env.CONVERSATIONS.put('conv:' + sid, JSON.stringify(convRecord), { expirationTtl: 2592000 }) // 30 days
       .catch(e => console.error('KV write error:', e));
   }
 
@@ -477,7 +572,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
 }
 
 async function handleSend(body, env, corsHeaders) {
-  const { name, email, summary, messages = [] } = body;
+  const { name, email, summary, messages = [], company, quiz } = body;
 
   if (!email || !summary) {
     return new Response(JSON.stringify({ error: 'Email and summary required' }), {
@@ -503,11 +598,62 @@ ${summary}
 Full Conversation:
 ${conversationLog}`;
 
-  if (env.DISCORD_WEBHOOK) {
-    // Structured message for OpenClaw agent to act on
+  // Compute quality score early so we can include it in webhook payloads
+  let qualityScore = 0;
+  if (name) qualityScore += 10;
+  if (email) qualityScore += 15;
+  if (summary) qualityScore += 10;
+  if (company && company.name) qualityScore += 15;
+  if (company && company.domain) qualityScore += 10;
+  if (company && company.industries && company.industries.length > 0) qualityScore += 10;
+  if (company && company.workflows && company.workflows.length > 0) qualityScore += 10;
+  if (quiz && quiz.q1) qualityScore += 5;
+  if (quiz && quiz.q2) qualityScore += 5;
+  if (quiz && quiz.q4) qualityScore += 5;
+  if (messages.length >= 4) qualityScore += 5;
+
+  // Send to OpenClaw agent (primary) — structured lead payload
+  if (env.OPENCLAW_WEBHOOK) {
+    try {
+      const headers = { 'Content-Type': 'application/json' };
+      if (env.OPENCLAW_WEBHOOK_TOKEN) {
+        headers['Authorization'] = 'Bearer ' + env.OPENCLAW_WEBHOOK_TOKEN;
+      }
+      await fetch(env.OPENCLAW_WEBHOOK, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          type: 'lead',
+          name: name || email.split('@')[0],
+          email,
+          summary,
+          company: company ? {
+            name: company.name || null,
+            domain: company.domain || null,
+            industries: company.industries || [],
+            workflows: company.workflows || [],
+          } : null,
+          quiz: quiz || null,
+          qualityScore,
+          messages,
+          createdAt: new Date().toISOString(),
+        }),
+        signal: AbortSignal.timeout(10000),
+      });
+    } catch (e) {
+      console.error('OpenClaw webhook error:', e);
+    }
+  }
+
+  // Discord fallback (if no OpenClaw webhook, or as secondary notification)
+  if (env.DISCORD_WEBHOOK && !env.OPENCLAW_WEBHOOK) {
+    const sanitize = (s) => (s || '').replace(/@(everyone|here)/gi, '[at-$1]').replace(/```/g, '').slice(0, 1024);
     const lastFewMessages = messages.slice(-6).map(m =>
-      `${m.role === 'user' ? '👤' : '🤖'} ${m.content}`
+      `${m.role === 'user' ? '👤' : '🤖'} ${sanitize(m.content)}`
     ).join('\n');
+    const safeName = sanitize(name || email.split('@')[0]);
+    const safeEmail = sanitize(email);
+    const safeSummary = sanitize(summary);
 
     await fetch(env.DISCORD_WEBHOOK, {
       method: 'POST',
@@ -515,14 +661,14 @@ ${conversationLog}`;
       body: JSON.stringify({
         content: `🔔 **HANDOFF: New lead from briu.ai**`,
         embeds: [{
-          title: `${name || email.split('@')[0]} wants to talk`,
+          title: `${safeName} wants to talk`,
           color: 0xd4a05a,
           fields: [
-            { name: 'Email', value: email, inline: true },
-            { name: 'Context', value: summary.slice(0, 200), inline: false },
+            { name: 'Email', value: safeEmail, inline: true },
+            { name: 'Context', value: safeSummary.slice(0, 200), inline: false },
             { name: 'Recent Conversation', value: lastFewMessages.slice(0, 900) || 'No messages', inline: false },
           ],
-          footer: { text: `Action: Draft a follow-up email for ${email} based on their conversation. Suggest specific next steps and pricing.` },
+          footer: { text: `Action: Draft a follow-up email for ${safeEmail} based on their conversation. Suggest specific next steps and pricing.` },
         }],
       }),
     });
@@ -552,6 +698,14 @@ ${conversationLog}`;
       name,
       email,
       summary,
+      company: company ? {
+        name: company.name || null,
+        domain: company.domain || null,
+        industries: company.industries || [],
+        workflows: company.workflows || [],
+      } : null,
+      quiz: quiz || null,
+      qualityScore,
       messages,
       createdAt: new Date().toISOString(),
     };
@@ -568,9 +722,17 @@ ${conversationLog}`;
 // ─── Company lookup (no Claude call — just fetch + parse) ───
 async function handleCompanyLookup(body, corsHeaders) {
   const { domain } = body;
-  if (!domain) {
+  if (!domain || typeof domain !== 'string') {
     return new Response(JSON.stringify({ error: 'Domain required' }), {
       status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Validate domain format before attempting fetch
+  if (isBlockedDomain(domain) || !/^[a-zA-Z0-9]([a-zA-Z0-9-]*\.)+[a-zA-Z]{2,}$/.test(domain)) {
+    return new Response(JSON.stringify({ found: false, domain }), {
+      status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   }

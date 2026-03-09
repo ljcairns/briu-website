@@ -7,7 +7,7 @@
 
   var API_BASE = 'https://briu-assess.briu.workers.dev';
   var CONV_KEY = 'briu_conv';
-  var CONV_VERSION = 6;
+  var CONV_VERSION = 7;
   var conversation = [];
   var sessionId = null;
   var isWaiting = false;
@@ -66,7 +66,7 @@
       '.briu-chat-bubble .fr-dot{position:absolute;top:50%;left:50%;width:4px;height:4px;margin:-2px 0 0 -2px;border-radius:50%;background:#d4a05a;animation:fractalPulse 2s ease-in-out infinite;}',
       '.briu-chat-bubble .bubble-badge{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:#d4a05a;border:2px solid #1a1a2e;}',
       // Panel
-      '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:#1a1a2e;border:1px solid rgba(255,255,255,0.08);box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease;pointer-events:none;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
+      '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease;pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
       '.briu-chat-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}',
       // Header
       '.briu-chat-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}',
@@ -309,6 +309,11 @@
     if (ld) ld.remove();
   }
 
+  // Check if the homepage inline chat is active (to avoid dual writes)
+  function isInlineChatActive() {
+    return window.location.pathname === '/' && document.getElementById('convThread');
+  }
+
   // ─── Send message ───
   function sendMessage(text) {
     if (isWaiting) return;
@@ -317,7 +322,7 @@
     if (!text) return;
 
     conversation.push({ role: 'user', content: text });
-    saveConversation();
+    if (!isInlineChatActive()) saveConversation();
 
     var thread = document.getElementById('bcThread');
     appendMsg(thread, 'user', text);
@@ -329,15 +334,12 @@
     appendLoading(thread);
     scrollThread();
 
-    // Also trigger bubble on homepage inline chat
-    if (window.briuBubbleSync) window.briuBubbleSync();
-
     fetchChat(function(data) {
       removeLoading();
       if (data && data.text) {
         var entry = { role: 'assistant', content: data.text, actions: data.actions || [] };
         conversation.push(entry);
-        saveConversation();
+        if (!isInlineChatActive()) saveConversation();
         appendMsg(thread, 'assistant', data.text);
         renderInlineCards(thread, data.actions || []);
 
@@ -380,7 +382,10 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(function(data) {
       if (timedOut) return;
       clearTimeout(timer);
@@ -414,10 +419,13 @@
         name: userEmail ? userEmail.split('@')[0] : '',
         email: userEmail || 'not-provided@briu.ai',
         summary: summary,
-        messages: conversation
+        messages: conversation,
+        company: companyData || undefined,
+        quiz: answers || undefined
       })
     })
     .then(function() {
+      if (window.briuSetStage) window.briuSetStage('contacted');
       var parent = btn.parentElement;
       if (parent) parent.innerHTML = '<div class="bc-handoff-sent">Sent to the Briu team. Lucas will follow up within 24 hours.</div>';
     })
@@ -443,11 +451,20 @@
     return d.innerHTML;
   }
 
+  function safeHref(url) {
+    if (!url) return '#';
+    if (url.charAt(0) === '/') return url;
+    if (url.indexOf('https://') === 0) return url;
+    return '#';
+  }
+
   function formatText(text) {
     var d = document.createElement('div');
     d.textContent = text;
     var safe = d.innerHTML;
-    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
+      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
+    });
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
       return pre + '<a href="' + path + '">' + path + '</a>' + post;
     });
@@ -458,11 +475,6 @@
   // ─── Init ───
   function init() {
     if (!shouldShow()) return;
-    // Don't show on homepage if the inline assessment is visible
-    if (window.location.pathname === '/' && document.getElementById('assessBox')) {
-      // Still inject but keep hidden — will show when user navigates away
-      // Listen for storage changes to show bubble when conversation starts on homepage
-    }
     injectStyles();
     injectBubble();
   }
@@ -515,6 +527,28 @@
     if (!document.getElementById('briuChatBubble')) {
       injectStyles();
       injectBubble();
+    }
+  };
+
+  // Same-tab sync: interactive.js calls this after every saveConversation
+  window.briuSyncConversation = function(msgs, sid) {
+    conversation = msgs || [];
+    if (sid) sessionId = sid;
+    // Re-read other state that may have changed
+    try {
+      var e = localStorage.getItem('briu_email');
+      if (e) userEmail = e;
+      var c = localStorage.getItem('briu_company');
+      if (c) companyData = JSON.parse(c);
+      var a = localStorage.getItem('briu_assess');
+      if (a) answers = JSON.parse(a);
+    } catch(ex) {}
+    // If bubble exists and panel is open, refresh the thread
+    var thread = document.getElementById('bcThread');
+    if (thread && document.getElementById('briuChatPanel') && document.getElementById('briuChatPanel').classList.contains('open')) {
+      thread.innerHTML = '';
+      restoreThread();
+      scrollThread();
     }
   };
 })();

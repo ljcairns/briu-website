@@ -15,7 +15,7 @@ MAIL_DESTINATION = "hi@briu.ai"
 binding = "CONVERSATIONS"
 id = "1b36a305e4204874bafb42fe9a105dc0"
 
-# Optional KV namespace for rate limiting:
-# [[kv_namespaces]]
-# binding = "RATE_LIMIT"
-# id = "your-kv-namespace-id"
+# Distributed rate limiting
+[[kv_namespaces]]
+binding = "RATE_LIMIT"
+id = "dac7967fcf58452a97330374e2ed4f9c"

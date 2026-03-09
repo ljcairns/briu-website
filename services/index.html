@@ -19,8 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css?v=20260308c">
-<link rel="stylesheet" href="/charts.css?v=20260308c">
+<link rel="stylesheet" href="/shared.css?v=20260309p">
+<link rel="stylesheet" href="/charts.css?v=20260309p">
 <style>
 .hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
@@ -507,9 +507,9 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260308c"></script>
-<script src="/chat-bubble.js?v=20260309h"></script>
-<script src="/charts.js?v=20260308c"></script>
+<script src="/shared.js?v=20260309p"></script>
+<script src="/chat-bubble.js?v=20260309p"></script>
+<script src="/charts.js?v=20260309p"></script>
 <script>Briu.charts.automationBars('svc-automation-bars');</script>
 <script>
 /* Expandable capability cards */
@@ -561,6 +561,36 @@ function tfAnswer(q, val) {
     }, 300);
   }
 })();
+
+/* Reorder capability cards based on quiz focus area */
+(function() {
+  var u = window.Briu && window.Briu.user;
+  if (!u || !u.answers || !u.answers.q4) return;
+  var orderMap = {
+    email: ['Personal Assistants', 'Autonomous Operations', 'Email, CRM', 'Reporting'],
+    sales: ['Email, CRM', 'Personal Assistants', 'Autonomous Operations', 'Reporting'],
+    reporting: ['Reporting', 'Autonomous Operations', 'Email, CRM', 'Personal Assistants'],
+    ops: ['Autonomous Operations', 'Personal Assistants', 'Email, CRM', 'Reporting'],
+    support: ['Personal Assistants', 'Email, CRM', 'Autonomous Operations', 'Reporting']
+  };
+  var order = orderMap[u.answers.q4] || orderMap.email;
+  var cards = document.querySelectorAll('.build-item');
+  for (var i = 0; i < cards.length; i++) {
+    var h4 = cards[i].querySelector('h4');
+    if (!h4) continue;
+    for (var j = 0; j < order.length; j++) {
+      if (h4.textContent.indexOf(order[j]) !== -1) {
+        cards[i].style.order = j;
+        if (j === 0) cards[i].style.borderColor = 'rgba(212,160,90,0.3)';
+        else cards[i].style.borderColor = '';
+        break;
+      }
+    }
+  }
+})();
+
+/* Always show chat bubble on services page (high-intent) */
+if (window.briuShowChatBubble) window.briuShowChatBubble();
 </script>
 </body>
 </html>

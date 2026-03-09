@@ -111,6 +111,9 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 /* Cursor Glow */
 .cursor-glow { position: fixed; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(212,160,90,0.045), transparent 70%); pointer-events: none; z-index: 0; top: 0; left: 0; will-change: transform; }
 
+/* Personalization Badge */
+.rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
+
 /* Footer */
 footer { border-top: 1px solid rgba(255,255,255,0.04); padding: 3rem 2rem; max-width: 1060px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
 footer p, footer a { font-size: 0.8rem; color: var(--text-muted); text-decoration: none; }

@@ -21,7 +21,7 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css">
-<link rel="stylesheet" href="/charts.css?v=20260308c">
+<link rel="stylesheet" href="/charts.css?v=20260309p">
 <style>
 /* Homepage nav overrides */
 nav { position: fixed; }
@@ -193,6 +193,35 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .timeline-year { font-size: 0.78rem; font-weight: 600; color: var(--river); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.25rem; }
 .timeline-item p { font-size: 0.95rem; margin-bottom: 0; }
 
+/* Proof Grid */
+.proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin: 2.5rem 0; }
+.proof-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.3s ease; }
+.proof-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
+.proof-card-icon { font-size: 1.4rem; margin-bottom: 0.75rem; }
+.proof-card h4 { font-family: var(--serif); font-size: 1rem; color: var(--text); font-weight: 400; margin-bottom: 0.4rem; }
+.proof-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
+.proof-card-stat { font-size: 0.78rem; color: var(--text-muted); border-top: 1px solid rgba(255,255,255,0.04); padding-top: 0.6rem; }
+.proof-num { color: var(--gold); font-weight: 600; font-size: 0.9rem; }
+
+/* Proof Summary */
+.proof-summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 2.5rem 0; padding: 2rem; background: var(--surface); border: 1px solid rgba(212,160,90,0.1); }
+.proof-summary-stat { text-align: center; }
+.proof-summary-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.25rem; }
+.proof-summary-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+.proof-cta { text-align: center; margin-top: 1.5rem; }
+
+/* Founder Row */
+.founder-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
+.founder-bio p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; margin-bottom: 1rem; }
+.founder-bio p:first-child { color: var(--text); }
+
+@media (max-width: 640px) {
+  .proof-grid { grid-template-columns: 1fr 1fr; }
+  .proof-summary { grid-template-columns: repeat(2, 1fr); gap: 1rem; padding: 1.25rem; }
+  .proof-summary-num { font-size: 1.4rem; }
+  .founder-row { grid-template-columns: 1fr; gap: 2rem; }
+}
+
 .mission { text-align: center; }
 .mission h2 { max-width: 800px; margin-left: auto; margin-right: auto; }
 .mission p { max-width: 680px; margin-left: auto; margin-right: auto; }
@@ -255,6 +284,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-email-go { white-space: nowrap; padding: 0.85rem 1.5rem; }
 .assess-skip { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; cursor: pointer; font-family: var(--sans); padding: 0.25rem 0; opacity: 0.7; transition: opacity 0.2s; }
 .assess-skip:hover { opacity: 1; color: var(--gold); }
+.assess-back { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; cursor: pointer; font-family: var(--sans); padding: 0.5rem 0; margin-top: 0.75rem; opacity: 0.6; transition: all 0.2s; display: block; }
+.assess-back:hover { opacity: 1; color: var(--text); }
 .assess-company-badge { display: inline-block; font-size: 0.78rem; color: var(--gold); background: rgba(212,160,90,0.08); border: 1px solid rgba(212,160,90,0.15); padding: 0.3rem 0.75rem; margin-top: 0.5rem; animation: fadeUp 0.4s ease; }
 .assess-options { display: flex; flex-direction: column; gap: 0.75rem; }
 .assess-opt { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem 1.25rem; color: var(--text); font-family: var(--sans); font-size: 0.95rem; cursor: pointer; text-align: left; transition: all 0.25s ease; }
@@ -609,6 +640,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="ic" onclick="assessSelect(1,this)">Individual Contributor</button>
         <button class="assess-opt" data-value="exploring" onclick="assessSelect(1,this)">Exploring for my company</button>
       </div>
+      <button class="assess-back" onclick="assessBack(1)">&larr; Back</button>
     </div>
 
     <div class="assess-step" id="assess-2">
@@ -619,6 +651,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="medium" onclick="assessSelect(2,this)">11–50 people</button>
         <button class="assess-opt" data-value="large" onclick="assessSelect(2,this)">50+</button>
       </div>
+      <button class="assess-back" onclick="assessBack(2)">&larr; Back</button>
     </div>
 
     <div class="assess-step" id="assess-3">
@@ -629,6 +662,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="paid" onclick="assessSelect(3,this)">Paid AI accounts</button>
         <button class="assess-opt" data-value="building" onclick="assessSelect(3,this)">Already building agents</button>
       </div>
+      <button class="assess-back" onclick="assessBack(3)">&larr; Back</button>
     </div>
 
     <div class="assess-step" id="assess-4">
@@ -640,6 +674,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <button class="assess-opt" data-value="ops" onclick="assessSelect(4,this)">Operations &amp; admin</button>
         <button class="assess-opt" data-value="support" onclick="assessSelect(4,this)">Customer support</button>
       </div>
+      <button class="assess-back" onclick="assessBack(4)">&larr; Back</button>
     </div>
 
     <!-- Persistent email lookup panel (shows during quiz, becomes chat) -->
@@ -844,15 +879,60 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <!-- SOCIAL PROOF -->
 <section id="social-proof">
-  <p class="section-label reveal">Real Deployments</p>
-  <h2 class="reveal">This isn't theoretical. It's happening now.</h2>
-  <p class="reveal">Operators running real businesses on agents are reporting numbers that change how they think about headcount, cost structure, and competitive advantage.</p>
+  <p class="section-label reveal">What's Running Right Now</p>
+  <h2 class="reveal">We run our entire business on the same stack we deploy for you.</h2>
+  <p class="reveal">This isn't a demo. These agents handle real email, real CRM, real money — every day. Here's what ours do.</p>
+
+  <div class="proof-grid reveal">
+    <div class="proof-card">
+      <div class="proof-card-icon">✉</div>
+      <h4>Email across 2 accounts</h4>
+      <p>Inbox triage, draft responses, follow-up scheduling. Handles ~40 emails/day. Nothing sends without approval.</p>
+      <div class="proof-card-stat"><span class="proof-num">~$3</span>/day API cost</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-card-icon">📊</div>
+      <h4>CRM & sales pipeline</h4>
+      <p>HubSpot updates, Apollo prospecting, lead scoring, personalized outreach drafts. Runs overnight, briefing ready by morning.</p>
+      <div class="proof-card-stat"><span class="proof-num">$0.60</span>/run</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-card-icon">🔔</div>
+      <h4>Lead qualification</h4>
+      <p>Website chat agent qualifies visitors, researches their company, drafts a follow-up email, and posts to Discord — fully automated handoff.</p>
+      <div class="proof-card-stat"><span class="proof-num">0</span> leads missed</div>
+    </div>
+    <div class="proof-card">
+      <div class="proof-card-icon">📋</div>
+      <h4>Reporting & monitoring</h4>
+      <p>Daily cost tracking, weekly self-audits, anomaly alerts. PDF reports generated and delivered on schedule.</p>
+      <div class="proof-card-stat"><span class="proof-num">24/7</span> monitoring</div>
+    </div>
+  </div>
+
+  <div class="proof-summary reveal">
+    <div class="proof-summary-stat">
+      <div class="proof-summary-num" data-count="376" data-prefix="$">$0</div>
+      <div class="proof-summary-label">Total agent build cost</div>
+    </div>
+    <div class="proof-summary-stat">
+      <div class="proof-summary-num" data-count="12">0</div>
+      <div class="proof-summary-label">Custom skills in production</div>
+    </div>
+    <div class="proof-summary-stat">
+      <div class="proof-summary-num" data-dynamic="commits">354</div>
+      <div class="proof-summary-label">Total commits</div>
+    </div>
+    <div class="proof-summary-stat">
+      <div class="proof-summary-num">$2–5</div>
+      <div class="proof-summary-label">Daily operating cost</div>
+    </div>
+  </div>
 
   <div id="hp-automation-bars"></div>
 
-  <div class="quote-block reveal" style="margin-top: 2rem;">
-    <p>"They don't forget to do work. They don't make mistakes. Once you put this in, you don't need checklists."</p>
-    <p class="quote-source">Jason Calacanis — All-In Podcast E261</p>
+  <div class="proof-cta reveal">
+    <a href="/build/" class="hero-cta-secondary">See every dollar we spent →</a>
   </div>
 </section>
 
@@ -923,37 +1003,18 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </svg>
 </div>
 
-<!-- CASE STUDY -->
-<section>
-  <p class="section-label reveal">Case Study</p>
-  <h2 class="reveal">Briu was built by agents from day one.</h2>
-  <p class="reveal">Production agent, brand, and website — all built with the same stack we deploy for clients. 12 skills, <span data-dynamic="commits">354</span> commits, $376 total build cost.</p>
-
-  <div id="hp-week-breakdown"></div>
-
-  <div class="why-now-links reveal" style="margin-top: 2rem;">
-    <a href="/build/" class="hero-cta-primary">See the Full Build Log</a>
-  </div>
-</section>
-
-<!-- BACKGROUND -->
+<!-- WHO BUILDS THIS -->
 <section class="credentials">
-  <p class="section-label reveal">Background</p>
-  <h2 class="reveal">Building production AI systems since 2024.</h2>
-  <p class="reveal">Lucas Cairns. Co-Founder of Subsights. We don't just consult on agents. We run our entire business on one.</p>
+  <p class="section-label reveal">Who Builds This</p>
+  <h2 class="reveal">Two years of production AI. One founder who runs his business on it.</h2>
 
-  <div class="timeline reveal">
-    <div class="timeline-item">
-      <div class="timeline-year">2024</div>
-      <p>Co-founded Subsights to fix broken chatbot experiences for small businesses. Built multi-agent systems across all leading models, developing deep tool familiarity, prompt expertise, and production reliability.</p>
+  <div class="founder-row reveal">
+    <div class="founder-bio">
+      <p>Lucas Cairns. Co-founded Subsights in 2024 building production chatbot platforms. Spent two years solving the reliability problems — hallucination, consistency, tool integration — that kept agents from being useful in real business workflows.</p>
+      <p>In 2026, deployed a full agent stack to run his own business: email, CRM, sales, reporting, cost monitoring, even the brand and website. Then started doing it for others.</p>
     </div>
-    <div class="timeline-item">
-      <div class="timeline-year">2025</div>
-      <p>Production chatbot platform serving multiple clients. Solved the reliability issues that plagued the industry (hallucination, link accuracy, response consistency) as models matured enough to eliminate them at the infrastructure level.</p>
-    </div>
-    <div class="timeline-item">
-      <div class="timeline-year">2026</div>
-      <p>Full OpenClaw deployment: personal assistant managing two email accounts, HubSpot CRM, Apollo sales prospecting, automated client reporting, calendar, cost monitoring, and weekly self-audits. 12 custom skills, 2 plugins, multi-model routing. Launched Briu, where the name search, due diligence, skill creation, and website build were all conducted by agents.</p>
+    <div class="founder-proof">
+      <div id="hp-week-breakdown"></div>
     </div>
   </div>
 </section>
@@ -1100,10 +1161,10 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309h"></script>
-<script src="/chat-bubble.js?v=20260309h"></script>
-<script src="/interactive.js?v=20260309h"></script>
-<script src="/dynamic-stats.js?v=20260309h"></script>
+<script src="/shared.js?v=20260309p"></script>
+<script src="/chat-bubble.js?v=20260309p"></script>
+<script src="/interactive.js?v=20260309p"></script>
+<script src="/dynamic-stats.js?v=20260309p"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {
@@ -1125,7 +1186,7 @@ function filterFAQ(query) {
   noResults.style.display = (q && visible === 0) ? 'block' : 'none';
 }
 </script>
-<script src="/charts.js?v=20260308c"></script>
+<script src="/charts.js?v=20260309p"></script>
 <script>
 /* Initialize chart library components */
 Briu.charts.adoptionTimeline('hp-adoption-timeline');

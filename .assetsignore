@@ -1,0 +1,4 @@
+workers/
+node_modules/
+.git/
+.claude/

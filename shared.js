@@ -1,5 +1,94 @@
 /* ===== Briu Shared Scripts ===== */
 
+/* ─── User State & Personalization ─── */
+(function() {
+  var user = { email: null, company: null, answers: null, stage: 'visitor', score: 0 };
+  try {
+    var e = localStorage.getItem('briu_email');
+    if (e) user.email = e;
+    var c = localStorage.getItem('briu_company');
+    if (c) user.company = JSON.parse(c);
+    var a = localStorage.getItem('briu_assess');
+    if (a) user.answers = JSON.parse(a);
+    var s = localStorage.getItem('briu_stage');
+    if (s) user.stage = s;
+    var conv = localStorage.getItem('briu_conv');
+    if (conv) {
+      var p = JSON.parse(conv);
+      if (p.msgs && p.msgs.length > 0 && user.stage === 'assessed') user.stage = 'chatting';
+    }
+  } catch(ex) {}
+
+  // Compute score if answers exist
+  if (user.answers && user.answers.q1) {
+    var sc = 0;
+    sc += ({founder:20, leader:20, ic:10, exploring:15})[user.answers.q1] || 15;
+    sc += ({solo:15, small:20, medium:25, large:20})[user.answers.q2] || 20;
+    sc += ({none:5, free:15, paid:25, building:30})[user.answers.q3] || 15;
+    sc += 20;
+    user.score = Math.min(sc, 95);
+    if (user.stage === 'visitor') user.stage = 'assessed';
+  }
+
+  window.Briu = { user: user };
+
+  // Update stage helper — called by interactive.js and chat-bubble.js
+  window.briuSetStage = function(stage) {
+    user.stage = stage;
+    try { localStorage.setItem('briu_stage', stage); } catch(ex) {}
+  };
+
+  // ─── Cross-page personalization (runs on all pages) ───
+  function personalize() {
+    if (!user.answers) return;
+
+    // Pre-fill contact form name/email if available
+    var nameInput = document.getElementById('q-name');
+    var emailInput = document.getElementById('q-email');
+    if (emailInput && user.email && !emailInput.value) emailInput.value = user.email;
+    if (nameInput && user.email && !nameInput.value) {
+      var prefix = user.email.split('@')[0].replace(/[._-]/g, ' ');
+      nameInput.value = prefix.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+    }
+
+    // Highlight recommended kickoff tier on any page
+    var recTier = (user.answers.q2 === 'solo' || user.answers.q2 === 'small') ? 'Founder' : 'Team';
+    var tiers = document.querySelectorAll('.tier, .kickoff-card, .kickoff-pair .tier');
+    tiers.forEach(function(t) {
+      var name = t.querySelector('.tier-name, h3');
+      if (!name) return;
+      var existing = t.querySelector('.rec-badge');
+      if (existing) return; // don't double-badge
+      if (name.textContent.indexOf(recTier) !== -1) {
+        t.style.borderColor = 'rgba(212,160,90,0.4)';
+        var badge = document.createElement('div');
+        badge.className = 'rec-badge';
+        badge.textContent = 'Recommended for you';
+        t.insertBefore(badge, t.firstChild);
+      }
+    });
+
+    // Company-aware CTAs
+    if (user.company && user.company.name) {
+      var ctas = document.querySelectorAll('[data-personalize-cta]');
+      ctas.forEach(function(el) {
+        el.textContent = el.getAttribute('data-personalize-cta').replace('{company}', user.company.name);
+      });
+    }
+
+    // Stage-aware CTA text
+    var stageCtas = document.querySelectorAll('[data-stage-cta]');
+    stageCtas.forEach(function(el) {
+      if (user.stage === 'chatting' || user.stage === 'contacted') {
+        el.textContent = 'Continue the conversation';
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', personalize);
+  else personalize();
+})();
+
 /* Contact Form Modal */
 var qData = {};
 function openContactForm(prefill) {
@@ -13,6 +102,17 @@ function openContactForm(prefill) {
     goToStep(3);
     var dots = document.querySelectorAll('.q-dot');
     dots.forEach(function(d) { d.classList.add('filled'); });
+  } else if (window.Briu && window.Briu.user && window.Briu.user.answers) {
+    // Auto-fill from quiz if available
+    var u = window.Briu.user;
+    var aiMap = { none: 'We haven\'t started with AI yet', free: 'Free tools like ChatGPT', paid: 'Paid AI accounts', building: 'Already building agents' };
+    if (u.answers.q3 && aiMap[u.answers.q3]) {
+      qData.ai_usage = aiMap[u.answers.q3];
+      document.getElementById('q-ai-usage').value = aiMap[u.answers.q3];
+    }
+    goToStep(2);
+    var dots = document.querySelectorAll('.q-dot');
+    if (dots[0]) dots[0].classList.add('filled');
   } else {
     goToStep(1);
   }

@@ -8,25 +8,29 @@
   'use strict';
   var KEY = 'briu_assess';
   var CONV_KEY = 'briu_conv';
+  var SESSION_KEY = 'briu_session';
   var API_BASE = 'https://briu-assess.briu.workers.dev';
   var STEPS = 4;
   var answers = {};
-  var conversation = []; // { role, content }
+  var conversation = []; // { role, content, actions }
   var sessionId = null;
   var isWaiting = false;
   var userEmail = '';
   var companyData = null; // { found, domain, name, description, industries, workflows }
   var companyFetching = false;
+  var inputBound = false; // prevent duplicate event listeners
 
   var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   // Restore saved state
-  var CONV_VERSION = 6; // bump to clear stale conversations
+  var CONV_VERSION = 7; // bump to clear stale conversations
   try {
     var savedEmail = localStorage.getItem('briu_email');
     if (savedEmail) userEmail = savedEmail;
     var savedCompany = localStorage.getItem('briu_company');
     if (savedCompany) companyData = JSON.parse(savedCompany);
+    var savedSession = localStorage.getItem(SESSION_KEY);
+    if (savedSession) sessionId = savedSession;
     var saved = localStorage.getItem(KEY);
     if (saved) {
       answers = JSON.parse(saved);
@@ -62,9 +66,20 @@
         if (nxt) nxt.classList.add('active');
       } else {
         try { localStorage.setItem(KEY, JSON.stringify(answers)); } catch(e) {}
+        if (window.briuSetStage) window.briuSetStage('assessed');
         showResults(false);
       }
     }, 250);
+  };
+
+  window.assessBack = function(fromStep) {
+    var cur = document.getElementById('assess-' + fromStep);
+    if (cur) cur.classList.remove('active');
+    var prev = document.getElementById('assess-' + (fromStep - 1));
+    if (prev) prev.classList.add('active');
+    var bar = document.getElementById('assessProgress');
+    if (bar) bar.style.width = (((fromStep - 1) / STEPS) * 100) + '%';
+    delete answers['q' + fromStep];
   };
 
   window.resetAssess = function() {
@@ -73,15 +88,16 @@
       localStorage.removeItem(CONV_KEY);
       localStorage.removeItem('briu_email');
       localStorage.removeItem('briu_company');
+      localStorage.removeItem(SESSION_KEY);
     } catch(e) {}
     answers = {};
     conversation = [];
     sessionId = null;
     userEmail = '';
     companyData = null;
+    inputBound = false;
     var r = document.getElementById('assessResult');
     if (r) { r.classList.remove('active'); r.innerHTML = ''; }
-    // Show step 0 (email), hide step 1
     var s0 = document.getElementById('assess-0');
     var s1 = document.getElementById('assess-1');
     if (s0) s0.classList.add('active');
@@ -90,11 +106,18 @@
     if (bar) bar.style.width = '0%';
     var opts = document.querySelectorAll('.assess-opt');
     for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
+    // Reset lookup panel
+    var lookupPanel = document.getElementById('assessLookupPanel');
+    if (lookupPanel) {
+      lookupPanel.style.display = 'none';
+      lookupPanel.classList.remove('chat-expanded');
+    }
     removePersonalization();
+    // Notify bubble to clear state
+    if (window.briuSyncConversation) window.briuSyncConversation([], null);
   };
 
   // ─── Email step ───
-  // Bind enter key on email input when DOM is ready
   function bindEmailInput() {
     var input = document.getElementById('assessEmail');
     if (input) {
@@ -110,10 +133,12 @@
     var input = document.getElementById('assessEmail');
     if (!input) return;
     var email = input.value.trim();
-    if (!email || email.indexOf('@') === -1) {
+    // Basic email validation
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       input.style.borderColor = 'rgba(220,80,80,0.5)';
       return;
     }
+    input.style.borderColor = ''; // clear error state
     userEmail = email;
     try { localStorage.setItem('briu_email', email); } catch(e) {}
     var domain = email.split('@')[1].toLowerCase();
@@ -143,7 +168,6 @@
           try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
           showLookupReady(data);
         } else {
-          // Hide panel if no data found
           if (panel) panel.style.display = 'none';
         }
       })
@@ -154,15 +178,21 @@
     }
   };
 
+  var lookupInputBound = false;
   function showLookupReady(data) {
     var loading = document.getElementById('lookupLoading');
     var ready = document.getElementById('lookupReady');
     var companyEl = document.getElementById('lookupCompany');
     if (loading) loading.style.display = 'none';
     if (ready) ready.style.display = '';
-    if (companyEl) companyEl.textContent = data.name + ' — ' + (data.industries || []).join(', ');
+    if (companyEl) {
+      var industries = (data.industries || []).join(', ');
+      companyEl.textContent = data.name + (industries ? ' — ' + industries : '');
+    }
 
-    // Bind mini chat input
+    // Bind mini chat input (only once)
+    if (lookupInputBound) return;
+    lookupInputBound = true;
     var chatInput = document.getElementById('lookupChatInput');
     var chatSend = document.getElementById('lookupChatSend');
     if (chatInput) {
@@ -179,8 +209,6 @@
     var text = input.value.trim();
     if (!text || isWaiting) return;
     input.value = '';
-
-    // Expand into full chat
     expandLookupToChat(text);
   }
 
@@ -189,7 +217,6 @@
     if (!panel) return;
     panel.classList.add('chat-expanded');
 
-    // Build full chat UI inside the panel
     var h = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:25%"></div><span class="conv-progress-label">Chatting</span></div>' +
       '<div class="conv-thread" id="convThread"></div>' +
       '<div class="conv-quick-replies" id="convReplies"></div>' +
@@ -198,9 +225,9 @@
       '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
       '</div>';
     panel.innerHTML = h;
+    inputBound = false;
     bindInput();
 
-    // Send the initial message
     if (initialMessage) {
       submitMessage(initialMessage);
     }
@@ -228,18 +255,15 @@
     return { label: 'Perfect starting point', desc: 'You are at the ideal moment to start right. A single focused deployment will teach your team more than months of exploration.' };
   }
 
-  // Build programmatic suggestions based on quiz answers + company data (no API call)
   function buildReadinessActions() {
     var suggestions = [];
 
-    // If we have company data, lead with their specific workflows
     if (companyData && companyData.workflows) {
       for (var w = 0; w < Math.min(companyData.workflows.length, 2); w++) {
         suggestions.push('Tell me about ' + companyData.workflows[w].toLowerCase());
       }
       suggestions.push('What would this cost for ' + companyData.name + '?');
     } else {
-      // Fallback to focus-area based suggestions
       var focusMap = {
         email: ['How would an email agent work?', 'What does approval flow look like?'],
         sales: ['How do agents handle CRM updates?', 'What does prospecting automation look like?'],
@@ -251,16 +275,13 @@
       suggestions = suggestions.concat(focus);
     }
 
-    // Based on AI experience (q3)
     if (answers.q3 === 'none' || answers.q3 === 'free') {
       suggestions.push('What does an agent actually cost?');
     } else if (!companyData) {
       suggestions.push('How is this different from what I already use?');
     }
 
-    // Always include
     suggestions.push('Show me your real build costs');
-
     return suggestions;
   }
 
@@ -275,7 +296,6 @@
       support: { t: 'Start with support triage', d: 'Inbound request sorting, draft responses, smart routing. Nothing sends without approval.' }
     };
 
-    // Company-specific workflows if available
     if (companyData && companyData.workflows && companyData.workflows.length > 0) {
       r.push({ title: 'For ' + companyData.name, desc: companyData.workflows.slice(0, 3).join(', ') + ' — all on your infrastructure, your API keys.' });
     }
@@ -313,7 +333,6 @@
     if (!el) return;
     var s = score();
 
-    // Hide quiz steps (including email step 0)
     for (var j = 0; j <= STEPS; j++) {
       var step = document.getElementById('assess-' + j);
       if (step) step.classList.remove('active');
@@ -358,8 +377,9 @@
       if (lookupPanel) {
         lookupPanel.style.display = '';
         lookupPanel.classList.add('chat-expanded');
-        // Build chat UI inside lookup panel
-        var chatHtml = '<div class="conv-thread" id="convThread"></div>' +
+        // Build chat UI with progress bar
+        var chatHtml = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Ask anything</span></div>' +
+          '<div class="conv-thread" id="convThread"></div>' +
           '<div class="conv-quick-replies" id="convReplies"></div>' +
           '<div class="conv-input-row" id="convInputRow">' +
           '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
@@ -405,6 +425,7 @@
         }
       }
 
+      inputBound = false; // new DOM, allow rebind
       bindInput();
       personalizePageSections();
     };
@@ -426,8 +447,11 @@
 
 
   function bindInput() {
+    if (inputBound) return; // prevent duplicate listeners
     var input = document.getElementById('convInput');
     var sendBtn = document.getElementById('convSend');
+    if (!input && !sendBtn) return;
+    inputBound = true;
     if (input) {
       input.addEventListener('keydown', function(e) {
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitMessage(); }
@@ -442,9 +466,15 @@
     if (!text && input) { text = input.value.trim(); if (input) input.value = ''; }
     if (!text) return;
 
+    // Disable send button during request
+    var sendBtn = document.getElementById('convSend');
+    if (sendBtn) sendBtn.disabled = true;
+
     conversation.push({ role: 'user', content: text });
     saveConversation();
 
+    // Track funnel stage
+    if (window.briuSetStage) window.briuSetStage('chatting');
     // Show floating bubble so chat persists if they navigate away
     if (window.briuShowChatBubble) window.briuShowChatBubble();
 
@@ -456,6 +486,7 @@
 
     fetchChat(function(data) {
       removeLoading();
+      if (sendBtn) sendBtn.disabled = false;
       if (data && data.text) {
         var entry = { role: 'assistant', content: data.text, actions: data.actions || [] };
         conversation.push(entry);
@@ -472,7 +503,6 @@
   function fetchChat(callback) {
     isWaiting = true;
 
-    // Timeout after 25s
     var timedOut = false;
     var timer = setTimeout(function() {
       timedOut = true;
@@ -498,12 +528,18 @@
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    .then(function(r) { return r.json(); })
+    .then(function(r) {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
     .then(function(data) {
       if (timedOut) return;
       clearTimeout(timer);
       isWaiting = false;
-      sessionId = data.sessionId || sessionId;
+      if (data.sessionId) {
+        sessionId = data.sessionId;
+        try { localStorage.setItem(SESSION_KEY, sessionId); } catch(e) {}
+      }
       callback(data);
     })
     .catch(function() {
@@ -521,12 +557,9 @@
     var val = input.value.trim();
     if (!val) return;
 
-    // If email with work domain, extract company domain for pitch
     if (field === 'email' && val.indexOf('@') !== -1) {
       var domain = val.split('@')[1];
-      var freeProviders = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com'];
-      if (freeProviders.indexOf(domain.toLowerCase()) === -1) {
-        // Work email — trigger domain pitch
+      if (FREE_PROVIDERS.indexOf(domain.toLowerCase()) === -1) {
         submitMessage('My email is ' + val + ' — I work at ' + domain);
         return;
       }
@@ -535,6 +568,21 @@
     var labels = { company: 'My company is ', name: 'My name is ', email: 'My email is ', website: 'Our website is ', workflow: '' };
     submitMessage((labels[field] || '') + val);
   };
+
+  // ─── Utilities ───
+  function escapeHtml(t) {
+    var d = document.createElement('div');
+    d.textContent = t;
+    return d.innerHTML;
+  }
+
+  // Sanitize href — only allow relative paths and https URLs
+  function safeHref(url) {
+    if (!url) return '#';
+    if (url.charAt(0) === '/') return url;
+    if (url.indexOf('https://') === 0) return url;
+    return '#';
+  }
 
   // ─── Message rendering ───
   function appendUserMessage(thread, text) {
@@ -551,7 +599,6 @@
     div.className = 'conv-msg conv-msg-assistant';
     div.innerHTML = formatMessage(text);
 
-    // Render inline action cards (estimate, page, collect)
     var inlineActions = (actions || []).filter(function(a) {
       return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff' || a.type === 'pitch';
     });
@@ -587,7 +634,6 @@
     div.className = 'conv-msg conv-msg-assistant conv-loading';
     div.id = 'convLoadingMsg';
 
-    // Pick a random starting quote
     loadingQuoteIndex = Math.floor(Math.random() * LOADING_QUOTES.length);
 
     div.innerHTML = '<div class="conv-fractal-loader">' +
@@ -600,7 +646,6 @@
 
     thread.appendChild(div);
 
-    // Rotate quotes every 2.5s
     loadingQuoteTimer = setInterval(function() {
       loadingQuoteIndex = (loadingQuoteIndex + 1) % LOADING_QUOTES.length;
       var el = document.getElementById('convLoadingQuote');
@@ -635,10 +680,10 @@
       var a = actions[i];
 
       if (a.type === 'progress') {
-        var bar = document.querySelector('.conv-progress-fill');
-        var label = document.querySelector('.conv-progress-label');
-        if (bar) bar.style.width = a.value + '%';
-        if (label) label.textContent = a.label || '';
+        var pbar = document.querySelector('.conv-progress-fill');
+        var plabel = document.querySelector('.conv-progress-label');
+        if (pbar) pbar.style.width = a.value + '%';
+        if (plabel) plabel.textContent = a.label || '';
       }
 
       if (a.type === 'replies') {
@@ -674,7 +719,7 @@
     }
 
     if (action.type === 'page') {
-      card.innerHTML = '<a href="' + escapeHtml(action.path) + '" class="conv-page-link">' +
+      card.innerHTML = '<a href="' + safeHref(action.path) + '" class="conv-page-link">' +
         '<div class="conv-card-label">' + escapeHtml(action.title) + '</div>' +
         '<div class="conv-card-desc">' + escapeHtml(action.desc || '') + '</div>' +
         '<span class="conv-card-arrow">→</span></a>';
@@ -691,7 +736,7 @@
 
     if (action.type === 'handoff') {
       card.innerHTML = '<div class="conv-card-label">' + escapeHtml(action.message || 'Ready to connect') + '</div>' +
-        '<button class="conv-action-btn conv-handoff-btn" onclick="sendConversation()">Send to Lucas</button>';
+        '<button class="conv-action-btn conv-handoff-btn" onclick="handleHandoff(this)">Send to Lucas</button>';
     }
 
     if (action.type === 'pitch') {
@@ -700,8 +745,8 @@
         '</div>';
       if (action.points && action.points.length) {
         ph += '<ul class="conv-pitch-points">';
-        for (var p = 0; p < action.points.length; p++) {
-          ph += '<li>' + escapeHtml(action.points[p]) + '</li>';
+        for (var pp = 0; pp < action.points.length; pp++) {
+          ph += '<li>' + escapeHtml(action.points[pp]) + '</li>';
         }
         ph += '</ul>';
       }
@@ -728,7 +773,10 @@
     var div = document.createElement('div');
     div.textContent = text;
     var safe = div.innerHTML;
-    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+    // Convert [text](url) links — only allow safe hrefs
+    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
+      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
+    });
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
       return pre + '<a href="' + path + '">' + path + '</a>' + post;
     });
@@ -738,39 +786,58 @@
 
   function saveConversation() {
     try { localStorage.setItem(CONV_KEY, JSON.stringify({ _v: CONV_VERSION, msgs: conversation })); } catch(e) {}
+    // Sync to bubble if it's loaded
+    if (window.briuSyncConversation) window.briuSyncConversation(conversation, sessionId);
   }
 
-  // Send conversation summary to Briu team
-  window.sendConversation = function() {
-    var el = document.getElementById('assessResult');
-    if (!el) return;
+  // ─── Handoff: send conversation to Briu team ───
+  window.handleHandoff = function(btn) {
+    if (!btn) return;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
 
-    // Show email capture form
-    var actions = el.querySelector('.conv-actions');
-    if (!actions) return;
-    actions.innerHTML =
-      '<div class="conv-send-form">' +
-      '<p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1rem">We\'ll send this conversation to Lucas so he can follow up with specifics.</p>' +
-      '<input type="text" class="conv-input" id="convName" placeholder="Your name" style="margin-bottom:0.5rem">' +
-      '<input type="email" class="conv-input" id="convEmail" placeholder="Your email" style="margin-bottom:0.75rem">' +
-      '<button class="conv-action-btn" onclick="submitConversation()">Send to Briu</button>' +
-      '</div>';
+    var name = userEmail ? userEmail.split('@')[0] : '';
+    var email = userEmail || '';
+
+    // If no email yet, prompt for it
+    if (!email) {
+      var parent = btn.parentElement;
+      if (parent) {
+        parent.innerHTML =
+          '<div class="conv-card-label">Share your email so Lucas can follow up</div>' +
+          '<div class="conv-collect-row" style="margin-top:0.5rem">' +
+          '<input type="email" class="conv-input conv-collect-input" id="handoffEmail" placeholder="you@company.com">' +
+          '<button class="conv-send conv-collect-send" onclick="submitHandoff()">&#8593;</button>' +
+          '</div>';
+      }
+      return;
+    }
+
+    sendHandoff(name, email, btn);
   };
 
-  window.submitConversation = function() {
-    var name = (document.getElementById('convName') || {}).value || '';
-    var email = (document.getElementById('convEmail') || {}).value || '';
-    if (!email) return;
+  window.submitHandoff = function() {
+    var input = document.getElementById('handoffEmail');
+    if (!input) return;
+    var email = input.value.trim();
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
+    userEmail = email;
+    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    var name = email.split('@')[0];
+    var parent = input.closest('.conv-action-card');
+    sendHandoff(name, email, parent);
+  };
 
-    // Build summary from quiz + conversation
+  function sendHandoff(name, email, container) {
     var roleMap = { founder: 'Founder/CEO', leader: 'Team Lead', ic: 'IC', exploring: 'Exploring' };
     var teamMap = { solo: 'Solo', small: '2-10', medium: '11-50', large: '50+' };
     var focusMap = { email: 'Email', sales: 'Sales', reporting: 'Reporting', ops: 'Operations', support: 'Support' };
 
-    var summary = 'Role: ' + (roleMap[answers.q1] || answers.q1) +
-      ' | Team: ' + (teamMap[answers.q2] || answers.q2) +
-      ' | Focus: ' + (focusMap[answers.q4] || answers.q4) +
+    var summary = 'Role: ' + (roleMap[answers.q1] || answers.q1 || '?') +
+      ' | Team: ' + (teamMap[answers.q2] || answers.q2 || '?') +
+      ' | Focus: ' + (focusMap[answers.q4] || answers.q4 || '?') +
       ' | Score: ' + score() + '/95';
+    if (companyData && companyData.name) summary += ' | Company: ' + companyData.name;
 
     fetch(API_BASE + '/api/send', {
       method: 'POST',
@@ -779,19 +846,21 @@
         name: name,
         email: email,
         summary: summary,
-        messages: conversation
+        messages: conversation,
+        company: companyData || undefined,
+        quiz: answers || undefined
       })
     }).then(function() {
-      var actions = document.querySelector('.conv-actions');
-      if (actions) {
-        actions.innerHTML = '<p style="color:var(--forest);font-size:0.9rem">Sent. Lucas will be in touch within 24 hours.</p>' +
-          '<button class="assess-retake" onclick="resetAssess()" style="margin-top:0.75rem">Start over</button>';
+      if (window.briuSetStage) window.briuSetStage('contacted');
+      if (container) {
+        container.innerHTML = '<div style="color:rgba(106,174,156,0.9);font-size:0.85rem">Sent to the Briu team. Lucas will follow up within 24 hours.</div>';
       }
     }).catch(function() {
-      // Fall back to mailto
-      window.location.href = 'mailto:hi@briu.ai?subject=Inquiry from briu.ai&body=' + encodeURIComponent(summary);
+      if (container) {
+        container.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem">Could not send — reach us at <a href="mailto:hi@briu.ai" style="color:var(--gold)">hi@briu.ai</a></div>';
+      }
     });
-  };
+  }
 
   window.openContactFromAssess = function() {
     var aiMap = {
@@ -847,12 +916,12 @@
     var recTier = (answers.q2 === 'solo' || answers.q2 === 'small') ? 'Founder' : 'Team';
     var kickoffs = document.querySelectorAll('.kickoff-card');
     for (var k = 0; k < kickoffs.length; k++) {
-      var name = kickoffs[k].querySelector('.tier-name');
-      if (!name) continue;
+      var tierName = kickoffs[k].querySelector('.tier-name');
+      if (!tierName) continue;
       var existing = kickoffs[k].querySelector('.rec-badge');
       if (existing) existing.remove();
 
-      if (name.textContent.indexOf(recTier) !== -1) {
+      if (tierName.textContent.indexOf(recTier) !== -1) {
         kickoffs[k].style.borderColor = 'rgba(212,160,90,0.4)';
         var badge = document.createElement('div');
         badge.className = 'rec-badge';
