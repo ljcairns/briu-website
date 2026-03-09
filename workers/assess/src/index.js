@@ -319,7 +319,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       'anthropic-version': '2023-06-01',
     },
     body: JSON.stringify({
-      model: 'claude-3-haiku-20240307',
+      model: 'claude-4-sonnet-20250514',
       max_tokens: 600,
       system: [
         {
