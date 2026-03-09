@@ -28,7 +28,6 @@
       '  </div>\n' +
       '  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>\n' +
       '</nav>\n' +
-      '<div class="nav-progress" id="navProgress"></div>\n' +
       '</header>';
   }
 

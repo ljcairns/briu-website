@@ -233,10 +233,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
 
-/* Scroll Progress Bar — sits in header, below nav */
+/* Scroll Progress Bar — fixed to top of viewport, independent of nav */
 (function() {
-  var bar = document.getElementById('navProgress');
-  if (!bar) { console.warn('[scroll-bar] #navProgress not found'); return; }
+  // Create the bar directly on body so nothing can clip it
+  var bar = document.createElement('div');
+  bar.className = 'nav-progress';
+  bar.id = 'navProgress';
+  document.body.appendChild(bar);
+
   function onScroll() {
     var scrollTop = window.scrollY || document.documentElement.scrollTop;
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
@@ -244,22 +248,6 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
-  // Debug: log state once on load for diagnostics
-  console.log('[scroll-bar] audit:', {
-    barFound: !!bar,
-    barHeight: bar.offsetHeight,
-    barParent: bar.parentElement && bar.parentElement.className,
-    htmlOverflow: getComputedStyle(document.documentElement).overflow,
-    htmlOverflowX: getComputedStyle(document.documentElement).overflowX,
-    htmlOverflowY: getComputedStyle(document.documentElement).overflowY,
-    bodyOverflowY: getComputedStyle(document.body).overflowY,
-    docScrollHeight: document.documentElement.scrollHeight,
-    bodyScrollHeight: document.body.scrollHeight,
-    windowInnerHeight: window.innerHeight,
-    scrollTop: window.scrollY,
-    computedWidth: bar.style.width || '(not set)',
-    barVisible: bar.offsetWidth > 0 || bar.offsetHeight > 0
-  });
 })();
 
 /* Scroll Reveal */
