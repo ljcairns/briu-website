@@ -113,12 +113,26 @@
 .advantages li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 0.55rem; }
 
 /* Live counters */
-.tl-counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 0; }
-.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; }
-.tl-counter::before { content: ''; position: absolute; inset: 0; opacity: 0; background: linear-gradient(135deg, rgba(212,160,90,0.04), rgba(90,157,172,0.02)); transition: opacity 0.4s ease; }
-.tl-counter:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
-.tl-counter:hover::before { opacity: 1; }
-.tl-counter-num { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); margin-bottom: 0.35rem; position: relative; }
+.tl-counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin: 0; }
+.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); border-top: 2px solid rgba(255,255,255,0.06); padding: 1.75rem 1rem 1.5rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; overflow: hidden; }
+.tl-counter::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1px; transition: width 0.4s ease; }
+.tl-counter:hover { transform: translateY(-3px); }
+.tl-counter:hover::after { width: 60%; }
+/* Unique accents per counter */
+.tl-counter:nth-child(1) { border-top-color: var(--gold); }
+.tl-counter:nth-child(1)::after { background: var(--gold); }
+.tl-counter:nth-child(1) .tl-counter-num { color: var(--gold); }
+.tl-counter:nth-child(2) { border-top-color: var(--river); }
+.tl-counter:nth-child(2)::after { background: var(--river); }
+.tl-counter:nth-child(2) .tl-counter-num { color: var(--river); }
+.tl-counter:nth-child(3) { border-top-color: var(--forest); }
+.tl-counter:nth-child(3)::after { background: var(--forest); }
+.tl-counter:nth-child(3) .tl-counter-num { color: var(--forest); }
+.tl-counter:nth-child(4) { border-top-color: var(--coral); }
+.tl-counter:nth-child(4)::after { background: var(--coral); }
+.tl-counter:nth-child(4) .tl-counter-num { color: var(--coral); }
+.tl-counter:hover { border-color: rgba(255,255,255,0.08); }
+.tl-counter-num { font-family: var(--serif); font-size: 1.8rem; margin-bottom: 0.4rem; position: relative; }
 .tl-counter-label { font-size: 0.72rem; color: var(--text-muted); position: relative; line-height: 1.5; }
 .tl-counter-detail { font-size: 0.68rem; color: var(--text-muted); opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease; position: relative; }
 .tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
