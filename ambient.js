@@ -10,7 +10,7 @@
 
   var canvas = document.createElement('canvas');
   canvas.id = 'ambient-bg';
-  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0;transition:opacity 1.5s ease;';
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:3;opacity:0;transition:opacity 1.5s ease;';
   document.body.appendChild(canvas);
 
   // Fade in after page loads
@@ -69,8 +69,8 @@
       length: 60 + Math.random() * 120,
       // Visual
       color: color,
-      baseOpacity: 0.06 + Math.random() * 0.08,
-      width: 0.5 + Math.random() * 1,
+      baseOpacity: 0.15 + Math.random() * 0.15,
+      width: 1 + Math.random() * 1.5,
       // Lifecycle
       life: 0,
       maxLife: 400 + Math.random() * 600,
@@ -126,12 +126,19 @@
     }
     ctx.stroke();
 
-    // Endpoint glow dot (very subtle)
-    if (lifeFade > 0.3 && twinkle > 0.6) {
-      var dotOpacity = opacity * 1.5;
+    // Endpoint glow dot
+    if (lifeFade > 0.2 && twinkle > 0.4) {
+      var dotOpacity = Math.min(opacity * 2.5, 0.6);
       if (dotOpacity > 0.01) {
+        var dx = f.x + Math.sin(f.phase + f.life * f.frequency) * f.amplitude * 0.7;
+        // Outer glow
         ctx.beginPath();
-        ctx.arc(f.x + Math.sin(f.phase + f.life * f.frequency) * f.amplitude * 0.7, f.y, 1.2, 0, Math.PI * 2);
+        ctx.arc(dx, f.y, 4, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + (dotOpacity * 0.3).toFixed(4) + ')';
+        ctx.fill();
+        // Core dot
+        ctx.beginPath();
+        ctx.arc(dx, f.y, 1.8, 0, Math.PI * 2);
         ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + dotOpacity.toFixed(4) + ')';
         ctx.fill();
       }
