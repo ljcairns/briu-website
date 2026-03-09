@@ -16,12 +16,21 @@
   var isWaiting = false;
 
   // Restore saved conversation
+  var CONV_VERSION = 2; // bump to clear stale conversations
   try {
     var saved = localStorage.getItem(KEY);
     if (saved) {
       answers = JSON.parse(saved);
       var savedConv = localStorage.getItem(CONV_KEY);
-      if (savedConv) conversation = JSON.parse(savedConv);
+      if (savedConv) {
+        var parsed = JSON.parse(savedConv);
+        // Clear stale conversations from before actions support
+        if (parsed._v === CONV_VERSION) {
+          conversation = parsed.msgs || [];
+        } else {
+          localStorage.removeItem(CONV_KEY);
+        }
+      }
       var ready = function() { showResults(true); };
       if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', ready);
       else ready();
@@ -429,7 +438,7 @@
   }
 
   function saveConversation() {
-    try { localStorage.setItem(CONV_KEY, JSON.stringify(conversation)); } catch(e) {}
+    try { localStorage.setItem(CONV_KEY, JSON.stringify({ _v: CONV_VERSION, msgs: conversation })); } catch(e) {}
   }
 
   // Send conversation summary to Briu team
