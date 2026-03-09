@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | From Comment to Fix in One Loop</title>
+<meta name="description" content="How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client — without re-learning the account.">
+<meta property="og:title" content="Briu | From Comment to Fix in One Loop">
+<meta property="og:description" content="How we automated the full cycle from customer feedback to live fix to client email.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/build/from-comment-to-fix-in-one-loop/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Briu | From Comment to Fix in One Loop">
+<meta name="twitter:description" content="How we automated the full cycle from customer feedback to live fix to client email.">
+<link rel="canonical" href="https://briu.ai/build/from-comment-to-fix-in-one-loop/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260309w">
+<style>
+.hero { padding: 8rem 2rem 2rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
+.hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
+.hero-eyebrow { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.28em; color: var(--gold); margin-bottom: 1.5rem; position: relative; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; margin-bottom: 1rem; max-width: 820px; position: relative; }
+.hero p { max-width: 760px; color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; position: relative; }
+article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
+.section-label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--forest); margin-bottom: 1.5rem; }
+article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
+article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
+article p strong { color: var(--text); font-weight: 600; }
+article ul { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; padding-left: 1.5rem; }
+article li { margin-bottom: 0.4rem; }
+/* Loop diagram */
+.loop-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1.75rem 0 2rem; counter-reset: step; }
+.loop-step { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; position: relative; transition: border-color 0.3s; }
+.loop-step:hover { border-color: rgba(212,160,90,0.15); }
+.loop-step::before { counter-increment: step; content: counter(step); font-family: var(--serif); font-size: 1.8rem; color: rgba(212,160,90,0.2); position: absolute; top: 0.8rem; right: 1rem; line-height: 1; }
+.loop-step h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; font-weight: 400; }
+.loop-step p { margin: 0; font-size: 0.9rem; }
+/* Failure card */
+.failure-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin: 1.75rem 0 2rem; }
+.failure-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; }
+.failure-card h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; font-weight: 400; color: var(--coral); }
+.failure-card .fix { color: var(--forest); font-size: 0.88rem; margin-top: 0.5rem; }
+.failure-card p { margin: 0; font-size: 0.9rem; }
+/* Time comparison */
+.time-compare { display: flex; gap: 1.5rem; margin: 1.75rem 0 2rem; align-items: stretch; }
+.time-col { flex: 1; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; }
+.time-col h3 { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.75rem; font-weight: 400; }
+.time-col.before h3 { color: var(--text-muted); }
+.time-col.after h3 { color: var(--gold); }
+.time-col .time-value { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.5rem; }
+.time-col.before .time-value { color: var(--text-muted); text-decoration: line-through; text-decoration-color: rgba(224,123,95,0.4); }
+.time-col.after .time-value { color: var(--gold); }
+.time-col p { font-size: 0.88rem; margin: 0; }
+@media (max-width: 640px) {
+  .hero { padding: 7rem 1.25rem 2rem; }
+  article { padding: 2rem 1.25rem 4rem; }
+  .time-compare { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<nav>
+  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
+  <button class="nav-toggle" onclick="this.classList.toggle('open');document.querySelector('.nav-links').classList.toggle('open')" aria-label="Menu"><span></span><span></span><span></span></button>
+  <div class="nav-links">
+    <a href="/why-now/">Why Now</a>
+    <a href="/build/" class="active">Build</a>
+    <a href="/services/">Services</a>
+    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>
+  </div>
+  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>
+  <div class="nav-progress" id="navProgress"></div>
+</nav>
+
+<main>
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>From Comment to Fix in One Loop</h1>
+  <p>How we wired a customer feedback notification into an agent that reads the conversation, updates the live product, and emails the client — without us re-learning the account.</p>
+</section>
+
+<article>
+  <p class="section-label reveal">The Real Cost of a Customer Comment</p>
+  <p>A customer leaves a comment on one of their chatbot conversations. Something isn't working right — the opener is too narrow, a product line isn't triggering, the staff contact is out of date. The fix itself is five minutes.</p>
+  <p>But the fix isn't what takes the time.</p>
+  <p><strong>The context reload is what kills you.</strong> Log into the platform. Find the right workspace — which account was this again? Find the right chatbot. There might be three. Re-read the prompt configuration to remember what you set up two months ago. Parse the customer's comment to understand what they're actually asking for. Make the change. Test it. Then figure out who to email. Was it the ops lead or the founder? Find their address. Write the email. Send it. Mark the comment as handled so nobody else picks it up.</p>
+  <p>That's not five minutes. That's twenty to thirty. And for a small team, that friction means comments sit for days. Not because the work is hard. Because starting the work is hard.</p>
+
+  <div class="time-compare reveal">
+    <div class="time-col before">
+      <h3>Manual</h3>
+      <div class="time-value">20-30 min</div>
+      <p>Context reload, platform navigation, change, test, find contact, write email, mark handled</p>
+    </div>
+    <div class="time-col after">
+      <h3>Automated Loop</h3>
+      <div class="time-value">~2 min</div>
+      <p>Notification fires, agent runs the full cycle, human reviews the email before send</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">The Loop We Built</h2>
+  <p>Customer leaves a comment on a conversation. Here's exactly what happens:</p>
+
+  <div class="loop-steps reveal">
+    <div class="loop-step">
+      <h3>Notification</h3>
+      <p>Discord webhook fires with the comment details. Agent detects it, parses the commenter, workspace, and conversation link.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Read Context</h3>
+      <p>Agent opens the conversation and reads the full thread — what the customer said, what the chatbot said, where it went wrong.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Read Current Config</h3>
+      <p>Agent navigates to the chatbot's live prompt configuration. Reads the current state so it knows exactly what to change.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Make Changes</h3>
+      <p>Updates the prompts based on the comment. Broader opener, new product triggers, updated staff contact — whatever the feedback requires.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Verify</h3>
+      <p>Saves, reloads the config, confirms the changes are live. No "I think I saved it" — the agent checks.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Client Email</h3>
+      <p>Looks up the right contact for that workspace. Drafts a specific email explaining what was changed and why. Sends on approval.</p>
+    </div>
+    <div class="loop-step">
+      <h3>Mark Processed</h3>
+      <p>Tags the comment as handled so the loop doesn't re-trigger. The next comment starts a fresh cycle.</p>
+    </div>
+  </div>
+
+  <p>The whole cycle runs from a single notification. The agent already knows the workspace structure, the contact database, the navigation pattern for each platform section. It doesn't need to re-learn the account because the account context lives in persistent reference documents, not in someone's head.</p>
+
+  <h2 class="reveal">What Broke and What We Documented</h2>
+  <p>It didn't work cleanly the first time. Or the second. Every failure became a permanent upgrade to the system.</p>
+
+  <div class="failure-grid reveal">
+    <div class="failure-card">
+      <h3>Wrong chatbot name</h3>
+      <p>Workspace had three chatbots with similar names. Agent picked the wrong one and edited the wrong prompt.</p>
+      <p class="fix">Fix: Built a workspace-to-chatbot mapping in the reference docs. Agent now looks up the correct chatbot by workspace ID, not name.</p>
+    </div>
+    <div class="failure-card">
+      <h3>Nested UI sections</h3>
+      <p>The platform's prompt editor has collapsible sections. Agent couldn't find the right field because it was hidden inside a collapsed panel.</p>
+      <p class="fix">Fix: Browser navigation guide updated with explicit expand-then-edit sequences for each section type.</p>
+    </div>
+    <div class="failure-card">
+      <h3>Different DOM per workspace type</h3>
+      <p>Two workspaces used different platform versions with different page structures. The same navigation steps failed on one.</p>
+      <p class="fix">Fix: Navigation guide now branches by workspace type. Agent detects which version it's on before proceeding.</p>
+    </div>
+  </div>
+
+  <p>Each failure took 10-15 minutes to diagnose and fix. But each fix is permanent. The navigation guide, the client contacts database, the comment processing script — they all get more reliable with every cycle. <strong>The system learns from its mistakes once. A human re-learns them every time they context-switch back into an account.</strong></p>
+
+  <h2 class="reveal">What It Feels Like Now</h2>
+  <p>Comments come in. The loop runs. Changes go live. The client gets an email explaining exactly what was updated and why.</p>
+  <p>The account context that used to live in someone's head — which chatbot, which workspace, who's the contact, what did we configure last time — now lives in a database and a set of navigation docs. The agent consults them every time. It doesn't have good days and bad days. It doesn't forget that the contact changed last month. It doesn't dread the small task that takes longer to start than to finish.</p>
+  <p>The human role shifted from "do the whole thing" to "review the email before it sends." That's the right division. The agent handles the mechanical recall and execution. The human handles the judgment call on tone and correctness.</p>
+
+  <h2 class="reveal">Why This Matters Beyond Us</h2>
+  <p>Every service business has this pattern. Small customer requests that are easy to do but painful to start. The fix is never the bottleneck. The context reload is.</p>
+  <p>Think about the tasks your team dreads — not because they're hard, but because they require re-acquainting with an account, a platform, a relationship. Those are the tasks that sit in a queue for days. Those are the tasks that make customers feel forgotten.</p>
+  <p>The pattern is straightforward:</p>
+  <ul>
+    <li><strong>Encode the context.</strong> Contacts, credentials, navigation patterns, preferences, configuration history. Get it out of people's heads and into structured reference documents.</li>
+    <li><strong>Wire the trigger.</strong> Notification, email, form submission, webhook — whatever event signals "a customer needs something."</li>
+    <li><strong>Connect trigger to resolution.</strong> The agent reads the trigger, consults the context, executes the fix, communicates the result.</li>
+  </ul>
+  <p>The loop eliminates the context switch. The human stays in the loop for judgment. The customer gets a response in minutes instead of days.</p>
+  <p><strong>That's the service we deploy for clients.</strong> Not the agent itself — the elimination of the context reload that makes small tasks feel big.</p>
+
+  <div class="article-links">
+    <a href="/build/" class="primary-link">Back to Build</a>
+    <a href="#" onclick="openContactForm();return false" class="secondary-link">Book a Call</a>
+  </div>
+</article>
+</main>
+
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeContactForm()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeContactForm()">&times;</button>
+    <div class="q-progress"><div class="q-dot filled"></div><div class="q-dot"></div><div class="q-dot"></div></div>
+    <div class="q-step active" id="q-step-1">
+      <h3>How does your business use AI today?</h3>
+      <p>This helps us tailor the conversation to where you are.</p>
+      <button class="q-option" onclick="selectAI('We use free tools like ChatGPT')"><div class="q-opt-label">Getting started</div><div class="q-opt-desc">We use free tools like ChatGPT for ad-hoc tasks</div></button>
+      <button class="q-option" onclick="selectAI('Enterprise AI accounts with multiple vendors')"><div class="q-opt-label">Enterprise accounts</div><div class="q-opt-desc">We have paid AI accounts across the team or multiple vendors</div></button>
+      <button class="q-option" onclick="selectAI('Already building agents or significant automation')"><div class="q-opt-label">Building with AI</div><div class="q-opt-desc">We're already building agents or automating significant business processes</div></button>
+    </div>
+    <div class="q-step" id="q-step-2">
+      <h3>What would you most like to automate?</h3>
+      <p>No wrong answers. Just tell us what takes up your team's time.</p>
+      <textarea id="q-automate" placeholder="e.g. Sales prospecting, email triage, CRM updates, reporting, customer onboarding..."></textarea>
+      <button class="modal-btn cta-shimmer" onclick="goToStep(3)">Continue</button>
+      <button class="q-back" onclick="goToStep(1)">&larr; Back</button>
+    </div>
+    <div class="q-step" id="q-step-3">
+      <h3>Where should we send our thoughts?</h3>
+      <p>We'll get back within 24 hours with specific ideas for your business.</p>
+      <form id="contactForm" action="https://formsubmit.co/ajax/hi@briu.ai" method="POST">
+        <input type="text" name="_honey" style="display:none">
+        <input type="hidden" name="_subject" value="New inquiry from briu.ai (Build Article)">
+        <input type="hidden" name="ai_usage" id="q-ai-usage">
+        <input type="hidden" name="automate" id="q-automate-val">
+        <input type="text" name="name" placeholder="Your name" required>
+        <input type="email" name="email" placeholder="Your email" required>
+        <input type="text" name="company" placeholder="Company (optional)">
+        <button type="submit" class="modal-btn cta-shimmer">Send</button>
+      </form>
+      <button class="q-back" onclick="goToStep(2)">&larr; Back</button>
+    </div>
+    <div class="form-success" id="formSuccess"><h3>Message sent</h3><p>We'll be in touch within 24 hours.</p></div>
+  </div>
+</div>
+
+<footer>
+  <p>&copy; 2026 Briu. All rights reserved.</p>
+  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
+</footer>
+
+<script src="/shared.js"></script>
+<script src="/chat-bubble.js?v=20260309w"></script>
+</body>
+</html>
