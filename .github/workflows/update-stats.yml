@@ -134,42 +134,38 @@ jobs:
             END_DATE=$(date -u +"%Y-%m-%dT23:59:59Z")
             echo "Cost API: start=$START_DATE end=$END_DATE"
             if [ -n "$START_DATE" ]; then
-              # Paginate through all results
+              # Paginate by advancing starting_at to last page's end
               ALL_DATA="[]"
-              NEXT_PAGE=""
+              CURSOR_START="$START_DATE"
               PAGE_NUM=0
               while true; do
                 PAGE_NUM=$((PAGE_NUM + 1))
-                API_URL="https://api.anthropic.com/v1/organizations/cost_report?starting_at=${START_DATE}&ending_at=${END_DATE}"
-                if [ -n "$NEXT_PAGE" ]; then
-                  API_URL="${API_URL}&next_page=${NEXT_PAGE}"
-                fi
-
                 RESPONSE=$(curl -s -w "\n%{http_code}" -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
                   -H "anthropic-version: 2023-06-01" \
-                  "$API_URL" 2>/dev/null || echo "{}")
+                  "https://api.anthropic.com/v1/organizations/cost_report?starting_at=${CURSOR_START}&ending_at=${END_DATE}" 2>/dev/null || echo "{}")
 
                 HTTP_CODE=$(echo "$RESPONSE" | tail -1)
                 BODY=$(echo "$RESPONSE" | sed '$d')
-                echo "Cost API page $PAGE_NUM: HTTP $HTTP_CODE, days=$(echo "$BODY" | jq '.data | length' 2>/dev/null || echo 0)"
+                PAGE_DAYS=$(echo "$BODY" | jq '.data | length' 2>/dev/null || echo 0)
+                echo "Cost API page $PAGE_NUM: HTTP $HTTP_CODE, days=$PAGE_DAYS, from=$CURSOR_START"
 
                 if ! echo "$BODY" | jq -e '.data' >/dev/null 2>&1; then
                   echo "Cost API error: $(echo "$BODY" | jq -r '.error' 2>/dev/null || echo "$BODY")"
                   break
                 fi
 
-                # Merge this page's data into ALL_DATA
+                # Merge this page's data
                 ALL_DATA=$(echo "$ALL_DATA" "$BODY" | jq -s '.[0] + (.[1].data)')
 
                 HAS_MORE=$(echo "$BODY" | jq -r '.has_more // false')
-                if [ "$HAS_MORE" = "true" ]; then
-                  NEXT_PAGE=$(echo "$BODY" | jq -r '.next_page // empty')
-                  if [ -z "$NEXT_PAGE" ]; then break; fi
+                if [ "$HAS_MORE" = "true" ] && [ "$PAGE_DAYS" -gt 0 ]; then
+                  # Use last entry's ending_at as next starting_at
+                  CURSOR_START=$(echo "$BODY" | jq -r '.data[-1].ending_at')
+                  if [ -z "$CURSOR_START" ] || [ "$CURSOR_START" = "null" ]; then break; fi
                 else
                   break
                 fi
 
-                # Safety: max 10 pages
                 if [ "$PAGE_NUM" -ge 10 ]; then break; fi
               done
 
