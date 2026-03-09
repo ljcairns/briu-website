@@ -647,32 +647,32 @@ Briu.charts.ownershipRisk = function(containerId) {
   var container = document.getElementById(containerId);
   if (!container) return;
 
-  var html = '<div class="chart-surface"><div class="chart-label">Closed-source risk vs self-hosted control</div>' +
+  var html = '<div class="chart-surface"><div class="chart-label">SaaS dependency vs owning your stack</div>' +
     '<div class="own-compare">' +
     '<div class="own-col risk">' +
-    '<div class="own-col-title">Public AI Endpoints</div>' +
+    '<div class="own-col-title">Renting AI from a Platform</div>' +
     '<div class="own-items">' +
-    '<div class="own-item"><span class="own-item-icon">\u2717</span>All prompts and responses sent to model providers</div>' +
-    '<div class="own-item"><span class="own-item-icon">\u2717</span>Agent traces leak proprietary data back to builders</div>' +
-    '<div class="own-item"><span class="own-item-icon">\u2717</span>No attorney-client privilege for AI tool usage</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2717</span>Your workflows live inside someone else\'s product</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2717</span>Pricing, features, and limits change without notice</div>' +
     '<div class="own-item"><span class="own-item-icon">\u2717</span>One TOS update can break your entire workflow</div>' +
-    '<div class="own-item"><span class="own-item-icon">\u2717</span>Vendor sets pricing, rate limits, and access rules</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2717</span>Locked into one vendor\'s model and ecosystem</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2717</span>No visibility into what you\'re spending or why</div>' +
     '</div>' +
     '<div class="own-bottom">"You\'re one terms of service update away from everything breaking." \u2014 Chamath</div>' +
     '</div>' +
     '<div class="own-col safe">' +
-    '<div class="own-col-title">Self-Hosted / Your Infrastructure</div>' +
+    '<div class="own-col-title">Owning Your Agent Stack</div>' +
     '<div class="own-items">' +
-    '<div class="own-item"><span class="own-item-icon">\u2713</span>Data never leaves your environment</div>' +
-    '<div class="own-item"><span class="own-item-icon">\u2713</span>Full audit trail on every agent action</div>' +
     '<div class="own-item"><span class="own-item-icon">\u2713</span>You own all code, configs, and agent skills</div>' +
-    '<div class="own-item"><span class="own-item-icon">\u2713</span>No vendor lock-in \u2014 switch models anytime</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2713</span>Your API keys, your accounts \u2014 swap models anytime</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2713</span>Full audit trail on every agent action</div>' +
     '<div class="own-item"><span class="own-item-icon">\u2713</span>Budget ceilings and approval gates you control</div>' +
+    '<div class="own-item"><span class="own-item-icon">\u2713</span>Everything keeps running if you stop working with us</div>' +
     '</div>' +
     '<div class="own-bottom">"You will need AI to survive. But you don\'t have to give up control to get it." \u2014 Briu</div>' +
     '</div>' +
     '</div>' +
-    '<div class="chart-source">Source: Chamath Palihapitiya on data sovereignty \u2014 All-In E259, E261</div></div>';
+    '<div class="chart-source">Ownership framing inspired by Chamath Palihapitiya on vendor lock-in \u2014 All-In E259, E261</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');
