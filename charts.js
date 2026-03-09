@@ -738,35 +738,38 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="chart-label">How this company actually runs</div>' +
     '<div class="constellation">' +
 
-    /* SVG lines — desktop only */
-    '<svg class="constellation-lines" viewBox="0 0 700 440" preserveAspectRatio="xMidYMid meet">' +
-    '<line x1="350" y1="65" x2="160" y2="195" />' +
-    '<line x1="350" y1="65" x2="350" y2="195" />' +
-    '<line x1="350" y1="65" x2="540" y2="195" />' +
-    '<line x1="350" y1="65" x2="600" y2="60" />' +
-    '<line x1="350" y1="65" x2="600" y2="110" />' +
-    '<line x1="160" y1="240" x2="160" y2="355" />' +
-    '<line x1="160" y1="240" x2="350" y2="355" />' +
-    '<line x1="160" y1="240" x2="540" y2="355" />' +
+    /* SVG lines — desktop only, clean vertical hierarchy */
+    '<svg class="constellation-lines" viewBox="0 0 700 480" preserveAspectRatio="xMidYMid meet">' +
+    /* Founder to 3 interfaces */
+    '<line x1="350" y1="80" x2="140" y2="190" />' +
+    '<line x1="350" y1="80" x2="350" y2="190" />' +
+    '<line x1="350" y1="80" x2="560" y2="190" />' +
+    /* Founder to audit models — subtle */
+    '<line x1="350" y1="55" x2="530" y2="40" class="c-line-audit" />' +
+    '<line x1="350" y1="55" x2="600" y2="40" class="c-line-audit" />' +
+    /* Claw down to 3 skills */
+    '<line x1="140" y1="270" x2="140" y2="370" />' +
+    '<line x1="140" y1="270" x2="350" y2="370" />' +
+    '<line x1="140" y1="270" x2="560" y2="370" />' +
     '</svg>' +
 
-    /* Row 1: Founder */
+    /* Row 1: Founder — centered, with audit models as subtle satellites */
     '<div class="c-row c-row-founder">' +
     '<div class="c-node c-founder">' +
     '<div class="c-circle c-human"><span>You</span></div>' +
     '<div class="c-label">Founder</div>' +
     '<div class="c-sub">Judgment &middot; taste &middot; approval</div>' +
     '</div>' +
-    '<div class="c-node c-secondary">' +
-    '<div class="c-circle c-audit"><span>G</span></div>' +
-    '<div class="c-label">Gemini</div>' +
     '</div>' +
-    '<div class="c-node c-secondary">' +
-    '<div class="c-circle c-audit"><span>O</span></div>' +
-    '<div class="c-label">GPT</div>' +
-    '</div>' +
+    /* Audit models positioned separately */
+    '<div class="c-audit-group">' +
+    '<div class="c-node c-secondary"><div class="c-circle c-audit"><span>G</span></div><div class="c-label">Gemini</div></div>' +
+    '<div class="c-node c-secondary"><div class="c-circle c-audit"><span>O</span></div><div class="c-label">GPT</div></div>' +
     '</div>' +
     '<div class="c-connector"></div>' +
+
+    /* Row label */
+    '<div class="c-row-label c-row-label-interfaces">Interfaces</div>' +
 
     /* Row 2: Direct interfaces */
     '<div class="c-row c-row-primary">' +
@@ -790,9 +793,11 @@ Briu.charts.briuOrg = function(containerId) {
     '</div>' +
     '</div>' +
     '<div class="c-connector"></div>' +
-    '<div class="c-note">Any interface can spawn sub-agents for complex tasks — research, multi-step analysis, parallel workstreams.</div>' +
 
-    /* Row 3: Specialist agents under Claw */
+    /* Row label */
+    '<div class="c-row-label c-row-label-skills">Specialist Agents <span>(under Claw)</span></div>' +
+
+    /* Row 3: Specialist agents */
     '<div class="c-row c-row-skills">' +
     '<div class="c-node c-skill">' +
     '<div class="c-circle c-agent"><span>&#x2709;</span></div>' +
