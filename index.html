@@ -382,30 +382,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 @keyframes fractalPulse { 0%,100% { opacity: 0.6; transform: scale(1); box-shadow: 0 0 8px rgba(212,160,90,0.3); } 50% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 20px rgba(212,160,90,0.6), 0 0 40px rgba(90,157,172,0.2); } }
 .conv-loading-quote { font-size: 0.82rem; color: var(--text-muted); font-style: italic; max-width: 260px; margin: 0 auto; line-height: 1.5; transition: opacity 0.3s ease; opacity: 1; }
 
-/* Calculator */
-.calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 1.5rem; }
-.calc-inputs { display: flex; flex-direction: column; gap: 1.5rem; }
-.calc-field label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.5rem; }
-.calc-field .calc-value { float: right; color: var(--gold); font-family: var(--serif); }
-.calc-slider { -webkit-appearance: none; width: 100%; height: 4px; background: rgba(255,255,255,0.08); outline: none; border-radius: 2px; }
-.calc-slider::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--bg); box-shadow: 0 0 10px rgba(212,160,90,0.3); }
-.calc-slider::-moz-range-thumb { width: 18px; height: 18px; border-radius: 50%; background: var(--gold); cursor: pointer; border: 2px solid var(--bg); }
-.calc-toggles { display: flex; gap: 0.5rem; margin-top: 0.5rem; }
-.calc-toggle { flex: 1; padding: 0.75rem 0.5rem; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-family: var(--sans); font-size: 0.82rem; font-weight: 600; cursor: pointer; text-align: center; transition: all 0.25s ease; }
-.calc-toggle span { display: block; font-size: 0.72rem; font-weight: 400; margin-top: 2px; }
-.calc-toggle:hover { border-color: rgba(212,160,90,0.2); }
-.calc-toggle.active { border-color: var(--gold); background: rgba(212,160,90,0.1); color: var(--gold); }
-.calc-output { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2rem; display: flex; flex-direction: column; justify-content: center; }
-.calc-row { display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.calc-row:last-child { border-bottom: none; }
-.calc-row-label { font-size: 0.88rem; color: var(--text-muted); }
-.calc-row-value { font-family: var(--serif); font-size: 1.3rem; }
-.calc-savings { text-align: center; padding: 1rem; margin-top: 1rem; }
-.calc-savings.positive { background: rgba(77,128,112,0.1); border: 1px solid rgba(77,128,112,0.2); }
-.calc-savings.neutral { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); }
-.calc-savings-num { font-family: var(--serif); font-size: 2rem; color: var(--forest); }
-.calc-savings-num span { font-size: 1rem; }
-.calc-savings-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 0.25rem; }
+/* Calculator styles moved to shared.css */
 
 .footer-links { display: flex; gap: 2rem; }
 
@@ -440,8 +417,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .conv-quick-replies { gap: 0.4rem; }
   .conv-reply-btn { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
   .conv-bottom-actions { flex-direction: column; align-items: stretch; }
-  .calc-grid { grid-template-columns: 1fr; }
-  .calc-toggles { flex-direction: column; }
+  /* calc mobile styles moved to shared.css */
   .footer-links { justify-content: center; }
   .wave-divider svg { height: 30px; }
   .assess-teaser-btn { padding: 0.85rem 1.5rem; font-size: 0.72rem; letter-spacing: 0.1em; }
@@ -545,7 +521,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
   <div class="hero-cta-group">
     <a href="#" onclick="openContactForm();return false" class="hero-cta-primary">Start a Conversation</a>
-    <a href="#wake-up" class="hero-cta-secondary">Why now</a>
+    <a href="/why-now/" class="hero-cta-secondary">Why now</a>
   </div>
 
 </section>
@@ -555,192 +531,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
     <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
-  </svg>
-</div>
-
-<!-- ASSESSMENT -->
-<section id="assessment">
-  <p class="section-label reveal">Find Your Starting Point</p>
-  <h2 class="reveal">What could an agent handle for your business?</h2>
-
-  <div class="assess-teaser reveal" id="assessTeaser" onclick="window.openAssessment()">
-    <div class="assess-teaser-btn" id="assessTeaserBtn">See What Fits Your Business</div>
-    <div class="assess-teaser-sub" id="assessTeaserSub">4 questions &middot; 30 seconds &middot; personalized recommendation</div>
-  </div>
-
-  <div class="assess-container" id="assessBox">
-    <button class="assess-close" onclick="window.closeAssessment()">&times;</button>
-    <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
-
-    <div class="assess-step active" id="assess-0">
-      <h3>What's your email?</h3>
-      <p class="assess-email-sub">We'll personalize your results. Work email gets you a custom pitch.</p>
-      <div class="assess-email-row">
-        <input type="email" class="assess-email-input" id="assessEmail" placeholder="you@company.com" autocomplete="email">
-        <button class="assess-opt assess-email-go" onclick="assessEmailSubmit()">Continue</button>
-      </div>
-      <button class="assess-skip" onclick="assessEmailSkip()">Skip for now</button>
-    </div>
-
-    <div class="assess-step" id="assess-1">
-      <h3>What's your role?</h3>
-      <div class="assess-options">
-        <button class="assess-opt" data-value="founder" onclick="assessSelect(1,this)">Founder / CEO</button>
-        <button class="assess-opt" data-value="leader" onclick="assessSelect(1,this)">Team Lead / Manager</button>
-        <button class="assess-opt" data-value="ic" onclick="assessSelect(1,this)">Individual Contributor</button>
-        <button class="assess-opt" data-value="exploring" onclick="assessSelect(1,this)">Exploring for my company</button>
-      </div>
-      <!-- No back to email step -->
-    </div>
-
-    <div class="assess-step" id="assess-2">
-      <h3>How big is your team?</h3>
-      <div class="assess-options">
-        <button class="assess-opt" data-value="solo" onclick="assessSelect(2,this)">Just me</button>
-        <button class="assess-opt" data-value="small" onclick="assessSelect(2,this)">2–10 people</button>
-        <button class="assess-opt" data-value="medium" onclick="assessSelect(2,this)">11–50 people</button>
-        <button class="assess-opt" data-value="large" onclick="assessSelect(2,this)">50+</button>
-      </div>
-      <button class="assess-back" onclick="assessBack(2)">&larr; Back</button>
-    </div>
-
-    <div class="assess-step" id="assess-3">
-      <h3>How does your team use AI today?</h3>
-      <div class="assess-options">
-        <button class="assess-opt" data-value="none" onclick="assessSelect(3,this)">Not yet</button>
-        <button class="assess-opt" data-value="free" onclick="assessSelect(3,this)">Free tools (ChatGPT, etc.)</button>
-        <button class="assess-opt" data-value="paid" onclick="assessSelect(3,this)">Paid AI accounts</button>
-        <button class="assess-opt" data-value="building" onclick="assessSelect(3,this)">Already building agents</button>
-      </div>
-      <button class="assess-back" onclick="assessBack(3)">&larr; Back</button>
-    </div>
-
-    <div class="assess-step" id="assess-4">
-      <h3>What takes the most of your team's time?</h3>
-      <div class="assess-options">
-        <button class="assess-opt" data-value="email" onclick="assessSelect(4,this)">Email &amp; communication</button>
-        <button class="assess-opt" data-value="sales" onclick="assessSelect(4,this)">Sales &amp; prospecting</button>
-        <button class="assess-opt" data-value="reporting" onclick="assessSelect(4,this)">Reporting &amp; data</button>
-        <button class="assess-opt" data-value="ops" onclick="assessSelect(4,this)">Operations &amp; admin</button>
-        <button class="assess-opt" data-value="support" onclick="assessSelect(4,this)">Customer support</button>
-      </div>
-      <button class="assess-back" onclick="assessBack(4)">&larr; Back</button>
-    </div>
-
-    <!-- Persistent email lookup panel (shows during quiz, becomes chat) -->
-    <div class="assess-lookup-panel" id="assessLookupPanel" style="display:none;">
-      <div class="lookup-loading" id="lookupLoading">
-        <div class="conv-fractal-loader conv-fractal-sm">
-          <div class="fractal-ring fractal-ring-1"></div>
-          <div class="fractal-ring fractal-ring-2"></div>
-          <div class="fractal-ring fractal-ring-3"></div>
-          <div class="fractal-dot"></div>
-        </div>
-        <div class="lookup-status" id="lookupStatus">Loading your business profile&hellip;</div>
-      </div>
-      <div class="lookup-ready" id="lookupReady" style="display:none;">
-        <div class="lookup-company" id="lookupCompany"></div>
-        <div class="lookup-chat-mini" id="lookupChatMini">
-          <input type="text" class="conv-input lookup-chat-input" id="lookupChatInput" placeholder="Ask a question about agents for your business..." autocomplete="off">
-          <button class="conv-send" id="lookupChatSend" aria-label="Send">&#8593;</button>
-        </div>
-      </div>
-    </div>
-
-    <div id="assessResult"></div>
-  </div>
-</section>
-
-<!-- Wave divider -->
-<div class="wave-divider">
-  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,25 C360,50 720,0 1080,30 C1260,45 1380,35 1440,30 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
-    <path d="M0,35 C240,10 480,45 720,20 C960,45 1200,10 1440,35 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
-  </svg>
-</div>
-
-<!-- WHY NOW -->
-<section class="problem" id="wake-up">
-  <p class="section-label reveal">Why Now</p>
-  <h2 class="reveal">AI agents are becoming practical operating tools for real businesses.</h2>
-  <p class="reveal">Not theoretical. These are real numbers from real deployments, reported by the operators running them.</p>
-
-  <div id="hp-adoption-timeline"></div>
-  <div id="hp-time-compression"></div>
-  <div id="hp-compound-loop"></div>
-
-  <div class="why-now-links reveal" style="margin-top: 2rem;">
-    <a href="/why-now/" class="hero-cta-primary">Read the Full Case</a>
-  </div>
-</section>
-
-<!-- Wave divider -->
-<div class="wave-divider">
-  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,20 C180,50 360,0 540,25 C720,50 900,10 1080,30 C1260,50 1380,20 1440,25 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.03)"/>
-    <path d="M0,30 C240,5 480,50 720,25 C960,0 1200,45 1440,20 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
-  </svg>
-</div>
-
-<!-- ECONOMICS -->
-<section>
-  <p class="section-label reveal">Economics</p>
-  <h2 class="reveal">Cheaper and better, every quarter.</h2>
-  <p class="reveal">Capability is rising while cost keeps falling. Most businesses start at $2-5/day in API costs, plus a shared platform subscription. The economics only improve from here.</p>
-
-  <div id="hp-compression-meter"></div>
-  <div id="hp-cost-per-hour"></div>
-  <div id="hp-cost-arbitrage"></div>
-  <div id="hp-migration-curve"></div>
-
-  <div class="calc-grid reveal" style="margin-top: 2.5rem;">
-    <div class="calc-inputs">
-      <div class="calc-field">
-        <label>Hours of work to automate <span class="calc-value" id="calcHoursVal">4h/day</span></label>
-        <input type="range" class="calc-slider" id="calcHours" min="1" max="10" step="0.5" value="4" oninput="updateCalc()">
-      </div>
-      <div class="calc-field">
-        <label>Current cost of that work <span class="calc-value" id="calcRateVal">$50/hr</span></label>
-        <input type="range" class="calc-slider" id="calcRate" min="15" max="150" step="5" value="50" oninput="updateCalc()">
-      </div>
-      <div class="calc-field">
-        <label>Deployment level</label>
-        <div class="calc-toggles">
-          <button class="calc-toggle active" data-val="practical" onclick="setComplexity('practical',this)">Practical<span>$2–5/day</span></button>
-          <button class="calc-toggle" data-val="moderate" onclick="setComplexity('moderate',this)">Moderate<span>$10–20/day</span></button>
-          <button class="calc-toggle" data-val="frontier" onclick="setComplexity('frontier',this)">Frontier<span>$30–100/day</span></button>
-        </div>
-      </div>
-    </div>
-    <div class="calc-output">
-      <div class="calc-comparison">
-        <div class="calc-row">
-          <span class="calc-row-label">Current monthly cost</span>
-          <span class="calc-row-value" style="color:var(--coral)" id="calcCurrentCost">$4,400</span>
-        </div>
-        <div class="calc-row">
-          <span class="calc-row-label">Agent monthly cost</span>
-          <span class="calc-row-value" style="color:var(--forest)" id="calcAgentCost">$305</span>
-        </div>
-        <div class="calc-row" style="border:none;padding-top:0">
-          <span class="calc-row-label"></span>
-          <span id="calcAgentBreakdown" style="font-size:0.75rem;color:var(--text-muted)">($105 API + $200 platform)</span>
-        </div>
-      </div>
-      <div class="calc-savings positive" id="calcSavings">
-        <div class="calc-savings-num">$4,095<span>/mo</span></div>
-        <div class="calc-savings-label">Estimated savings (93% reduction)</div>
-      </div>
-    </div>
-  </div>
-  <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>
-</section>
-
-<!-- Wave divider -->
-<div class="wave-divider">
-  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,25 C360,50 720,0 1080,30 C1260,45 1380,35 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.02)"/>
-    <path d="M0,35 C240,10 480,45 720,20 C960,45 1200,10 1440,35 L1440,60 L0,60 Z" fill="rgba(139,94,60,0.02)"/>
   </svg>
 </div>
 
@@ -950,30 +740,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <p class="services-detail-link reveal"><a href="/services/">See full details &rarr;</a></p>
 </section>
 
-
-<!-- Wave divider -->
-<div class="wave-divider">
-  <svg viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.03)"/>
-    <path d="M0,20 C360,45 720,10 1080,35 C1260,45 1350,30 1440,25 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
-  </svg>
-</div>
-
-<!-- WHO BUILDS THIS -->
-<section class="credentials">
-  <p class="section-label reveal">Who Builds This</p>
-  <h2 class="reveal">Two years of production AI. One founder who runs his business on it.</h2>
-
-  <div class="founder-row reveal">
-    <div class="founder-bio">
-      <p>Lucas Cairns. Co-founded Subsights in 2024 building production chatbot platforms. Spent two years solving the reliability problems — hallucination, consistency, tool integration — that kept agents from being useful in real business workflows.</p>
-      <p>In 2026, deployed a full agent stack to run his own business: email, CRM, sales, reporting, cost monitoring, even the brand and website. Then started doing it for others.</p>
-    </div>
-    <div class="founder-proof">
-      <div id="hp-week-breakdown"></div>
-    </div>
-  </div>
-</section>
 
 <!-- FAQ -->
 <section>

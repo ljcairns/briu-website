@@ -114,6 +114,48 @@
 
   <p class="wuc-highlight reveal" style="margin-top: 2rem;">$300 per day is the most you will ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
 
+  <div class="calc-grid reveal" style="margin-top: 2.5rem;">
+    <div class="calc-inputs">
+      <div class="calc-field">
+        <label>Hours of work to automate <span class="calc-value" id="calcHoursVal">4h/day</span></label>
+        <input type="range" class="calc-slider" id="calcHours" min="1" max="10" step="0.5" value="4" oninput="updateCalc()">
+      </div>
+      <div class="calc-field">
+        <label>Current cost of that work <span class="calc-value" id="calcRateVal">$50/hr</span></label>
+        <input type="range" class="calc-slider" id="calcRate" min="15" max="150" step="5" value="50" oninput="updateCalc()">
+      </div>
+      <div class="calc-field">
+        <label>Deployment level</label>
+        <div class="calc-toggles">
+          <button class="calc-toggle active" data-val="practical" onclick="setComplexity('practical',this)">Practical<span>$2–5/day</span></button>
+          <button class="calc-toggle" data-val="moderate" onclick="setComplexity('moderate',this)">Moderate<span>$10–20/day</span></button>
+          <button class="calc-toggle" data-val="frontier" onclick="setComplexity('frontier',this)">Frontier<span>$30–100/day</span></button>
+        </div>
+      </div>
+    </div>
+    <div class="calc-output">
+      <div class="calc-comparison">
+        <div class="calc-row">
+          <span class="calc-row-label">Current monthly cost</span>
+          <span class="calc-row-value" style="color:var(--coral)" id="calcCurrentCost">$4,400</span>
+        </div>
+        <div class="calc-row">
+          <span class="calc-row-label">Agent monthly cost</span>
+          <span class="calc-row-value" style="color:var(--forest)" id="calcAgentCost">$305</span>
+        </div>
+        <div class="calc-row" style="border:none;padding-top:0">
+          <span class="calc-row-label"></span>
+          <span id="calcAgentBreakdown" style="font-size:0.75rem;color:var(--text-muted)">($105 API + $200 platform)</span>
+        </div>
+      </div>
+      <div class="calc-savings positive" id="calcSavings">
+        <div class="calc-savings-num">$4,095<span>/mo</span></div>
+        <div class="calc-savings-label">Estimated savings (93% reduction)</div>
+      </div>
+    </div>
+  </div>
+  <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>
+
   <div class="quote-card quote-decorated reveal">
     <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
     <p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> — All-In Podcast E261</p>
@@ -164,6 +206,7 @@
 <script src="/shared.js?v=20260309w"></script>
 <script src="/chat-bubble.js?v=20260309w"></script>
 <script src="/charts.js?v=20260309w"></script>
+<script src="/interactive.js?v=20260309w"></script>
 <script>
 Briu.charts.compressionMeter('wn-compression-meter');
 Briu.charts.salaryCrossover('wn-salary-crossover');
@@ -173,6 +216,7 @@ Briu.charts.infraScale('wn-infra-scale');
 Briu.charts.thenVsNow('wn-then-vs-now');
 Briu.charts.sublinearScaling('wn-sublinear-scaling');
 Briu.charts.energyBottleneck('wn-energy-bottleneck');
+if (document.getElementById('calcHours')) updateCalc();
 // Show chat bubble on this high-intent page regardless of prior engagement
 if (window.briuShowChatBubble) window.briuShowChatBubble();
 </script>
