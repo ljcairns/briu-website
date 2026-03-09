@@ -235,12 +235,14 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 
 /* Scroll Progress Bar */
 var navProgress = document.getElementById('navProgress');
-window.addEventListener('scroll', function() {
-  var scrollTop = window.scrollY;
-  var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-  var scrollPercent = (scrollTop / docHeight) * 100;
-  navProgress.style.width = scrollPercent + '%';
-});
+if (navProgress) {
+  window.addEventListener('scroll', function() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    var scrollPercent = (scrollTop / docHeight) * 100;
+    navProgress.style.width = scrollPercent + '%';
+  });
+}
 
 /* Scroll Reveal */
 var revealEls = document.querySelectorAll('.reveal, .reveal-scale');

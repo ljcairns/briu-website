@@ -771,19 +771,40 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="chart-label">How this company actually runs</div>' +
     '<div class="constellation">' +
 
-    /* SVG lines — desktop only, clean vertical hierarchy */
+    /* SVG lines — gradient flowing connections */
     '<svg class="constellation-lines" viewBox="0 0 700 480" preserveAspectRatio="xMidYMid meet">' +
-    /* Founder to 3 interfaces */
-    '<line x1="350" y1="80" x2="140" y2="190" />' +
-    '<line x1="350" y1="80" x2="350" y2="190" />' +
-    '<line x1="350" y1="80" x2="560" y2="190" />' +
+    '<defs>' +
+    '<linearGradient id="orgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">' +
+    '<stop offset="0%" stop-color="#D4A05A" stop-opacity="0.6"/>' +
+    '<stop offset="50%" stop-color="#E07B5F" stop-opacity="0.4"/>' +
+    '<stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.5"/>' +
+    '</linearGradient>' +
+    '<linearGradient id="orgGrad2" x1="100%" y1="0%" x2="0%" y2="100%">' +
+    '<stop offset="0%" stop-color="#5A9DAC" stop-opacity="0.5"/>' +
+    '<stop offset="50%" stop-color="#E07B5F" stop-opacity="0.35"/>' +
+    '<stop offset="100%" stop-color="#D4A05A" stop-opacity="0.5"/>' +
+    '</linearGradient>' +
+    '<linearGradient id="orgFlowGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A05A"/><stop offset="100%" stop-color="#E07B5F"/></linearGradient>' +
+    '<linearGradient id="orgFlowTeal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A9DAC"/><stop offset="100%" stop-color="#D4A05A"/></linearGradient>' +
+    '</defs>' +
+    /* Founder to 3 interfaces — gradient lines */
+    '<line x1="350" y1="80" x2="140" y2="190" class="c-line-main c-line-m1" />' +
+    '<line x1="350" y1="80" x2="350" y2="190" class="c-line-main c-line-m2" />' +
+    '<line x1="350" y1="80" x2="560" y2="190" class="c-line-main c-line-m3" />' +
     /* Founder to audit models — subtle */
     '<line x1="350" y1="55" x2="530" y2="40" class="c-line-audit" />' +
     '<line x1="350" y1="55" x2="600" y2="40" class="c-line-audit" />' +
     /* Claw down to 3 skills */
-    '<line x1="140" y1="270" x2="140" y2="370" />' +
-    '<line x1="140" y1="270" x2="350" y2="370" />' +
-    '<line x1="140" y1="270" x2="560" y2="370" />' +
+    '<line x1="140" y1="270" x2="140" y2="370" class="c-line-main c-line-m4" />' +
+    '<line x1="140" y1="270" x2="350" y2="370" class="c-line-main c-line-m5" />' +
+    '<line x1="140" y1="270" x2="560" y2="370" class="c-line-main c-line-m6" />' +
+    /* Data flow pulses */
+    '<line x1="350" y1="80" x2="140" y2="190" class="c-flow c-flow-1" stroke="url(#orgFlowGold)" />' +
+    '<line x1="350" y1="80" x2="350" y2="190" class="c-flow c-flow-2" stroke="url(#orgFlowTeal)" />' +
+    '<line x1="350" y1="80" x2="560" y2="190" class="c-flow c-flow-3" stroke="url(#orgFlowGold)" />' +
+    '<line x1="140" y1="270" x2="140" y2="370" class="c-flow c-flow-4" stroke="url(#orgFlowTeal)" />' +
+    '<line x1="140" y1="270" x2="350" y2="370" class="c-flow c-flow-5" stroke="url(#orgFlowGold)" />' +
+    '<line x1="140" y1="270" x2="560" y2="370" class="c-flow c-flow-6" stroke="url(#orgFlowTeal)" />' +
     '</svg>' +
 
     /* Row 1: Founder — centered, with audit models as subtle satellites */

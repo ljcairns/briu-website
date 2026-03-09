@@ -10,7 +10,7 @@
 
   var canvas = document.createElement('canvas');
   canvas.id = 'ambient-bg';
-  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;opacity:0;transition:opacity 1.5s ease;';
+  canvas.style.cssText = 'position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:2;opacity:0;transition:opacity 1.5s ease;';
   document.body.appendChild(canvas);
 
   // Fade in after page loads
@@ -69,7 +69,7 @@
       length: 60 + Math.random() * 120,
       // Visual
       color: color,
-      baseOpacity: 0.025 + Math.random() * 0.04,
+      baseOpacity: 0.06 + Math.random() * 0.08,
       width: 0.5 + Math.random() * 1,
       // Lifecycle
       life: 0,

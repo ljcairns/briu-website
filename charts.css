@@ -388,9 +388,29 @@
 /* ---- Chart 14: Constellation Org ---- */
 .constellation { position: relative; width: 100%; height: 480px; margin: 0 auto; }
 .constellation-lines { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; }
-.constellation-lines line { stroke: rgba(212,160,90,0.12); stroke-width: 1; stroke-dasharray: 5 5; }
-.constellation-lines .c-line-audit { stroke: rgba(255,255,255,0.06); stroke-dasharray: 3 6; }
-.briu-chart.visible .constellation-lines line { animation: lineReveal 1.2s ease forwards; }
+.constellation-lines line { stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: none; }
+.constellation-lines .c-line-audit { stroke: rgba(255,255,255,0.06); stroke-width: 1; stroke-dasharray: 3 6; }
+.constellation-lines .c-line-main { stroke: url(#orgGrad1); opacity: 0; }
+.briu-chart.visible .constellation-lines .c-line-main { animation: orgLineDraw 2s ease forwards; }
+.briu-chart.visible .c-line-m1 { animation-delay: 0.2s; }
+.briu-chart.visible .c-line-m2 { animation-delay: 0.4s; }
+.briu-chart.visible .c-line-m3 { animation-delay: 0.6s; }
+.briu-chart.visible .c-line-m4 { animation-delay: 0.8s; }
+.briu-chart.visible .c-line-m5 { animation-delay: 1s; }
+.briu-chart.visible .c-line-m6 { animation-delay: 1.2s; }
+@keyframes orgLineDraw { 0% { stroke-dashoffset: 300; opacity: 0; } 20% { opacity: 0.7; } 100% { stroke-dashoffset: 0; opacity: 0.7; } }
+.constellation-lines .c-line-main { stroke-dasharray: 300; stroke-dashoffset: 300; }
+/* Flowing pulse along lines */
+.constellation-lines .c-flow { fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-dasharray: 6 44; opacity: 0; }
+.briu-chart.visible .c-flow { animation: dataFlow 3.5s ease-in-out infinite; }
+.briu-chart.visible .c-flow-1 { animation-delay: 0.5s; }
+.briu-chart.visible .c-flow-2 { animation-delay: 1.5s; }
+.briu-chart.visible .c-flow-3 { animation-delay: 2.5s; }
+.briu-chart.visible .c-flow-4 { animation-delay: 1s; }
+.briu-chart.visible .c-flow-5 { animation-delay: 2s; }
+.briu-chart.visible .c-flow-6 { animation-delay: 3s; }
+@keyframes dataFlow { 0% { stroke-dashoffset: 50; opacity: 0; } 15% { opacity: 0.6; } 85% { opacity: 0.6; } 100% { stroke-dashoffset: -50; opacity: 0; } }
+.briu-chart.visible .constellation-lines .c-line-audit { animation: lineReveal 1.2s ease forwards; }
 @keyframes lineReveal { from { stroke-dashoffset: 200; } to { stroke-dashoffset: 0; } }
 
 /* Desktop: rows are absolutely positioned over the SVG */
@@ -422,16 +442,24 @@
 
 .c-circle.c-human { width: 68px; height: 68px; background: rgba(90,157,172,0.12); border-color: rgba(90,157,172,0.35); box-shadow: 0 0 20px rgba(90,157,172,0.1); }
 .c-circle.c-human span { font-size: 0.82rem; font-weight: 600; color: var(--river); }
-.c-node:hover .c-circle.c-human { box-shadow: 0 0 30px rgba(90,157,172,0.2); }
+.briu-chart.visible .c-circle.c-human { animation: pulseHuman 4s ease-in-out infinite; }
+.c-node:hover .c-circle.c-human { box-shadow: 0 0 30px rgba(90,157,172,0.25); }
 
 .c-circle.c-orchestrator { background: rgba(212,160,90,0.1); border-color: rgba(212,160,90,0.3); box-shadow: 0 0 16px rgba(212,160,90,0.08); }
-.c-node:hover .c-circle.c-orchestrator { box-shadow: 0 0 24px rgba(212,160,90,0.18); }
+.briu-chart.visible .c-circle.c-orchestrator { animation: pulseGold 5s ease-in-out 0.5s infinite; }
+.c-node:hover .c-circle.c-orchestrator { box-shadow: 0 0 24px rgba(212,160,90,0.22); }
 
 .c-circle.c-code { background: rgba(77,128,112,0.1); border-color: rgba(77,128,112,0.3); box-shadow: 0 0 16px rgba(77,128,112,0.08); }
-.c-node:hover .c-circle.c-code { box-shadow: 0 0 24px rgba(77,128,112,0.18); }
+.briu-chart.visible .c-circle.c-code { animation: pulseForest 5s ease-in-out 1s infinite; }
+.c-node:hover .c-circle.c-code { box-shadow: 0 0 24px rgba(77,128,112,0.22); }
 
 .c-circle.c-web { background: rgba(90,157,172,0.08); border-color: rgba(90,157,172,0.25); box-shadow: 0 0 16px rgba(90,157,172,0.06); }
-.c-node:hover .c-circle.c-web { box-shadow: 0 0 24px rgba(90,157,172,0.15); }
+.briu-chart.visible .c-circle.c-web { animation: pulseHuman 5s ease-in-out 1.5s infinite; }
+.c-node:hover .c-circle.c-web { box-shadow: 0 0 24px rgba(90,157,172,0.2); }
+
+@keyframes pulseHuman { 0%, 100% { box-shadow: 0 0 20px rgba(90,157,172,0.1); } 50% { box-shadow: 0 0 35px rgba(90,157,172,0.2), 0 0 60px rgba(90,157,172,0.05); } }
+@keyframes pulseGold { 0%, 100% { box-shadow: 0 0 16px rgba(212,160,90,0.08); } 50% { box-shadow: 0 0 30px rgba(212,160,90,0.18), 0 0 50px rgba(212,160,90,0.04); } }
+@keyframes pulseForest { 0%, 100% { box-shadow: 0 0 16px rgba(77,128,112,0.08); } 50% { box-shadow: 0 0 30px rgba(77,128,112,0.18), 0 0 50px rgba(77,128,112,0.04); } }
 
 .c-circle.c-audit { width: 36px; height: 36px; background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.08); }
 .c-circle.c-audit span { font-size: 0.72rem; font-weight: 600; color: var(--text-muted); }
