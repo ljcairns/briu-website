@@ -206,7 +206,7 @@ export default {
     const allowed = env.ALLOWED_ORIGIN || 'https://briu.ai';
 
     const corsHeaders = {
-      'Access-Control-Allow-Origin': origin === allowed || origin.startsWith('http://localhost') ? origin : allowed,
+      'Access-Control-Allow-Origin': origin === allowed || origin.startsWith('http://localhost') || origin.endsWith('.workers.dev') ? origin : allowed,
       'Access-Control-Allow-Methods': 'POST, OPTIONS',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Max-Age': '86400',

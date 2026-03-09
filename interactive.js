@@ -8,7 +8,7 @@
   'use strict';
   var KEY = 'briu_assess';
   var CONV_KEY = 'briu_conv';
-  var API_BASE = 'https://assess.briu.ai';
+  var API_BASE = 'https://briu-assess.briu.workers.dev';
   var STEPS = 4;
   var answers = {};
   var conversation = []; // { role, content }
