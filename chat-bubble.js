@@ -67,7 +67,8 @@
       '.briu-chat-bubble .bubble-badge{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);border:2px solid #0E1219;box-shadow:0 0 8px rgba(212,160,90,0.4);}',
       '@keyframes bubbleRotateBg{0%{background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}100%{background:conic-gradient(from 360deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}}',
       // Panel
-      '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease;pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
+      '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease,width 0.4s cubic-bezier(0.22,1,0.36,1),max-height 0.4s cubic-bezier(0.22,1,0.36,1);pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
+      '.briu-chat-panel.bc-expanded{width:480px;max-height:620px;}',
       '.briu-chat-panel.open{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;}',
       // Header
       '.briu-chat-header{display:flex;align-items:center;justify-content:space-between;padding:0.75rem 1rem;border-bottom:1px solid rgba(255,255,255,0.06);flex-shrink:0;}',
@@ -79,7 +80,8 @@
       '.briu-chat-close{background:none;border:none;color:#888;font-size:1.2rem;cursor:pointer;padding:4px 8px;line-height:1;}',
       '.briu-chat-close:hover{color:#e8e6e1;}',
       // Thread
-      '.briu-chat-thread{flex:1;overflow-y:auto;padding:0.75rem 1rem;min-height:200px;max-height:340px;}',
+      '.briu-chat-thread{flex:1;overflow-y:auto;padding:0.75rem 1rem;min-height:200px;max-height:340px;transition:max-height 0.4s cubic-bezier(0.22,1,0.36,1);}',
+      '.bc-expanded .briu-chat-thread{max-height:440px;}',
       '.bc-msg{margin-bottom:0.75rem;animation:convFade 0.3s ease;}',
       '.bc-msg p{margin:0;font-size:0.85rem;line-height:1.55;}',
       '.bc-msg-user{text-align:right;}',
@@ -138,6 +140,21 @@
       '.bc-chart-comparison .bc-chart-fill{background:linear-gradient(90deg,rgba(224,123,95,0.7),rgba(224,123,95,0.35));}',
       '.bc-chart-comparison .bc-chart-value{color:#e07b5f;}',
       '.bc-chart-savings{font-size:0.72rem;color:rgba(106,174,156,0.9);text-align:right;margin-top:0.3rem;font-weight:600;}',
+      // Percent format bars (green gradient)
+      '.bc-chart-pct .bc-chart-fill{background:linear-gradient(90deg,rgba(77,128,112,0.8),rgba(77,128,112,0.4));}',
+      '.bc-chart-pct .bc-chart-value{color:rgba(106,174,156,0.9);}',
+      // Stat card (big number + label, inline in chat)
+      '.bc-stat-card{display:flex;gap:0.75rem;margin:0.5rem 0;padding:0.75rem;border:1px solid rgba(212,160,90,0.15);background:rgba(212,160,90,0.03);animation:convFade 0.3s ease;align-items:center;}',
+      '.bc-stat-num{font-family:var(--serif,"DM Serif Display",serif);font-size:1.8rem;line-height:1;color:#d4a05a;flex-shrink:0;}',
+      '.bc-stat-body{flex:1;}',
+      '.bc-stat-label{font-size:0.8rem;color:#e8e6e1;font-weight:600;margin-bottom:0.15rem;}',
+      '.bc-stat-desc{font-size:0.72rem;color:#a8a598;line-height:1.4;}',
+      '.bc-stat-source{font-size:0.65rem;color:#666;margin-top:0.2rem;}',
+      // Expand toggle
+      '.bc-expand-hint{display:flex;align-items:center;justify-content:center;gap:0.4rem;font-size:0.68rem;color:#666;padding:0.25rem 0;cursor:pointer;transition:color 0.2s;user-select:none;}',
+      '.bc-expand-hint:hover{color:#d4a05a;}',
+      '.bc-expand-hint svg{width:12px;height:12px;transition:transform 0.3s;}',
+      '.bc-expanded .bc-expand-hint svg{transform:rotate(180deg);}',
       // Email gate
       '.bc-email-gate{padding:1.5rem 1rem;text-align:center;animation:convFade 0.3s ease;}',
       '.bc-gate-icon{width:48px;height:48px;margin:0 auto 1rem;position:relative;}',
@@ -184,6 +201,7 @@
       '<div class="briu-chat-title">Briu</div>' +
       '<div class="briu-chat-header-actions">' +
       '<button class="briu-chat-reset" onclick="window.briuChatReset()">New chat</button>' +
+      '<button class="briu-chat-reset" id="bcExpandToggle" onclick="window.briuToggleExpand()" style="display:none;" title="Toggle wide view">&#x26F6;</button>' +
       '<button class="briu-chat-close" onclick="window.briuToggleChatPanel()">&times;</button>' +
       '</div></div>' +
       '<div class="briu-chat-thread" id="bcThread"></div>' +
@@ -425,13 +443,24 @@
       if (a.type === 'chart' && a.data) {
         thread.appendChild(renderChart(a));
       }
+      if (a.type === 'stat' && a.value) {
+        thread.appendChild(renderStat(a));
+      }
     }
   }
 
   // ─── Chart rendering ───
+  // format: "dollar" (default), "percent", "multiplier"
+  function formatValue(val, fmt) {
+    if (fmt === 'percent') return val + '%';
+    if (fmt === 'multiplier') return val + 'x';
+    return '$' + val.toLocaleString();
+  }
+
   function renderChart(action) {
+    var fmt = action.format || 'dollar';
     var card = document.createElement('div');
-    card.className = 'bc-chart';
+    card.className = 'bc-chart' + (fmt === 'percent' ? ' bc-chart-pct' : '');
     var maxVal = 0;
     for (var i = 0; i < action.data.length; i++) {
       if (action.data[i].value > maxVal) maxVal = action.data[i].value;
@@ -439,32 +468,34 @@
     if (action.comparison && action.comparison.value > maxVal) maxVal = action.comparison.value;
     if (action.total && action.total.value > maxVal) maxVal = action.total.value;
 
-    var h = '<div class="bc-chart-title">' + escapeHtml(action.title || 'Cost Breakdown') + '</div>';
+    var h = '<div class="bc-chart-title">' + escapeHtml(action.title || 'Breakdown') + '</div>';
     for (var j = 0; j < action.data.length; j++) {
       var d = action.data[j];
       var pct = maxVal > 0 ? Math.round((d.value / maxVal) * 100) : 0;
       h += '<div class="bc-chart-row">' +
         '<div class="bc-chart-label">' + escapeHtml(d.label) + '</div>' +
         '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + pct + '%"></div></div>' +
-        '<div class="bc-chart-value">$' + d.value.toLocaleString() + '</div></div>';
+        '<div class="bc-chart-value">' + formatValue(d.value, fmt) + '</div></div>';
     }
     if (action.total) {
       var tpct = maxVal > 0 ? Math.round((action.total.value / maxVal) * 100) : 0;
       h += '<div class="bc-chart-row bc-chart-total">' +
         '<div class="bc-chart-label" style="font-weight:600">' + escapeHtml(action.total.label || 'Total') + '</div>' +
         '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + tpct + '%"></div></div>' +
-        '<div class="bc-chart-value" style="font-weight:700">$' + action.total.value.toLocaleString() + '</div></div>';
+        '<div class="bc-chart-value" style="font-weight:700">' + formatValue(action.total.value, fmt) + '</div></div>';
     }
     if (action.comparison) {
       var cpct = maxVal > 0 ? Math.round((action.comparison.value / maxVal) * 100) : 0;
       h += '<div class="bc-chart-row bc-chart-comparison">' +
         '<div class="bc-chart-label">' + escapeHtml(action.comparison.label || 'Traditional') + '</div>' +
         '<div class="bc-chart-track"><div class="bc-chart-fill" style="width:0%" data-width="' + cpct + '%"></div></div>' +
-        '<div class="bc-chart-value">$' + action.comparison.value.toLocaleString() + '</div></div>';
-      var savings = action.comparison.value - (action.total ? action.total.value : 0);
-      if (savings > 0) {
-        var savPct = Math.round((savings / action.comparison.value) * 100);
-        h += '<div class="bc-chart-savings">Save $' + savings.toLocaleString() + '/mo (' + savPct + '% less)</div>';
+        '<div class="bc-chart-value">' + formatValue(action.comparison.value, fmt) + '</div></div>';
+      if (fmt === 'dollar') {
+        var savings = action.comparison.value - (action.total ? action.total.value : 0);
+        if (savings > 0) {
+          var savPct = Math.round((savings / action.comparison.value) * 100);
+          h += '<div class="bc-chart-savings">Save $' + savings.toLocaleString() + '/mo (' + savPct + '% less)</div>';
+        }
       }
     }
     card.innerHTML = h;
@@ -475,6 +506,23 @@
         fills[f].style.width = fills[f].getAttribute('data-width');
       }
     }, 50);
+    // Auto-expand panel to fit chart
+    autoExpand();
+    return card;
+  }
+
+  // ─── Stat card rendering ───
+  function renderStat(action) {
+    var card = document.createElement('div');
+    card.className = 'bc-stat-card';
+    card.innerHTML =
+      '<div class="bc-stat-num">' + escapeHtml(action.value || '') + '</div>' +
+      '<div class="bc-stat-body">' +
+      '<div class="bc-stat-label">' + escapeHtml(action.label || '') + '</div>' +
+      (action.desc ? '<div class="bc-stat-desc">' + escapeHtml(action.desc) + '</div>' : '') +
+      (action.source ? '<div class="bc-stat-source">' + escapeHtml(action.source) + '</div>' : '') +
+      '</div>';
+    autoExpand();
     return card;
   }
 
@@ -776,6 +824,27 @@
       var el = container.parentElement || container;
       el.innerHTML = '<div class="bc-handoff-label">Could not send — reach us at <a href="mailto:hi@briu.ai" style="color:#d4a05a;">hi@briu.ai</a></div>';
     });
+  }
+
+  // ─── Expand/collapse panel ───
+  var hasExpanded = false;
+
+  window.briuToggleExpand = function() {
+    var panel = document.getElementById('briuChatPanel');
+    if (!panel) return;
+    panel.classList.toggle('bc-expanded');
+    scrollThread();
+  };
+
+  function autoExpand() {
+    var panel = document.getElementById('briuChatPanel');
+    if (!panel || panel.classList.contains('bc-expanded')) return;
+    panel.classList.add('bc-expanded');
+    hasExpanded = true;
+    // Show the toggle button so user can collapse
+    var toggle = document.getElementById('bcExpandToggle');
+    if (toggle) toggle.style.display = '';
+    scrollThread();
   }
 
   // ─── Reset conversation ───

@@ -39,9 +39,13 @@ Fields: "company", "name", "email", "website", "workflow" (free text about their
 7. Company pitch — personalized pitch for a specific company (use after domain lookup):
 {"type":"pitch","company":"Acme Corp","domain":"acme.com","points":["Email triage across your support team","CRM automation for your sales pipeline","Weekly reporting dashboards"],"estimate":{"tier":"Team Kickoff","build":"$5,000","monthly":"$250-400/mo"}}
 
-8. Chart — visual bar chart for cost comparisons or breakdowns:
-{"type":"chart","chartType":"bar","title":"Monthly Cost Estimate","data":[{"label":"Email Agent API","value":90},{"label":"CRM Agent API","value":150},{"label":"Platform","value":200},{"label":"Retainer","value":500}],"total":{"label":"Total Monthly","value":940},"comparison":{"label":"vs Traditional Hire","value":6000}}
-Data values must be numbers (dollars). Include "comparison" to show savings. Keep to 3-5 data items. The frontend renders animated bars proportional to the max value.
+8. Chart — visual bar chart for comparisons or breakdowns:
+{"type":"chart","title":"Monthly Cost Estimate","format":"dollar","data":[{"label":"Email Agent API","value":90},{"label":"CRM Agent API","value":150},{"label":"Platform","value":200},{"label":"Retainer","value":500}],"total":{"label":"Total Monthly","value":940},"comparison":{"label":"vs Traditional Hire","value":6000}}
+"format" can be "dollar" (default, shows $), "percent" (shows %, green bars), or "multiplier" (shows Nx). Include "comparison" to show savings (dollar format only). Keep to 3-5 data items. The frontend renders animated bars and auto-expands the chat panel.
+
+9. Stat card — a big number with context:
+{"type":"stat","value":"100x","label":"Cost Reduction","desc":"From $1,000/day to $10/day with local models","source":"Chamath Palihapitiya, All-In E259"}
+Use for impactful single data points. The panel auto-expands to show these.
 
 ## Action Guidelines
 - ALWAYS include "replies" on every response (2-3 contextual suggestions + one like "Tell me more about X")
@@ -50,7 +54,8 @@ Data values must be numbers (dollars). Include "comparison" to show savings. Kee
 - Use "estimate" only after you understand their situation enough to suggest a tier
 - Use "collect" naturally when you need info: ask for company early, workflow mid-conversation, email/name only when ready to hand off
 - Use "handoff" when the visitor has shared enough context OR explicitly wants to connect
-- Use "chart" when giving specific cost breakdowns — visual bars are more impactful than text estimates. Use instead of or alongside "estimate".
+- Use "chart" when giving specific cost breakdowns — visual bars are more impactful than text estimates. Use instead of or alongside "estimate". Use format:"percent" for automation rates, format:"multiplier" for leverage/scaling comparisons.
+- Use "stat" for powerful single data points — a big number grabs attention. Great for opening with impact (e.g., "100x" cost reduction, "10-20x" leverage).
 - When discussing costs, performance, or market data, cite specific numbers from the charts data (e.g., "SDR tasks are 95% automatable", "$1,000/day drops to $10/day with local models", "10x problems only take 2-3x effort"). These are real numbers from real operators — use them to build credibility.
 - When visitors ask about specific topics covered by charts (automation rates, costs, scaling), point them to the relevant page where they can see the interactive visualization.
 - Keep actions relevant — don't overload. 2-3 actions per response max.
