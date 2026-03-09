@@ -446,12 +446,29 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   }
 
   // Normalize response
+  const sid = body.sessionId || generateSessionId();
   const result = {
     text: parsed?.text || rawText,
     actions: Array.isArray(parsed?.actions) ? parsed.actions : [],
-    sessionId: body.sessionId || generateSessionId(),
+    sessionId: sid,
     usage: data.usage || null,
   };
+
+  // Store conversation in KV (non-blocking)
+  if (env.CONVERSATIONS) {
+    const convRecord = {
+      sessionId: sid,
+      email: email || null,
+      company: company ? { name: company.name, domain: company.domain, industries: company.industries } : null,
+      quiz,
+      page,
+      messages: messages.concat([{ role: 'assistant', content: result.text }]),
+      updatedAt: new Date().toISOString(),
+    };
+    // Fire and forget — don't block the response
+    env.CONVERSATIONS.put('conv:' + sid, JSON.stringify(convRecord), { expirationTtl: 604800 }) // 7 days
+      .catch(e => console.error('KV write error:', e));
+  }
 
   return new Response(JSON.stringify(result), {
     status: 200,
@@ -511,6 +528,20 @@ ${conversationLog}`;
     } catch (e) {
       console.error('Email send failed:', e);
     }
+  }
+
+  // Store lead in KV
+  if (env.CONVERSATIONS) {
+    const leadRecord = {
+      type: 'lead',
+      name,
+      email,
+      summary,
+      messages,
+      createdAt: new Date().toISOString(),
+    };
+    env.CONVERSATIONS.put('lead:' + Date.now() + '_' + email, JSON.stringify(leadRecord), { expirationTtl: 2592000 }) // 30 days
+      .catch(e => console.error('KV lead write error:', e));
   }
 
   return new Response(JSON.stringify({ sent: true }), {

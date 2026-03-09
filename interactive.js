@@ -449,17 +449,62 @@
     thread.appendChild(div);
   }
 
+  // ─── Loading animation with fractal + rotating quotes ───
+  var LOADING_QUOTES = [
+    'Agents don\'t forget to follow up.',
+    'Every email triaged teaches patterns.',
+    '$2-5/day. Not $200K/year.',
+    'Your API keys. Your infrastructure.',
+    'Knowledge compounds, salaries don\'t.',
+    'Agents work nights, weekends, holidays.',
+    'One developer. 354 commits. 12 agent skills.',
+    'The cheapest this capability will ever be.',
+    'No vendor lock-in. Everything you own.',
+    'Approval gates on every action.',
+    '30x less cost. 7x faster delivery.',
+    'Agents as capital, not expense.'
+  ];
+  var loadingQuoteIndex = 0;
+  var loadingQuoteTimer = null;
+
   function appendLoading() {
     var thread = document.getElementById('convThread');
     if (!thread) return;
     var div = document.createElement('div');
     div.className = 'conv-msg conv-msg-assistant conv-loading';
     div.id = 'convLoadingMsg';
-    div.innerHTML = '<div class="assess-loading-dots"><span></span><span></span><span></span></div>';
+
+    // Pick a random starting quote
+    loadingQuoteIndex = Math.floor(Math.random() * LOADING_QUOTES.length);
+
+    div.innerHTML = '<div class="conv-fractal-loader">' +
+      '<div class="fractal-ring fractal-ring-1"></div>' +
+      '<div class="fractal-ring fractal-ring-2"></div>' +
+      '<div class="fractal-ring fractal-ring-3"></div>' +
+      '<div class="fractal-dot"></div>' +
+      '</div>' +
+      '<div class="conv-loading-quote" id="convLoadingQuote">' + LOADING_QUOTES[loadingQuoteIndex] + '</div>';
+
     thread.appendChild(div);
+
+    // Rotate quotes every 2.5s
+    loadingQuoteTimer = setInterval(function() {
+      loadingQuoteIndex = (loadingQuoteIndex + 1) % LOADING_QUOTES.length;
+      var el = document.getElementById('convLoadingQuote');
+      if (el) {
+        el.style.opacity = '0';
+        setTimeout(function() {
+          if (el) {
+            el.textContent = LOADING_QUOTES[loadingQuoteIndex];
+            el.style.opacity = '1';
+          }
+        }, 300);
+      }
+    }, 2500);
   }
 
   function removeLoading() {
+    if (loadingQuoteTimer) { clearInterval(loadingQuoteTimer); loadingQuoteTimer = null; }
     var ld = document.getElementById('convLoadingMsg');
     if (ld) ld.remove();
   }

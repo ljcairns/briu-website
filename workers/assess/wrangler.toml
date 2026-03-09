@@ -10,6 +10,11 @@ MAIL_DESTINATION = "hi@briu.ai"
 # ANTHROPIC_API_KEY
 # DISCORD_WEBHOOK (optional)
 
+# Conversation storage
+[[kv_namespaces]]
+binding = "CONVERSATIONS"
+id = "1b36a305e4204874bafb42fe9a105dc0"
+
 # Optional KV namespace for rate limiting:
 # [[kv_namespaces]]
 # binding = "RATE_LIMIT"
