@@ -89,13 +89,19 @@
     updateEls('commits', data.totalCommits.toLocaleString());
     if (data.websiteCommits) updateEls('website-commits', data.websiteCommits.toLocaleString());
     if (data.privateAgentCommits) updateEls('agent-commits', data.privateAgentCommits.toLocaleString());
-    if (data.linesOfCode) updateEls('lines-of-code', data.linesOfCode.toLocaleString());
+    if (data.linesOfCode) {
+      var loc = data.linesOfCode >= 1000 ? (data.linesOfCode / 1000).toFixed(1) + 'K' : data.linesOfCode.toLocaleString();
+      updateEls('lines-of-code', loc);
+    }
     if (data.websiteLinesOfCode) updateEls('website-loc', data.websiteLinesOfCode.toLocaleString());
     if (data.agentLinesOfCode) updateEls('agent-loc', data.agentLinesOfCode.toLocaleString());
     if (data.chartCount) updateEls('chart-count', data.chartCount.toLocaleString());
     if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
     if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());
     if (data.pageCount) updateEls('page-count', data.pageCount.toLocaleString());
+    if (data.avgDailyCost) updateEls('avg-daily-cost', '$' + data.avgDailyCost.toFixed(2));
+    if (data.peakDailyCost) updateEls('peak-daily-cost', '$' + data.peakDailyCost.toFixed(2));
+    if (data.totalApiSpend) updateEls('total-api-spend', '$' + data.totalApiSpend.toFixed(2));
   }
 
   // ─── Site Config (pricing, costs, build stats) ───

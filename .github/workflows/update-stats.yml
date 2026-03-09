@@ -75,9 +75,8 @@ jobs:
           UPDATED=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
 
           # Lines of code — public repo (local checkout)
-          WEBSITE_LOC=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' -o -name '*.json' \) \
+          WEBSITE_LOC=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' \) \
             -not -path '*/node_modules/*' -not -path '*/.wrangler/*' -not -path '*/.github/*' \
-            -not -name 'package-lock.json' -not -name 'stats.json' \
             -exec cat {} + | wc -l | tr -d ' ')
           echo "Website lines of code: ${WEBSITE_LOC}"
 
@@ -87,8 +86,8 @@ jobs:
             TMPDIR=$(mktemp -d)
             git clone --depth 1 "https://x-access-token:${PRIVATE_REPO_TOKEN}@github.com/${PRIVATE_REPO}.git" "$TMPDIR" 2>/dev/null || true
             if [ -d "$TMPDIR" ]; then
-              AGENT_LOC=$(find "$TMPDIR" \( -name '*.js' -o -name '*.ts' -o -name '*.json' -o -name '*.yml' -o -name '*.yaml' -o -name '*.toml' -o -name '*.md' \) \
-                -not -path '*/node_modules/*' -not -path '*/.git/*' -not -name 'package-lock.json' \
+              AGENT_LOC=$(find "$TMPDIR" \( -name '*.js' -o -name '*.ts' \) \
+                -not -path '*/node_modules/*' -not -path '*/.git/*' \
                 -exec cat {} + 2>/dev/null | wc -l | tr -d ' ')
               rm -rf "$TMPDIR"
             fi

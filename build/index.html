@@ -304,12 +304,12 @@ section { padding-bottom: 2rem; }
     <div class="hud-value" id="hud-days">27</div>
     <div class="hud-label">Days Running</div>
   </div>
-  <div class="hud-stat" data-tooltip="Lines of code across 3 repositories" style="--pulse-delay: 0.5s;">
-    <div class="hud-value">15.2K</div>
+  <div class="hud-stat" data-tooltip="Lines of code across website + agent repos" style="--pulse-delay: 0.5s;">
+    <div class="hud-value" data-dynamic="lines-of-code" id="hud-loc">38.6K</div>
     <div class="hud-label">Lines of Code</div>
   </div>
   <div class="hud-stat" data-tooltip="Pulled from GitHub every 6 hours" style="--pulse-delay: 1s;">
-    <div class="hud-value" data-dynamic="commits" data-count="480" id="hud-commits">480+</div>
+    <div class="hud-value" data-dynamic="commits" data-count="611" id="hud-commits">611</div>
     <div class="hud-label">Commits</div>
   </div>
   <div class="hud-stat" data-tooltip="Live articles documenting production capabilities" style="--pulse-delay: 1.5s;">
@@ -321,7 +321,7 @@ section { padding-bottom: 2rem; }
     <div class="hud-label">Attacks Blocked</div>
   </div>
   <div class="hud-stat" data-tooltip="Average daily baseline cost across all agents" style="--pulse-delay: 2.5s;">
-    <div class="hud-value">$3.20</div>
+    <div class="hud-value" data-dynamic="avg-daily-cost" id="hud-cost">$14.44</div>
     <div class="hud-label">Daily Baseline Cost</div>
   </div>
   <div class="hud-stat" data-tooltip="Agent uptime since deployment" style="--pulse-delay: 3s;">
