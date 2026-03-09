@@ -233,13 +233,20 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
 
-/* Scroll Progress Bar — fixed to top of viewport, independent of nav */
+/* Scroll Progress Bar — fixed below nav */
 (function() {
-  // Create the bar directly on body so nothing can clip it
   var bar = document.createElement('div');
   bar.className = 'nav-progress';
   bar.id = 'navProgress';
   document.body.appendChild(bar);
+
+  // Position below nav
+  function setBarPosition() {
+    var nav = document.querySelector('nav');
+    if (nav) bar.style.top = nav.offsetHeight + 'px';
+  }
+  setBarPosition();
+  window.addEventListener('resize', setBarPosition);
 
   function onScroll() {
     var scrollTop = window.scrollY || document.documentElement.scrollTop;

@@ -137,7 +137,7 @@ jobs:
               # Try the admin API endpoint (uses starting_at/ending_before params)
               COST_DATA=$(curl -s -w "\n%{http_code}" -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
                 -H "anthropic-version: 2023-06-01" \
-                "https://api.anthropic.com/v1/organizations/cost_report?starting_at=${START_DATE}&ending_before=${END_DATE}&bucket_size=1d" 2>/dev/null || echo "{}")
+                "https://api.anthropic.com/v1/organizations/cost_report?starting_at=${START_DATE}&ending_at=${END_DATE}&bucket_size=1d" 2>/dev/null || echo "{}")
 
               HTTP_CODE=$(echo "$COST_DATA" | tail -1)
               COST_DATA=$(echo "$COST_DATA" | sed '$d')
