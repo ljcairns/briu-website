@@ -55,17 +55,16 @@
     var style = document.createElement('style');
     style.id = 'briuChatStyles';
     style.textContent = [
-      // Bubble — Gaudí fractal with gold→coral→river gradient
-      '.briu-chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:60px;height:60px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;box-shadow:0 4px 24px rgba(0,0,0,0.4),0 0 40px rgba(212,160,90,0.08);background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));border:1.5px solid rgba(212,160,90,0.3);animation:bubbleRotateBg 12s linear infinite;}',
-      '.briu-chat-bubble:hover{transform:scale(1.12);box-shadow:0 6px 32px rgba(212,160,90,0.25),0 0 60px rgba(224,123,95,0.1);border-color:rgba(212,160,90,0.5);}',
-      '.briu-chat-bubble .fractal-mini{position:relative;width:32px;height:32px;}',
-      '.briu-chat-bubble .fractal-mini .fr{position:absolute;inset:0;border-radius:50%;border:1.5px solid transparent;}',
-      '.briu-chat-bubble .fr-1{border-top-color:#d4a05a;border-right-color:rgba(224,123,95,0.4);animation:fractalSpin1 2.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-2{inset:5px;border-top-color:#e07b5f;border-left-color:rgba(90,157,172,0.4);animation:fractalSpin2 3.2s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-3{inset:10px;border-bottom-color:#5a9dac;border-right-color:rgba(212,160,90,0.4);animation:fractalSpin3 1.8s cubic-bezier(0.68,-0.55,0.27,1.55) infinite;}',
-      '.briu-chat-bubble .fr-dot{position:absolute;top:50%;left:50%;width:5px;height:5px;margin:-2.5px 0 0 -2.5px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);animation:fractalPulse 2s ease-in-out infinite;}',
-      '.briu-chat-bubble .bubble-badge{position:absolute;top:-2px;right:-2px;width:12px;height:12px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);border:2px solid #0E1219;box-shadow:0 0 8px rgba(212,160,90,0.4);}',
-      '@keyframes bubbleRotateBg{0%{background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}100%{background:conic-gradient(from 360deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));}}',
+      // Bubble — gradient spiral, inspired by nav progress bar aesthetic
+      '.briu-chat-bubble{position:fixed;bottom:24px;right:24px;z-index:9999;width:44px;height:44px;border-radius:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.35s cubic-bezier(0.22,1,0.36,1);background:transparent;border:none;padding:0;}',
+      '.briu-chat-bubble:hover{transform:scale(1.15) rotate(15deg);}',
+      '.briu-chat-bubble:hover .spiral-path{filter:drop-shadow(0 0 8px rgba(212,160,90,0.4)) drop-shadow(0 0 20px rgba(224,123,95,0.15));}',
+      '.briu-chat-bubble svg{width:44px;height:44px;overflow:visible;}',
+      '.briu-chat-bubble .spiral-path{fill:none;stroke-width:2.2;stroke-linecap:round;stroke:url(#briuSpiralGrad);filter:drop-shadow(0 0 4px rgba(212,160,90,0.2));transition:filter 0.35s ease;}',
+      '.briu-chat-bubble .spiral-dot{fill:#d4a05a;filter:drop-shadow(0 0 3px rgba(212,160,90,0.5));animation:spiralPulse 3s ease-in-out infinite;}',
+      '.briu-chat-bubble .bubble-badge{position:absolute;top:0;right:0;width:8px;height:8px;border-radius:50%;background:linear-gradient(135deg,#d4a05a,#e07b5f);border:1.5px solid #07090E;box-shadow:0 0 6px rgba(212,160,90,0.4);}',
+      '@keyframes spiralPulse{0%,100%{opacity:0.7;r:2;}50%{opacity:1;r:2.5;}}',
+      '@keyframes spiralDraw{0%{stroke-dashoffset:120;}100%{stroke-dashoffset:0;}}',
       // Panel
       '.briu-chat-panel{position:fixed;bottom:90px;right:24px;z-index:9998;width:380px;max-height:520px;background:var(--surface,#0E1219);border:1px solid rgba(255,255,255,0.08);border-radius:2px;box-shadow:0 12px 48px rgba(0,0,0,0.5);display:flex;flex-direction:column;opacity:0;transform:translateY(12px) scale(0.95);transition:all 0.25s ease,width 0.4s cubic-bezier(0.22,1,0.36,1),max-height 0.4s cubic-bezier(0.22,1,0.36,1);pointer-events:none;font-family:var(--sans,"DM Sans",-apple-system,sans-serif);}',
       '.briu-chat-panel.bc-expanded{width:480px;max-height:620px;}',
@@ -185,9 +184,15 @@
     var bubble = document.createElement('div');
     bubble.className = 'briu-chat-bubble';
     bubble.id = 'briuChatBubble';
-    bubble.innerHTML = '<div class="fractal-mini">' +
-      '<div class="fr fr-1"></div><div class="fr fr-2"></div><div class="fr fr-3"></div><div class="fr-dot"></div>' +
-      '</div>' +
+    bubble.innerHTML = '<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">' +
+      '<defs><linearGradient id="briuSpiralGrad" x1="0%" y1="0%" x2="100%" y2="100%">' +
+      '<stop offset="0%" stop-color="#d4a05a"/>' +
+      '<stop offset="45%" stop-color="#e07b5f"/>' +
+      '<stop offset="100%" stop-color="#5a9dac"/>' +
+      '</linearGradient></defs>' +
+      '<path class="spiral-path" d="M20,20 C20,16 24,12 28,12 C34,12 36,18 36,22 C36,30 28,36 20,36 C10,36 4,28 4,20 C4,10 12,4 22,4 C33,4 38,14 38,22" style="stroke-dasharray:120;animation:spiralDraw 1.5s ease-out forwards;"/>' +
+      '<circle class="spiral-dot" cx="20" cy="20" r="2"/>' +
+      '</svg>' +
       (conversation.length > 0 ? '<div class="bubble-badge"></div>' : '');
     bubble.addEventListener('click', window.briuToggleChatPanel);
 
