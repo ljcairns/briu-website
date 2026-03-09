@@ -628,9 +628,147 @@ async function handleAdmin(request, env, corsHeaders) {
     });
   }
 
+  // GET /api/admin/faq — FAQ candidates
+  if (path === '/api/admin/faq') {
+    const status = url.searchParams.get('status') || 'candidate';
+    const faqs = await db.prepare(
+      'SELECT * FROM faq_candidates WHERE status = ? ORDER BY frequency DESC, created_at DESC LIMIT 50'
+    ).bind(status).all();
+    return new Response(JSON.stringify({ faqs: faqs.results || [] }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // POST /api/admin/faq/:id/status — approve/reject FAQ candidate
+  if (path.match(/^\/api\/admin\/faq\/\d+\/status$/)) {
+    const id = parseInt(path.split('/')[4]);
+    const body = await request.json();
+    if (!['candidate', 'approved', 'published', 'rejected'].includes(body.status)) {
+      return new Response(JSON.stringify({ error: 'Invalid status' }), {
+        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+    // Allow editing answer when approving
+    if (body.answer) {
+      await db.prepare('UPDATE faq_candidates SET status = ?, answer = ?, updated_at = datetime(\'now\') WHERE id = ?')
+        .bind(body.status, body.answer, id).run();
+    } else {
+      await db.prepare('UPDATE faq_candidates SET status = ?, updated_at = datetime(\'now\') WHERE id = ?')
+        .bind(body.status, id).run();
+    }
+    return new Response(JSON.stringify({ ok: true }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // GET /api/admin/faq/published — published FAQs (public, no auth needed from site)
+  // (handled below outside admin auth gate)
+
+  // POST /api/admin/analyze-faq — trigger FAQ analysis manually
+  if (path === '/api/admin/analyze-faq') {
+    await analyzeFAQFromConversations(env);
+    return new Response(JSON.stringify({ ok: true, message: 'FAQ analysis complete' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   return new Response(JSON.stringify({ error: 'Not found' }), {
     status: 404, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
+}
+
+// ─── FAQ Analysis (cron + manual trigger) ───
+async function analyzeFAQFromConversations(env) {
+  const db = env.DB;
+  if (!db || !env.ANTHROPIC_API_KEY) return;
+
+  // Get recent user messages from last 7 days
+  const recent = await db.prepare(
+    `SELECT m.content, c.session_id
+     FROM messages m JOIN conversations c ON m.conversation_id = c.id
+     WHERE m.role = 'user' AND m.created_at > datetime('now', '-7 days')
+     ORDER BY m.created_at DESC LIMIT 200`
+  ).all();
+
+  const messages = recent.results || [];
+  if (messages.length < 5) return; // Not enough data
+
+  // Get existing FAQ candidates to avoid duplicates
+  const existing = await db.prepare(
+    'SELECT question FROM faq_candidates WHERE status != \'rejected\''
+  ).all();
+  const existingQuestions = (existing.results || []).map(r => r.question.toLowerCase());
+
+  // Ask Claude to extract FAQ patterns
+  const userMessages = messages.map(m => m.content).join('\n---\n');
+  const response = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': env.ANTHROPIC_API_KEY,
+      'anthropic-version': '2023-06-01',
+    },
+    body: JSON.stringify({
+      model: 'claude-haiku-4-5-20251001',
+      max_tokens: 1000,
+      system: `You analyze visitor chat messages from briu.ai (an AI agent consultancy) and extract common questions that should be in an FAQ. Return ONLY a JSON array of objects with "question" and "answer" fields. Questions should be concise and general (not visitor-specific). Answers should be 1-2 sentences, direct, using contractions. Return 3-5 FAQ candidates maximum. If no clear patterns, return an empty array [].`,
+      messages: [{ role: 'user', content: 'Here are recent visitor messages. Extract FAQ patterns:\n\n' + userMessages.slice(0, 8000) }],
+    }),
+  });
+
+  if (!response.ok) return;
+  const result = await response.json();
+  const text = result.content?.[0]?.text || '';
+
+  let candidates;
+  try {
+    const jsonMatch = text.match(/\[[\s\S]*\]/);
+    candidates = jsonMatch ? JSON.parse(jsonMatch[0]) : [];
+  } catch (e) {
+    return;
+  }
+
+  // Insert new candidates (skip duplicates)
+  for (const c of candidates) {
+    if (!c.question || !c.answer) continue;
+    if (existingQuestions.some(eq => eq.includes(c.question.toLowerCase().slice(0, 30)))) continue;
+
+    // Count how many conversations touched this topic
+    const topicWords = c.question.toLowerCase().split(/\s+/).filter(w => w.length > 3).slice(0, 3);
+    let frequency = 1;
+    if (topicWords.length > 0) {
+      const pattern = '%' + topicWords[0] + '%';
+      const count = await db.prepare(
+        "SELECT COUNT(DISTINCT c.session_id) as c FROM messages m JOIN conversations c ON m.conversation_id = c.id WHERE m.role = 'user' AND m.content LIKE ?"
+      ).bind(pattern).first();
+      frequency = count?.c || 1;
+    }
+
+    await db.prepare(
+      'INSERT INTO faq_candidates (question, answer, frequency, status) VALUES (?, ?, ?, \'candidate\')'
+    ).bind(c.question, c.answer, frequency).run();
+  }
+
+  // Update daily metrics
+  const today = new Date().toISOString().split('T')[0];
+  const dayStats = await Promise.all([
+    db.prepare("SELECT COUNT(*) as c FROM visitors WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT COUNT(*) as c FROM conversations WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT COUNT(*) as c FROM messages WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT COUNT(*) as c FROM leads WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT COUNT(*) as c FROM bookings WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT AVG(message_count) as a FROM conversations WHERE date(created_at) = ?").bind(today).first(),
+    db.prepare("SELECT AVG(quality_score) as a FROM conversations WHERE date(created_at) = ? AND quality_score > 0").bind(today).first(),
+  ]);
+  await db.prepare(
+    `INSERT OR REPLACE INTO daily_metrics (date, total_visitors, total_conversations, total_messages, total_leads, total_bookings, avg_messages_per_conv, avg_quality_score)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+  ).bind(
+    today,
+    dayStats[0]?.c || 0, dayStats[1]?.c || 0, dayStats[2]?.c || 0,
+    dayStats[3]?.c || 0, dayStats[4]?.c || 0,
+    dayStats[5]?.a || 0, dayStats[6]?.a || 0
+  ).run();
 }
 
 // ─── Main handler ───
@@ -654,6 +792,62 @@ export default {
 
     const url = new URL(request.url);
     const path = url.pathname;
+
+    // Public: published FAQs (no auth, for site to fetch)
+    if (path === '/api/faq' && request.method === 'GET') {
+      if (!env.DB) return new Response('[]', { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+      const faqs = await env.DB.prepare(
+        "SELECT question, answer FROM faq_candidates WHERE status = 'published' ORDER BY frequency DESC LIMIT 20"
+      ).all();
+      return new Response(JSON.stringify(faqs.results || []), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' },
+      });
+    }
+
+    // Public: chat summary for form handoff (called by frontend)
+    if (path === '/api/chat-summary' && request.method === 'POST') {
+      const body = await request.json();
+      const sessionId = body.sessionId;
+      if (!sessionId || !env.DB) {
+        return new Response(JSON.stringify({ found: false }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const conv = await env.DB.prepare(
+        `SELECT c.id, c.message_count, c.quality_score, v.email, v.company_name, v.quiz_role, v.quiz_focus
+         FROM conversations c LEFT JOIN visitors v ON c.visitor_id = v.id
+         WHERE c.session_id = ? ORDER BY c.id DESC LIMIT 1`
+      ).bind(sessionId).first();
+      if (!conv) {
+        return new Response(JSON.stringify({ found: false }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      const msgs = await env.DB.prepare(
+        'SELECT role, content FROM messages WHERE conversation_id = ? ORDER BY id ASC'
+      ).bind(conv.id).all();
+      const userMsgs = (msgs.results || []).filter(m => m.role === 'user').map(m => m.content);
+      const topics = new Set();
+      for (const m of userMsgs) {
+        const lower = m.toLowerCase();
+        if (lower.includes('email') || lower.includes('inbox')) topics.add('email automation');
+        if (lower.includes('crm') || lower.includes('salesforce') || lower.includes('hubspot')) topics.add('CRM');
+        if (lower.includes('report')) topics.add('reporting');
+        if (lower.includes('sales') || lower.includes('prospect')) topics.add('sales/prospecting');
+        if (lower.includes('price') || lower.includes('cost') || lower.includes('$')) topics.add('pricing');
+        if (lower.includes('security') || lower.includes('privacy')) topics.add('security');
+      }
+      return new Response(JSON.stringify({
+        found: true,
+        messageCount: conv.message_count,
+        email: conv.email,
+        company: conv.company_name,
+        role: conv.quiz_role,
+        focus: conv.quiz_focus,
+        topics: Array.from(topics),
+        recentMessages: userMsgs.slice(-3),
+      }), { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
+    }
 
     // Admin endpoints (GET or POST, auth-gated)
     if (path.startsWith('/api/admin/')) {
@@ -729,6 +923,11 @@ export default {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
     }
+  },
+
+  // Cron: analyze conversations for FAQ candidates + update daily metrics
+  async scheduled(event, env, ctx) {
+    ctx.waitUntil(analyzeFAQFromConversations(env));
   },
 };
 

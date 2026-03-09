@@ -199,7 +199,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .proof-summary-stat { text-align: center; }
 .proof-summary-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.25rem; }
 .proof-summary-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
-.proof-cta { text-align: center; margin-top: 1.5rem; }
+.proof-cta { display: flex; gap: 2rem; justify-content: center; margin-top: 1.5rem; }
+.proof-link { font-size: 0.85rem; color: var(--text-muted); text-decoration: none; letter-spacing: 0.03em; transition: color 0.3s ease; }
+.proof-link:hover { color: var(--gold); }
 #social-proof { padding-bottom: 2rem; }
 
 /* Founder Row */
@@ -789,8 +791,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div id="hp-automation-bars"></div>
 
   <div class="proof-cta reveal">
-    <a href="/build/" class="hero-cta-secondary">See the full build dashboard →</a>
-    <a href="/why-now/" class="hero-cta-secondary" style="margin-left: 1rem;">Read why now →</a>
+    <a href="/build/" class="proof-link">See the full build dashboard &rarr;</a>
+    <a href="/why-now/" class="proof-link">Read why now &rarr;</a>
   </div>
 </section>
 

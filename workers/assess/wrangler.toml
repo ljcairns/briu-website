@@ -22,6 +22,10 @@ id = "1b36a305e4204874bafb42fe9a105dc0"
 binding = "RATE_LIMIT"
 id = "dac7967fcf58452a97330374e2ed4f9c"
 
+# Daily FAQ analysis + metrics aggregation
+[triggers]
+crons = ["0 6 * * *"]
+
 # Analytics D1 database
 [[d1_databases]]
 binding = "DB"

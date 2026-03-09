@@ -94,6 +94,19 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 .stage-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; margin-bottom: 2rem; gap: 2px; }
 .stage-bar .segment { transition: width 0.5s ease; }
 
+/* FAQ candidates */
+.faq-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; margin-bottom: 0.75rem; }
+.faq-card .faq-question { font-family: var(--serif); font-size: 0.95rem; color: var(--text); margin-bottom: 0.5rem; }
+.faq-card .faq-answer { font-size: 13px; color: var(--text-muted); margin-bottom: 0.75rem; line-height: 1.5; }
+.faq-card .faq-answer textarea { width: 100%; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.08); color: var(--text); padding: 0.5rem; font-size: 13px; font-family: var(--sans); resize: vertical; min-height: 60px; }
+.faq-card .faq-meta { display: flex; gap: 1rem; align-items: center; font-size: 11px; color: var(--text-muted); }
+.faq-card .faq-actions { display: flex; gap: 0.5rem; margin-left: auto; }
+.faq-card .faq-actions button { background: none; border: 1px solid rgba(255,255,255,0.1); color: var(--text-muted); padding: 0.25rem 0.6rem; font-size: 11px; cursor: pointer; transition: all 0.2s; }
+.faq-card .faq-actions button:hover { border-color: var(--gold); color: var(--gold); }
+.faq-card .faq-actions button.approve { border-color: rgba(94,184,94,0.3); color: var(--green); }
+.faq-card .faq-actions button.reject { border-color: rgba(232,93,93,0.3); color: var(--red); }
+.faq-filter.active { background: var(--gold-dim); color: var(--gold); border-color: var(--gold); }
+
 /* Responsive */
 @media (max-width: 768px) {
   .stat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -136,6 +149,7 @@ tr:hover td { background: rgba(255,255,255,0.02); }
       <div class="tab active" data-tab="conversations" onclick="switchTab('conversations')">Conversations</div>
       <div class="tab" data-tab="leads" onclick="switchTab('leads')">Leads</div>
       <div class="tab" data-tab="bookings" onclick="switchTab('bookings')">Bookings</div>
+      <div class="tab" data-tab="faq" onclick="switchTab('faq')">FAQ Candidates</div>
     </div>
 
     <!-- Conversation detail panel -->
@@ -170,6 +184,20 @@ tr:hover td { background: rgba(255,255,255,0.02); }
         <thead><tr><th>Time</th><th>Name</th><th>Email</th><th>Tier</th><th>Amount</th><th>Payment</th><th>Status</th></tr></thead>
         <tbody id="bookings-tbody"></tbody>
       </table>
+    </div>
+
+    <!-- FAQ Candidates -->
+    <div class="tab-panel" id="panel-faq">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+        <div style="display:flex; gap:0.5rem;">
+          <button class="refresh faq-filter active" data-status="candidate" onclick="loadFAQ('candidate')">Candidates</button>
+          <button class="refresh faq-filter" data-status="approved" onclick="loadFAQ('approved')">Approved</button>
+          <button class="refresh faq-filter" data-status="published" onclick="loadFAQ('published')">Published</button>
+          <button class="refresh faq-filter" data-status="rejected" onclick="loadFAQ('rejected')">Rejected</button>
+        </div>
+        <button class="refresh" onclick="triggerFAQAnalysis()">Run Analysis Now</button>
+      </div>
+      <div id="faq-list"></div>
     </div>
   </div>
 </div>
@@ -363,6 +391,61 @@ function closeDetail() {
 function escapeHtml(s) {
   if (!s) return '';
   return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+// FAQ management
+async function loadFAQ(status) {
+  status = status || 'candidate';
+  document.querySelectorAll('.faq-filter').forEach(b => b.classList.toggle('active', b.dataset.status === status));
+  const data = await api('/api/admin/faq?status=' + status);
+  const list = document.getElementById('faq-list');
+  if (!data || !data.faqs || data.faqs.length === 0) {
+    list.innerHTML = '<div class="empty">No ' + status + ' FAQ items.</div>';
+    return;
+  }
+  list.innerHTML = data.faqs.map(f => {
+    const isCandidate = status === 'candidate';
+    const isApproved = status === 'approved';
+    return '<div class="faq-card" id="faq-' + f.id + '">' +
+      '<div class="faq-question">' + escapeHtml(f.question) + '</div>' +
+      '<div class="faq-answer">' +
+        (isCandidate || isApproved
+          ? '<textarea id="faq-answer-' + f.id + '">' + escapeHtml(f.answer) + '</textarea>'
+          : escapeHtml(f.answer)) +
+      '</div>' +
+      '<div class="faq-meta">' +
+        '<span>Frequency: ' + f.frequency + ' conversations</span>' +
+        '<span>' + timeAgo(f.created_at) + '</span>' +
+        '<div class="faq-actions">' +
+          (isCandidate ? '<button class="approve" onclick="faqAction(' + f.id + ',\'approved\')">Approve</button>' : '') +
+          (isApproved ? '<button class="approve" onclick="faqAction(' + f.id + ',\'published\')">Publish</button>' : '') +
+          (isCandidate || isApproved ? '<button class="reject" onclick="faqAction(' + f.id + ',\'rejected\')">Reject</button>' : '') +
+          (status === 'rejected' ? '<button onclick="faqAction(' + f.id + ',\'candidate\')">Restore</button>' : '') +
+          (status === 'published' ? '<button onclick="faqAction(' + f.id + ',\'approved\')">Unpublish</button>' : '') +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+async function faqAction(id, newStatus) {
+  const textarea = document.getElementById('faq-answer-' + id);
+  const body = { status: newStatus };
+  if (textarea) body.answer = textarea.value;
+  await apiPost('/api/admin/faq/' + id + '/status', body);
+  // Reload current filter
+  const active = document.querySelector('.faq-filter.active');
+  loadFAQ(active ? active.dataset.status : 'candidate');
+}
+
+async function triggerFAQAnalysis() {
+  const btn = event.target;
+  btn.textContent = 'Analyzing...';
+  btn.disabled = true;
+  await apiPost('/api/admin/analyze-faq', {});
+  btn.textContent = 'Run Analysis Now';
+  btn.disabled = false;
+  loadFAQ('candidate');
 }
 
 // Auto-login if token stored
