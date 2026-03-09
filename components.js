@@ -18,7 +18,8 @@
       linksHtml += '<a href="' + link.href + '"' + (isActive ? ' class="active"' : '') + '>' + link.label + '</a>\n';
     }
 
-    return '<nav>\n' +
+    return '<header class="site-header">\n' +
+      '<nav>\n' +
       '  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>\n' +
       '  <button class="nav-toggle" onclick="this.classList.toggle(\'open\');document.querySelector(\'.nav-links\').classList.toggle(\'open\')" aria-label="Menu"><span></span><span></span><span></span></button>\n' +
       '  <div class="nav-links">\n' +
@@ -26,7 +27,9 @@
       '    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>\n' +
       '  </div>\n' +
       '  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>\n' +
-      '</nav>';
+      '</nav>\n' +
+      '<div class="nav-progress" id="navProgress"></div>\n' +
+      '</header>';
   }
 
   // --- FOOTER ---

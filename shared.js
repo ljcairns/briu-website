@@ -233,20 +233,10 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
 
-/* Scroll Progress Bar — fixed just below nav */
+/* Scroll Progress Bar — sits in header, below nav, no positioning tricks */
 (function() {
-  var bar = document.createElement('div');
-  bar.className = 'nav-progress';
-  bar.id = 'navProgress';
-  document.body.appendChild(bar);
-
-  function positionBar() {
-    var nav = document.querySelector('nav');
-    if (nav) bar.style.top = nav.offsetHeight + 'px';
-  }
-  positionBar();
-  window.addEventListener('resize', positionBar);
-
+  var bar = document.getElementById('navProgress');
+  if (!bar) return;
   window.addEventListener('scroll', function() {
     var scrollTop = window.scrollY;
     var docHeight = document.documentElement.scrollHeight - window.innerHeight;
