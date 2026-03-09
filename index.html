@@ -270,13 +270,10 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
 
 /* Conversation UI */
-.conv-gauge-row { display: flex; align-items: center; gap: 1.25rem; margin-bottom: 1.5rem; }
-.assess-gauge-sm { width: 72px; height: 72px; flex-shrink: 0; }
-.assess-gauge-sm .assess-gauge-inner { width: 58px; height: 58px; }
-.assess-gauge-sm .assess-gauge-score { font-size: 1.3rem; }
-.assess-gauge-sm .assess-gauge-label { font-size: 0.58rem; margin-top: 2px; }
-.conv-gauge-persona { font-family: var(--serif); font-size: 1.15rem; color: var(--text); }
-.conv-thread { max-height: 360px; overflow-y: auto; margin-bottom: 1rem; padding-right: 0.5rem; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.2) transparent; }
+.conv-progress-bar { position: relative; height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 1.5rem; overflow: hidden; }
+.conv-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--forest)); transition: width 0.8s ease; }
+.conv-progress-label { position: absolute; right: 0; top: 8px; font-size: 0.68rem; color: var(--text-muted); letter-spacing: 0.05em; }
+.conv-thread { max-height: 400px; overflow-y: auto; margin-bottom: 1rem; padding-right: 0.5rem; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.2) transparent; }
 .conv-thread::-webkit-scrollbar { width: 4px; }
 .conv-thread::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.2); border-radius: 2px; }
 .conv-msg { margin-bottom: 1rem; animation: convFade 0.4s ease; }
@@ -289,13 +286,41 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .conv-msg a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,160,90,0.3); transition: border-color 0.2s; }
 .conv-msg a:hover { border-color: var(--gold); }
 .conv-loading { border-left-color: rgba(212,160,90,0.1); }
-.conv-input-row { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+/* Quick replies */
+.conv-quick-replies { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; min-height: 0; }
+.conv-reply-btn { font-size: 0.82rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 1rem; cursor: pointer; font-family: var(--sans); transition: all 0.2s; white-space: nowrap; }
+.conv-reply-btn:hover { color: var(--gold); border-color: rgba(212,160,90,0.35); background: rgba(212,160,90,0.05); transform: translateY(-1px); }
+/* Input */
+.conv-input-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
 .conv-input { flex: 1; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; }
 .conv-input:focus { border-color: rgba(212,160,90,0.4); }
 .conv-input::placeholder { color: rgba(196,185,168,0.4); }
 .conv-send { width: 42px; height: 42px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--bg); font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
 .conv-send:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,160,90,0.25); }
-.conv-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.conv-bottom-actions { display: flex; align-items: center; gap: 1rem; }
+/* Action cards (inline in messages) */
+.conv-action-card { margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); animation: convFade 0.4s ease; }
+.conv-card-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.5rem; }
+.conv-card-desc { font-size: 0.85rem; color: var(--text-muted); }
+.conv-card-arrow { color: var(--gold); font-size: 1rem; }
+/* Estimate card */
+.conv-card-estimate { border-color: rgba(212,160,90,0.15); }
+.conv-estimate-row { display: flex; justify-content: space-between; align-items: center; padding: 0.35rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.88rem; }
+.conv-estimate-row:last-child { border-bottom: none; }
+.conv-estimate-row span:first-child { color: var(--text-muted); }
+.conv-estimate-cost { color: var(--text); font-family: var(--serif); font-weight: 400; }
+/* Page card */
+.conv-page-link { display: flex; align-items: center; gap: 1rem; text-decoration: none; color: inherit; padding: 0.25rem 0; transition: all 0.2s; }
+.conv-page-link:hover { transform: translateX(4px); }
+.conv-page-link .conv-card-label { margin-bottom: 0.15rem; }
+.conv-page-link .conv-card-arrow { margin-left: auto; flex-shrink: 0; }
+/* Collect card */
+.conv-collect-row { display: flex; gap: 0.5rem; }
+.conv-collect-input { flex: 1; }
+.conv-collect-send { width: 36px; height: 36px; font-size: 0.9rem; }
+/* Handoff card */
+.conv-card-handoff { border-color: rgba(106,174,156,0.25); background: rgba(106,174,156,0.04); }
+.conv-handoff-btn { margin-top: 0.5rem; }
 .conv-action-btn { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); background: none; border: 1px solid rgba(212,160,90,0.3); padding: 0.6rem 1.25rem; cursor: pointer; font-family: var(--sans); transition: all 0.2s; }
 .conv-action-btn:hover { background: rgba(212,160,90,0.08); border-color: rgba(212,160,90,0.5); }
 .conv-send-form { width: 100%; }
@@ -369,10 +394,11 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .case-study-box { padding: 1.5rem; }
   .offer-grid { grid-template-columns: 1fr; }
   .assess-container { padding: 1.25rem; }
-  .conv-gauge-row { gap: 1rem; }
   .conv-thread { max-height: 280px; }
   .conv-msg-assistant { padding: 0.75rem 1rem; }
-  .conv-actions { flex-direction: column; align-items: stretch; }
+  .conv-quick-replies { gap: 0.4rem; }
+  .conv-reply-btn { font-size: 0.75rem; padding: 0.4rem 0.75rem; }
+  .conv-bottom-actions { flex-direction: column; align-items: stretch; }
   .calc-grid { grid-template-columns: 1fr; }
   .calc-toggles { flex-direction: column; }
   .footer-links { justify-content: center; }

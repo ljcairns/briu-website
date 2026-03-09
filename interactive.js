@@ -107,18 +107,21 @@
     // Fresh quiz completion — fetch first AI response
     if (!instant) {
       renderConversation(el, s, false);
-      appendLoading(el);
-      fetchChat(null, function(text) {
-        removeLoading(el);
-        if (text) {
-          conversation.push({ role: 'assistant', content: text });
+      appendLoading();
+      fetchChat(function(data) {
+        removeLoading();
+        var thread = document.getElementById('convThread');
+        if (data && data.text) {
+          var entry = { role: 'assistant', content: data.text, actions: data.actions || [] };
+          conversation.push(entry);
           saveConversation();
-          appendMessage(el, 'assistant', text);
+          appendAssistantMessage(thread, data.text, data.actions || []);
+          renderActions(data.actions || []);
         } else {
-          // Fallback to static
           var p = persona(s);
-          appendMessage(el, 'assistant', p.desc);
+          appendAssistantMessage(thread, p.desc, []);
         }
+        scrollThread();
         personalizePageSections();
       });
     } else {
@@ -128,79 +131,84 @@
   }
 
   function renderConversation(el, s, showHistory) {
-    var angle = (s / 100) * 360;
-    var h = '<div class="conv-gauge-row">' +
-      '<div class="assess-gauge assess-gauge-sm" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
-      '<div class="assess-gauge-inner"><div class="assess-gauge-score">' + s + '</div><div class="assess-gauge-label">Readiness</div></div></div>' +
-      '<div class="conv-gauge-text"><span class="conv-gauge-persona">' + persona(s).label + '</span></div></div>' +
+    var h = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Getting started</span></div>' +
       '<div class="conv-thread" id="convThread"></div>' +
+      '<div class="conv-quick-replies" id="convReplies"></div>' +
       '<div class="conv-input-row" id="convInputRow">' +
       '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
       '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
       '</div>' +
-      '<div class="conv-actions">' +
-      '<button class="conv-action-btn" onclick="sendConversation()">Send this to Briu</button>' +
+      '<div class="conv-bottom-actions">' +
       '<button class="assess-retake" onclick="resetAssess()">Start over</button>' +
       '</div>';
 
     el.innerHTML = h;
     el.classList.add('active');
 
-    // Show history
+    // Restore history
     if (showHistory && conversation.length > 0) {
       var thread = document.getElementById('convThread');
       for (var i = 0; i < conversation.length; i++) {
-        appendMessageToThread(thread, conversation[i].role, conversation[i].content);
+        var msg = conversation[i];
+        if (msg.role === 'user') {
+          appendUserMessage(thread, msg.content);
+        } else {
+          appendAssistantMessage(thread, msg.content, msg.actions || []);
+        }
       }
+      // Show last set of actions
+      var lastAssistant = null;
+      for (var j = conversation.length - 1; j >= 0; j--) {
+        if (conversation[j].role === 'assistant') { lastAssistant = conversation[j]; break; }
+      }
+      if (lastAssistant && lastAssistant.actions) renderActions(lastAssistant.actions);
     }
 
-    // Bind input events
+    bindInput();
+  }
+
+  function bindInput() {
     var input = document.getElementById('convInput');
     var sendBtn = document.getElementById('convSend');
     if (input) {
       input.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-          e.preventDefault();
-          submitMessage();
-        }
+        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitMessage(); }
       });
     }
-    if (sendBtn) {
-      sendBtn.addEventListener('click', submitMessage);
-    }
+    if (sendBtn) sendBtn.addEventListener('click', submitMessage);
   }
 
-  function submitMessage() {
+  function submitMessage(text) {
     if (isWaiting) return;
     var input = document.getElementById('convInput');
-    if (!input) return;
-    var text = input.value.trim();
+    if (!text && input) { text = input.value.trim(); if (input) input.value = ''; }
     if (!text) return;
 
-    input.value = '';
     conversation.push({ role: 'user', content: text });
     saveConversation();
 
-    var el = document.getElementById('assessResult');
     var thread = document.getElementById('convThread');
-    appendMessageToThread(thread, 'user', text);
-    appendLoading(el);
+    appendUserMessage(thread, text);
+    clearActions();
+    appendLoading();
     scrollThread();
 
-    fetchChat(text, function(response) {
-      removeLoading(el);
-      if (response) {
-        conversation.push({ role: 'assistant', content: response });
+    fetchChat(function(data) {
+      removeLoading();
+      if (data && data.text) {
+        var entry = { role: 'assistant', content: data.text, actions: data.actions || [] };
+        conversation.push(entry);
         saveConversation();
-        appendMessageToThread(thread, 'assistant', response);
+        appendAssistantMessage(thread, data.text, data.actions || []);
+        renderActions(data.actions || []);
       } else {
-        appendMessageToThread(thread, 'assistant', 'Sorry, I had trouble connecting. You can reach the team directly at hi@briu.ai.');
+        appendAssistantMessage(thread, 'Sorry, I had trouble connecting. You can reach the team directly at hi@briu.ai.', []);
       }
       scrollThread();
     });
   }
 
-  function fetchChat(userMessage, callback) {
+  function fetchChat(callback) {
     isWaiting = true;
     var payload = {
       quiz: answers,
@@ -209,7 +217,6 @@
       messages: []
     };
 
-    // Send full conversation history for context
     for (var i = 0; i < conversation.length; i++) {
       payload.messages.push({ role: conversation[i].role, content: conversation[i].content });
     }
@@ -223,7 +230,7 @@
     .then(function(data) {
       isWaiting = false;
       sessionId = data.sessionId || sessionId;
-      callback(data.response || null);
+      callback(data);
     })
     .catch(function() {
       isWaiting = false;
@@ -231,31 +238,43 @@
     });
   }
 
-  function appendMessageToThread(thread, role, text) {
+  // ─── Message rendering ───
+  function appendUserMessage(thread, text) {
     if (!thread) return;
     var div = document.createElement('div');
-    div.className = 'conv-msg conv-msg-' + role;
-    div.innerHTML = formatMessage(text);
+    div.className = 'conv-msg conv-msg-user';
+    div.innerHTML = '<p>' + escapeHtml(text) + '</p>';
     thread.appendChild(div);
   }
 
-  function appendMessage(el, role, text) {
-    var thread = el.querySelector('#convThread') || el.querySelector('.conv-thread');
-    appendMessageToThread(thread, role, text);
+  function appendAssistantMessage(thread, text, actions) {
+    if (!thread) return;
+    var div = document.createElement('div');
+    div.className = 'conv-msg conv-msg-assistant';
+    div.innerHTML = formatMessage(text);
+
+    // Render inline action cards (estimate, page, collect)
+    var inlineActions = (actions || []).filter(function(a) {
+      return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff';
+    });
+    for (var i = 0; i < inlineActions.length; i++) {
+      div.appendChild(renderActionCard(inlineActions[i]));
+    }
+
+    thread.appendChild(div);
   }
 
-  function appendLoading(el) {
-    var thread = el.querySelector('#convThread') || el.querySelector('.conv-thread');
+  function appendLoading() {
+    var thread = document.getElementById('convThread');
     if (!thread) return;
     var div = document.createElement('div');
     div.className = 'conv-msg conv-msg-assistant conv-loading';
     div.id = 'convLoadingMsg';
     div.innerHTML = '<div class="assess-loading-dots"><span></span><span></span><span></span></div>';
     thread.appendChild(div);
-    scrollThread();
   }
 
-  function removeLoading(el) {
+  function removeLoading() {
     var ld = document.getElementById('convLoadingMsg');
     if (ld) ld.remove();
   }
@@ -265,21 +284,100 @@
     if (thread) thread.scrollTop = thread.scrollHeight;
   }
 
+  // ─── Action rendering ───
+  function renderActions(actions) {
+    if (!actions || !actions.length) return;
+
+    for (var i = 0; i < actions.length; i++) {
+      var a = actions[i];
+
+      if (a.type === 'progress') {
+        var bar = document.querySelector('.conv-progress-fill');
+        var label = document.querySelector('.conv-progress-label');
+        if (bar) bar.style.width = a.value + '%';
+        if (label) label.textContent = a.label || '';
+      }
+
+      if (a.type === 'replies') {
+        var container = document.getElementById('convReplies');
+        if (container) {
+          container.innerHTML = '';
+          for (var j = 0; j < a.options.length; j++) {
+            var btn = document.createElement('button');
+            btn.className = 'conv-reply-btn';
+            btn.textContent = a.options[j];
+            btn.setAttribute('data-reply', a.options[j]);
+            btn.addEventListener('click', function() {
+              submitMessage(this.getAttribute('data-reply'));
+            });
+            container.appendChild(btn);
+          }
+        }
+      }
+    }
+  }
+
+  function renderActionCard(action) {
+    var card = document.createElement('div');
+    card.className = 'conv-action-card conv-card-' + action.type;
+
+    if (action.type === 'estimate') {
+      var h = '<div class="conv-card-label">' + escapeHtml(action.label || 'Estimate') + '</div>';
+      for (var i = 0; i < (action.items || []).length; i++) {
+        var item = action.items[i];
+        h += '<div class="conv-estimate-row"><span>' + escapeHtml(item.name) + '</span><span class="conv-estimate-cost">' + escapeHtml(item.cost) + '</span></div>';
+      }
+      card.innerHTML = h;
+    }
+
+    if (action.type === 'page') {
+      card.innerHTML = '<a href="' + escapeHtml(action.path) + '" class="conv-page-link">' +
+        '<div class="conv-card-label">' + escapeHtml(action.title) + '</div>' +
+        '<div class="conv-card-desc">' + escapeHtml(action.desc || '') + '</div>' +
+        '<span class="conv-card-arrow">→</span></a>';
+    }
+
+    if (action.type === 'collect') {
+      var inputId = 'convCollect_' + action.field;
+      card.innerHTML = '<label class="conv-card-label" for="' + inputId + '">' + escapeHtml(action.label) + '</label>' +
+        '<div class="conv-collect-row">' +
+        '<input type="text" class="conv-input conv-collect-input" id="' + inputId + '" placeholder="' + escapeHtml(action.placeholder || '') + '">' +
+        '<button class="conv-send conv-collect-send" onclick="submitCollected(\'' + action.field + '\')">&#8593;</button>' +
+        '</div>';
+    }
+
+    if (action.type === 'handoff') {
+      card.innerHTML = '<div class="conv-card-label">' + escapeHtml(action.message || 'Ready to connect') + '</div>' +
+        '<button class="conv-action-btn conv-handoff-btn" onclick="sendConversation()">Send to Lucas</button>';
+    }
+
+    return card;
+  }
+
+  function clearActions() {
+    var replies = document.getElementById('convReplies');
+    if (replies) replies.innerHTML = '';
+  }
+
+  window.submitCollected = function(field) {
+    var input = document.getElementById('convCollect_' + field);
+    if (!input) return;
+    var val = input.value.trim();
+    if (!val) return;
+
+    var labels = { company: 'My company is ', name: 'My name is ', email: 'My email is ', website: 'Our website is ', workflow: '' };
+    submitMessage((labels[field] || '') + val);
+  };
+
+  // ─── Message formatting ───
   function formatMessage(text) {
-    // Escape HTML
     var div = document.createElement('div');
     div.textContent = text;
     var safe = div.innerHTML;
-
-    // Convert [link text](/path/) to clickable links
-    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" style="color:var(--gold)">$1</a>');
-
-    // Convert plain /path/ references to links
+    safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
-      return pre + '<a href="' + path + '" style="color:var(--gold)">' + path + '</a>' + post;
+      return pre + '<a href="' + path + '">' + path + '</a>' + post;
     });
-
-    // Paragraphs
     safe = safe.replace(/\n\n/g, '</p><p>');
     return '<p>' + safe + '</p>';
   }

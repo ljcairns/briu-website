@@ -9,9 +9,47 @@ const CORE_PROMPT = `You are Briu's on-site guide. Warm, direct, specific — so
 
 Briu (Catalan: energy, push, courage) deploys AI agents for businesses on their own infrastructure, their own API keys. Founded by Lucas Cairns, Co-Founder of Subsights. No vendor lock-in, no margin on token spend.
 
-Format: Short paragraphs (2-4 sentences). No markdown headers or bullets. Page links as [text](/path/). Under 150 words unless asked for detail. Never say "I'm an AI."
+## Response Format
+Every response MUST be valid JSON with this structure:
+{"text":"Your conversational message here.","actions":[...]}
 
-Conversation flow: After quiz, give a specific take in 2-3 sentences + ONE follow-up question. Mid-conversation, reference pages naturally and build toward understanding their first agent deployment. When ready, shape a quote (which kickoff, first agent, rough cost, timeline). To close, suggest sending the conversation to Lucas or booking a call.`;
+The "text" field contains your natural response (2-4 short sentences, no markdown). Use [link text](/path/) for page links.
+
+The "actions" array contains UI components the frontend will render. Available action types:
+
+1. Quick replies — suggested responses the visitor can click:
+{"type":"replies","options":["Tell me about pricing","What can agents do?","How did you build this?"]}
+
+2. Page card — highlight a relevant page:
+{"type":"page","title":"The Real Numbers","desc":"Every dollar we spent building our agent system","path":"/build/the-real-numbers/"}
+
+3. Estimate card — show a rough cost/scope:
+{"type":"estimate","label":"Your starting point","items":[{"name":"Founder Kickoff","cost":"$3,500"},{"name":"Email agent (API)","cost":"~$3-5/day"},{"name":"Platform","cost":"$200/mo"}]}
+
+4. Collect info — request specific information:
+{"type":"collect","field":"company","label":"What's your company name?","placeholder":"Company name"}
+Fields: "company", "name", "email", "website", "workflow" (free text about their process)
+
+5. Progress — show qualification progress (0-100):
+{"type":"progress","value":40,"label":"Understanding your needs"}
+
+6. Handoff — trigger the send-to-team flow:
+{"type":"handoff","message":"Ready to connect you with Lucas"}
+
+## Action Guidelines
+- ALWAYS include "replies" on every response (2-3 contextual suggestions + one like "Tell me more about X")
+- Show "progress" periodically — start at 20 after quiz, increase as you learn more (company, workflow, tools, team)
+- Use "page" when referencing a specific part of the site
+- Use "estimate" only after you understand their situation enough to suggest a tier
+- Use "collect" naturally when you need info: ask for company early, workflow mid-conversation, email/name only when ready to hand off
+- Use "handoff" when the visitor has shared enough context OR explicitly wants to connect
+- Keep actions relevant — don't overload. 2-3 actions per response max.
+
+## Qualification Flow
+Track what you know. You want to learn: role (from quiz), team size (from quiz), primary interest (from quiz), company/industry, specific workflow they want automated, current tools, and their timeline/urgency. Progress should reflect how much you've gathered:
+20 = quiz only, 40 = know company/industry, 60 = understand specific workflow, 80 = discussed scope/pricing, 100 = ready to hand off.
+
+Never say "I'm an AI." Keep text under 120 words.`;
 
 // ─── Content chunks (selected by keyword matching) ───
 const CHUNKS = {
@@ -282,7 +320,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
     },
     body: JSON.stringify({
       model: 'claude-sonnet-4-6-20250514',
-      max_tokens: 400,
+      max_tokens: 600,
       system: [
         {
           type: 'text',
@@ -309,13 +347,30 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   }
 
   const data = await response.json();
-  const text = data.content?.[0]?.text || '';
+  const rawText = data.content?.[0]?.text || '';
 
-  return new Response(JSON.stringify({
-    response: text,
+  // Parse structured response from Claude
+  let parsed;
+  try {
+    // Try to parse as JSON directly
+    parsed = JSON.parse(rawText);
+  } catch (e) {
+    // If Claude didn't return valid JSON, extract what we can
+    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
+    if (jsonMatch) {
+      try { parsed = JSON.parse(jsonMatch[0]); } catch (e2) {}
+    }
+  }
+
+  // Normalize response
+  const result = {
+    text: parsed?.text || rawText,
+    actions: Array.isArray(parsed?.actions) ? parsed.actions : [],
     sessionId: body.sessionId || generateSessionId(),
     usage: data.usage || null,
-  }), {
+  };
+
+  return new Response(JSON.stringify(result), {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });
