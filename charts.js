@@ -767,53 +767,62 @@ Briu.charts.briuOrg = function(containerId) {
   var container = document.getElementById(containerId);
   if (!container) return;
 
-  function layer(cls, label, nodes) {
-    var h = '<div class="org-layer ' + cls + '">';
-    if (label) h += '<div class="org-layer-label">' + label + '</div>';
-    h += '<div class="org-layer-nodes">';
-    for (var i = 0; i < nodes.length; i++) {
-      var n = nodes[i];
-      h += '<div class="org-node' + (n.cls ? ' ' + n.cls : '') + '">' +
-        '<div class="org-icon' + (n.iconCls ? ' ' + n.iconCls : '') + '">' + n.icon + '</div>' +
-        '<div class="org-name">' + n.name + '</div>' +
-        '<div class="org-detail">' + n.detail + '</div>' +
-        (n.env ? '<div class="org-env">' + n.env + '</div>' : '') +
-        '</div>';
-    }
-    h += '</div></div>';
+  function card(c) {
+    var cls = 'sb-card' + (c.accent ? ' sb-' + c.accent : '') + (c.future ? ' sb-future' : '');
+    var h = '<div class="' + cls + '">';
+    h += '<div class="sb-card-head">';
+    h += '<span class="sb-card-name">' + c.name + '</span>';
+    if (c.status) h += '<span class="sb-status sb-status-' + c.status + '">' + (c.status === 'active' ? 'Active' : c.status === 'audit' ? 'Verifying' : 'Open') + '</span>';
+    h += '</div>';
+    if (c.role) h += '<div class="sb-card-role">' + c.role + '</div>';
+    if (c.tools) h += '<div class="sb-card-tools">' + c.tools + '</div>';
+    if (c.metric) h += '<div class="sb-card-metric">' + c.metric + '</div>';
+    if (c.env) h += '<div class="sb-card-env">' + c.env + '</div>';
+    h += '</div>';
     return h;
   }
 
   var html = '<div class="chart-surface" style="padding:24px 18px 14px">' +
     '<div class="chart-label">How this company actually runs</div>' +
-    '<div class="org-tree">' +
+    '<div class="sb-grid">' +
 
-    layer('org-human', '', [
-      { icon: 'You', iconCls: 'org-icon-human', name: 'Founder', detail: 'Judgment &middot; taste &middot; approval' }
-    ]) +
-    '<div class="org-stem"></div>' +
-
-    layer('org-interfaces', 'Interfaces', [
-      { icon: '&#x1f9e0;', iconCls: 'org-icon-gold', name: 'Claw', detail: 'Discord &middot; OpenClaw', env: 'Sandboxed VPS' },
-      { icon: '&#x2318;', iconCls: 'org-icon-forest', name: 'Claude Code', detail: 'Terminal &middot; GitHub', env: 'Local' },
-      { icon: '&#x25CE;', iconCls: 'org-icon-teal', name: 'Claude Web', detail: 'Planning &middot; orchestration', env: 'Browser' }
-    ]) +
-    '<div class="org-stem"></div>' +
-
-    layer('org-agents', 'Specialist Agents', [
-      { icon: '&#x2709;', iconCls: 'org-icon-forest', name: 'Email &amp; CRM', detail: 'Gmail &middot; HubSpot &middot; Apollo' },
-      { icon: '&#x1f50d;', iconCls: 'org-icon-teal', name: 'Research', detail: 'Web &middot; LinkedIn &middot; Docs' },
-      { icon: '&#x2699;', iconCls: 'org-icon-forest', name: 'Daily Ops', detail: 'Reports &middot; Security &middot; Cron' },
-      { icon: '+', iconCls: 'org-icon-add', name: 'Your Agent', detail: 'Custom-built for you', cls: 'org-node-future' }
-    ]) +
-
-    '<div class="org-audit">' +
-      '<span class="org-audit-label">Audit layer</span>' +
-      '<span class="org-audit-models">Gemini &middot; GPT verify every action</span>' +
+    /* Left: The human */
+    '<div class="sb-col sb-col-human">' +
+    '<div class="sb-human-card">' +
+      '<div class="sb-human-icon">&#x1f464;</div>' +
+      '<div class="sb-human-title">1 Founder</div>' +
+      '<div class="sb-human-sub">Judgment &middot; taste &middot; approval</div>' +
+      '<div class="sb-human-detail">Every agent action passes through human review. The founder sets direction, approves outputs, and makes the calls that require trust.</div>' +
+    '</div>' +
+    '<div class="sb-arrow">&rarr;</div>' +
     '</div>' +
 
+    /* Center: Interfaces */
+    '<div class="sb-col sb-col-interfaces">' +
+    '<div class="sb-col-label">Interfaces</div>' +
+    card({ name: 'Claw', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw', metric: '12 skills &middot; 24/7', env: 'Sandboxed VPS' }) +
+    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '480+ commits', env: 'Local machine' }) +
+    card({ name: 'Claude Web', accent: 'teal', status: 'active', role: 'Strategy', tools: 'Planning &middot; research', metric: 'Long-context ops', env: 'Browser' }) +
     '</div>' +
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3+ specialist agents, 2 audit models.</div></div>';
+
+    /* Right: Agents */
+    '<div class="sb-col sb-col-agents">' +
+    '<div class="sb-col-label">Specialist Agents</div>' +
+    card({ name: 'Email &amp; CRM', accent: 'forest', status: 'active', tools: 'Gmail &middot; HubSpot &middot; Apollo', metric: '~50 emails/day &middot; 2 accounts' }) +
+    card({ name: 'Research', accent: 'teal', status: 'active', tools: 'Web &middot; LinkedIn &middot; Docs', metric: 'Overnight prospect runs' }) +
+    card({ name: 'Daily Ops', accent: 'forest', status: 'active', tools: 'Reports &middot; Security &middot; Cron', metric: 'Morning briefing &middot; cost monitor' }) +
+    card({ name: 'Your Agent', status: 'open', future: true, tools: 'Custom-built for your business', metric: 'We build it, you own it' }) +
+    '</div>' +
+
+    '</div>' + /* end sb-grid */
+
+    /* Audit footer */
+    '<div class="sb-audit">' +
+      '<span class="sb-audit-dot"></span>' +
+      '<span>Audit layer: Gemini &amp; GPT independently verify every agent action</span>' +
+    '</div>' +
+
+    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3+ specialist agents, 2 audit models. Running cost: $2&ndash;5/day.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');
