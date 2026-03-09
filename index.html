@@ -20,8 +20,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<link rel="stylesheet" href="/shared.css?v=20260309t">
-<link rel="stylesheet" href="/charts.css?v=20260309t">
+<link rel="stylesheet" href="/shared.css?v=20260309u">
+<link rel="stylesheet" href="/charts.css?v=20260309u">
 <style>
 /* Homepage nav overrides */
 nav { position: fixed; }
@@ -271,9 +271,15 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-retake:hover { color: var(--text); }
 .assess-company-greeting { font-size: 0.82rem; color: var(--gold); margin-bottom: 1.25rem; letter-spacing: 0.03em; }
 .assess-chat-toggle { margin-top: 1.5rem; text-align: center; }
-.assess-chat-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-family: var(--sans); font-size: 0.88rem; padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
-.assess-chat-btn:hover { border-color: rgba(212,160,90,0.3); color: var(--gold); background: rgba(212,160,90,0.04); }
-.assess-chat-arrow { font-size: 0.75rem; transition: transform 0.2s; }
+.assess-chat-btn { background: rgba(255,255,255,0.02); border: 1px solid rgba(212,160,90,0.15); color: var(--text-muted); font-family: var(--sans); font-size: 0.85rem; padding: 0.75rem 1.75rem; cursor: pointer; transition: all 0.35s ease; display: inline-flex; align-items: center; gap: 0.75rem; border-radius: 24px; position: relative; overflow: hidden; }
+.assess-chat-btn::before { content: ''; position: absolute; inset: 0; background: conic-gradient(from 0deg, rgba(212,160,90,0.06), rgba(224,123,95,0.04), rgba(90,157,172,0.04), rgba(212,160,90,0.06)); opacity: 0; transition: opacity 0.35s; }
+.assess-chat-btn:hover { border-color: rgba(212,160,90,0.4); color: var(--gold); transform: translateY(-2px); box-shadow: 0 4px 20px rgba(212,160,90,0.1); }
+.assess-chat-btn:hover::before { opacity: 1; }
+.assess-chat-fractal { position: relative; width: 20px; height: 20px; flex-shrink: 0; }
+.fr-mini { position: absolute; inset: 0; border-radius: 50%; border: 1.5px solid transparent; }
+.fr-m1 { border-top-color: #d4a05a; border-right-color: rgba(224,123,95,0.4); animation: fractalSpin1 2.4s cubic-bezier(0.68,-0.55,0.27,1.55) infinite; }
+.fr-m2 { inset: 4px; border-top-color: #e07b5f; border-left-color: rgba(90,157,172,0.4); animation: fractalSpin2 3.2s cubic-bezier(0.68,-0.55,0.27,1.55) infinite; }
+.fr-dot-mini { position: absolute; top: 50%; left: 50%; width: 3px; height: 3px; margin: -1.5px 0 0 -1.5px; border-radius: 50%; background: #d4a05a; animation: fractalPulse 2s ease-in-out infinite; }
 .assess-chat-panel { margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem; animation: fadeUp 0.4s ease; }
 /* Persistent lookup panel */
 .assess-lookup-panel { margin-top: 1.25rem; padding: 1rem 1.25rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); animation: fadeUp 0.4s ease; transition: all 0.3s ease; }
@@ -315,15 +321,17 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .conv-loading { border-left-color: rgba(212,160,90,0.1); }
 /* Quick replies */
 .conv-quick-replies { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem; min-height: 0; }
-.conv-reply-btn { font-size: 0.82rem; color: var(--text-muted); background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 1rem; cursor: pointer; font-family: var(--sans); transition: all 0.2s; white-space: nowrap; }
-.conv-reply-btn:hover { color: var(--gold); border-color: rgba(212,160,90,0.35); background: rgba(212,160,90,0.05); transform: translateY(-1px); }
+.conv-reply-btn { font-size: 0.82rem; color: var(--text-muted); background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 0.5rem 1rem; cursor: pointer; font-family: var(--sans); transition: all 0.3s ease; white-space: nowrap; border-radius: 16px; position: relative; overflow: hidden; }
+.conv-reply-btn::before { content: ''; position: absolute; inset: 0; background: conic-gradient(from 0deg, rgba(212,160,90,0.05), rgba(224,123,95,0.03), rgba(90,157,172,0.03), rgba(212,160,90,0.05)); opacity: 0; transition: opacity 0.3s; }
+.conv-reply-btn:hover { color: var(--gold); border-color: rgba(212,160,90,0.35); transform: translateY(-1px); box-shadow: 0 2px 12px rgba(212,160,90,0.08); }
+.conv-reply-btn:hover::before { opacity: 1; }
 /* Input */
 .conv-input-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
 .conv-input { flex: 1; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; }
 .conv-input:focus { border-color: rgba(212,160,90,0.4); }
 .conv-input::placeholder { color: rgba(196,185,168,0.4); }
-.conv-send { width: 42px; height: 42px; background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; color: var(--bg); font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; flex-shrink: 0; }
-.conv-send:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(212,160,90,0.25); }
+.conv-send { width: 42px; height: 42px; background: conic-gradient(from 0deg, rgba(212,160,90,0.9), rgba(224,123,95,0.7), rgba(90,157,172,0.7), rgba(212,160,90,0.9)); border: none; border-radius: 50%; color: var(--bg); font-size: 1.1rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; flex-shrink: 0; }
+.conv-send:hover { transform: scale(1.1) rotate(15deg); box-shadow: 0 4px 20px rgba(212,160,90,0.3); }
 .conv-bottom-actions { display: flex; align-items: center; gap: 1rem; }
 /* Action cards (inline in messages) */
 .conv-action-card { margin-top: 0.75rem; padding: 0.75rem 1rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); animation: convFade 0.4s ease; }
@@ -1113,10 +1121,10 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309t"></script>
-<script src="/chat-bubble.js?v=20260309t"></script>
-<script src="/interactive.js?v=20260309t"></script>
-<script src="/dynamic-stats.js?v=20260309t"></script>
+<script src="/shared.js?v=20260309u"></script>
+<script src="/chat-bubble.js?v=20260309u"></script>
+<script src="/interactive.js?v=20260309u"></script>
+<script src="/dynamic-stats.js?v=20260309u"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {
@@ -1138,7 +1146,7 @@ function filterFAQ(query) {
   noResults.style.display = (q && visible === 0) ? 'block' : 'none';
 }
 </script>
-<script src="/charts.js?v=20260309t"></script>
+<script src="/charts.js?v=20260309u"></script>
 <script>
 /* Initialize chart library components */
 Briu.charts.adoptionTimeline('hp-adoption-timeline');

@@ -92,19 +92,21 @@
       '.bc-loading-quote{font-size:0.78rem;color:#888;font-style:italic;transition:opacity 0.3s;}',
       // Quick replies
       '.bc-replies{display:flex;flex-wrap:wrap;gap:0.4rem;padding:0 1rem 0.5rem;}',
-      '.bc-reply-btn{font-size:0.78rem;color:#a8a598;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:0.4rem 0.75rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}',
-      '.bc-reply-btn:hover{color:#d4a05a;border-color:rgba(212,160,90,0.35);background:rgba(212,160,90,0.05);}',
+      '.bc-reply-btn{font-size:0.78rem;color:#a8a598;background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.06);padding:0.45rem 0.85rem;cursor:pointer;font-family:inherit;transition:all 0.3s ease;border-radius:16px;position:relative;overflow:hidden;}',
+      '.bc-reply-btn::before{content:"";position:absolute;inset:0;background:conic-gradient(from 0deg,rgba(212,160,90,0.05),rgba(224,123,95,0.03),rgba(90,157,172,0.03),rgba(212,160,90,0.05));opacity:0;transition:opacity 0.3s;}',
+      '.bc-reply-btn:hover{color:#d4a05a;border-color:rgba(212,160,90,0.35);transform:translateY(-1px);box-shadow:0 2px 12px rgba(212,160,90,0.08);}',
+      '.bc-reply-btn:hover::before{opacity:1;}',
       // Input
       '.bc-input-row{display:flex;gap:0.5rem;padding:0.75rem 1rem;border-top:1px solid rgba(255,255,255,0.06);flex-shrink:0;}',
       '.bc-input{flex:1;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.08);padding:0.6rem 0.75rem;color:#e8e6e1;font-size:0.85rem;font-family:inherit;outline:none;}',
       '.bc-input:focus{border-color:rgba(212,160,90,0.4);}',
-      '.bc-send{width:36px;height:36px;background:rgba(212,160,90,0.15);border:1px solid rgba(212,160,90,0.3);color:#d4a05a;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.2s;}',
-      '.bc-send:hover{background:rgba(212,160,90,0.25);}',
+      '.bc-send{width:36px;height:36px;background:conic-gradient(from 0deg,rgba(212,160,90,0.18),rgba(224,123,95,0.12),rgba(90,157,172,0.12),rgba(212,160,90,0.18));border:1px solid rgba(212,160,90,0.25);border-radius:50%;color:#d4a05a;font-size:0.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all 0.3s ease;flex-shrink:0;}',
+      '.bc-send:hover{transform:scale(1.1) rotate(15deg);box-shadow:0 0 16px rgba(212,160,90,0.2);border-color:rgba(212,160,90,0.5);}',
       // Handoff card
       '.bc-handoff{margin:0.5rem 0;padding:0.75rem;border:1px solid rgba(106,174,156,0.25);background:rgba(106,174,156,0.04);}',
       '.bc-handoff-label{font-size:0.82rem;color:#e8e6e1;margin-bottom:0.5rem;}',
-      '.bc-handoff-btn{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#d4a05a;background:none;border:1px solid rgba(212,160,90,0.3);padding:0.5rem 1rem;cursor:pointer;font-family:inherit;transition:all 0.2s;}',
-      '.bc-handoff-btn:hover{background:rgba(212,160,90,0.08);border-color:rgba(212,160,90,0.5);}',
+      '.bc-handoff-btn{font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:#d4a05a;background:conic-gradient(from 45deg,rgba(106,174,156,0.06),rgba(212,160,90,0.08),rgba(106,174,156,0.06));border:1px solid rgba(212,160,90,0.25);border-radius:20px;padding:0.55rem 1.25rem;cursor:pointer;font-family:inherit;transition:all 0.3s ease;}',
+      '.bc-handoff-btn:hover{transform:translateY(-1px);box-shadow:0 4px 16px rgba(212,160,90,0.15);border-color:rgba(212,160,90,0.5);}',
       '.bc-handoff-sent{font-size:0.82rem;color:rgba(106,174,156,0.9);}',
       // Estimate card
       '.bc-estimate{margin:0.5rem 0;padding:0.75rem;border:1px solid rgba(212,160,90,0.15);background:rgba(212,160,90,0.03);}',

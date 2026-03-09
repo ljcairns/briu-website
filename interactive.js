@@ -130,6 +130,36 @@
     if (window.briuSyncConversation) window.briuSyncConversation([], null);
   };
 
+  // Expand the inline chat panel on results page
+  window.expandInlineChat = function() {
+    var panel = document.getElementById('assessLookupPanel');
+    var toggle = document.querySelector('.assess-chat-toggle');
+    if (panel) {
+      panel.style.display = '';
+      panel.style.animation = 'fadeUp 0.4s ease';
+    }
+    if (toggle) toggle.style.display = 'none';
+    // Populate quick replies on first expand
+    var replies = document.getElementById('convReplies');
+    if (replies && replies.children.length === 0 && conversation.length === 0) {
+      var suggestions = buildReadinessActions();
+      for (var si = 0; si < suggestions.length; si++) {
+        var btn = document.createElement('button');
+        btn.className = 'conv-reply-btn';
+        btn.textContent = suggestions[si];
+        btn.setAttribute('data-reply', suggestions[si]);
+        btn.addEventListener('click', function() {
+          submitMessage(this.getAttribute('data-reply'));
+        });
+        replies.appendChild(btn);
+      }
+    }
+    inputBound = false;
+    bindInput();
+    var input = document.getElementById('convInput');
+    if (input) setTimeout(function() { input.focus(); }, 100);
+  };
+
   // Allow bubble to reset inline chat state
   window.briuResetInlineChat = function() {
     conversation = [];
@@ -431,18 +461,23 @@
         '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
         '<a href="#services" class="hero-cta-secondary">See pricing</a></div>';
 
+      h += '<div class="assess-chat-toggle">' +
+        '<button class="assess-chat-btn" onclick="window.expandInlineChat()">' +
+        '<span class="assess-chat-fractal"><span class="fr-mini fr-m1"></span><span class="fr-mini fr-m2"></span><span class="fr-dot-mini"></span></span>' +
+        'Have a question? Ask our AI' +
+        '</button></div>';
+
       h += '</div><div class="assess-cta-group-bottom">' +
         '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button></div>';
 
       el.innerHTML = h;
       el.classList.add('active');
 
-      // Convert lookup panel into chat
+      // Build chat panel but keep it hidden until user expands
       var lookupPanel = document.getElementById('assessLookupPanel');
       if (lookupPanel) {
-        lookupPanel.style.display = '';
+        lookupPanel.style.display = 'none';
         lookupPanel.classList.add('chat-expanded');
-        // Build chat UI with progress bar
         var chatHtml = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Ask anything</span></div>' +
           '<div class="conv-thread" id="convThread"></div>' +
           '<div class="conv-quick-replies" id="convReplies"></div>' +
@@ -459,8 +494,11 @@
         if (scoreEl) countUp(scoreEl, 0, s, 1200);
       }
 
-      // If conversation exists, restore it
+      // If conversation already exists, auto-expand the chat
       if (conversation.length > 0) {
+        if (lookupPanel) lookupPanel.style.display = '';
+        var toggleBtn = el.querySelector('.assess-chat-toggle');
+        if (toggleBtn) toggleBtn.style.display = 'none';
         var thread = document.getElementById('convThread');
         for (var ci = 0; ci < conversation.length; ci++) {
           var msg = conversation[ci];
@@ -472,23 +510,8 @@
           if (conversation[lj].role === 'assistant') { lastA = conversation[lj]; break; }
         }
         if (lastA && lastA.actions) renderActions(lastA.actions);
-      } else {
-        // Pre-populate quick replies
-        var replies = document.getElementById('convReplies');
-        if (replies) {
-          var suggestions = buildReadinessActions();
-          for (var si = 0; si < suggestions.length; si++) {
-            var btn = document.createElement('button');
-            btn.className = 'conv-reply-btn';
-            btn.textContent = suggestions[si];
-            btn.setAttribute('data-reply', suggestions[si]);
-            btn.addEventListener('click', function() {
-              submitMessage(this.getAttribute('data-reply'));
-            });
-            replies.appendChild(btn);
-          }
-        }
       }
+      // Quick replies populated on expand, not here
 
       inputBound = false; // new DOM, allow rebind
       bindInput();
