@@ -115,16 +115,17 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
 
 /* Quote Card */
-.quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; }
+.quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; position: relative; }
 .quote-card:hover { background: rgba(212,160,90,0.06); border-left-color: var(--gold-light); transform: translateX(4px); }
 .quote-card p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0; }
 .quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
 .quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
 
 /* Quote Block */
-.quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; }
+.quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; position: relative; }
 .quote-block p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0.4rem; }
 .quote-source { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; }
+.quote-card::before, .quote-block::before { content: '\201C'; position: absolute; top: -0.5rem; left: 0.5rem; font-size: 4rem; font-family: var(--serif); color: rgba(212,160,90,0.12); line-height: 1; pointer-events: none; }
 
 /* Service Tiers */
 .tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2.5rem; display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; transition: all 0.4s ease; }
