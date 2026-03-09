@@ -91,9 +91,9 @@ article li { margin-bottom: 0.4rem; }
 
 <article>
   <p class="section-label reveal">The Real Cost of a Customer Comment</p>
-  <p>A customer leaves a comment on one of their chatbot conversations. Something isn't working right — the opener is too narrow, a product line isn't triggering, the staff contact is out of date. The fix itself is five minutes.</p>
+  <p>We run chatbot deployments for clients through Subsights. A customer leaves a comment on one of their conversations — the opener is too narrow, a product line isn't triggering, the staff contact listed is someone who left last month. The fix itself is five minutes.</p>
   <p>But the fix isn't what takes the time.</p>
-  <p><strong>The context reload is what kills you.</strong> Log into the platform. Find the right workspace — which account was this again? Find the right chatbot. There might be three. Re-read the prompt configuration to remember what you set up two months ago. Parse the customer's comment to understand what they're actually asking for. Make the change. Test it. Then figure out who to email. Was it the ops lead or the founder? Find their address. Write the email. Send it. Mark the comment as handled so nobody else picks it up.</p>
+  <p><strong>The context reload is what kills you.</strong> Log into the Subsights dashboard. Find the right workspace — which client account was this again? Find the right chatbot. There might be three per workspace. Navigate through accordion menus to the prompt editor. Re-read the configuration to remember what you set up two months ago. Parse the customer's comment to understand what they're actually asking for. Make the change in the right textarea. Test it. Then figure out who to email — was it the ops lead or the founder? Is that email address even current? Write the email. Send it. Mark the comment as handled so nobody else picks it up.</p>
   <p>That's not five minutes. That's twenty to thirty. And for a small team, that friction means comments sit for days. Not because the work is hard. Because starting the work is hard.</p>
 
   <div class="time-compare reveal">
@@ -110,40 +110,40 @@ article li { margin-bottom: 0.4rem; }
   </div>
 
   <h2 class="reveal">The Loop We Built</h2>
-  <p>Customer leaves a comment on a conversation. Here's exactly what happens:</p>
+  <p>Subsights posts a webhook to a Discord channel whenever a customer comments on a conversation. A monitoring script checks that channel every 30 minutes. Here's exactly what happens when it finds one:</p>
 
   <div class="loop-steps reveal">
     <div class="loop-step">
-      <h3>Notification</h3>
-      <p>Discord webhook fires with the comment details. Agent detects it, parses the commenter, workspace, and conversation link.</p>
+      <h3>Detect &amp; Dedup</h3>
+      <p>Script pulls new comments from the Discord webhook channel. Cross-references a SQLite table of already-processed comments. New ones get queued.</p>
     </div>
     <div class="loop-step">
-      <h3>Read Context</h3>
-      <p>Agent opens the conversation and reads the full thread — what the customer said, what the chatbot said, where it went wrong.</p>
+      <h3>Read Conversation</h3>
+      <p>Agent opens the actual customer conversation via browser automation. Reads the full thread — what the customer said, what the chatbot said, where it went wrong.</p>
     </div>
     <div class="loop-step">
-      <h3>Read Current Config</h3>
-      <p>Agent navigates to the chatbot's live prompt configuration. Reads the current state so it knows exactly what to change.</p>
+      <h3>Read Live Config</h3>
+      <p>Navigates the Subsights dashboard — workspace switching, accordion menus, prompt editor. Reads the current chatbot configuration so it knows exactly what to change.</p>
     </div>
     <div class="loop-step">
       <h3>Make Changes</h3>
-      <p>Updates the prompts based on the comment. Broader opener, new product triggers, updated staff contact — whatever the feedback requires.</p>
+      <p>Edits the prompts in the platform's textareas. Broader opener, new product triggers, updated staff contact — whatever the feedback requires.</p>
     </div>
     <div class="loop-step">
       <h3>Verify</h3>
-      <p>Saves, reloads the config, confirms the changes are live. No "I think I saved it" — the agent checks.</p>
+      <p>Saves, reloads the configuration page, confirms the changes persisted. No "I think I saved it" — the agent checks.</p>
     </div>
     <div class="loop-step">
       <h3>Client Email</h3>
-      <p>Looks up the right contact for that workspace. Drafts a specific email explaining what was changed and why. Sends on approval.</p>
+      <p>Queries the <code>client_contacts</code> database for the right person at that workspace. Drafts a specific email explaining what changed and why. Sends on human approval.</p>
     </div>
     <div class="loop-step">
-      <h3>Mark Processed</h3>
-      <p>Tags the comment as handled so the loop doesn't re-trigger. The next comment starts a fresh cycle.</p>
+      <h3>Close the Loop</h3>
+      <p>Marks the comment as processed in SQLite. Posts a status update back to the Discord thread. The next comment starts a fresh cycle.</p>
     </div>
   </div>
 
-  <p>The whole cycle runs from a single notification. The agent already knows the workspace structure, the contact database, the navigation pattern for each platform section. It doesn't need to re-learn the account because the account context lives in persistent reference documents, not in someone's head.</p>
+  <p>The whole cycle runs from a single heartbeat cron. The agent already knows the workspace structure, the contact database, the navigation pattern for each platform section. It doesn't need to re-learn the account because the account context lives in queryable database tables — not in someone's head.</p>
 
   <h2 class="reveal">What Broke and What We Documented</h2>
   <p>It didn't work cleanly the first time. Or the second. Every failure became a permanent upgrade to the system.</p>
@@ -152,26 +152,31 @@ article li { margin-bottom: 0.4rem; }
     <div class="failure-card">
       <h3>Wrong chatbot name</h3>
       <p>Workspace had three chatbots with similar names. Agent picked the wrong one and edited the wrong prompt.</p>
-      <p class="fix">Fix: Built a workspace-to-chatbot mapping in the reference docs. Agent now looks up the correct chatbot by workspace ID, not name.</p>
+      <p class="fix">Fix: Built a <code>client_chatbots</code> database table mapping workspace IDs to the correct chatbot. Replaced hardcoded chatbot references across 6 files with one queryable source.</p>
     </div>
     <div class="failure-card">
-      <h3>Nested UI sections</h3>
-      <p>The platform's prompt editor has collapsible sections. Agent couldn't find the right field because it was hidden inside a collapsed panel.</p>
-      <p class="fix">Fix: Browser navigation guide updated with explicit expand-then-edit sequences for each section type.</p>
+      <h3>Accordion menus and nested UI</h3>
+      <p>The Subsights prompt editor has collapsible sections. Agent couldn't find the right textarea because it was hidden inside a collapsed panel.</p>
+      <p class="fix">Fix: Browser navigation guide updated with explicit expand-then-edit sequences for each section type. Different DOM selectors per workspace version.</p>
     </div>
     <div class="failure-card">
-      <h3>Different DOM per workspace type</h3>
-      <p>Two workspaces used different platform versions with different page structures. The same navigation steps failed on one.</p>
-      <p class="fix">Fix: Navigation guide now branches by workspace type. Agent detects which version it's on before proceeding.</p>
+      <h3>Stale contact information</h3>
+      <p>Commenter's email belonged to a former employee who had left the company. Agent would have emailed someone who no longer works there.</p>
+      <p class="fix">Fix: Agent now cross-references the <code>client_contacts</code> table and validates against Gmail history. Found the real current contact before sending.</p>
     </div>
   </div>
 
-  <p>Each failure took 10-15 minutes to diagnose and fix. But each fix is permanent. The navigation guide, the client contacts database, the comment processing script — they all get more reliable with every cycle. <strong>The system learns from its mistakes once. A human re-learns them every time they context-switch back into an account.</strong></p>
+  <p>Each failure became a permanent system upgrade. The <code>client_chatbots</code> table, the <code>client_contacts</code> database, the browser navigation guide, the comment processing script — they all get more reliable with every cycle. <strong>The system learns from its mistakes once. A human re-learns them every time they context-switch back into an account.</strong></p>
 
   <h2 class="reveal">What It Feels Like Now</h2>
-  <p>Comments come in. The loop runs. Changes go live. The client gets an email explaining exactly what was updated and why.</p>
-  <p>The account context that used to live in someone's head — which chatbot, which workspace, who's the contact, what did we configure last time — now lives in a database and a set of navigation docs. The agent consults them every time. It doesn't have good days and bad days. It doesn't forget that the contact changed last month. It doesn't dread the small task that takes longer to start than to finish.</p>
+  <p>The heartbeat cron runs every 30 minutes. Comments come in. The loop runs. Changes go live. The client gets an email explaining exactly what was updated and why. A status update posts back to the Discord thread.</p>
+  <p>The account context that used to live in someone's head — which chatbot, which workspace, who's the contact, what did we configure last time — now lives in shared database tables (<code>client_chatbots</code>, <code>client_contacts</code>) and a browser navigation guide. The agent queries them every time. It doesn't have good days and bad days. It doesn't forget that the contact changed last month. It doesn't dread the small task that takes longer to start than to finish.</p>
   <p>The human role shifted from "do the whole thing" to "review the email before it sends." That's the right division. The agent handles the mechanical recall and execution. The human handles the judgment call on tone and correctness.</p>
+
+  <h2 class="reveal">The Knowledge Coherence Problem</h2>
+  <p>Before the loop, operational context was scattered. Chatbot IDs were hardcoded across 6 different files. Client contacts lived in email threads. Navigation patterns lived in muscle memory. Every time the agent (or a human) needed to service an account, they had to reconstruct this context from scratch.</p>
+  <p>The loop forced us to consolidate. We built shared database tables — <code>client_chatbots</code> maps every workspace to its correct chatbot ID. <code>client_contacts</code> stores the current point of contact for each account, validated against real email history. The browser navigation guide documents the exact click sequence for each workspace type.</p>
+  <p><strong>This is the real output of the project.</strong> Not just the automation — the structured knowledge that makes the automation possible. The loop runs because the context is encoded. And once it's encoded, it's available to every other process that touches that account. The comment loop was the forcing function. The knowledge system is the lasting asset.</p>
 
   <h2 class="reveal">Why This Matters Beyond Us</h2>
   <p>Every service business has this pattern. Small customer requests that are easy to do but painful to start. The fix is never the bottleneck. The context reload is.</p>
