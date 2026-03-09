@@ -152,6 +152,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .followup-price { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
 .services-detail-link { margin-top: 1.5rem; text-align: center; }
 .services-detail-link a { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; transition: opacity 0.3s ease; }
+.nonprofit-callout { display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 1.5rem; padding: 1rem 1.25rem; background: rgba(106,174,156,0.04); border: 1px solid rgba(106,174,156,0.12); font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+.nonprofit-callout strong { color: var(--text); }
+.nonprofit-heart { font-size: 1.2rem; color: var(--forest); flex-shrink: 0; margin-top: 0.1rem; }
 .services-detail-link a:hover { opacity: 0.7; }
 
 .case-study-box { background: var(--surface); border: 1px solid rgba(212,160,90,0.12); padding: 2.5rem; margin-top: 2rem; }
@@ -182,6 +185,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .proof-summary-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.25rem; }
 .proof-summary-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
 .proof-cta { text-align: center; margin-top: 1.5rem; }
+#social-proof { padding-bottom: 2rem; }
 
 /* Founder Row */
 .founder-row { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2rem; }
@@ -693,6 +697,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <div class="followup-item">
       <span class="followup-name">Retainer</span>
       <span class="followup-price">From <span data-config="pricing.retainer_from" data-config-format="dollar-mo">$500/mo</span></span>
+    </div>
+  </div>
+
+  <div class="nonprofit-callout reveal">
+    <span class="nonprofit-heart">♡</span>
+    <div>
+      <strong>Nonprofits &amp; community organizations:</strong> significant discounts available. Same quality, same architecture.
+      <a href="/services/#community" style="color:var(--forest); font-weight:600; text-decoration:none;"> Learn more &rarr;</a>
     </div>
   </div>
 
