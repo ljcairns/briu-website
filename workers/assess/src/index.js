@@ -517,9 +517,10 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       'Content-Type': 'application/json',
       'x-api-key': env.ANTHROPIC_API_KEY,
       'anthropic-version': '2023-06-01',
+      'anthropic-beta': 'prompt-caching-2024-07-31',
     },
     body: JSON.stringify({
-      model: 'claude-4-sonnet-20250514',
+      model: 'claude-sonnet-4-5-20250929',
       max_tokens: 800,
       stream: true,
       system: [
