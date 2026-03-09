@@ -58,12 +58,21 @@
 .spectrum-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
 .spectrum-quote { font-size: 0.78rem; color: var(--gold); font-style: italic; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); line-height: 1.5; }
 
-.stats-coming .stat-box { opacity: 0.4; }
-.stats-coming .stat-box:hover { transform: none; box-shadow: none; background: var(--surface); }
-.stat-soon { color: var(--text-muted); font-size: 1.6rem; }
-.stats-coming-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.6rem; }
-.stats-coming-note a { color: var(--gold); text-decoration: none; transition: color 0.2s; }
-.stats-coming-note a:hover { color: var(--gold-light); }
+/* ROI comparison */
+.roi-compare { display: flex; align-items: center; gap: 1rem; }
+.roi-col { flex: 1; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; }
+.roi-col:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.roi-agent { border-color: rgba(77,128,112,0.25); }
+.roi-header { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); margin-bottom: 0.75rem; }
+.roi-agent .roi-header { color: var(--forest); }
+.roi-value { font-family: var(--serif); font-size: 1.8rem; line-height: 1.2; margin-bottom: 0.75rem; }
+.roi-agent .roi-value { color: var(--gold); }
+.roi-trad .roi-value { color: var(--text-muted); text-decoration: line-through; text-decoration-color: rgba(224,123,95,0.4); }
+.roi-items { display: flex; flex-direction: column; gap: 0.3rem; }
+.roi-items span { font-size: 0.78rem; color: var(--text-muted); line-height: 1.4; }
+.roi-vs { flex: 0 0 auto; text-align: center; padding: 1rem; }
+.roi-multiplier { font-family: var(--serif); font-size: 2.4rem; color: var(--gold); line-height: 1; }
+.roi-multiplier-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); margin-top: 0.25rem; }
 .stats-meta { text-align: center; margin-top: 1.25rem; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; max-width: 1060px; margin-left: auto; margin-right: auto; padding: 0 2rem; }
 
 /* Timeline filters */
@@ -171,6 +180,9 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   .stats { grid-template-columns: 1fr; }
   .stats.stats-4 { grid-template-columns: repeat(2, 1fr); }
   .cost-spectrum { grid-template-columns: 1fr; }
+  .roi-compare { flex-direction: column; }
+  .roi-vs { padding: 0.5rem; }
+  .roi-multiplier { font-size: 1.8rem; }
   section { padding: 3rem 1.25rem 2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
 }
@@ -203,23 +215,23 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </section>
 
 <div class="stats-group">
-  <div class="stats-group-label">The Build</div>
+  <div class="stats-group-label">The Journey</div>
   <div class="stats stats-4" id="buildStats">
-    <div class="stat-box reveal-scale stat-pulse">
-      <div class="stat-value">Mar 5, 2026</div>
-      <div class="stat-label">Founded</div>
+    <div class="stat-box reveal-scale">
+      <div class="stat-value">3 days</div>
+      <div class="stat-label">Agent to Production</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value" data-count="711" data-prefix="~$">~$711</div>
-      <div class="stat-label">Month One Cost</div>
+      <div class="stat-value">1 session</div>
+      <div class="stat-label">Brand Created</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
       <div class="stat-label" data-dynamic-label="commit-days">Total Commits</div>
     </div>
-    <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value">~$2<span style="font-size: 0.9rem; color: var(--text-muted)">/commit</span></div>
-      <div class="stat-label">Cost per Commit</div>
+    <div class="stat-box reveal-scale reveal-delay-3 stat-pulse">
+      <div class="stat-value" data-dynamic="build-days">26</div>
+      <div class="stat-label">Days Since Day Zero</div>
     </div>
   </div>
 </div>
@@ -240,55 +252,118 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <div class="stat-label">Data Visualizations</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value" data-dynamic="build-days">26</div>
-      <div class="stat-label">Days Operating</div>
+      <div class="stat-value">1</div>
+      <div class="stat-label">Person</div>
     </div>
   </div>
 </div>
 
 <div class="stats-group">
-  <div class="stats-group-label">Operating Cost Spectrum</div>
+  <div class="stats-group-label">What It Costs to Run</div>
   <div class="cost-spectrum">
     <div class="spectrum-tier spectrum-baseline reveal-scale">
-      <div class="spectrum-marker" style="color: var(--forest);">Baseline</div>
+      <div class="spectrum-marker" style="color: var(--forest);">Where We Are Now</div>
       <div class="spectrum-value">~$310<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo Claude Max + $2-5/day API</div>
-      <div class="spectrum-desc">Daily reports, security self-checks, email triage, CRM updates, scheduled tasks. Efficient architecture — agents run when there's work and stop when it's done.</div>
+      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
+      <div class="spectrum-desc">Daily reports, security self-checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-1">
       <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
-      <div class="spectrum-value">$30-100<span>/day</span></div>
-      <div class="spectrum-breakdown">Dedicated agent workflows running continuously</div>
-      <div class="spectrum-desc">Overnight prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
+      <div class="spectrum-value">$1-3K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
+      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. This is where token spend starts matching real employee output.</div>
       <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-2">
-      <div class="spectrum-marker" style="color: var(--coral);">Frontier</div>
-      <div class="spectrum-value">$300<span>/day &times; 7</span></div>
-      <div class="spectrum-breakdown">$2,100/day — autonomous Opus-class agents, 24/7</div>
-      <div class="spectrum-desc">Full team deployment: each agent on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily.</div>
+      <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
+      <div class="spectrum-value">$5-10K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
+      <div class="spectrum-desc">Full deployment: 5-7 agents, each on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily. Still a fraction of equivalent headcount.</div>
       <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
     </div>
   </div>
 </div>
 
 <div class="stats-group">
-  <div class="stats-group-label">Business Outcomes</div>
-  <div class="stats stats-3 stats-coming">
+  <div class="stats-group-label">Month One — Every Dollar</div>
+  <div class="stats stats-4">
     <div class="stat-box reveal-scale">
-      <div class="stat-value stat-soon">&mdash;</div>
-      <div class="stat-label">Customers</div>
+      <div class="stat-value">$376</div>
+      <div class="stat-label">Agent Build (API)</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value stat-soon">&mdash;</div>
-      <div class="stat-label">Revenue</div>
+      <div class="stat-value">$200</div>
+      <div class="stat-label">Claude Max</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value stat-soon">&mdash;</div>
-      <div class="stat-label">Cost per Acquisition</div>
+      <div class="stat-value">~$30</div>
+      <div class="stat-label">Brand &amp; Logo</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-3">
+      <div class="stat-value">~$105</div>
+      <div class="stat-label">Domain, LLC, Banking</div>
     </div>
   </div>
-  <div class="stats-coming-note">Tracking starts with first customer. <a href="#" onclick="openContactForm();return false">Be the first &rarr;</a></div>
+</div>
+
+<div class="stats-group">
+  <div class="stats-group-label">Agent ROI</div>
+  <div class="roi-compare">
+    <div class="roi-col roi-agent reveal-scale">
+      <div class="roi-header">What We Spent</div>
+      <div class="roi-value">~$711</div>
+      <div class="roi-items">
+        <span>Production agent</span>
+        <span>Brand &amp; identity</span>
+        <span>Website</span>
+        <span>Company formation</span>
+      </div>
+    </div>
+    <div class="roi-vs reveal-scale reveal-delay-1">
+      <div class="roi-multiplier" data-count="84" data-suffix="x">84x</div>
+      <div class="roi-multiplier-label">less</div>
+    </div>
+    <div class="roi-col roi-trad reveal-scale reveal-delay-2">
+      <div class="roi-header">Traditional Equivalent</div>
+      <div class="roi-value">$40–75K+</div>
+      <div class="roi-items">
+        <span>Dev agency or internal hire</span>
+        <span>Branding agency</span>
+        <span>Web dev shop</span>
+        <span>SaaS stack &amp; consultants</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-group">
+  <div class="stats-group-label">Time to Launch</div>
+  <div class="roi-compare">
+    <div class="roi-col roi-agent reveal-scale">
+      <div class="roi-header">With Agents</div>
+      <div class="roi-value">26 days</div>
+      <div class="roi-items">
+        <span>Production agent — 3 days</span>
+        <span>Brand &amp; identity — 1 session</span>
+        <span>Website — 2 days</span>
+        <span>Services &amp; pricing — 1 day</span>
+      </div>
+    </div>
+    <div class="roi-vs reveal-scale reveal-delay-1">
+      <div class="roi-multiplier" data-count="7" data-suffix="x">7x</div>
+      <div class="roi-multiplier-label">faster</div>
+    </div>
+    <div class="roi-col roi-trad reveal-scale reveal-delay-2">
+      <div class="roi-header">Traditional Timeline</div>
+      <div class="roi-value">4–6 months</div>
+      <div class="roi-items">
+        <span>Custom dev — 3-6 months</span>
+        <span>Branding agency — 4-8 weeks</span>
+        <span>Web dev shop — 4-6 weeks</span>
+        <span>Sequential, not parallel</span>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="stats-meta">Last updated: Mar 8, 2026 PT</div>
