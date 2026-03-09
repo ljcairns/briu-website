@@ -44,6 +44,8 @@
 .stat-box:hover .stat-value { color: var(--gold-light); }
 .stat-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); transition: color 0.3s ease; }
 .stat-box:hover .stat-label { color: var(--text); }
+a.stat-box { text-decoration: none; color: inherit; cursor: pointer; }
+a.stat-box:hover .stat-label::after { content: ' \2192'; }
 @keyframes statPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; text-shadow: 0 0 8px rgba(212,160,90,0.3); } }
 .stat-pulse .stat-value { animation: statPulse 3s ease-in-out infinite; }
 /* Cost spectrum */
@@ -218,14 +220,14 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 <div class="stats-group">
   <div class="stats-group-label">The Journey</div>
   <div class="stats stats-4" id="buildStats">
-    <div class="stat-box reveal-scale">
+    <a href="/build/the-real-numbers/" class="stat-box reveal-scale">
       <div class="stat-value">3 days</div>
       <div class="stat-label">Agent to Production</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-1">
+    </a>
+    <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-1">
       <div class="stat-value">1 session</div>
       <div class="stat-label">Brand Created</div>
-    </div>
+    </a>
     <div class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
       <div class="stat-label" data-dynamic-label="commit-days">Changes Shipped</div>
@@ -241,18 +243,18 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 <div class="stats-group">
   <div class="stats-group-label">What Each Project Cost</div>
   <div class="stats stats-4">
-    <div class="stat-box reveal-scale">
+    <a href="/build/the-real-numbers/" class="stat-box reveal-scale">
       <div class="stat-value">$376</div>
       <div class="stat-label">Production Agent</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value">~$45</div>
+    </a>
+    <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value">~$105</div>
       <div class="stat-label">Brand, Logo &amp; Domain</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-2">
+    </a>
+    <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value">$710</div>
       <div class="stat-label">Trademark (2 Classes)</div>
-    </div>
+    </a>
     <div class="stat-box reveal-scale reveal-delay-3">
       <div class="stat-value">$200<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
       <div class="stat-label">Platform (Claude Max)</div>
@@ -266,16 +268,16 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
   <div class="roi-compare">
     <div class="roi-col roi-agent reveal-scale">
       <div class="roi-header">With Agents</div>
-      <div class="roi-value">~$1,331</div>
+      <div class="roi-value">~$1,391</div>
       <div class="roi-items">
         <span>Production agent — $376</span>
-        <span>Brand, logo &amp; domain — ~$45</span>
+        <span>Brand, logo &amp; domain — ~$105</span>
         <span>Trademark (2 classes) — $710</span>
         <span>Platform — $200/mo</span>
       </div>
     </div>
     <div class="roi-vs reveal-scale reveal-delay-1">
-      <div class="roi-multiplier" data-count="46" data-suffix="x">46x</div>
+      <div class="roi-multiplier" data-count="30" data-suffix="x">30x</div>
       <div class="roi-multiplier-label">less</div>
     </div>
     <div class="roi-col roi-trad reveal-scale reveal-delay-2">
@@ -528,7 +530,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <tfoot>
       <tr>
         <td>Total (project costs)</td>
-        <td><span class="agent-cost">~$1,331</span></td>
+        <td><span class="agent-cost">~$1,391</span></td>
         <td><span class="trad-cost">$40,000–75,000+</span></td>
       </tr>
     </tfoot>
