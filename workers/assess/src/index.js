@@ -309,6 +309,10 @@ export default {
         return await handleSend(body, env, corsHeaders);
       }
 
+      if (path === '/api/company') {
+        return await handleCompanyLookup(body, corsHeaders);
+      }
+
       return new Response(JSON.stringify({ error: 'Not found' }), {
         status: 404,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
@@ -325,7 +329,7 @@ export default {
 };
 
 async function handleChat(body, env, corsHeaders) {
-  const { messages = [], quiz, page } = body;
+  const { messages = [], quiz, page, email, company } = body;
 
   // Build conversation messages
   const apiMessages = [];
@@ -363,17 +367,26 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   const isFirstTurn = managedMessages.length <= 2;
   const lastText = lastUserMsg ? lastUserMsg.content : '';
 
-  // Check if user mentioned a work domain — fetch their company website
+  // Company context — use pre-fetched data from frontend, or detect from message
   let companyContext = '';
-  const domainMatch = lastText.match(DOMAIN_RE);
-  if (domainMatch) {
-    const domain = domainMatch[1];
-    const info = await fetchCompanyInfo(domain);
-    if (info) {
-      companyContext = '\n\n' + info + '\n' + COST_ESTIMATE_PROMPT;
-    } else {
-      companyContext = '\n\n' + COST_ESTIMATE_PROMPT +
-        '\n\nNote: Could not fetch ' + domain + ' — ask the visitor to describe their business instead.';
+  if (company && company.found) {
+    companyContext = '\n\nCompany: ' + company.name + ' (' + company.domain + ')' +
+      (company.description ? '\nDescription: ' + company.description : '') +
+      (company.industries ? '\nIndustry: ' + company.industries.join(', ') : '') +
+      (company.workflows ? '\nSuggested workflows: ' + company.workflows.join(', ') : '') +
+      '\nVisitor email: ' + (email || 'not provided') +
+      '\n' + COST_ESTIMATE_PROMPT;
+  } else {
+    const domainMatch = lastText.match(DOMAIN_RE);
+    if (domainMatch) {
+      const domain = domainMatch[1];
+      const info = await fetchCompanyInfo(domain);
+      if (info) {
+        companyContext = '\n\n' + info + '\n' + COST_ESTIMATE_PROMPT;
+      } else {
+        companyContext = '\n\n' + COST_ESTIMATE_PROMPT +
+          '\n\nNote: Could not fetch ' + domain + ' — ask the visitor to describe their business instead.';
+      }
     }
   }
 
@@ -501,6 +514,96 @@ ${conversationLog}`;
   }
 
   return new Response(JSON.stringify({ sent: true }), {
+    status: 200,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ─── Company lookup (no Claude call — just fetch + parse) ───
+async function handleCompanyLookup(body, corsHeaders) {
+  const { domain } = body;
+  if (!domain) {
+    return new Response(JSON.stringify({ error: 'Domain required' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  const info = await fetchCompanyInfo(domain);
+  if (!info) {
+    return new Response(JSON.stringify({ found: false, domain }), {
+      status: 200,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  // Extract structured data from the raw text
+  const titleMatch = info.match(/Title: (.+)/);
+  const descMatch = info.match(/Description: (.+)/);
+  const contentMatch = info.match(/Content: ([\s\S]+)/);
+  const content = (contentMatch ? contentMatch[1] : '').toLowerCase();
+
+  // Detect industry keywords
+  const industries = [];
+  const industryMap = {
+    'saas': ['saas', 'software', 'platform', 'app', 'cloud', 'api'],
+    'ecommerce': ['shop', 'store', 'ecommerce', 'e-commerce', 'retail', 'product', 'cart', 'shipping'],
+    'finance': ['finance', 'fintech', 'banking', 'investment', 'payments', 'insurance', 'accounting'],
+    'healthcare': ['health', 'medical', 'patient', 'clinic', 'care', 'wellness', 'pharma'],
+    'marketing': ['marketing', 'agency', 'brand', 'creative', 'advertising', 'media', 'content'],
+    'consulting': ['consulting', 'advisory', 'strategy', 'management consulting'],
+    'real-estate': ['real estate', 'property', 'properties', 'rental', 'leasing', 'realty'],
+    'legal': ['law', 'legal', 'attorney', 'lawyer', 'firm'],
+    'education': ['education', 'learning', 'training', 'course', 'university', 'school'],
+    'recruiting': ['recruit', 'hiring', 'talent', 'staffing', 'hr', 'human resources'],
+  };
+
+  for (const [industry, keywords] of Object.entries(industryMap)) {
+    for (const kw of keywords) {
+      if (content.includes(kw)) {
+        if (!industries.includes(industry)) industries.push(industry);
+        break;
+      }
+    }
+  }
+
+  // Suggest agent workflows based on industry
+  const workflowMap = {
+    'saas': ['Customer onboarding emails', 'Support ticket triage', 'Usage reporting'],
+    'ecommerce': ['Order status updates', 'Customer inquiry routing', 'Inventory alerts'],
+    'finance': ['Client reporting', 'Compliance document drafting', 'Transaction monitoring'],
+    'healthcare': ['Appointment scheduling', 'Patient follow-ups', 'Insurance verification'],
+    'marketing': ['Client reporting', 'Campaign performance summaries', 'Content calendar management'],
+    'consulting': ['Client communication', 'Proposal drafting', 'Project status updates'],
+    'real-estate': ['Lead follow-ups', 'Showing scheduling', 'Market report generation'],
+    'legal': ['Document review triage', 'Client intake', 'Deadline tracking'],
+    'education': ['Student communication', 'Enrollment follow-ups', 'Content scheduling'],
+    'recruiting': ['Candidate outreach', 'Interview scheduling', 'Pipeline updates'],
+  };
+
+  const suggestedWorkflows = [];
+  for (const ind of industries.slice(0, 2)) {
+    if (workflowMap[ind]) {
+      for (const wf of workflowMap[ind]) {
+        if (!suggestedWorkflows.includes(wf)) suggestedWorkflows.push(wf);
+      }
+    }
+  }
+
+  // Fallback workflows if no industry detected
+  if (suggestedWorkflows.length === 0) {
+    suggestedWorkflows.push('Email triage & response drafting', 'Weekly reporting', 'CRM updates & follow-ups');
+  }
+
+  return new Response(JSON.stringify({
+    found: true,
+    domain,
+    name: (titleMatch ? titleMatch[1] : domain).replace(/ [-–|].*/g, '').trim(),
+    description: descMatch ? descMatch[1] : '',
+    industries: industries.slice(0, 3),
+    workflows: suggestedWorkflows.slice(0, 4),
+    raw: info.slice(0, 500),
+  }), {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
   });

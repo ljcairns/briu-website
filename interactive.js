@@ -14,9 +14,14 @@
   var conversation = []; // { role, content }
   var sessionId = null;
   var isWaiting = false;
+  var userEmail = '';
+  var companyData = null; // { found, domain, name, description, industries, workflows }
+  var companyFetching = false;
+
+  var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   // Restore saved conversation
-  var CONV_VERSION = 3; // bump to clear stale conversations
+  var CONV_VERSION = 4; // bump to clear stale conversations
   try {
     var saved = localStorage.getItem(KEY);
     if (saved) {
@@ -67,15 +72,85 @@
     answers = {};
     conversation = [];
     sessionId = null;
+    userEmail = '';
+    companyData = null;
     var r = document.getElementById('assessResult');
     if (r) { r.classList.remove('active'); r.innerHTML = ''; }
+    // Show step 0 (email), hide step 1
+    var s0 = document.getElementById('assess-0');
     var s1 = document.getElementById('assess-1');
-    if (s1) s1.classList.add('active');
+    if (s0) s0.classList.add('active');
+    if (s1) s1.classList.remove('active');
     var bar = document.getElementById('assessProgress');
     if (bar) bar.style.width = '0%';
     var opts = document.querySelectorAll('.assess-opt');
     for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
     removePersonalization();
+  };
+
+  // ─── Email step ───
+  // Bind enter key on email input when DOM is ready
+  function bindEmailInput() {
+    var input = document.getElementById('assessEmail');
+    if (input) {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); assessEmailSubmit(); }
+      });
+    }
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bindEmailInput);
+  else bindEmailInput();
+
+  window.assessEmailSubmit = function() {
+    var input = document.getElementById('assessEmail');
+    if (!input) return;
+    var email = input.value.trim();
+    if (!email || email.indexOf('@') === -1) {
+      input.style.borderColor = 'rgba(220,80,80,0.5)';
+      return;
+    }
+    userEmail = email;
+    var domain = email.split('@')[1].toLowerCase();
+
+    // Advance to step 1
+    var s0 = document.getElementById('assess-0');
+    if (s0) s0.classList.remove('active');
+    var s1 = document.getElementById('assess-1');
+    if (s1) s1.classList.add('active');
+
+    // If work email, start company lookup in background
+    if (FREE_PROVIDERS.indexOf(domain) === -1) {
+      companyFetching = true;
+      fetch(API_BASE + '/api/company', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ domain: domain })
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        companyFetching = false;
+        if (data && data.found) {
+          companyData = data;
+          // Show badge on current step if still in quiz
+          var activeStep = document.querySelector('.assess-step.active');
+          if (activeStep && !document.getElementById('companyBadge')) {
+            var badge = document.createElement('div');
+            badge.className = 'assess-company-badge';
+            badge.id = 'companyBadge';
+            badge.textContent = 'Personalizing for ' + data.name;
+            activeStep.appendChild(badge);
+          }
+        }
+      })
+      .catch(function() { companyFetching = false; });
+    }
+  };
+
+  window.assessEmailSkip = function() {
+    var s0 = document.getElementById('assess-0');
+    if (s0) s0.classList.remove('active');
+    var s1 = document.getElementById('assess-1');
+    if (s1) s1.classList.add('active');
   };
 
   function score() {
@@ -93,25 +168,33 @@
     return { label: 'Perfect starting point', desc: 'You are at the ideal moment to start right. A single focused deployment will teach your team more than months of exploration.' };
   }
 
-  // Build programmatic suggestions based on quiz answers (no API call)
+  // Build programmatic suggestions based on quiz answers + company data (no API call)
   function buildReadinessActions() {
     var suggestions = [];
 
-    // Based on their focus area (q4)
-    var focusMap = {
-      email: ['How would an email agent work?', 'What does approval flow look like?'],
-      sales: ['How do agents handle CRM updates?', 'What does prospecting automation look like?'],
-      reporting: ['Can agents generate weekly reports?', 'How does data pull automation work?'],
-      ops: ['How do multi-agent systems work?', 'What operations can agents handle?'],
-      support: ['Can agents draft customer responses?', 'How does ticket triage work?']
-    };
-    var focus = focusMap[answers.q4] || ['What can agents do for my team?', 'How does this work?'];
-    suggestions = suggestions.concat(focus);
+    // If we have company data, lead with their specific workflows
+    if (companyData && companyData.workflows) {
+      for (var w = 0; w < Math.min(companyData.workflows.length, 2); w++) {
+        suggestions.push('Tell me about ' + companyData.workflows[w].toLowerCase());
+      }
+      suggestions.push('What would this cost for ' + companyData.name + '?');
+    } else {
+      // Fallback to focus-area based suggestions
+      var focusMap = {
+        email: ['How would an email agent work?', 'What does approval flow look like?'],
+        sales: ['How do agents handle CRM updates?', 'What does prospecting automation look like?'],
+        reporting: ['Can agents generate weekly reports?', 'How does data pull automation work?'],
+        ops: ['How do multi-agent systems work?', 'What operations can agents handle?'],
+        support: ['Can agents draft customer responses?', 'How does ticket triage work?']
+      };
+      var focus = focusMap[answers.q4] || ['What can agents do for my team?', 'How does this work?'];
+      suggestions = suggestions.concat(focus);
+    }
 
     // Based on AI experience (q3)
     if (answers.q3 === 'none' || answers.q3 === 'free') {
       suggestions.push('What does an agent actually cost?');
-    } else {
+    } else if (!companyData) {
       suggestions.push('How is this different from what I already use?');
     }
 
@@ -126,8 +209,8 @@
     if (!el) return;
     var s = score();
 
-    // Hide quiz steps
-    for (var j = 1; j <= STEPS; j++) {
+    // Hide quiz steps (including email step 0)
+    for (var j = 0; j <= STEPS; j++) {
       var step = document.getElementById('assess-' + j);
       if (step) step.classList.remove('active');
     }
@@ -142,31 +225,57 @@
     }
 
     // Fresh quiz completion — show programmatic readiness result (no API call)
-    renderConversation(el, s, false);
-    var thread = document.getElementById('convThread');
-    var p = persona(s);
+    // If company data is still fetching, wait briefly then proceed
+    var showReadiness = function() {
+      renderConversation(el, s, false);
+      var thread = document.getElementById('convThread');
+      var p = persona(s);
 
-    // Build readiness message with score context
-    var roleLabels = { founder: 'Founder', leader: 'Team Lead', ic: 'Individual Contributor', exploring: 'Exploring' };
-    var teamLabels = { solo: 'solo', small: '2-10 person team', medium: '11-50 person team', large: '50+ company' };
-    var focusLabels = { email: 'email & communication', sales: 'sales & prospecting', reporting: 'reporting & data', ops: 'operations & admin', support: 'customer support' };
+      var roleLabels = { founder: 'Founder', leader: 'Team Lead', ic: 'Individual Contributor', exploring: 'Exploring' };
+      var teamLabels = { solo: 'solo', small: '2-10 person team', medium: '11-50 person team', large: '50+ company' };
+      var focusLabels = { email: 'email & communication', sales: 'sales & prospecting', reporting: 'reporting & data', ops: 'operations & admin', support: 'customer support' };
 
-    var readinessText = p.desc + '\n\n' +
-      'Based on your answers — ' + (roleLabels[answers.q1] || 'your role') +
-      ', ' + (teamLabels[answers.q2] || 'your team') +
-      ', focused on ' + (focusLabels[answers.q4] || 'your workflows') + '.';
+      var readinessText;
+      if (companyData && companyData.found) {
+        readinessText = 'Welcome from ' + companyData.name + '. ' + p.desc + '\n\n';
+        if (companyData.workflows && companyData.workflows.length > 0) {
+          readinessText += 'Based on what you do, here are workflows agents could handle: ' +
+            companyData.workflows.slice(0, 3).join(', ').toLowerCase() + '.';
+        }
+      } else {
+        readinessText = p.desc + '\n\n' +
+          'Based on your answers — ' + (roleLabels[answers.q1] || 'your role') +
+          ', ' + (teamLabels[answers.q2] || 'your team') +
+          ', focused on ' + (focusLabels[answers.q4] || 'your workflows') + '.';
+      }
 
-    var readinessActions = [
-      { type: 'progress', value: Math.min(s, 25), label: p.label },
-      { type: 'replies', options: buildReadinessActions() }
-    ];
+      var startProgress = companyData ? 30 : 20;
+      var readinessActions = [
+        { type: 'progress', value: Math.min(s, startProgress), label: p.label },
+        { type: 'replies', options: buildReadinessActions() }
+      ];
 
-    var entry = { role: 'assistant', content: readinessText, actions: readinessActions };
-    conversation.push(entry);
-    saveConversation();
-    appendAssistantMessage(thread, readinessText, []);
-    renderActions(readinessActions);
-    personalizePageSections();
+      var entry = { role: 'assistant', content: readinessText, actions: readinessActions };
+      conversation.push(entry);
+      saveConversation();
+      appendAssistantMessage(thread, readinessText, []);
+      renderActions(readinessActions);
+      personalizePageSections();
+    };
+
+    // Wait up to 2s for company fetch if it's still in flight
+    if (companyFetching) {
+      var waited = 0;
+      var checkInterval = setInterval(function() {
+        waited += 200;
+        if (!companyFetching || waited >= 2000) {
+          clearInterval(checkInterval);
+          showReadiness();
+        }
+      }, 200);
+    } else {
+      showReadiness();
+    }
   }
 
   function renderConversation(el, s, showHistory) {
@@ -262,6 +371,8 @@
       quiz: answers,
       page: window.location.pathname,
       sessionId: sessionId,
+      email: userEmail || undefined,
+      company: companyData || undefined,
       messages: []
     };
 

@@ -248,6 +248,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-step { display: none; }
 .assess-step.active { display: block; animation: fadeUp 0.4s ease; }
 .assess-step h3 { font-family: var(--serif); font-size: 1.3rem; margin-bottom: 1.25rem; }
+.assess-email-sub { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.25rem; }
+.assess-email-row { display: flex; gap: 0.5rem; margin-bottom: 0.75rem; }
+.assess-email-input { flex: 1; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 0.85rem 1rem; color: var(--text); font-family: var(--sans); font-size: 0.95rem; outline: none; transition: border-color 0.2s; }
+.assess-email-input:focus { border-color: rgba(212,160,90,0.4); }
+.assess-email-go { white-space: nowrap; padding: 0.85rem 1.5rem; }
+.assess-skip { background: none; border: none; color: var(--text-muted); font-size: 0.8rem; cursor: pointer; font-family: var(--sans); padding: 0.25rem 0; opacity: 0.7; transition: opacity 0.2s; }
+.assess-skip:hover { opacity: 1; color: var(--gold); }
+.assess-company-badge { display: inline-block; font-size: 0.78rem; color: var(--gold); background: rgba(212,160,90,0.08); border: 1px solid rgba(212,160,90,0.15); padding: 0.3rem 0.75rem; margin-top: 0.5rem; animation: fadeUp 0.4s ease; }
 .assess-options { display: flex; flex-direction: column; gap: 0.75rem; }
 .assess-opt { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); padding: 1rem 1.25rem; color: var(--text); font-family: var(--sans); font-size: 0.95rem; cursor: pointer; text-align: left; transition: all 0.25s ease; }
 .assess-opt:hover { border-color: rgba(212,160,90,0.3); background: rgba(212,160,90,0.05); transform: translateX(4px); }
@@ -550,7 +558,17 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <button class="assess-close" onclick="document.getElementById('assessBox').classList.remove('assess-open');document.getElementById('assessTeaser').style.display=''">&times;</button>
     <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
 
-    <div class="assess-step active" id="assess-1">
+    <div class="assess-step active" id="assess-0">
+      <h3>What's your email?</h3>
+      <p class="assess-email-sub">We'll personalize your results. Work email gets you a custom pitch.</p>
+      <div class="assess-email-row">
+        <input type="email" class="assess-email-input" id="assessEmail" placeholder="you@company.com" autocomplete="email">
+        <button class="assess-opt assess-email-go" onclick="assessEmailSubmit()">Continue</button>
+      </div>
+      <button class="assess-skip" onclick="assessEmailSkip()">Skip for now</button>
+    </div>
+
+    <div class="assess-step" id="assess-1">
       <h3>What's your role?</h3>
       <div class="assess-options">
         <button class="assess-opt" data-value="founder" onclick="assessSelect(1,this)">Founder / CEO</button>
@@ -1029,9 +1047,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309d"></script>
-<script src="/interactive.js?v=20260309d"></script>
-<script src="/dynamic-stats.js?v=20260309d"></script>
+<script src="/shared.js?v=20260309e"></script>
+<script src="/interactive.js?v=20260309e"></script>
+<script src="/dynamic-stats.js?v=20260309e"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {
