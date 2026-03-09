@@ -19,8 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css?v=20260309v">
-<link rel="stylesheet" href="/charts.css?v=20260309v">
+<link rel="stylesheet" href="/shared.css?v=20260309w">
+<link rel="stylesheet" href="/charts.css?v=20260309w">
 <style>
 .hero { padding: 8rem 2rem 2.5rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 25%, rgba(90,157,172,0.015) 45%, transparent 65%); pointer-events: none; filter: blur(80px); }
@@ -95,12 +95,56 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 .tf-rec-link { display: inline-block; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; margin-top: 0.75rem; transition: opacity 0.2s; }
 .tf-rec-link:hover { opacity: 0.7; }
 
+/* Build detail extras */
+.build-meta { display: flex; gap: 1.5rem; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.build-meta-item { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.build-meta-item strong { color: var(--gold-light); font-weight: 600; display: block; font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.15rem; }
+
+/* Scenario cards */
+.scenario-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; }
+.scenario-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.4s ease; }
+.scenario-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.scenario-card h4 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 1.25rem; font-weight: 400; }
+.scenario-before, .scenario-after { font-size: 0.88rem; line-height: 1.65; margin-bottom: 0.75rem; padding-left: 1rem; border-left: 2px solid rgba(255,255,255,0.06); }
+.scenario-before { color: var(--text-muted); }
+.scenario-after { color: var(--text); border-left-color: rgba(212,160,90,0.3); }
+.scenario-before strong, .scenario-after strong { display: block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
+.scenario-before strong { color: var(--text-muted); }
+.scenario-after strong { color: var(--gold-light); }
+.scenario-meta { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); font-size: 0.78rem; color: var(--text-muted); line-height: 1.6; }
+.scenario-meta span { color: var(--gold); font-weight: 500; }
+
+/* What to Expect */
+.tier-expect { margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.tier-expect h4 { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 0.75rem; }
+.expect-item { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.5rem; padding-left: 1rem; border-left: 2px solid rgba(212,160,90,0.12); }
+.expect-item strong { color: var(--gold-light); font-weight: 500; }
+
+/* Implementation scope */
+.tier-scope { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; padding: 1.25rem; background: rgba(212,160,90,0.03); border-left: 2px solid rgba(212,160,90,0.15); }
+.tier-scope-item { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+.tier-scope-item strong { color: var(--text); font-weight: 500; }
+
+/* Retainer SLAs */
+.sla-detail { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.4rem; padding-left: 1.25rem; }
+
+/* Fit section */
+.fit-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; margin-top: 2.5rem; }
+.fit-col h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 1rem; font-weight: 400; }
+.fit-col.fit-good h3 { color: var(--gold-light); }
+.fit-col.fit-not h3 { color: var(--text-muted); }
+.fit-item { font-size: 0.9rem; color: var(--text-muted); line-height: 1.65; margin-bottom: 0.6rem; display: flex; align-items: flex-start; gap: 0.75rem; }
+.fit-item::before { flex-shrink: 0; font-size: 0.85rem; }
+.fit-good .fit-item::before { content: '\2192'; color: var(--gold); }
+.fit-not .fit-item::before { content: '\2014'; color: rgba(255,255,255,0.15); }
+
 /* Reveal — disabled on services (no scroll reveal) */
 .reveal { opacity: 1; transform: none; }
 .reveal-scale { opacity: 1; transform: none; }
 
 @media (max-width: 900px) {
   .kickoff-pair { grid-template-columns: 1fr; }
+  .fit-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 640px) {
@@ -112,6 +156,9 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   .arc-step { grid-template-columns: 40px 1fr; gap: 1rem; }
   .arc-num { font-size: 1.4rem; }
   .arc-step-highlight { padding-left: 1rem; }
+  .scenario-grid { grid-template-columns: 1fr; }
+  .build-meta { flex-direction: column; gap: 0.5rem; }
+  .tier-scope { flex-direction: column; gap: 0.75rem; }
 }
 </style>
 </head>
@@ -193,6 +240,11 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
       <p>Email, calendar, contacts, daily briefings. Available 24/7 on WhatsApp, Slack, or Discord. Human approval on sensitive actions.</p>
       <div class="build-detail">
         <p>Integrates with Gmail, Google Calendar, Slack, WhatsApp, Discord. Your agent learns your preferences, manages your inbox, and handles scheduling — but every external action requires your approval.</p>
+        <div class="build-meta">
+          <div class="build-meta-item"><strong>Time to production</strong>2-3 weeks</div>
+          <div class="build-meta-item"><strong>Success metric</strong>Hours saved on admin per week</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Founder Kickoff</div>
+        </div>
         <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
       </div>
@@ -202,6 +254,11 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
       <p>Triage inbound email, draft responses, update HubSpot or Salesforce, qualify leads, send outreach, schedule follow-ups. Nothing sends without your OK.</p>
       <div class="build-detail">
         <p>Connects to HubSpot, Salesforce, Apollo, Gmail. Your agent researches prospects, drafts personalized outreach, logs every interaction, and keeps your pipeline current — overnight, every night.</p>
+        <div class="build-meta">
+          <div class="build-meta-item"><strong>Time to production</strong>3-4 weeks</div>
+          <div class="build-meta-item"><strong>Success metric</strong>Qualified leads per week, CRM accuracy</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Founder or Team Kickoff</div>
+        </div>
         <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
       </div>
@@ -211,6 +268,11 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
       <p>Automated reports, cost tracking, PDF generation and delivery on a schedule. Real-time spend visibility across all agents.</p>
       <div class="build-detail">
         <p>Daily summaries, weekly dashboards, cost alerts when spending exceeds thresholds. PDF reports generated and emailed on your schedule. Every agent's token usage tracked and visible.</p>
+        <div class="build-meta">
+          <div class="build-meta-item"><strong>Time to production</strong>2-3 weeks</div>
+          <div class="build-meta-item"><strong>Success metric</strong>Time to first report, reporting accuracy</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Founder Kickoff</div>
+        </div>
         <a href="/build/the-real-numbers/" class="detail-link">See the real numbers</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
       </div>
@@ -220,6 +282,11 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
       <p>Agents that work overnight: consolidating data, researching prospects, prepping morning reports. Your team wakes up to work already done.</p>
       <div class="build-detail">
         <p>Multi-agent orchestration with a master agent coordinating sub-agents. Runs on schedules you define. Morning briefings ready before you open your laptop. Full audit trail of every action taken.</p>
+        <div class="build-meta">
+          <div class="build-meta-item"><strong>Time to production</strong>4-6 weeks</div>
+          <div class="build-meta-item"><strong>Success metric</strong>Tasks completed overnight, error rate</div>
+          <div class="build-meta-item"><strong>Starting point</strong>Team Kickoff</div>
+        </div>
         <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="detail-link">See how we built ours</a>
         <a href="#" onclick="event.stopPropagation();openContactForm();return false" class="detail-link" style="margin-left:1rem">Get started</a>
       </div>
@@ -228,10 +295,56 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
 </section>
 
 <section>
-  <p class="section-label reveal">What operators are seeing</p>
-  <h2 class="reveal">This is already happening at real companies.</h2>
+  <p class="section-label reveal">What this looks like in practice</p>
+  <h2 class="reveal">Real scenarios, real numbers.</h2>
+  <p>These are based on deployments we've built and operated — the same patterns we bring to every engagement.</p>
 
-  <div id="svc-automation-bars"></div>
+  <div class="scenario-grid">
+    <div class="scenario-card">
+      <h4>Email Triage Agent</h4>
+      <div class="scenario-before">
+        <strong>Before</strong>
+        4 hours/day manually sorting inbox, drafting responses, chasing follow-ups across threads.
+      </div>
+      <div class="scenario-after">
+        <strong>After</strong>
+        30 min/day reviewing agent-drafted responses. Priority sorting, auto-categorization, and follow-up scheduling handled overnight.
+      </div>
+      <div class="scenario-meta">
+        <span>2 weeks to production</span> &middot; ~$3/day API cost &middot; Based on Briu's own deployment
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <h4>Sales Prospecting Pipeline</h4>
+      <div class="scenario-before">
+        <strong>Before</strong>
+        Manual Apollo searches, copy-paste to CRM, individual outreach drafts. 2-3 hours per rep, per day.
+      </div>
+      <div class="scenario-after">
+        <strong>After</strong>
+        Agent enriches leads, updates HubSpot, drafts personalized outreach. Reps review and send — pipeline stays current without manual entry.
+      </div>
+      <div class="scenario-meta">
+        <span>3 weeks to production</span> &middot; ~$5/day API cost &middot; Approval-gated CRM writes
+      </div>
+    </div>
+
+    <div class="scenario-card">
+      <h4>Daily Operations &amp; Reporting</h4>
+      <div class="scenario-before">
+        <strong>Before</strong>
+        Morning spent collecting data from 5 tools, building reports in Sheets, manually flagging anomalies.
+      </div>
+      <div class="scenario-after">
+        <strong>After</strong>
+        Agent delivers morning briefing with anomaly alerts. PDF reports auto-generated and emailed on schedule. Team starts the day with clarity.
+      </div>
+      <div class="scenario-meta">
+        <span>4 weeks to production</span> &middot; ~$8/day API cost &middot; Multi-agent orchestration
+      </div>
+    </div>
+  </div>
 </section>
 
 <section>
@@ -288,6 +401,12 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
             <div class="deliverable">Written architecture plan with cost profile</div>
             <div class="deliverable">Your first agent, built and deployed</div>
           </div>
+          <div class="tier-expect">
+            <h4>What to expect</h4>
+            <div class="expect-item"><strong>Hour 1:</strong> Workflow mapping — we identify your highest-leverage automation</div>
+            <div class="expect-item"><strong>Hour 2:</strong> Live build — your first agent deployed on your infrastructure</div>
+            <div class="expect-item"><strong>Hour 3:</strong> Architecture plan and roadmap for expansion</div>
+          </div>
         </div>
       </div>
 
@@ -313,6 +432,13 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
             <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
             <div class="deliverable">Written architecture plan: automation candidates ranked by ROI, security model, cost profile, rollout order</div>
             <div class="deliverable">Your first agent, built and deployed</div>
+          </div>
+          <div class="tier-expect">
+            <h4>What to expect</h4>
+            <div class="expect-item"><strong>Hour 1:</strong> Team AI briefing — what's real, what's hype, cost curves</div>
+            <div class="expect-item"><strong>Hours 2-3:</strong> One-on-one sessions with key operators</div>
+            <div class="expect-item"><strong>Hour 4:</strong> Current tooling audit and recommendations</div>
+            <div class="expect-item"><strong>Hour 5:</strong> Architecture plan, first agent deployed, implementation quote</div>
           </div>
         </div>
       </div>
@@ -342,6 +468,12 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
           <div class="deliverable">Custom integrations across your existing tools</div>
           <div class="deliverable">Team training on agent operation and system extension</div>
         </div>
+        <div class="tier-scope">
+          <div class="tier-scope-item"><strong>Timeline:</strong> 4-8 weeks in 2-week sprints</div>
+          <div class="tier-scope-item"><strong>Single-agent projects:</strong> $8-20K</div>
+          <div class="tier-scope-item"><strong>Multi-agent systems:</strong> $20-50K+</div>
+        </div>
+        <p style="font-size:0.88rem; color:var(--text-muted); margin-top:1rem; margin-bottom:0;">You see working agents in production by week 2. Every sprint delivers deployable capability, not progress reports.</p>
       </div>
     </div>
 
@@ -365,6 +497,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
           <div class="deliverable">Model upgrades as providers ship improvements</div>
           <div class="deliverable">Small skill additions and workflow adjustments</div>
           <div class="deliverable">Priority response — no re-onboarding, ever</div>
+          <div class="sla-detail">24-hour response time. Monthly infrastructure review. Ongoing cost optimization across all agents.</div>
         </div>
         <div class="tier-deliverables" style="margin-top: 1rem;">
           <h4>Expanded partnership</h4>
@@ -372,6 +505,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
           <div class="deliverable">Regular strategy sessions on what to automate next</div>
           <div class="deliverable">Team training as your internal capacity grows</div>
           <div class="deliverable">First access to new patterns from our work across industries</div>
+          <div class="sla-detail">Weekly strategy sessions. One new agent or major upgrade per sprint. Priority access to new tools and patterns.</div>
         </div>
       </div>
     </div>
@@ -406,6 +540,29 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   <div class="quote-block" style="margin-top: 3rem;">
     <p>"They don't forget to do work. They don't make mistakes. Once you put this in, you don't need to have checklists. They just do it perfectly every single time."</p>
     <p class="quote-source">Jason Calacanis on his OpenClaw deployment — All-In Podcast E261</p>
+  </div>
+</section>
+
+<section>
+  <p class="section-label reveal">Honest assessment</p>
+  <h2 class="reveal">Is this the right fit?</h2>
+  <p>We'd rather tell you upfront than waste your time. Here's who gets the most value from working with us.</p>
+
+  <div class="fit-grid">
+    <div class="fit-col fit-good">
+      <h3>Good fit</h3>
+      <div class="fit-item">Repeatable workflows consuming 20+ hours/week across your team</div>
+      <div class="fit-item">Willing to learn — your team wants to understand the agents, not just use them</div>
+      <div class="fit-item">Can dedicate at least one technical person to work alongside us during the build</div>
+      <div class="fit-item">Existing tools and data sources that agents can connect to (email, CRM, spreadsheets)</div>
+    </div>
+    <div class="fit-col fit-not">
+      <h3>Probably not the fit</h3>
+      <div class="fit-item">Highly unstructured, creative workflows that change week to week</div>
+      <div class="fit-item">Need custom UI/UX or consumer-facing applications built from scratch</div>
+      <div class="fit-item">Data isn't organized — no existing systems or digital workflows to automate</div>
+      <div class="fit-item">Looking for a one-time project with no ongoing relationship</div>
+    </div>
   </div>
 </section>
 
@@ -459,10 +616,9 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309v"></script>
-<script src="/chat-bubble.js?v=20260309v"></script>
-<script src="/charts.js?v=20260309v"></script>
-<script>Briu.charts.automationBars('svc-automation-bars');</script>
+<script src="/shared.js?v=20260309w"></script>
+<script src="/chat-bubble.js?v=20260309w"></script>
+<script src="/charts.js?v=20260309w"></script>
 <script>
 /* Expandable capability cards */
 function toggleCapability(el) {

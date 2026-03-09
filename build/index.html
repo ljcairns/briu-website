@@ -19,8 +19,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css?v=20260309v">
-<link rel="stylesheet" href="/charts.css?v=20260309v">
+<link rel="stylesheet" href="/shared.css?v=20260309w">
+<link rel="stylesheet" href="/charts.css?v=20260309w">
 <style>
 /* Hero */
 .hero { padding: 8rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
@@ -129,6 +129,13 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .vtl-entry.major:hover .vtl-card { border-color: rgba(212,160,90,0.25); }
 .vtl-entry.major .vtl-date { color: var(--gold); }
 .vtl-entry.major .vtl-title { font-size: 1.1rem; }
+
+/* Timeline progressive fill */
+.vtl { --vtl-fill: 0px; }
+.vtl::after { content: ''; position: absolute; top: 2rem; left: 0; height: 2px; width: var(--vtl-fill); background: linear-gradient(90deg, var(--gold), var(--gold-light)); z-index: 1; transition: width 0.6s ease-out; pointer-events: none; }
+.vtl-dot { opacity: 0.3; transition: all 0.5s ease; }
+.vtl-entry.vtl-visible .vtl-dot { opacity: 1; box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
+.vtl-entry.major.vtl-visible .vtl-dot { box-shadow: 0 0 0 6px rgba(212,160,90,0.2), 0 0 22px rgba(212,160,90,0.35); }
 
 /* Cost Comparison Cards */
 /* Cost comparison table */
@@ -658,14 +665,40 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 </footer>
 
 <script src="/shared.js"></script>
-<script src="/chat-bubble.js?v=20260309v"></script>
-<script src="/charts.js?v=20260309v"></script>
+<script src="/chat-bubble.js?v=20260309w"></script>
+<script src="/charts.js?v=20260309w"></script>
 <script>
 Briu.charts.briuOrg('build-org-chart');
 Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js"></script>
 <script>
+/* Timeline progressive fill */
+(function() {
+  var vtl = document.querySelector('.vtl');
+  if (!vtl) return;
+  var entries = vtl.querySelectorAll('.vtl-entry');
+  function updateFill() {
+    var lastVisible = null;
+    entries.forEach(function(e) { if (e.classList.contains('vtl-visible') && !e.classList.contains('filtered-out')) lastVisible = e; });
+    if (lastVisible) {
+      var dot = lastVisible.querySelector('.vtl-dot');
+      var fillTo = lastVisible.offsetLeft + (dot ? dot.offsetLeft + dot.offsetWidth / 2 : 30);
+      vtl.style.setProperty('--vtl-fill', fillTo + 'px');
+    }
+  }
+  var vtlObs = new IntersectionObserver(function(observed) {
+    observed.forEach(function(o) {
+      if (o.isIntersecting) { o.target.classList.add('vtl-visible'); vtlObs.unobserve(o.target); }
+    });
+    updateFill();
+  }, { root: vtl, threshold: 0.2 });
+  entries.forEach(function(e) { vtlObs.observe(e); });
+  vtl.addEventListener('scroll', function() {
+    entries.forEach(function(e) { if (!e.classList.contains('vtl-visible')) vtlObs.observe(e); });
+  });
+})();
+
 /* Timeline filter */
 function filterTimeline(cat, btn) {
   var filters = document.querySelectorAll('.vtl-filter');

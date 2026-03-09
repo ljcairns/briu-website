@@ -508,7 +508,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   const dynamicContent = buildSystemPrompt(lastText, isFirstTurn)
     .replace(CORE_PROMPT + '\n\n', '') + companyContext;
 
-  // Use prompt caching for the stable core prompt
+  // Use prompt caching + streaming for the stable core prompt
   const response = await fetch('https://api.anthropic.com/v1/messages', {
     method: 'POST',
     headers: {
@@ -519,6 +519,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
     body: JSON.stringify({
       model: 'claude-4-sonnet-20250514',
       max_tokens: 800,
+      stream: true,
       system: [
         {
           type: 'text',
@@ -543,50 +544,104 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
     });
   }
 
-  const data = await response.json();
-  const rawText = data.content?.[0]?.text || '';
-
-  // Parse structured response from Claude
-  let parsed;
-  try {
-    // Try to parse as JSON directly
-    parsed = JSON.parse(rawText);
-  } catch (e) {
-    // If Claude didn't return valid JSON, extract what we can
-    const jsonMatch = rawText.match(/\{[\s\S]*\}/);
-    if (jsonMatch) {
-      try { parsed = JSON.parse(jsonMatch[0]); } catch (e2) {}
-    }
-  }
-
-  // Normalize response
+  // Stream response to client via SSE
   const sid = body.sessionId || generateSessionId();
-  const result = {
-    text: parsed?.text || rawText,
-    actions: Array.isArray(parsed?.actions) ? parsed.actions : [],
-    sessionId: sid,
-    usage: data.usage || null,
-  };
+  const { readable, writable } = new TransformStream();
+  const writer = writable.getWriter();
+  const enc = new TextEncoder();
 
-  // Store conversation in KV (non-blocking)
-  if (env.CONVERSATIONS) {
-    const convRecord = {
-      sessionId: sid,
-      email: email || null,
-      company: company ? { name: company.name, domain: company.domain, industries: company.industries } : null,
-      quiz,
-      page,
-      messages: messages.concat([{ role: 'assistant', content: result.text }]),
-      updatedAt: new Date().toISOString(),
-    };
-    // Fire and forget — don't block the response
-    env.CONVERSATIONS.put('conv:' + sid, JSON.stringify(convRecord), { expirationTtl: 2592000 }) // 30 days
-      .catch(e => console.error('KV write error:', e));
-  }
+  const sse = (obj) => writer.write(enc.encode('data: ' + JSON.stringify(obj) + '\n\n'));
 
-  return new Response(JSON.stringify(result), {
-    status: 200,
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  // Process Claude's stream in background
+  (async () => {
+    const reader = response.body.getReader();
+    const dec = new TextDecoder();
+    let sseBuffer = '';
+    let fullRaw = '';
+    let sentChars = 0;
+    const TEXT_PREFIX = '{"text":"';
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        sseBuffer += dec.decode(value, { stream: true });
+
+        // Split on double-newline (SSE event boundary)
+        const events = sseBuffer.split('\n\n');
+        sseBuffer = events.pop();
+
+        for (const event of events) {
+          for (const line of event.split('\n')) {
+            if (!line.startsWith('data: ')) continue;
+            const raw = line.slice(6).trim();
+            if (raw === '[DONE]') continue;
+            try {
+              const evt = JSON.parse(raw);
+              if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+                fullRaw += evt.delta.text;
+
+                // Extract clean text from the JSON {"text":"..."} as it streams
+                if (fullRaw.length > TEXT_PREFIX.length && fullRaw.startsWith(TEXT_PREFIX)) {
+                  let endPos = fullRaw.length;
+                  for (let i = TEXT_PREFIX.length; i < fullRaw.length; i++) {
+                    if (fullRaw[i] === '\\') { i++; continue; }
+                    if (fullRaw[i] === '"') { endPos = i; break; }
+                  }
+                  const rawSlice = fullRaw.slice(TEXT_PREFIX.length, endPos);
+                  let clean;
+                  try { clean = JSON.parse('"' + rawSlice + '"'); } catch(e) { clean = rawSlice; }
+                  if (clean.length > sentChars) {
+                    await sse({ type: 'delta', text: clean.slice(sentChars) });
+                    sentChars = clean.length;
+                  }
+                }
+              }
+            } catch(e) { /* skip unparseable */ }
+          }
+        }
+      }
+
+      // Stream complete — parse full response
+      let parsed;
+      try { parsed = JSON.parse(fullRaw); } catch(e) {
+        const jsonMatch = fullRaw.match(/\{[\s\S]*\}/);
+        if (jsonMatch) try { parsed = JSON.parse(jsonMatch[0]); } catch(e2) {}
+      }
+
+      const result = {
+        type: 'done',
+        text: parsed?.text || fullRaw,
+        actions: Array.isArray(parsed?.actions) ? parsed.actions : [],
+        sessionId: sid,
+      };
+      await sse(result);
+
+      // Store conversation in KV
+      if (env.CONVERSATIONS) {
+        env.CONVERSATIONS.put('conv:' + sid, JSON.stringify({
+          sessionId: sid,
+          email: email || null,
+          company: company ? { name: company.name, domain: company.domain, industries: company.industries } : null,
+          quiz, page,
+          messages: (messages || []).concat([{ role: 'assistant', content: result.text }]),
+          updatedAt: new Date().toISOString(),
+        }), { expirationTtl: 2592000 }).catch(e => console.error('KV write error:', e));
+      }
+    } catch(e) {
+      console.error('Stream error:', e);
+      await sse({ type: 'error' });
+    } finally {
+      await writer.close();
+    }
+  })();
+
+  return new Response(readable, {
+    headers: {
+      ...corsHeaders,
+      'Content-Type': 'text/event-stream',
+      'Cache-Control': 'no-cache',
+    },
   });
 }
 

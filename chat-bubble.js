@@ -600,19 +600,11 @@
   function fetchChat(callback) {
     isWaiting = true;
     var timedOut = false;
-    var timer = setTimeout(function() {
-      timedOut = true;
-      isWaiting = false;
-      callback(null);
-    }, 25000);
+    var timer = setTimeout(function() { timedOut = true; isWaiting = false; callback(null); }, 30000);
 
     var payload = {
-      quiz: answers,
-      page: window.location.pathname,
-      sessionId: sessionId,
-      email: userEmail || undefined,
-      company: companyData || undefined,
-      messages: []
+      quiz: answers, page: window.location.pathname, sessionId: sessionId,
+      email: userEmail || undefined, company: companyData || undefined, messages: []
     };
     for (var i = 0; i < conversation.length; i++) {
       payload.messages.push({ role: conversation[i].role, content: conversation[i].content });
@@ -626,25 +618,86 @@
     .then(function(r) {
       if (r.status === 429) throw { rateLimit: true };
       if (!r.ok) throw new Error('HTTP ' + r.status);
+      var ct = r.headers.get('content-type') || '';
+      if (ct.indexOf('text/event-stream') !== -1 && r.body) {
+        readStream(r.body, callback, timer);
+        throw { handled: true };
+      }
       return r.json();
     })
     .then(function(data) {
-      if (timedOut) return;
-      clearTimeout(timer);
-      isWaiting = false;
+      if (!data || timedOut) return;
+      clearTimeout(timer); isWaiting = false;
       sessionId = data.sessionId || sessionId;
       callback(data);
     })
     .catch(function(err) {
+      if (err && err.handled) return;
       if (timedOut) return;
-      clearTimeout(timer);
-      isWaiting = false;
+      clearTimeout(timer); isWaiting = false;
       if (err && err.rateLimit) {
         callback({ text: 'You\'ve reached the message limit for now. Reach us directly at hi@briu.ai or try again in an hour.', actions: [{ type: 'handoff', message: 'Or send your details to the Briu team' }] });
-      } else {
-        callback(null);
-      }
+      } else { callback(null); }
     });
+  }
+
+  function readStream(body, callback, timer) {
+    var reader = body.getReader();
+    var dec = new TextDecoder();
+    var buf = '';
+    var text = '';
+    var streamEl = null;
+
+    function pump() {
+      reader.read().then(function(res) {
+        if (res.done) { clearTimeout(timer); isWaiting = false; if (!text) callback(null); return; }
+        buf += dec.decode(res.value, { stream: true });
+        var parts = buf.split('\n\n');
+        buf = parts.pop();
+        for (var i = 0; i < parts.length; i++) {
+          var lines = parts[i].split('\n');
+          for (var j = 0; j < lines.length; j++) {
+            if (lines[j].indexOf('data: ') !== 0) continue;
+            try {
+              var evt = JSON.parse(lines[j].slice(6));
+              if (evt.type === 'delta') {
+                if (!streamEl) {
+                  removeLoading();
+                  var thread = document.getElementById('bcThread');
+                  streamEl = document.createElement('div');
+                  streamEl.className = 'bc-msg bc-msg-assistant';
+                  streamEl.innerHTML = '<p></p>';
+                  if (thread) thread.appendChild(streamEl);
+                }
+                text += evt.text;
+                var p = streamEl.querySelector('p');
+                if (p) p.innerHTML = formatText(text);
+                scrollThread();
+              }
+              if (evt.type === 'done') {
+                clearTimeout(timer); isWaiting = false;
+                if (streamEl) streamEl.remove();
+                if (evt.sessionId) sessionId = evt.sessionId;
+                callback(evt);
+                return;
+              }
+              if (evt.type === 'error') {
+                clearTimeout(timer); isWaiting = false;
+                if (streamEl) streamEl.remove();
+                callback(null);
+                return;
+              }
+            } catch(e) {}
+          }
+        }
+        pump();
+      }).catch(function() {
+        clearTimeout(timer); isWaiting = false;
+        if (streamEl) streamEl.remove();
+        callback(null);
+      });
+    }
+    pump();
   }
 
   // ─── Handoff to Discord ───
