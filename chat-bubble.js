@@ -190,8 +190,8 @@
       '<stop offset="45%" stop-color="#e07b5f"/>' +
       '<stop offset="100%" stop-color="#5a9dac"/>' +
       '</linearGradient></defs>' +
-      '<path class="spiral-path" d="M20,20 C20,16 24,12 28,12 C34,12 36,18 36,22 C36,30 28,36 20,36 C10,36 4,28 4,20 C4,10 12,4 22,4 C33,4 38,14 38,22" style="stroke-dasharray:120;animation:spiralDraw 1.5s ease-out forwards;"/>' +
-      '<circle class="spiral-dot" cx="20" cy="20" r="2"/>' +
+      '<path class="spiral-path" d="M20,20 C20,18.5 21.5,17 23,17 C25.5,17 27,19 27,21 C27,24 24,27 20,27 C15,27 12,23 12,19 C12,14 16,10 21,10 C27,10 31,15 31,21 C31,27.5 26,33 20,33 C13,33 8,27 8,20 C8,12 14,6 22,6" style="stroke-dasharray:140;animation:spiralDraw 1.2s ease-out forwards;"/>' +
+      '<circle class="spiral-dot" cx="20" cy="20" r="1.8"/>' +
       '</svg>' +
       (conversation.length > 0 ? '<div class="bubble-badge"></div>' : '');
     bubble.addEventListener('click', window.briuToggleChatPanel);
