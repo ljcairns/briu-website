@@ -16,7 +16,7 @@
   var isWaiting = false;
 
   // Restore saved conversation
-  var CONV_VERSION = 2; // bump to clear stale conversations
+  var CONV_VERSION = 3; // bump to clear stale conversations
   try {
     var saved = localStorage.getItem(KEY);
     if (saved) {
@@ -93,6 +93,34 @@
     return { label: 'Perfect starting point', desc: 'You are at the ideal moment to start right. A single focused deployment will teach your team more than months of exploration.' };
   }
 
+  // Build programmatic suggestions based on quiz answers (no API call)
+  function buildReadinessActions() {
+    var suggestions = [];
+
+    // Based on their focus area (q4)
+    var focusMap = {
+      email: ['How would an email agent work?', 'What does approval flow look like?'],
+      sales: ['How do agents handle CRM updates?', 'What does prospecting automation look like?'],
+      reporting: ['Can agents generate weekly reports?', 'How does data pull automation work?'],
+      ops: ['How do multi-agent systems work?', 'What operations can agents handle?'],
+      support: ['Can agents draft customer responses?', 'How does ticket triage work?']
+    };
+    var focus = focusMap[answers.q4] || ['What can agents do for my team?', 'How does this work?'];
+    suggestions = suggestions.concat(focus);
+
+    // Based on AI experience (q3)
+    if (answers.q3 === 'none' || answers.q3 === 'free') {
+      suggestions.push('What does an agent actually cost?');
+    } else {
+      suggestions.push('How is this different from what I already use?');
+    }
+
+    // Always include
+    suggestions.push('Show me your real build costs');
+
+    return suggestions;
+  }
+
   function showResults(instant) {
     var el = document.getElementById('assessResult');
     if (!el) return;
@@ -113,30 +141,32 @@
       return;
     }
 
-    // Fresh quiz completion — fetch first AI response
-    if (!instant) {
-      renderConversation(el, s, false);
-      appendLoading();
-      fetchChat(function(data) {
-        removeLoading();
-        var thread = document.getElementById('convThread');
-        if (data && data.text) {
-          var entry = { role: 'assistant', content: data.text, actions: data.actions || [] };
-          conversation.push(entry);
-          saveConversation();
-          appendAssistantMessage(thread, data.text, data.actions || []);
-          renderActions(data.actions || []);
-        } else {
-          var p = persona(s);
-          appendAssistantMessage(thread, p.desc, []);
-        }
-        scrollThread();
-        personalizePageSections();
-      });
-    } else {
-      renderConversation(el, s, true);
-      personalizePageSections();
-    }
+    // Fresh quiz completion — show programmatic readiness result (no API call)
+    renderConversation(el, s, false);
+    var thread = document.getElementById('convThread');
+    var p = persona(s);
+
+    // Build readiness message with score context
+    var roleLabels = { founder: 'Founder', leader: 'Team Lead', ic: 'Individual Contributor', exploring: 'Exploring' };
+    var teamLabels = { solo: 'solo', small: '2-10 person team', medium: '11-50 person team', large: '50+ company' };
+    var focusLabels = { email: 'email & communication', sales: 'sales & prospecting', reporting: 'reporting & data', ops: 'operations & admin', support: 'customer support' };
+
+    var readinessText = p.desc + '\n\n' +
+      'Based on your answers — ' + (roleLabels[answers.q1] || 'your role') +
+      ', ' + (teamLabels[answers.q2] || 'your team') +
+      ', focused on ' + (focusLabels[answers.q4] || 'your workflows') + '.';
+
+    var readinessActions = [
+      { type: 'progress', value: Math.min(s, 25), label: p.label },
+      { type: 'replies', options: buildReadinessActions() }
+    ];
+
+    var entry = { role: 'assistant', content: readinessText, actions: readinessActions };
+    conversation.push(entry);
+    saveConversation();
+    appendAssistantMessage(thread, readinessText, []);
+    renderActions(readinessActions);
+    personalizePageSections();
   }
 
   function renderConversation(el, s, showHistory) {
@@ -184,7 +214,7 @@
         if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); submitMessage(); }
       });
     }
-    if (sendBtn) sendBtn.addEventListener('click', submitMessage);
+    if (sendBtn) sendBtn.addEventListener('click', function() { submitMessage(); });
   }
 
   function submitMessage(text) {
