@@ -207,7 +207,7 @@ article p strong { color: var(--text); font-weight: 600; }
       <div class="stat-label">Total API Spend</div>
     </div>
     <div class="stat-box">
-      <div class="stat-value">$14.46</div>
+      <div class="stat-value" data-dynamic="avg-daily-cost">$14.44</div>
       <div class="stat-label">Average Daily</div>
     </div>
     <div class="stat-box">
@@ -215,8 +215,8 @@ article p strong { color: var(--text); font-weight: 600; }
       <div class="stat-label">Steady State / Day</div>
     </div>
     <div class="stat-box">
-      <div class="stat-value">$42.58</div>
-      <div class="stat-label">Peak Day (Mar 6)</div>
+      <div class="stat-value" data-dynamic="peak-daily-cost">$42.58</div>
+      <div class="stat-label">Peak Day</div>
     </div>
     <div class="stat-box">
       <div class="stat-value">12</div>
@@ -454,7 +454,8 @@ var dailyData = [
   { date:"Mar 4", cost:5.15, phase:"launch", commits:13 },
   { date:"Mar 5", cost:3.22, phase:"launch", milestone:"Briu founded", commits:28 },
   { date:"Mar 6", cost:42.58, phase:"launch", milestone:"Website + services built", commits:1 },
-  { date:"Mar 7", cost:2.59, phase:"launch", commits:1 }
+  { date:"Mar 7", cost:2.59, phase:"launch", commits:1 },
+  { date:"Mar 8", cost:13.78, phase:"launch", milestone:"Privacy policy + site audit", commits:12 }
 ];
 
 var phaseAlpha = { build:0.8, stable:0.45, optimize:0.6, launch:0.95 };
