@@ -201,19 +201,7 @@
   .intel-events { grid-template-columns: repeat(2, 1fr); }
   .own-compare { grid-template-columns: 1fr; }
   .compound-loop-ring { grid-template-columns: repeat(2, 1fr); }
-  .constellation { height: auto; position: static; display: flex; flex-direction: column; align-items: center; gap: 0; }
-  .constellation-lines { display: none; }
-  .c-row { position: static; flex-wrap: wrap; gap: 20px; justify-content: center; }
-  .c-row-founder { gap: 16px; }
-  .c-row-primary, .c-row-skills { gap: 12px; }
-  .c-node.c-secondary { display: none; }
-  .c-connector { display: block; width: 1px; height: 20px; background: rgba(212,160,90,0.2); margin: 0 auto; }
-  .c-note { position: static; transform: none; white-space: normal; font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; text-align: center; margin: 4px 0; padding: 0 1rem; display: block; }
-  .c-sub { white-space: normal; max-width: 100px; margin-left: auto; margin-right: auto; }
-  .c-label { white-space: normal; }
-  .c-circle { width: 44px; height: 44px; }
-  .c-circle.c-human { width: 56px; height: 56px; }
-  .c-circle.c-agent { width: 38px; height: 38px; }
+  /* constellation mobile is in a separate block below the base styles */
 }
 
 /* ---- Chart 14: Constellation Org ---- */
@@ -229,7 +217,7 @@
 .c-row-primary { top: 155px; }
 .c-row-skills { top: 295px; }
 .c-connector { display: none; }
-.c-note { display: none; position: absolute; top: 252px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: var(--text-muted); opacity: 0.5; text-align: center; white-space: nowrap; z-index: 1; }
+.c-note { display: none; position: absolute; top: 270px; left: 50%; transform: translateX(-50%); font-size: 0.62rem; color: var(--text-muted); opacity: 0.5; text-align: center; white-space: nowrap; z-index: 1; }
 .briu-chart.visible .c-note { display: block; }
 
 .c-node { text-align: center; z-index: 1; opacity: 0; transform: scale(0.8); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -266,3 +254,20 @@
 .c-sub { font-size: 0.65rem; color: var(--text-muted); margin-top: 2px; white-space: nowrap; }
 .c-env { font-size: 0.58rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); margin-top: 3px; opacity: 0.6; }
 .c-secondary .c-label { font-size: 0.7rem; color: var(--text-muted); }
+
+/* Constellation mobile — MUST come after base styles */
+@media (max-width: 640px) {
+  .constellation { height: auto !important; position: static !important; display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .constellation-lines { display: none; }
+  .c-row { position: static !important; flex-wrap: wrap; gap: 20px; justify-content: center; top: auto !important; }
+  .c-row-founder { gap: 16px; }
+  .c-row-primary, .c-row-skills { gap: 16px; }
+  .c-node.c-secondary { display: none; }
+  .c-connector { display: block; width: 1px; height: 20px; background: rgba(212,160,90,0.2); margin: 0 auto; }
+  .c-note { position: static !important; transform: none !important; white-space: normal; font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; text-align: center; margin: 4px 0; padding: 0 1rem; display: block !important; }
+  .c-sub { white-space: normal; max-width: 100px; margin-left: auto; margin-right: auto; }
+  .c-label { white-space: normal; }
+  .c-circle { width: 44px; height: 44px; }
+  .c-circle.c-human { width: 56px; height: 56px; }
+  .c-circle.c-agent { width: 38px; height: 38px; }
+}
