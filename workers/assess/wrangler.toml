@@ -21,3 +21,9 @@ id = "1b36a305e4204874bafb42fe9a105dc0"
 [[kv_namespaces]]
 binding = "RATE_LIMIT"
 id = "dac7967fcf58452a97330374e2ed4f9c"
+
+# Analytics D1 database
+[[d1_databases]]
+binding = "DB"
+database_name = "briu-analytics"
+database_id = "8f125fff-d3d5-404b-a9cc-a8a6c0a131d5"

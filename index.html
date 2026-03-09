@@ -146,10 +146,25 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .kickoff-card-header .tier-price { font-size: 1.5rem; font-weight: 600; color: var(--gold); margin-bottom: 0.15rem; }
 .kickoff-card-header .tier-price-note { font-size: 0.82rem; color: var(--text-muted); }
 .kickoff-card-body { padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.tier-cta { display: block; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: var(--gold); text-decoration: none; letter-spacing: 0.03em; transition: opacity 0.3s ease; }
+.tier-cta:hover { opacity: 0.7; }
 .followup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
 .followup-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); }
 .followup-name { font-family: var(--serif); font-size: 1.05rem; color: var(--text); }
 .followup-price { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
+.followup-expandable { flex-direction: column; align-items: stretch; cursor: pointer; transition: all 0.4s ease; grid-column: 1 / -1; }
+.followup-expandable .followup-top { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+.followup-expandable .followup-top .followup-name::after { content: ' +'; color: var(--text-muted); font-family: var(--sans); font-size: 0.85rem; transition: transform 0.3s ease; }
+.followup-expandable:hover, .followup-expandable.expanded { border-color: rgba(212,160,90,0.2); }
+.followup-expandable.expanded .followup-top .followup-name::after { content: ' −'; }
+.followup-details { max-height: 0; overflow: hidden; transition: max-height 0.5s ease, opacity 0.4s ease, margin 0.4s ease; opacity: 0; margin-top: 0; }
+.followup-expandable.expanded .followup-details { max-height: 500px; opacity: 1; margin-top: 1rem; }
+.followup-detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
+.followup-detail-item { display: flex; flex-direction: column; gap: 0.35rem; }
+.followup-detail-label { font-family: var(--serif); font-size: 0.92rem; color: var(--text); }
+.followup-detail-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.45; }
+.followup-detail-price { font-size: 0.85rem; font-weight: 600; color: var(--gold); margin-top: auto; }
+.followup-detail-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 1rem; font-style: italic; }
 .services-detail-link { margin-top: 1.5rem; text-align: center; }
 .services-detail-link a { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; transition: opacity 0.3s ease; }
 .nonprofit-callout { display: flex; align-items: flex-start; gap: 0.75rem; margin-top: 1.5rem; padding: 1rem 1.25rem; background: rgba(106,174,156,0.04); border: 1px solid rgba(106,174,156,0.12); font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
@@ -412,6 +427,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .integration-grid { grid-template-columns: repeat(3, 1fr); }
   .kickoff-grid { grid-template-columns: 1fr; }
   .followup-row { grid-template-columns: 1fr; }
+  .followup-detail-grid { grid-template-columns: 1fr; }
   .quotes-row { grid-template-columns: 1fr; }
   .case-study-box { padding: 1.5rem; }
   .offer-grid { grid-template-columns: 1fr; }
@@ -669,7 +685,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <div class="deliverable">Written architecture plan with cost profile and rollout order</div>
         <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
         <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0;">We use the lead time to research your business and pre-build your first agent, so the session is hands-on, not theoretical.</p>
-        <button class="cta" style="width:100%; margin-top:1.25rem; font-size:0.78rem; background:none; border:1px solid rgba(212,160,90,0.3); color:var(--gold);" onclick="bookTier('kickoff')">Reserve Your Kickoff</button>
+        <a href="#" onclick="bookTier('kickoff');return false" class="tier-cta">Reserve your kickoff &rarr;</a>
       </div>
     </div>
     <div class="kickoff-card">
@@ -683,7 +699,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <div class="deliverable">Hands-on sessions with individual team members</div>
         <div class="deliverable">Role-specific workflow recommendations</div>
         <div class="deliverable">Playbook for day-to-day agent operation</div>
-        <button class="cta" style="width:100%; margin-top:1.25rem; font-size:0.78rem; background:none; border:1px solid rgba(212,160,90,0.3); color:var(--gold);" onclick="bookTier('kickoff+workshop')">Reserve Kickoff + Workshop</button>
+        <a href="#" onclick="bookTier('kickoff+workshop');return false" class="tier-cta">Reserve kickoff + workshop &rarr;</a>
       </div>
     </div>
   </div>
@@ -697,9 +713,32 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <span class="followup-name">Retainer</span>
       <span class="followup-price">From <span data-config="pricing.retainer_from" data-config-format="dollar-mo">$500/mo</span></span>
     </div>
-    <div class="followup-item">
-      <span class="followup-name">Speaking & Workshops</span>
-      <span class="followup-price">From <span data-config="pricing.speaking_keynote" data-config-format="dollar">$5,000</span></span>
+    <div class="followup-item followup-expandable">
+      <div class="followup-top">
+        <span class="followup-name">Speaking & Workshops</span>
+        <span class="followup-price">From <span data-config="pricing.speaking_keynote" data-config-format="dollar">$5,000</span></span>
+      </div>
+      <div class="followup-details">
+        <div class="followup-detail-grid">
+          <div class="followup-detail-item">
+            <span class="followup-detail-label">Keynote</span>
+            <span class="followup-detail-desc">Agent capabilities, cost economics, implementation playbook. Fully customized to your industry.</span>
+            <span class="followup-detail-price"><span data-config="pricing.speaking_keynote" data-config-format="dollar">$5,000</span></span>
+          </div>
+          <div class="followup-detail-item">
+            <span class="followup-detail-label">Half-day workshop</span>
+            <span class="followup-detail-desc">Hands-on with your team. Live demos, role-specific workflows, implementation planning.</span>
+            <span class="followup-detail-price"><span data-config="pricing.speaking_half_day" data-config-format="dollar">$7,500</span></span>
+          </div>
+          <div class="followup-detail-item">
+            <span class="followup-detail-label">Corporate / multi-day</span>
+            <span class="followup-detail-desc">Custom scope for conferences, offsites, and executive retreats.</span>
+            <span class="followup-detail-price" style="font-size:0.8rem;">Contact for pricing</span>
+          </div>
+        </div>
+        <p class="followup-detail-note">Topics: agent economics, zero-trust AI security, building vs. buying, the 10x solo operator, AI readiness assessment.</p>
+        <a href="#" onclick="openContactForm({focus:'speaking'});return false" class="tier-cta" style="margin-top:0.75rem; padding-top:0.75rem;">Book a speaking engagement &rarr;</a>
+      </div>
     </div>
   </div>
 
@@ -878,6 +917,13 @@ function askAIFromFAQ() {
 <script src="/charts.js?v=20260309w"></script>
 <script>
 Briu.charts.automationBars('hp-automation-bars');
+</script>
+<script>
+document.querySelectorAll('.followup-expandable').forEach(function(el) {
+  el.querySelector('.followup-top').addEventListener('click', function() {
+    el.classList.toggle('expanded');
+  });
+});
 </script>
 </body>
 </html>
