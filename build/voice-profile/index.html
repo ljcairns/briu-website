@@ -4,15 +4,15 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Briu | How We Built a Voice Profile From 34,000 Lines of Writing</title>
-<meta name="description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile that catches the difference between correct and right.">
+<meta name="description" content="34,201 lines of real writing. Two files. $6 in API. Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works.">
 <meta property="og:title" content="Briu | Voice Profile">
-<meta property="og:description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile.">
+<meta property="og:description" content="34,201 lines of real writing. Two files. $6 in API. If your agent doesn't sound like you, none of it works.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/voice-profile/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | Voice Profile">
-<meta name="twitter:description" content="Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile.">
+<meta name="twitter:description" content="34,201 lines of real writing. Two files. $6 in API. If your agent doesn't sound like you, none of it works.">
 <link rel="canonical" href="https://briu.ai/build/voice-profile/">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
@@ -29,23 +29,45 @@
 article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
 .section-label { margin-bottom: 1.5rem; }
 article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
+article h3 { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.3; margin: 2rem 0 0.75rem; color: var(--text); }
 article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
 article strong { color: var(--text); }
 article ul { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; padding-left: 1.5rem; }
 article li { margin-bottom: 0.5rem; }
-article code { font-size: 0.88rem; background: rgba(255,255,255,0.04); padding: 0.15rem 0.4rem; border-radius: 3px; }
+/* Corpus table */
+.corpus-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.corpus-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.corpus-table td { padding: 0.75rem 1rem; font-size: 0.95rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.corpus-table td:first-child { color: var(--text); font-weight: 500; }
+/* Cost table */
+.cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.cost-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cost-table td { padding: 0.75rem 1rem; font-size: 0.95rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.cost-table td:last-child { text-align: right; }
+.cost-table th:last-child { text-align: right; }
+.cost-table tr:last-child td { border-bottom: 1px solid rgba(212,160,90,0.3); font-weight: 600; color: var(--gold); }
+/* Pattern cards */
+.pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
+.pattern-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; }
+.pattern-card h4 { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.5rem; }
+.pattern-card p { font-size: 0.88rem; margin-bottom: 0; }
+/* Voice examples */
 .voice-example { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; margin: 1.5rem 0; }
 .voice-example-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.5rem; }
 .voice-example-label.bad { color: var(--coral); }
 .voice-example-label.good { color: var(--forest); }
 .voice-example p { font-size: 0.92rem; margin-bottom: 0; font-style: italic; }
-.pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
-.pattern-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; }
-.pattern-card h4 { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-bottom: 0.5rem; }
-.pattern-card p { font-size: 0.88rem; margin-bottom: 0; }
+/* File architecture */
+.file-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; margin: 1rem 0; }
+.file-card h4 { font-family: monospace; font-size: 0.95rem; color: var(--gold); margin-bottom: 0.5rem; }
+.file-card .file-size { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+.file-card ul { font-size: 0.88rem; margin-bottom: 0; padding-left: 1.25rem; }
+.file-card li { margin-bottom: 0.25rem; }
 @media (max-width: 640px) {
   article { padding: 2rem 1.25rem 4rem; }
   article h2 { margin-top: 2rem; }
+  .corpus-table td, .corpus-table th { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
+  .cost-table td, .cost-table th { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
 }
 </style>
 <script type="application/ld+json">
@@ -53,7 +75,7 @@ article code { font-size: 0.88rem; background: rgba(255,255,255,0.04); padding: 
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "How We Built a Voice Profile From 34,000 Lines of Writing",
-  "description": "Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works. Here's how we built a voice profile that catches the difference between correct and right.",
+  "description": "34,201 lines of real writing. Two files. $6 in API. Your agent drafts emails, writes copy, and talks to customers. If it doesn't sound like you, none of it works.",
   "author": {"@type": "Person", "name": "Lucas Cairns"},
   "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
   "datePublished": "2026-03-09",
@@ -97,102 +119,210 @@ article code { font-size: 0.88rem; background: rgba(255,255,255,0.04); padding: 
 
   <p>When your agent drafts a client email and it reads like ChatGPT wrote it, the client notices. Maybe not consciously. But the trust erodes. The whole point of an agent handling your communication is that it sounds like you handled it. If it doesn't, you're just adding a review step to content you'll rewrite anyway.</p>
 
-  <h2 class="reveal">The Source Material</h2>
+  <p>We needed a system that captures how Lucas actually writes, not how AI thinks a professional should write, and makes it available to every agent interaction, every draft, every piece of website copy.</p>
 
-  <p>We started with everything the founder had written. Not curated samples. Everything.</p>
+  <h2 class="reveal">The Corpus</h2>
 
-  <ul>
-    <li>Emails: thousands of sent messages across work and personal accounts</li>
-    <li>Chat: Slack messages, Discord messages, iMessages</li>
-    <li>Long-form: website copy, proposals, internal docs</li>
-    <li>Short-form: social posts, comments, text threads</li>
-  </ul>
+  <p>We pulled from every source of real writing we could find. 34,201 lines across five sources.</p>
 
-  <p>34,000 lines of real writing. Different registers, different audiences, different levels of formality. That range is the point. A voice profile that only captures how you write proposals misses how you write to your best client at 11pm on a Tuesday.</p>
+  <table class="corpus-table reveal">
+    <thead>
+      <tr><th>Source</th><th>Volume</th><th>What It Captures</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Business emails (Subsights)</td><td>7,470 lines, 100 emails</td><td>Polished outward voice. Client reports, sales outreach, vendor declines, technical explainers.</td></tr>
+      <tr><td>Personal emails</td><td>8,384 lines, 100 emails</td><td>Unfiltered personality. How he writes when there's no professional filter.</td></tr>
+      <tr><td>Google Docs</td><td>1,557 lines, 8 documents</td><td>Strategic writing. Business plans, patent applications, pitch decks.</td></tr>
+      <tr><td>Claude Code sessions</td><td>16,263 lines, 790 messages</td><td>Working voice. How he gives direction, reacts to results, makes decisions.</td></tr>
+      <tr><td>Discord messages</td><td>527 lines, 243 messages</td><td>Raw commands and casual vocabulary. Voice-to-text artifacts, frustration patterns, approval language.</td></tr>
+    </tbody>
+  </table>
 
-  <h2 class="reveal">What We Extracted</h2>
+  <p>Each source matters for a different reason. Emails show the finished product. Discord and Claude Code sessions show the raw material, the vocabulary that comes out when he's not editing himself. Google Docs show how he structures long-form arguments. You need all of it to get the full picture.</p>
 
-  <p>The profile isn't a list of rules. It's a structured document that captures patterns across several dimensions:</p>
+  <p><strong>Cost: ~$2 in API for corpus extraction across Gmail and Google Drive. One session.</strong></p>
+
+  <h2 class="reveal">What We Found</h2>
+
+  <p>The analysis surfaced patterns that no style guide would have predicted. These aren't rules someone decided to follow. They're habits that showed up consistently across 34,000 lines.</p>
+
+  <h3 class="reveal">Signature patterns (use these)</h3>
 
   <div class="pattern-grid reveal">
     <div class="pattern-card">
-      <h4>Contractions</h4>
-      <p>Always. "Don't" not "do not." "It's" not "it is." "We're" not "we are." The founder never writes without contractions unless quoting someone else.</p>
+      <h4>Parenthetical Precision</h4>
+      <p>Context lives in parentheses: "(up from 4.5 in January)", "(56% chat-to-click rate)", "(a VPN)". Showed up in emails, business plans, and Discord messages. The single strongest identifier.</p>
     </div>
     <div class="pattern-card">
-      <h4>Punctuation</h4>
-      <p>Periods and commas. Never em dashes. Never semicolons. Colons only for lists. The founder treats em dashes the same way some people treat Comic Sans.</p>
+      <h4>Front-Loaded Takeaways</h4>
+      <p>The first sentence is always the point. "Key takeaway from February: quality of engagement continues to improve." Then the supporting detail. Never the other way around.</p>
     </div>
     <div class="pattern-card">
-      <h4>Sentence Structure</h4>
-      <p>Short. Subject-verb-object. Fragments are fine. Paragraphs rarely exceed 3 sentences. The style gets more formal in proposals but never loses the directness.</p>
+      <h4>Data Over Claims</h4>
+      <p>Never "powerful" or "industry-leading." Always the number: "96% of injection attacks caught." Percentages always paired with raw counts: "111 clicks (56% chat-to-click rate)."</p>
     </div>
     <div class="pattern-card">
-      <h4>Vocabulary</h4>
-      <p>No consultant jargon. Never "orchestrate," "leverage," "synergy," "holistic." Plain English. "Run" not "orchestrate." "Use" not "leverage." "Help" not "empower."</p>
+      <h4>Contractions, Always</h4>
+      <p>we've, we'll, it's, don't, I'm, I'd. Across every source, every context. The only exceptions were deliberate weight in formal documents.</p>
     </div>
     <div class="pattern-card">
-      <h4>Tone Markers</h4>
-      <p>Confident without being performative. Never "honestly" or "to be completely transparent" (both signal the opposite). Humor is dry, not clever. Self-deprecating occasionally.</p>
+      <h4>"That said" for Pivots</h4>
+      <p>Not "however." Not "on the other hand." Always "That said," to introduce counterpoints or caveats.</p>
     </div>
     <div class="pattern-card">
-      <h4>Formality Register</h4>
-      <p>Three levels detected: client-facing (direct but warm), internal (casual, fragments), personal (loose, humor, abbreviations). The agent needs to match context.</p>
+      <h4>"Happy to [verb]"</h4>
+      <p>"Happy to walk through the details." "Happy to connect for a brief call." Never "I'd love to" or "I'd be happy to discuss."</p>
     </div>
   </div>
 
-  <h2 class="reveal">Before and After</h2>
+  <h3 class="reveal">Forbidden patterns (the AI fingerprint)</h3>
 
-  <p>The difference is immediate. Here's the same email drafted with and without the voice profile:</p>
-
-  <div class="voice-example reveal">
-    <div class="voice-example-label bad">Without voice profile</div>
-    <p>"I'd love to schedule a time to discuss how we might be able to help streamline your team's workflows. We've had great success with organizations similar to yours, and I believe there's a significant opportunity for operational improvement. Would you be open to a brief call this week?"</p>
-  </div>
-
-  <div class="voice-example reveal">
-    <div class="voice-example-label good">With voice profile</div>
-    <p>"Your team's doing a lot of manual CRM work that an agent could handle. We built something similar for a 15-person sales team last month. Want to see what it'd look like for yours? Happy to jump on a call this week."</p>
-  </div>
-
-  <p>Same intent. Completely different feel. The first reads like AI. The second reads like a person who knows what they're talking about and respects your time.</p>
-
-  <h2 class="reveal">How It Works in Practice</h2>
-
-  <p>The voice profile lives as a system prompt component. Every time the agent drafts an email, writes website copy, or responds in chat, the profile is injected alongside the task instructions.</p>
-
-  <p>It's not a rigid template. The agent still adapts to context. A follow-up email to an existing client sounds different from a first-touch cold outreach. But the underlying voice stays consistent. The contractions stay. The jargon stays out. The sentence length stays short.</p>
-
-  <p><strong>The profile also includes anti-patterns.</strong> Things the agent must never do, because they're the clearest tells that AI wrote it:</p>
+  <p>These are the patterns that showed up zero times across 34,000 lines of real writing but appear constantly in AI-generated content:</p>
 
   <ul>
-    <li>Never start an email with "I hope this email finds you well"</li>
-    <li>Never use "I'd love to" or "I'm excited to"</li>
-    <li>Never restate a paragraph in different words right after it</li>
-    <li>Never use em dashes for parenthetical information</li>
-    <li>Never use "leverage" as a verb</li>
-    <li>Never use performative honesty ("to be candid," "frankly")</li>
+    <li>"I hope this email finds you well" (or any variant)</li>
+    <li>"I'd love to" / "I'm excited to" / "thrilled to" / "We're delighted"</li>
+    <li>"Just circling back" / "Just checking in"</li>
+    <li>"leverage" (as verb) / "synergy" / "cutting-edge" / "game-changing" / "next-generation"</li>
+    <li>"Best regards" / "Kind regards" / "Warm regards" / "Sincerely"</li>
+    <li>Em dashes. Lucas uses commas, periods, or parentheses. Never em dashes.</li>
+    <li>Recap paragraphs that restate what was just said</li>
+    <li>Paragraphs that exist only to justify the value of what was just described</li>
   </ul>
 
-  <h2 class="reveal">The Process</h2>
+  <h3 class="reveal">The 2024 vs. 2026 discovery</h3>
 
-  <p>Building a voice profile takes about 2-3 hours of focused work:</p>
+  <p>The analysis caught something we didn't expect. Lucas's 2024 writing sounds different from his 2026 writing. Earlier emails had phrases like "We greatly appreciate you and your partnership!" and "Looking forward to helping you drive even more value!" Those were AI-assisted drafts from a period when the tools were doing more of the writing.</p>
+
+  <p>By 2026, the voice tightened significantly. Shorter sentences, more direct, no performative language. If content sounds like 2024-era Lucas, it's wrong. The voice profile needed to exclude those patterns explicitly, or the agent would learn the wrong version.</p>
+
+  <h3 class="reveal">The casual voice (the secret weapon)</h3>
+
+  <p>Discord messages and Claude Code sessions revealed patterns that never show up in polished writing but define personality:</p>
 
   <ul>
-    <li><strong>Collect:</strong> gather 3-6 months of sent emails, chat messages, and any long-form writing. More is better. Different contexts are essential.</li>
-    <li><strong>Analyze:</strong> Claude reads through the corpus and identifies patterns. Not just what you write, but what you consistently avoid.</li>
-    <li><strong>Structure:</strong> the patterns get organized into a profile document with positive patterns (do this), negative patterns (never do this), and register variations (formal vs. casual vs. internal).</li>
-    <li><strong>Test:</strong> the agent drafts 10-15 emails across different scenarios. The founder reviews and flags anything that doesn't sound right. Those flags feed back into the profile.</li>
-    <li><strong>Iterate:</strong> the profile improves over time as the agent produces more content and gets more feedback. Corrections are permanent.</li>
+    <li><strong>Three modes of communication:</strong> Terse commands ("health check", "commit this"), voice-stream thinking (long unpunctuated runs exploring options), and structured specs (numbered lists with exact file paths).</li>
+    <li><strong>Near-silent approval:</strong> "Good" followed by the next task. Never "great job" or "perfect."</li>
+    <li><strong>Decision language:</strong> "lets do it" / "yeah lets." Casual imperative. Big decisions and small decisions get the same treatment.</li>
+    <li><strong>"lol" as pressure release.</strong> Flat emotional register. Points out errors directly, never dwells, immediately pivots to fixing.</li>
   </ul>
 
-  <h2 class="reveal">Why This Matters</h2>
+  <p>This matters because the agent doesn't just write emails. It communicates through Discord, drafts internal notes, and generates working documents. Knowing that Lucas says "Good" and moves on (not "Great work on this!") changes how the agent reports its own results.</p>
 
-  <p>Every business that deploys an agent for communication faces this problem. The agent can be technically competent, make zero mistakes, and still feel wrong. Customers can tell. Colleagues can tell. The uncanny valley of AI writing is real, and it undermines the trust you've built through years of personal communication.</p>
+  <h2 class="reveal">The Two-File Architecture</h2>
 
-  <p>A voice profile closes that gap. It turns the agent from a generic AI writer into something that sounds like you on your best day. Not a perfect copy. But close enough that the people receiving those emails don't think twice.</p>
+  <p>A comprehensive voice profile is ~280 lines. That's too much context to inject into every drafting prompt, but too valuable to skip. We split it into two files optimized for different uses.</p>
 
-  <p><strong>Cost: a few hours of setup and 34,000 lines of source material you already have. The result is an agent that sounds like you for every email, every draft, every customer interaction, forever.</strong></p>
+  <div class="file-card reveal">
+    <h4>VOICE.md</h4>
+    <div class="file-size">~120 lines, compact operational guide</div>
+    <p>Read once per session, held in context for all drafting. Contains:</p>
+    <ul>
+      <li>Voice DNA: 10 distinctive patterns with examples</li>
+      <li>Tone by Context: table mapping 7 contexts to register and rules</li>
+      <li>Personality Markers: 7 traits with examples</li>
+      <li>Forbidden Patterns: complete anti-AI checklist</li>
+      <li>5 key examples covering the most common drafting scenarios</li>
+    </ul>
+  </div>
+
+  <div class="file-card reveal">
+    <h4>VOICE-FULL.md</h4>
+    <div class="file-size">~280 lines, complete reference</div>
+    <p>Read once per session for deep context. Referenced when drafting unfamiliar content types. Contains everything in VOICE.md plus:</p>
+    <ul>
+      <li>Full email mechanics (openings, closings, CTAs)</li>
+      <li>Complete vocabulary analysis (register, jargon adaptation)</li>
+      <li>Audience adaptation for 6 different contexts</li>
+      <li>Casual working voice analysis (direction style, reactions, frustration)</li>
+      <li>12 complete examples spanning every content type</li>
+    </ul>
+  </div>
+
+  <p>The split matters for token efficiency. Most drafting sessions only need VOICE.md. When the agent encounters a content type it hasn't drafted before (a pitch deck, a complaint letter, a technical explainer for a non-technical audience), it pulls from VOICE-FULL.md for the specific patterns.</p>
+
+  <h2 class="reveal">The Website Audit</h2>
+
+  <p>Once the voice profile was built, we ran it against our own website. The results were not subtle.</p>
+
+  <p><strong>25+ em dashes</strong> across the site. Lucas doesn't use em dashes. Every one was either a comma, a period, or a parenthetical trying to happen.</p>
+
+  <p><strong>30+ missing contractions</strong> on the /why-now/ page alone. "It is not" instead of "it isn't." "You do not" instead of "you don't." The page read like a formal essay, not like the founder wrote it.</p>
+
+  <p><strong>Consultant jargon:</strong> "orchestrate" (5 instances), "highest-leverage" (3 instances), "executive working session" (2 instances). Lucas says "run," "operate," and "coordinate."</p>
+
+  <p><strong>Restated paragraphs:</strong> The "What We Do" section on the homepage had a paragraph that restated the hero copy word for word. Forbidden pattern: content that exists only to restate what was just said.</p>
+
+  <p><strong>Performative honesty:</strong> "We'll tell you honestly" and "We'd rather tell you upfront than waste your time." If you have to announce that you're being honest, it reads as defensive. Just be honest.</p>
+
+  <p>Every fix was specific. Not "make it sound more casual" but "replace this em dash with a period" and "contract this verb." The voice profile turns subjective editorial judgment into a checklist.</p>
+
+  <h3 class="reveal">Before and after</h3>
+
+  <div class="voice-example reveal">
+    <div class="voice-example-label bad">Before</div>
+    <p>"Every engagement starts with understanding your business. We build your first agent in the kickoff, deploy more on contract, and your team learns to orchestrate alongside us."</p>
+  </div>
+  <div class="voice-example reveal">
+    <div class="voice-example-label good">After</div>
+    <p>"We build your first agent in the kickoff. Deploy more on contract. Your team learns to run them."</p>
+  </div>
+
+  <div class="voice-example reveal">
+    <div class="voice-example-label bad">Before</div>
+    <p>"AI agents deployed for your business &mdash; at a fraction of what you'd expect."</p>
+  </div>
+  <div class="voice-example reveal">
+    <div class="voice-example-label good">After</div>
+    <p>"AI agents deployed for your business. Most run for $2-5/day."</p>
+  </div>
+
+  <div class="voice-example reveal">
+    <div class="voice-example-label bad">Before</div>
+    <p>"No. We automate the repetitive parts of your team's work so they can focus on judgment, relationships, and strategy. The goal is leverage, not headcount reduction."</p>
+  </div>
+  <div class="voice-example reveal">
+    <div class="voice-example-label good">After</div>
+    <p>"No. We automate the repetitive work so your team focuses on what requires judgment. The goal is leverage, not headcount reduction."</p>
+  </div>
+
+  <p>Same meaning. Fewer words. Sounds like a person, not a language model.</p>
+
+  <h2 class="reveal">The Replicable Pattern</h2>
+
+  <p>This isn't specific to Lucas or to Briu. Any business can build a voice profile from sources they already have.</p>
+
+  <ul>
+    <li><strong>Build the corpus.</strong> Pull from every source where the founder or key voice actually writes: sent emails (100-200 is plenty), chat messages, documents, meeting transcripts. Skip anything that was AI-assisted.</li>
+    <li><strong>Analyze for patterns.</strong> Consistent habits (sentence length, punctuation, contractions). Signature phrases. What's absent (your forbidden list). How voice changes by audience. How it's evolved over time.</li>
+    <li><strong>Build the two-file system.</strong> Compact guide (~100-150 lines) for every drafting context. Full reference (~250-300 lines) for unfamiliar territory.</li>
+    <li><strong>Audit existing content.</strong> Run the profile against your website, email templates, agent output. Flag every line that violates the profile. The fixes will be specific and mechanical, not subjective.</li>
+    <li><strong>Maintain.</strong> Review quarterly. New patterns emerge. Old ones fade. The forbidden list grows as you find new AI-isms creeping in.</li>
+  </ul>
+
+  <h2 class="reveal">What This Cost</h2>
+
+  <table class="cost-table reveal">
+    <thead>
+      <tr><th>Item</th><th>Cost</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Corpus extraction (Gmail, Google Drive, Discord, session logs)</td><td>~$2 API</td></tr>
+      <tr><td>Analysis and voice profile drafting</td><td>~$3 API</td></tr>
+      <tr><td>Website audit and rewrite suggestions</td><td>~$1 API</td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>~$6</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>Timeline: two sessions. One for corpus building and analysis. One for optimization, the two-file split, and the website audit.</p>
+
+  <p>The voice profile is now a permanent asset. Every email the agent drafts, every piece of website copy, every client-facing message runs through it. The $6 investment compounds every time the agent writes something that sounds like Lucas instead of like AI.</p>
+
+  <h2 class="reveal">What It Can't Do</h2>
+
+  <p>The voice profile catches mechanical patterns. It can't catch judgment. It can tell the agent to use "That said," instead of "However," but it can't tell the agent when a counterpoint is appropriate. It can enforce contractions and kill em dashes, but it can't decide whether a message needs to be warm or direct.</p>
+
+  <p>The human still makes the calls that require taste. The voice profile handles everything else, so the human's review time goes toward judgment instead of copy-editing.</p>
 
   <div style="text-align: center; margin-top: 3rem;" class="reveal">
     <a href="#" onclick="openContactForm();return false" class="cta-button">Build Your Voice Profile</a>
