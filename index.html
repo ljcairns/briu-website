@@ -733,7 +733,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       </div>
     </div>
   </div>
-  <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max $200/mo shared platform.</div>
+  <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>
 </section>
 
 <!-- Wave divider -->
@@ -866,7 +866,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
   <div class="proof-summary reveal">
     <div class="proof-summary-stat">
-      <div class="proof-summary-num" data-count="376" data-prefix="$">$0</div>
+      <div class="proof-summary-num" data-count="376" data-prefix="$" data-config="costs.agent_api_total" data-config-format="dollar">$0</div>
       <div class="proof-summary-label">Total agent build cost</div>
     </div>
     <div class="proof-summary-stat">
@@ -910,7 +910,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <div class="kickoff-card">
       <div class="kickoff-card-header">
         <div class="tier-name">Founder Kickoff</div>
-        <div class="tier-price">$3,500</div>
+        <div class="tier-price"><span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></div>
         <div class="tier-price-note">For solo founders &amp; small teams</div>
       </div>
       <div class="kickoff-card-body">
@@ -923,7 +923,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <div class="kickoff-card kickoff-card-featured">
       <div class="kickoff-card-header">
         <div class="tier-name">Team Kickoff</div>
-        <div class="tier-price">$5,000</div>
+        <div class="tier-price"><span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></div>
         <div class="tier-price-note">For teams with multiple stakeholders</div>
       </div>
       <div class="kickoff-card-body">
@@ -943,7 +943,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     </div>
     <div class="followup-item">
       <span class="followup-name">Retainer</span>
-      <span class="followup-price">From $500/mo</span>
+      <span class="followup-price">From <span data-config="pricing.retainer_from" data-config-format="dollar-mo">$500/mo</span></span>
     </div>
   </div>
 
@@ -1015,7 +1015,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <span class="faq-toggle">+</span>
       </div>
       <div class="faq-a">
-        <p>You pay model providers directly with your own API keys. We don't add a margin to your token spend. API costs for most agents start at $2-5/day, plus a platform subscription (~$200/mo) shared across all your agents. We set budget ceilings so there are no surprises.</p>
+        <p>You pay model providers directly with your own API keys. We don't add a margin to your token spend. API costs for most agents start at $2-5/day, plus a platform subscription (~<span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span>) shared across all your agents. We set budget ceilings so there are no surprises.</p>
       </div>
     </div>
     <div class="faq-item">

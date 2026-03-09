@@ -194,7 +194,7 @@ article p strong { color: var(--text); font-weight: 600; }
 <main>
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build &mdash; The Real Numbers</p>
-  <h1>$376 to build a production agent system. <em>26 days. Every receipt included.</em></h1>
+  <h1><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> to build a production agent system. <em>26 days. Every receipt included.</em></h1>
   <p class="hero-sub">From first skill to a running business. Email, CRM, calendar, sales prospecting, automated reporting, security monitoring, and cost controls. Then we used the same stack to name, brand, and launch Briu. Here's every dollar.</p>
 </section>
 
@@ -203,7 +203,7 @@ article p strong { color: var(--text); font-weight: 600; }
 
   <div class="stats">
     <div class="stat-box">
-      <div class="stat-value">$376</div>
+      <div class="stat-value"><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span></div>
       <div class="stat-label">Total API Spend</div>
     </div>
     <div class="stat-box">
@@ -255,7 +255,7 @@ article p strong { color: var(--text); font-weight: 600; }
       <p class="chart-note">Running total over 26 days. The steepest slopes are the heaviest build and optimization days.</p>
       <div id="cumulative-chart" style="height:340px;position:relative"></div>
       <div class="chart-summary">
-        <span class="big">$376</span>
+        <span class="big"><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span></span>
         <span class="sub">Total investment to build a production agent system + launch a company</span>
       </div>
     </div>
@@ -301,12 +301,12 @@ article p strong { color: var(--text); font-weight: 600; }
   <!-- vs. Traditional -->
   <div class="tab-panel" id="panel-comparison">
     <div class="chart-box">
-      <p class="chart-note">What it would cost to hire humans for the same work. The agent doesn't replace a single role. It handles pieces of many roles, 24/7, for $376 total.</p>
+      <p class="chart-note">What it would cost to hire humans for the same work. The agent doesn't replace a single role. It handles pieces of many roles, 24/7, for <span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> total.</p>
       <div id="comparison-chart" style="padding:1rem 0"></div>
       <div class="callout" style="margin-top:1.5rem;background:rgba(212,160,90,0.06);border-color:rgba(212,160,90,0.12)">
         <p style="text-align:center;line-height:1.8">
           Traditional equivalent: <strong style="color:var(--gold)">~$27,500</strong> in contractors and agencies.<br>
-          Actual cost with agents: <strong style="color:var(--gold)">$376</strong> in API spend + founder time.<br>
+          Actual cost with agents: <strong style="color:var(--gold)"><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span></strong> in API spend + founder time.<br>
           <span style="color:var(--text-muted);font-size:0.85rem">And the system keeps running. Every day it operates, the ROI compounds.</span>
         </p>
       </div>
@@ -314,7 +314,7 @@ article p strong { color: var(--text); font-weight: 600; }
   </div>
 
   <!-- What $376 Built -->
-  <h2 class="reveal">What $376 built</h2>
+  <h2 class="reveal">What <span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> built</h2>
   <div class="cap-grid">
     <div class="cap-card"><h4>Email Management</h4><p>Inbox triage, draft responses, sent-mail tracking across 2 accounts. Human approval before any outbound.</p></div>
     <div class="cap-card"><h4>CRM Automation</h4><p>HubSpot contact/company management, activity logging, deal tracking. Dedup checks against cached data.</p></div>
@@ -328,22 +328,22 @@ article p strong { color: var(--text); font-weight: 600; }
 
   <!-- Full Investment Table -->
   <h2 class="reveal">The full investment picture</h2>
-  <p>The $376 API figure is the OpenClaw runtime cost. Here is the complete picture including all subscriptions and tools used during the first month:</p>
+  <p>The <span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> API figure is the OpenClaw runtime cost. Here is the complete picture including all subscriptions and tools used during the first month:</p>
 
   <table class="inv-table">
     <thead>
       <tr><th>Item</th><th>Cost</th><th>What it did</th></tr>
     </thead>
     <tbody>
-      <tr><td>OpenClaw API</td><td>$376</td><td>Agent runtime: email, CRM, sales, reporting, security, brand research</td></tr>
-      <tr><td>Claude Max</td><td>$200/mo</td><td>Strategy (web app), code generation (Claude Code), 9-10hr sessions</td></tr>
+      <tr><td>OpenClaw API</td><td><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span></td><td>Agent runtime: email, CRM, sales, reporting, security, brand research</td></tr>
+      <tr><td>Claude Max</td><td><span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span></td><td>Strategy (web app), code generation (Claude Code), 9-10hr sessions</td></tr>
       <tr><td>ChatGPT Plus</td><td>$20/mo</td><td>Second opinion, review, cross-validation of agent output</td></tr>
       <tr><td>Gemini Advanced</td><td>$20/mo</td><td>Third opinion, factual checks, alternative perspectives</td></tr>
-      <tr><td>Midjourney</td><td>~$10-20/mo</td><td>400+ brand generations across 7 creative directions</td></tr>
-      <tr><td>Domain (briu.ai)</td><td>$85</td><td>Porkbun registration (.ai TLD)</td></tr>
+      <tr><td>Midjourney</td><td>~$10-20/mo</td><td><span data-config="build.midjourney_generations">400</span>+ brand generations across 7 creative directions</td></tr>
+      <tr><td>Domain (briu.ai)</td><td><span data-config="costs.domain" data-config-format="dollar">$85</span></td><td>Porkbun registration (.ai TLD)</td></tr>
       <tr><td>GitHub Pages</td><td class="free">$0</td><td>Website hosting</td></tr>
       <tr><td>Cloudflare</td><td class="free">$0</td><td>DNS + SSL</td></tr>
-      <tr><td><strong>Total</strong></td><td><strong>~$711</strong></td><td><strong>Production agent + company launch, month one</strong></td></tr>
+      <tr><td><strong>Total</strong></td><td><strong>~<span data-config="costs.total_month_one" data-config-format="dollar">$711</span></strong></td><td><strong>Production agent + company launch, month one</strong></td></tr>
     </tbody>
   </table>
 

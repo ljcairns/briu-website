@@ -96,9 +96,47 @@
     if (data.pageCount) updateEls('page-count', data.pageCount.toLocaleString());
   }
 
+  // ─── Site Config (pricing, costs, build stats) ───
+  function resolveConfigPath(obj, path) {
+    var parts = path.split('.');
+    for (var i = 0; i < parts.length; i++) {
+      if (!obj || typeof obj !== 'object') return undefined;
+      obj = obj[parts[i]];
+    }
+    return obj;
+  }
+
+  function formatConfigValue(val, el) {
+    if (val === undefined || val === null) return '';
+    var fmt = el.getAttribute('data-config-format');
+    if (fmt === 'dollar' && typeof val === 'number') return '$' + val.toLocaleString();
+    if (fmt === 'dollar-mo' && typeof val === 'number') return '$' + val.toLocaleString() + '/mo';
+    if (fmt === 'dollar-day') return '$' + val + '/day';
+    return String(val);
+  }
+
+  function loadConfig() {
+    fetch('/site-config.json?v=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(cfg) {
+        var els = document.querySelectorAll('[data-config]');
+        for (var i = 0; i < els.length; i++) {
+          var path = els[i].getAttribute('data-config');
+          var val = resolveConfigPath(cfg, path);
+          if (val !== undefined) {
+            var display = formatConfigValue(val, els[i]);
+            els[i].textContent = display;
+            if (els[i].hasAttribute('data-count')) els[i].setAttribute('data-count', val);
+          }
+        }
+      })
+      .catch(function() { /* fail silently, keep hardcoded defaults */ });
+  }
+
   function init() {
     updateComputed();
     fetchStats();
+    loadConfig();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

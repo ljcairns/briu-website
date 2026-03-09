@@ -205,7 +205,7 @@
   </div>
 
   <div class="arc-proof">
-    <p>We built our own production agent, brand, and website using this exact stack — <strong>$376 in agent costs</strong>, <strong>3 days to production</strong>. <a href="/build/">See the full build log →</a></p>
+    <p>We built our own production agent, brand, and website using this exact stack — <strong><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> in agent costs</strong>, <strong>3 days to production</strong>. <a href="/build/">See the full build log →</a></p>
   </div>
 </section>
 
@@ -366,7 +366,7 @@
             <div class="tier-name">Founder Kickoff</div>
           </div>
           <div>
-            <div class="tier-price">$3,500</div>
+            <div class="tier-price"><span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></div>
             <div class="tier-price-note">For solo founders & small teams</div>
           </div>
         </div>
@@ -397,7 +397,7 @@
             <div class="tier-name">Team Kickoff</div>
           </div>
           <div>
-            <div class="tier-price">$5,000</div>
+            <div class="tier-price"><span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></div>
             <div class="tier-price-note">For teams with multiple stakeholders</div>
           </div>
         </div>
@@ -450,8 +450,8 @@
         </div>
         <div class="tier-scope">
           <div class="tier-scope-item"><strong>Timeline:</strong> 4-8 weeks in 2-week sprints</div>
-          <div class="tier-scope-item"><strong>Single-agent projects:</strong> $8-20K</div>
-          <div class="tier-scope-item"><strong>Multi-agent systems:</strong> $20-50K+</div>
+          <div class="tier-scope-item"><strong>Single-agent projects:</strong> <span data-config="pricing.implementation_single">8-20K</span></div>
+          <div class="tier-scope-item"><strong>Multi-agent systems:</strong> <span data-config="pricing.implementation_multi">20-50K+</span></div>
         </div>
         <p style="font-size:0.88rem; color:var(--text-muted); margin-top:1rem; margin-bottom:0;">You see working agents in production by week 2. Every sprint delivers deployable capability, not progress reports.</p>
       </div>
@@ -464,7 +464,7 @@
           <div class="tier-name">Retainer</div>
         </div>
         <div>
-          <div class="tier-price">From $500/month</div>
+          <div class="tier-price">From <span data-config="pricing.retainer_from" data-config-format="dollar">$500</span>/month</div>
           <div class="tier-price-note">Ongoing partnership</div>
         </div>
       </div>
@@ -591,9 +591,9 @@ function tfAnswer(q, val) {
     else if (tfAnswers.q2 === 'few') score += 1;
     var result = document.getElementById('tfResult');
     if (score >= 3) {
-      result.innerHTML = '<p class="tf-rec">Team Kickoff — $5,000</p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Team Kickoff →</a>';
+      result.innerHTML = '<p class="tf-rec">Team Kickoff — <span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Team Kickoff →</a>';
     } else {
-      result.innerHTML = '<p class="tf-rec">Founder Kickoff — $3,500</p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Founder Kickoff →</a>';
+      result.innerHTML = '<p class="tf-rec">Founder Kickoff — <span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Founder Kickoff →</a>';
     }
     result.style.display = '';
   }
