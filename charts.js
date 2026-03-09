@@ -519,37 +519,70 @@ Briu.charts.agentTeam = function(containerId) {
   var container = document.getElementById(containerId);
   if (!container) return;
 
-  var agents = [
-    { title: 'Email Agent', desc: 'Triage, draft, follow-up', tools: ['Gmail', 'Contacts', 'Calendar'] },
-    { title: 'CRM Agent', desc: 'Pipeline, updates, scoring', tools: ['HubSpot', 'PipeDrive', 'Apollo'] },
-    { title: 'Research Agent', desc: 'Prospects, competitive intel', tools: ['Web', 'LinkedIn', 'Docs'] },
-    { title: 'Reporting Agent', desc: 'Dashboards, summaries, alerts', tools: ['Notion', 'Slack', 'Sheets'] }
-  ];
+  var html = '<div class="chart-surface" style="padding:24px 18px 14px">' +
+    '<div class="chart-label">What a typical agent deployment looks like</div>' +
+    '<div class="constellation constellation-hp">' +
 
-  var html = '<div class="chart-surface"><div class="chart-label">How a real agent deployment is structured</div>' +
-    '<div class="agent-org">' +
-    '<div class="agent-org-level"><div class="agent-org-node human">' +
-    '<div class="agent-org-icon">&#x1f464;</div>' +
-    '<div class="agent-org-title">You</div>' +
-    '<div class="agent-org-desc">Approve, direct, override</div>' +
-    '</div></div>' +
-    '<div class="agent-org-connector"></div>' +
-    '<div class="agent-org-level"><div class="agent-org-node meta">' +
-    '<div class="agent-org-icon">&#x1f9e0;</div>' +
-    '<div class="agent-org-title">Meta-Agent</div>' +
-    '<div class="agent-org-desc">Manages all agents, checks work, summarizes daily</div>' +
-    '</div></div>' +
-    '<div class="agent-org-connector"></div>' +
-    '<div class="agent-org-level">';
-  agents.forEach(function(a) {
-    html += '<div class="agent-org-node sub">' +
-      '<div class="agent-org-title">' + a.title + '</div>' +
-      '<div class="agent-org-desc">' + a.desc + '</div>' +
-      '<div class="agent-org-tools">' + a.tools.map(function(t) { return '<span class="agent-org-tool">' + t + '</span>'; }).join('') + '</div>' +
-      '</div>';
-  });
-  html += '</div></div>' +
-    '<div class="chart-source">Source: Calacanis "Ultron" meta-agent managing 4 replicants — All-In E261</div></div>';
+    /* SVG lines — desktop only */
+    '<svg class="constellation-lines" viewBox="0 0 700 400" preserveAspectRatio="xMidYMid meet">' +
+    /* You to orchestrator */
+    '<line x1="350" y1="70" x2="350" y2="160" />' +
+    /* Orchestrator to 4 agents */
+    '<line x1="350" y1="210" x2="100" y2="320" />' +
+    '<line x1="350" y1="210" x2="270" y2="320" />' +
+    '<line x1="350" y1="210" x2="440" y2="320" />' +
+    '<line x1="350" y1="210" x2="610" y2="320" />' +
+    '</svg>' +
+
+    /* Row 1: You */
+    '<div class="c-row c-row-hp-you">' +
+    '<div class="c-node c-founder">' +
+    '<div class="c-circle c-human"><span>You</span></div>' +
+    '<div class="c-label">Your Team</div>' +
+    '<div class="c-sub">Approve &middot; direct &middot; override</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="c-connector"></div>' +
+
+    /* Row 2: Orchestrator */
+    '<div class="c-row c-row-hp-orch">' +
+    '<div class="c-node c-primary">' +
+    '<div class="c-circle c-orchestrator"><span>&#x1f9e0;</span></div>' +
+    '<div class="c-label">Orchestrator</div>' +
+    '<div class="c-sub">Manages agents &middot; checks work &middot; reports daily</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="c-connector"></div>' +
+
+    /* Row label */
+    '<div class="c-row-label c-row-label-hp-agents">Your Agents</div>' +
+
+    /* Row 3: 4 specialist agents */
+    '<div class="c-row c-row-hp-agents">' +
+    '<div class="c-node c-skill">' +
+    '<div class="c-circle c-agent"><span>&#x2709;</span></div>' +
+    '<div class="c-label">Email</div>' +
+    '<div class="c-sub">Triage &middot; draft &middot; follow-up</div>' +
+    '</div>' +
+    '<div class="c-node c-skill">' +
+    '<div class="c-circle c-agent"><span>&#x1f4ca;</span></div>' +
+    '<div class="c-label">CRM</div>' +
+    '<div class="c-sub">Pipeline &middot; updates &middot; scoring</div>' +
+    '</div>' +
+    '<div class="c-node c-skill">' +
+    '<div class="c-circle c-agent"><span>&#x1f50d;</span></div>' +
+    '<div class="c-label">Research</div>' +
+    '<div class="c-sub">Prospects &middot; competitive intel</div>' +
+    '</div>' +
+    '<div class="c-node c-skill">' +
+    '<div class="c-circle c-agent"><span>&#x1f4c8;</span></div>' +
+    '<div class="c-label">Reporting</div>' +
+    '<div class="c-sub">Dashboards &middot; alerts</div>' +
+    '</div>' +
+    '</div>' +
+
+    '</div>' + /* end constellation */
+    '<div class="chart-source">Typical deployment pattern. Your agents connect to your existing tools — nothing changes without your approval.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');

@@ -263,6 +263,13 @@
 .c-env { font-size: 0.58rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); margin-top: 3px; opacity: 0.6; }
 .c-secondary .c-label { font-size: 0.7rem; color: var(--text-muted); }
 
+/* ---- Homepage constellation variant (shorter, 4 agents) ---- */
+.constellation-hp { height: 400px; }
+.constellation-hp .c-row-hp-you { top: 16px; }
+.constellation-hp .c-row-hp-orch { top: 145px; }
+.constellation-hp .c-row-hp-agents { top: 290px; gap: 40px; }
+.constellation-hp .c-row-label-hp-agents { top: 285px; }
+
 /* Constellation mobile — MUST come after base styles */
 @media (max-width: 820px) {
   .constellation {
@@ -310,6 +317,10 @@
   /* Hide audit group + secondary nodes on mobile */
   .c-audit-group { display: none !important; }
   .c-node.c-secondary { display: none !important; }
+  /* Homepage variant: allow 4 agents to wrap 2x2 */
+  .constellation-hp { height: auto !important; }
+  .constellation-hp .c-row-hp-agents { flex-wrap: wrap !important; gap: 12px 8px !important; }
+  .constellation-hp .c-row-hp-agents .c-node { max-width: 80px !important; flex: 0 0 calc(25% - 8px) !important; min-width: 70px !important; }
   /* Row labels as inline dividers on mobile */
   .c-row-label {
     position: static !important;
