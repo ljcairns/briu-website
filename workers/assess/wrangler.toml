@@ -1,0 +1,10 @@
+name = "briu-assess"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://briu.ai"
+
+# Set via `wrangler secret put ANTHROPIC_API_KEY`
+# [secrets]
+# ANTHROPIC_API_KEY

@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css">
+<link rel="stylesheet" href="/shared.css?v=20260308c">
 <style>
 .hero { padding: 8rem 2rem 2rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
 .hero::before { content: ''; position: absolute; top: 0; left: 0; width: 720px; height: 520px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); filter: blur(80px); pointer-events: none; }
@@ -34,7 +34,7 @@ article strong { color: var(--text); }
 .callout { background: rgba(77,128,112,0.08); border: 1px solid rgba(77,128,112,0.15); padding: 1.5rem; margin: 2rem 0; }
 .callout p { color: var(--text); margin: 0; }
 /* Phase filmstrip */
-.phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 0 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: calc(50vw - 50% + 2rem); padding-right: 2rem; }
+.phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 2rem 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
 .phase-strip::-webkit-scrollbar { height: 4px; }
 .phase-strip::-webkit-scrollbar-track { background: transparent; }
 .phase-strip::-webkit-scrollbar-thumb { background: rgba(212,160,90,0.3); border-radius: 2px; }
@@ -259,6 +259,6 @@ article strong { color: var(--text); }
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js"></script>
+<script src="/shared.js?v=20260308c"></script>
 </body>
 </html>

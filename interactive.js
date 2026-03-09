@@ -7,6 +7,8 @@
 (function() {
   'use strict';
   var KEY = 'briu_assess';
+  var AI_KEY = 'briu_assess_ai';
+  var ASSESS_API = 'https://assess.briu.ai';
   var STEPS = 4;
   var answers = {};
 
@@ -44,7 +46,7 @@
   };
 
   window.resetAssess = function() {
-    try { localStorage.removeItem(KEY); } catch(e) {}
+    try { localStorage.removeItem(KEY); localStorage.removeItem(AI_KEY); } catch(e) {}
     answers = {};
     var r = document.getElementById('assessResult');
     if (r) { r.classList.remove('active'); r.innerHTML = ''; }
@@ -103,27 +105,8 @@
     var s = score();
     var p = persona(s);
     var rc = recs();
-    var angle = (s / 100) * 360;
 
-    var h = '<div class="assess-gauge" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
-      '<div class="assess-gauge-inner"><div class="assess-gauge-score">' + (instant ? s : '0') + '</div><div class="assess-gauge-label">Readiness</div></div></div>' +
-      '<h3 class="assess-persona">' + p.label + '</h3>' +
-      '<p class="assess-desc">' + p.desc + '</p><div class="assess-recs">';
-
-    for (var i = 0; i < rc.length; i++) {
-      h += '<div class="assess-rec"><p><strong>' + rc[i].title + '</strong> — ' + rc[i].desc;
-      if (rc[i].link) h += ' <a href="' + rc[i].link + '" style="color:var(--gold)">Read →</a>';
-      h += '</p></div>';
-    }
-
-    h += '</div><div class="assess-cta-group">' +
-      '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
-      '<a href="#services" class="hero-cta-secondary">See pricing</a></div>' +
-      '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
-
-    el.innerHTML = h;
-    el.classList.add('active');
-
+    // Hide quiz steps, show progress complete
     for (var j = 1; j <= STEPS; j++) {
       var step = document.getElementById('assess-' + j);
       if (step) step.classList.remove('active');
@@ -131,13 +114,111 @@
     var bar = document.getElementById('assessProgress');
     if (bar) bar.style.width = '100%';
 
-    // Animate score
+    // Check for cached AI response
+    var cachedAI = null;
+    try { cachedAI = localStorage.getItem(AI_KEY); } catch(e) {}
+
+    if (cachedAI && instant) {
+      renderAIResult(el, s, cachedAI, rc, true);
+      personalizePageSections();
+      return;
+    }
+
+    // Show loading state while fetching AI response
+    if (!instant) {
+      renderLoading(el, s);
+      fetchAIRecommendation(answers, function(aiText) {
+        if (aiText) {
+          try { localStorage.setItem(AI_KEY, aiText); } catch(e) {}
+          renderAIResult(el, s, aiText, rc, false);
+        } else {
+          renderStaticResult(el, s, p, rc, false);
+        }
+        personalizePageSections();
+      });
+    } else {
+      renderStaticResult(el, s, p, rc, true);
+      personalizePageSections();
+    }
+  }
+
+  function renderLoading(el, s) {
+    var angle = (s / 100) * 360;
+    var h = '<div class="assess-gauge" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
+      '<div class="assess-gauge-inner"><div class="assess-gauge-score">0</div><div class="assess-gauge-label">Readiness</div></div></div>' +
+      '<div class="assess-loading"><div class="assess-loading-dots"><span></span><span></span><span></span></div>' +
+      '<p style="color:var(--text-muted);font-size:0.88rem;margin-top:1rem">Analyzing your situation...</p></div>';
+    el.innerHTML = h;
+    el.classList.add('active');
+    var scoreEl = el.querySelector('.assess-gauge-score');
+    if (scoreEl) countUp(scoreEl, 0, s, 1200);
+  }
+
+  function renderAIResult(el, s, aiText, rc, instant) {
+    var angle = (s / 100) * 360;
+    var h = '<div class="assess-gauge" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
+      '<div class="assess-gauge-inner"><div class="assess-gauge-score">' + (instant ? s : '0') + '</div><div class="assess-gauge-label">Readiness</div></div></div>' +
+      '<div class="assess-ai-response">' + escapeHtml(aiText).replace(/\n\n/g, '</p><p>').replace(/^/, '<p>').replace(/$/, '</p>') + '</div>' +
+      '<div class="assess-recs" style="margin-top:1.5rem">';
+    for (var i = 0; i < rc.length; i++) {
+      h += '<div class="assess-rec"><p><strong>' + rc[i].title + '</strong> — ' + rc[i].desc;
+      if (rc[i].link) h += ' <a href="' + rc[i].link + '" style="color:var(--gold)">Read →</a>';
+      h += '</p></div>';
+    }
+    h += '</div><div class="assess-cta-group">' +
+      '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
+      '<a href="#services" class="hero-cta-secondary">See pricing</a></div>' +
+      '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
+    el.innerHTML = h;
+    el.classList.add('active');
     if (!instant) {
       var scoreEl = el.querySelector('.assess-gauge-score');
       if (scoreEl) countUp(scoreEl, 0, s, 1200);
     }
+  }
 
-    personalizePageSections();
+  function renderStaticResult(el, s, p, rc, instant) {
+    var angle = (s / 100) * 360;
+    var h = '<div class="assess-gauge" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
+      '<div class="assess-gauge-inner"><div class="assess-gauge-score">' + (instant ? s : '0') + '</div><div class="assess-gauge-label">Readiness</div></div></div>' +
+      '<h3 class="assess-persona">' + p.label + '</h3>' +
+      '<p class="assess-desc">' + p.desc + '</p><div class="assess-recs">';
+    for (var i = 0; i < rc.length; i++) {
+      h += '<div class="assess-rec"><p><strong>' + rc[i].title + '</strong> — ' + rc[i].desc;
+      if (rc[i].link) h += ' <a href="' + rc[i].link + '" style="color:var(--gold)">Read →</a>';
+      h += '</p></div>';
+    }
+    h += '</div><div class="assess-cta-group">' +
+      '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
+      '<a href="#services" class="hero-cta-secondary">See pricing</a></div>' +
+      '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
+    el.innerHTML = h;
+    el.classList.add('active');
+    if (!instant) {
+      var scoreEl = el.querySelector('.assess-gauge-score');
+      if (scoreEl) countUp(scoreEl, 0, s, 1200);
+    }
+  }
+
+  function fetchAIRecommendation(ans, callback) {
+    fetch(ASSESS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ q1: ans.q1, q2: ans.q2, q3: ans.q3, q4: ans.q4 })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      callback(data.recommendation || null);
+    })
+    .catch(function() {
+      callback(null);
+    });
+  }
+
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
   }
 
   function countUp(el, from, to, dur) {
