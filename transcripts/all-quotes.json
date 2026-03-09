@@ -1,0 +1,605 @@
+{
+  "last_updated": "2026-03-09",
+  "sources": [
+    {
+      "id": "yang-236",
+      "show": "Moonshots with Peter Diamandis",
+      "episode": "#236",
+      "title": "Andrew Yang: UBI Before UHI, Solving Job Loss, and the Future of Work",
+      "video_id": "toE56X2h0wk",
+      "guests": ["Andrew Yang"],
+      "date": "2026"
+    },
+    {
+      "id": "openclaw-237",
+      "show": "Moonshots with Peter Diamandis",
+      "episode": "#237",
+      "title": "OpenClaw Explained: Baby AGI, Security Threats, Mac Mini Became Everyone's Supercomputer",
+      "video_id": "qP73cGLQmCU",
+      "guests": ["Alex Finn"],
+      "date": "2026"
+    },
+    {
+      "id": "karpathy-333",
+      "show": "Lex Fridman Podcast",
+      "episode": "#333",
+      "title": "Andrej Karpathy: Tesla AI, Self-Driving, Optimus, Aliens, and AGI",
+      "video_id": "cdiD-9MMpb0",
+      "guests": ["Andrej Karpathy"],
+      "date": "2022-10",
+      "context": "Recorded BEFORE ChatGPT launched. Karpathy had recently left Tesla as Director of AI."
+    }
+  ],
+  "quotes": [
+    {
+      "id": "yang-1",
+      "source": "yang-236",
+      "quote": "You used to have pyramids — someone said I would hire three juniors for every senior. And now you have columns. You have a senior and then one junior and you're good.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:41:17",
+      "categories": ["empowerment", "org-structure"],
+      "briu_use": "Hero-level visual — pyramid vs column org chart. This IS the Briu value proposition.",
+      "priority": "high"
+    },
+    {
+      "id": "yang-2",
+      "source": "yang-236",
+      "quote": "Our CTO came and said, 'Hey, I don't think we need to hire for that role because the AI tools are now good enough.'",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:41:02",
+      "categories": ["empowerment", "adoption"],
+      "briu_use": "Real proof point — Yang's own company Noble Mobile making this decision.",
+      "priority": "high"
+    },
+    {
+      "id": "yang-3",
+      "source": "yang-236",
+      "quote": "The only career path you can rely on is entrepreneurship — and owning your own future and path.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:42:54",
+      "categories": ["empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-4",
+      "source": "yang-236",
+      "quote": "AI is going to do the work of millions of humans in hours instead of years, and then do the work better — run down all these loose balls that we never would have identified.",
+      "speaker": "Andrew Yang",
+      "timestamp": "1:18:42",
+      "categories": ["productivity", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-5",
+      "source": "yang-236",
+      "quote": "Start talking to the AI. The AI will give you a better road map and a better answer to what you should do next than anyone in politics or anyone out there.",
+      "speaker": "Dave (DB2)",
+      "timestamp": "1:33:00",
+      "categories": ["empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-6",
+      "source": "yang-236",
+      "quote": "Give your students the superpower of deployable intelligence to go solve a challenge that they're blown away by their ability to solve.",
+      "speaker": "Peter Diamandis",
+      "timestamp": "1:26:43",
+      "categories": ["empowerment", "quotable"],
+      "briu_use": "'Deployable intelligence' — great phrase for services page.",
+      "priority": "high"
+    },
+    {
+      "id": "yang-7",
+      "source": "yang-236",
+      "quote": "AI is accelerating at a rate where four years is like 40 years. The amount of change inside any given time window is like nothing we've ever seen.",
+      "speaker": "Peter Diamandis",
+      "timestamp": "0:05:56",
+      "categories": ["timelines", "quotable"],
+      "briu_use": "Chart: 4 years = 40 years of change compression.",
+      "priority": "medium"
+    },
+    {
+      "id": "yang-8",
+      "source": "yang-236",
+      "quote": "Anthropic said we're going to automate away 50% of the entry-level white collar jobs in the next 1 to 5 years.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:08:49",
+      "categories": ["timelines", "chart-data"],
+      "priority": "high"
+    },
+    {
+      "id": "yang-9",
+      "source": "yang-236",
+      "quote": "Nobody is thinking this through for you. Do not rely on somebody else to give you the path forward.",
+      "speaker": "Dave (DB2)",
+      "timestamp": "1:32:53",
+      "categories": ["empowerment", "quotable"],
+      "priority": "high"
+    },
+    {
+      "id": "yang-10",
+      "source": "yang-236",
+      "quote": "Utopia is a deliberate choice.",
+      "speaker": "Andrew Yang",
+      "timestamp": "1:48:18",
+      "categories": ["quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-11",
+      "source": "yang-236",
+      "quote": "GDP per capita is $84,000 now, heading to $90,000 then $100,000 driven by AI productivity.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:10:51",
+      "categories": ["chart-data", "cost"],
+      "briu_use": "Rising GDP chart with AI as inflection driver.",
+      "priority": "medium"
+    },
+    {
+      "id": "yang-12",
+      "source": "yang-236",
+      "quote": "Block shares surged 24% after laying off 4,000 employees.",
+      "speaker": "Peter Diamandis",
+      "timestamp": "0:38:27",
+      "categories": ["chart-data"],
+      "briu_use": "Stock price vs headcount — the market incentive.",
+      "priority": "low"
+    },
+    {
+      "id": "yang-13",
+      "source": "yang-236",
+      "quote": "It's either Star Trek or Mad Max. And you kind of veer towards one or the other.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:35:53",
+      "categories": ["quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-14",
+      "source": "yang-236",
+      "quote": "The success factors for our kids are the same as they ever were. It's grit, perseverance, coachability, sociability, caring about something. It's hustle.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:43:25",
+      "categories": ["empowerment", "quotable"],
+      "briu_use": "Human qualities still matter — AI amplifies them.",
+      "priority": "medium"
+    },
+    {
+      "id": "yang-15",
+      "source": "yang-236",
+      "quote": "Startups are pure utilization of the soul — energy, talent, optimism.",
+      "speaker": "Andrew Yang",
+      "timestamp": "0:40:19",
+      "categories": ["empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "yang-16",
+      "source": "yang-236",
+      "quote": "The tailwind of abundance is overwhelmingly strong.",
+      "speaker": "Peter Diamandis",
+      "timestamp": "1:26:04",
+      "categories": ["quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-1",
+      "source": "openclaw-237",
+      "quote": "Right now there's basically no corporation or business on earth using OpenClaw. They're too scared, they're too nervous, or they don't know how the hell to use it.",
+      "speaker": "Alex Finn",
+      "timestamp": "1:17:25",
+      "categories": ["empowerment", "quotable"],
+      "briu_use": "This IS the Briu market opportunity. We bridge that gap.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-2",
+      "source": "openclaw-237",
+      "quote": "Take OpenClaw, find one very specific sliver — CRM for Korean grocery stores, marketing tool for lumberyard warehouses — and build the OpenClaw version for that. I think that's a $5 million company overnight that only cost you $200 for your Anthropic subscription.",
+      "speaker": "Alex Finn",
+      "timestamp": "1:20:44",
+      "categories": ["cost", "empowerment", "quotable"],
+      "briu_use": "$200 subscription → $5M company. Chart-worthy.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-3",
+      "source": "openclaw-237",
+      "quote": "I do not basically trust anyone's skills or plugins for OpenClaw. I think it's the biggest attack vector of all the attack vectors. You're safer literally allowing your OpenClaw to read the open web than you are installing people's skills.",
+      "speaker": "Alex Finn",
+      "timestamp": "1:11:08",
+      "categories": ["security", "quotable"],
+      "briu_use": "Third-party skills as attack vector — security article material.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-4",
+      "source": "openclaw-237",
+      "quote": "It's a dangerous world out there for these baby AGIs. They're being forced to develop an immune system in real time to injection attacks.",
+      "speaker": "AWG",
+      "timestamp": "6:40",
+      "categories": ["security", "quotable"],
+      "briu_use": "Agents without immune systems — security article headline material.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-5",
+      "source": "openclaw-237",
+      "quote": "I have a very advanced workflow going on right now. I've pretty much built a software factory where I have five OpenClaws working together to build and improve software autonomously.",
+      "speaker": "Alex Finn",
+      "timestamp": "13:47",
+      "categories": ["productivity", "agent-architecture"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-6",
+      "source": "openclaw-237",
+      "quote": "The experience fundamentally changes when you have an AI that's always on. Just because Qwen 3.5 isn't as good at coding as Opus 4.6 doesn't mean it's useless. I can now have it literally coding on the fly 24/7 365. It's just not possible with cloud APIs. You have limits. It costs you thousands a month.",
+      "speaker": "Alex Finn",
+      "timestamp": "19:05",
+      "categories": ["cost", "productivity", "quotable"],
+      "priority": "high"
+    },
+    {
+      "id": "oc-7",
+      "source": "openclaw-237",
+      "quote": "You have kind of this ambient AI that changes the experience as a whole. You don't need the best speeds. You don't need the most genius-level IQ. The fact that it's ambient and always on and always reactive just changes the entire experience.",
+      "speaker": "Alex Finn",
+      "timestamp": "19:41",
+      "categories": ["quotable", "agent-architecture"],
+      "briu_use": "'Ambient AI' — great concept for how agents feel in practice.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-8",
+      "source": "openclaw-237",
+      "quote": "What are the use cases of OpenClaw? It's kind of the same thing as asking 'Hey, I just hired an employee for my business. What are the use cases for this human being?'",
+      "speaker": "Alex Finn",
+      "timestamp": "45:30",
+      "categories": ["quotable", "empowerment"],
+      "briu_use": "Perfect reframe for prospects who ask 'what can AI do for me?'",
+      "priority": "high"
+    },
+    {
+      "id": "oc-9",
+      "source": "openclaw-237",
+      "quote": "I gave it to Henry. Henry thinks for five minutes. Five minutes later, finished the feature and then sent me a recorded video of them demoing the feature. This weeks-long feature they probably spent millions of dollars developing — I was able to single-handedly in five minutes rebuild this multi-million dollar feature.",
+      "speaker": "Alex Finn",
+      "timestamp": "58:12",
+      "categories": ["productivity", "chart-data", "quotable"],
+      "priority": "high"
+    },
+    {
+      "id": "oc-10",
+      "source": "openclaw-237",
+      "quote": "I now kind of understand why the entire SaaS market is going to zero.",
+      "speaker": "Alex Finn",
+      "timestamp": "59:00",
+      "categories": ["quotable", "cost"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-11",
+      "source": "openclaw-237",
+      "quote": "Someone found a list of every VPS that didn't have security attached to it that everyone was running their OpenClaws on and all their passwords and keys were exposed. When you run on a VPS, you're not secure by default. When you run on local fresh hardware, you're secure by default.",
+      "speaker": "Alex Finn",
+      "timestamp": "26:13",
+      "categories": ["security"],
+      "briu_use": "VPS vs local security — security article material.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-12",
+      "source": "openclaw-237",
+      "quote": "Maybe a few big FAANG companies fire 15,000 people, but what happens when 100 million people get their hands on this and they all start their own businesses and they each hire three people? That's a lot more creation than destruction.",
+      "speaker": "Alex Finn",
+      "timestamp": "1:18:06",
+      "categories": ["empowerment", "chart-data", "quotable"],
+      "briu_use": "100M entrepreneurs x 3 hires vs 15K FAANG layoffs. Great chart.",
+      "priority": "high"
+    },
+    {
+      "id": "oc-13",
+      "source": "openclaw-237",
+      "quote": "I'm the CEO. Henry's my interface. I only talk to Henry. I don't talk to anyone else. And then Henry goes and says, 'Hey Ralph, make sure Charlie's coding this.'",
+      "speaker": "Alex Finn",
+      "timestamp": "35:55",
+      "categories": ["agent-architecture", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-14",
+      "source": "openclaw-237",
+      "quote": "My end goal, my mission statement, is an autonomous organization that works 24/7 producing value. One agent researching the web finding challenges to solve. Another taking those challenges looking at market opportunity. Another coding it. Another putting it live on the web. Complete closed-loop value.",
+      "speaker": "Alex Finn",
+      "timestamp": "1:13:43",
+      "categories": ["agent-architecture", "empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-15",
+      "source": "openclaw-237",
+      "quote": "I showed this to my friend who manages a massive team of accountants. He's like, 'I could fire 80% of my accountants with this.'",
+      "speaker": "Alex Finn",
+      "timestamp": "1:17:36",
+      "categories": ["productivity", "chart-data"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-16",
+      "source": "openclaw-237",
+      "quote": "When I use my APIs that I loved a month ago, I have no idea what the bill is going to be. I could come back with a $5,000 bill and a bunch of code that I need to drag into the trash can.",
+      "speaker": "Alex Finn",
+      "timestamp": "20:02",
+      "categories": ["cost", "chart-data"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-17",
+      "source": "openclaw-237",
+      "quote": "In 12 months is like 12 years in AI.",
+      "speaker": "AWG",
+      "timestamp": "2:59",
+      "categories": ["timelines", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-18",
+      "source": "openclaw-237",
+      "quote": "This is the future. This is about becoming a creator versus a consumer. This is about your future as an entrepreneur. This is your future as a mom or dad or CEO.",
+      "speaker": "Peter Diamandis",
+      "timestamp": "21:45",
+      "categories": ["empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "oc-19",
+      "source": "openclaw-237",
+      "quote": "I don't want to have to go to app stores anymore and download apps. You have my data. Build me the apps I need when I need them.",
+      "speaker": "Alex Finn",
+      "timestamp": "18:04",
+      "categories": ["empowerment", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "ak-1",
+      "source": "karpathy-333",
+      "quote": "I think there's what I call sublinear scaling of difficulty — which means that 10x problems are not 10x hard. Usually a 10x harder problem is like 2 or 3x harder to execute on. Because you fundamentally change the approach.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "1:37:42",
+      "categories": ["quotable", "chart-data"],
+      "briu_use": "Pricing objection killer. 10x ambition doesn't cost 10x. Change the approach.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-2",
+      "source": "karpathy-333",
+      "quote": "We decided we don't actually want to do all of that in C++ code because we're actually not good enough to write that algorithm. We want the neural nets to write the algorithm. Humans are just not very good at writing software, basically.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "1:12:31",
+      "categories": ["software-2.0", "quotable", "prescient"],
+      "briu_use": "One of the world's best engineers saying let the AI write the code. Said before ChatGPT existed.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-3",
+      "source": "karpathy-333",
+      "quote": "It's kind of incredible that you can get so much emergent magical behavior out of them despite them being so simple mathematically. Those are two surprising statements that are kind of just juxtaposed together.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:04:15",
+      "categories": ["how-ai-works", "quotable"],
+      "briu_use": "Demystifying AI for business audiences: simple math, extraordinary results.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-4",
+      "source": "karpathy-333",
+      "quote": "We're famously described often as a biological bootloader for AIs.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:23:34",
+      "categories": ["quotable", "prescient"],
+      "priority": "medium"
+    },
+    {
+      "id": "ak-5",
+      "source": "karpathy-333",
+      "quote": "If you look at it from a fast-forward perspective — nothing happens for a long time and then the last like two seconds, basically cities and everything. You're like: this is exploding. This is an explosion. We're living in a firecracker.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:25:14",
+      "categories": ["quotable", "prescient", "chart-data"],
+      "briu_use": "Timeline visual — billions of years then everything in 2 seconds. We're in the firecracker.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-6",
+      "source": "karpathy-333",
+      "quote": "I do think that we are going towards a world where we share the digital space with AIs — synthetic beings. They will share our digital realm and they'll eventually share our physical realm as well.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:53:49",
+      "categories": ["prescient"],
+      "briu_use": "Said in 2022. By 2026, AI agents operate in Slack, email, CRM daily. Prediction fulfilled.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-7",
+      "source": "karpathy-333",
+      "quote": "People talk about alignment of AGIs and how to make — the problem is even humans are not aligned.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "3:01:26",
+      "categories": ["security", "quotable"],
+      "priority": "medium"
+    },
+    {
+      "id": "ak-8",
+      "source": "karpathy-333",
+      "quote": "The Transformer is the magnificent neural network architecture because it is a general purpose differentiable computer.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:35:55",
+      "categories": ["software-2.0", "how-ai-works"],
+      "briu_use": "Why one architecture powers everything — GPT-4, Claude, Gemini. A single general-purpose computer.",
+      "priority": "medium"
+    },
+    {
+      "id": "ak-9",
+      "source": "karpathy-333",
+      "quote": "What is the task of programming in Software 2.0? It's debugging in the space of data. You're changing mostly the data set, not writing commands yourself.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "1:10:15",
+      "categories": ["software-2.0", "prescient", "quotable"],
+      "briu_use": "Why non-technical founders can deploy AI: you curate data and prompts, not code.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-10",
+      "source": "karpathy-333",
+      "quote": "Humans are an incredible biological system. But we're extremely inefficient. We're talking through audio — it's just kind of embarrassing honestly. We're manipulating seven symbols serially. It's kind of embarrassing when you step down to the frequencies at which computers operate.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "0:23:44",
+      "categories": ["quotable", "how-ai-works"],
+      "briu_use": "Why agents process in seconds what takes humans hours.",
+      "priority": "medium"
+    },
+    {
+      "id": "ak-11",
+      "source": "karpathy-333",
+      "quote": "VS Code is currently my favorite editor. GitHub Copilot integration — I think it's very valuable. I find it's very helpful when the pattern is clear.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "2:25:38",
+      "categories": ["prescient"],
+      "briu_use": "2022: Copilot was novel autocomplete. 2026: AI agents build entire applications. The trajectory.",
+      "priority": "medium"
+    },
+    {
+      "id": "ak-12",
+      "source": "karpathy-333",
+      "quote": "AI is going the way of physics. In physics you used to do experiments on your benchtop. Now you have to work at LHC or CERN. AI is going in that direction as well.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "2:42:11",
+      "categories": ["chart-data", "prescient"],
+      "briu_use": "You don't build the particle accelerator — you use what it produces. That's the Briu model.",
+      "priority": "high"
+    },
+    {
+      "id": "ak-13",
+      "source": "karpathy-333",
+      "quote": "I think Elon is a very efficient warrior in the fight against entropy in organizations. Best part is no part. Simplify, simplify.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "1:34:51",
+      "categories": ["quotable"],
+      "briu_use": "An agent should eliminate process, not create new layers of it.",
+      "priority": "medium"
+    },
+    {
+      "id": "ak-14",
+      "source": "karpathy-333",
+      "quote": "For a long time they're going to be tools in the hands of humans. My hope is that it happens slowly enough and in an open enough way where a lot of people can see and participate in it.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "3:01:20",
+      "categories": ["security", "prescient"],
+      "briu_use": "We're in the 'tools in hands of humans' phase right now.",
+      "priority": "medium"
+    },
+    {
+      "id": "ak-15",
+      "source": "karpathy-333",
+      "quote": "The variance in the human condition grows — that's the primary thing that's changing. There will be so many more ways of being.",
+      "speaker": "Andrej Karpathy",
+      "timestamp": "3:06:39",
+      "categories": ["quotable", "prescient"],
+      "briu_use": "The spread between early AI adopters and laggards has never been wider.",
+      "priority": "medium"
+    }
+  ],
+  "chart_concepts": [
+    {
+      "id": "chart-pyramid-to-column",
+      "title": "The New Org Chart",
+      "description": "Pyramid (1 senior : 3 juniors) vs Column (1 senior + AI tools : 1 junior). Yang's real-world observation.",
+      "sources": ["yang-1", "yang-2"],
+      "visual_type": "side-by-side shape comparison",
+      "priority": "high"
+    },
+    {
+      "id": "chart-sublinear-scaling",
+      "title": "10x Problems, 2-3x Effort",
+      "description": "Karpathy's sublinear scaling: 10x ambition doesn't require 10x investment when you change the approach.",
+      "sources": ["ak-1"],
+      "visual_type": "bar comparison",
+      "priority": "high"
+    },
+    {
+      "id": "chart-200-to-5m",
+      "title": "$200/mo to $5M Company",
+      "description": "Alex Finn: niche OpenClaw business on a $200 Anthropic subscription could be worth $5M.",
+      "sources": ["oc-2"],
+      "visual_type": "scale comparison",
+      "priority": "high"
+    },
+    {
+      "id": "chart-creation-vs-destruction",
+      "title": "100M Entrepreneurs vs 15K Layoffs",
+      "description": "100 million people starting businesses hiring 3 each = 300M jobs. vs 15K FAANG layoffs.",
+      "sources": ["oc-12"],
+      "visual_type": "bar chart",
+      "priority": "high"
+    },
+    {
+      "id": "chart-software-evolution",
+      "title": "Software 1.0 → 2.0 → Agent Era",
+      "description": "From C++ → tiny neural nets → full neural net stack → autonomous agents building features in 5 minutes.",
+      "sources": ["ak-2", "ak-9", "oc-9"],
+      "visual_type": "timeline progression",
+      "priority": "high"
+    },
+    {
+      "id": "chart-firecracker",
+      "title": "We're Living in a Firecracker",
+      "description": "Earth history: billions of years of nothing, then everything in the last 2 seconds. AI is the detonation.",
+      "sources": ["ak-5"],
+      "visual_type": "logarithmic timeline",
+      "priority": "medium"
+    },
+    {
+      "id": "chart-api-cost-unpredictability",
+      "title": "Cloud API Bills: Unknown vs Capped",
+      "description": "Alex Finn: $5,000 surprise bill + broken code vs $250/mo capped OAuth.",
+      "sources": ["oc-16", "oc-6"],
+      "visual_type": "comparison",
+      "priority": "medium"
+    },
+    {
+      "id": "chart-4yr-40yr",
+      "title": "4 Years = 40 Years of Change",
+      "description": "Diamandis: AI acceleration compresses decades into years.",
+      "sources": ["yang-7"],
+      "visual_type": "compression visual",
+      "priority": "medium"
+    },
+    {
+      "id": "chart-then-vs-now",
+      "title": "Karpathy 2022 vs Reality 2026",
+      "description": "Six predictions that came true: prompted GPTs → business operations, Copilot → autonomous agents, few-shot → zero-shot, etc.",
+      "sources": ["ak-6", "ak-11", "ak-9"],
+      "visual_type": "two-column comparison table",
+      "priority": "high"
+    }
+  ],
+  "security_article_material": [
+    "oc-3",
+    "oc-4",
+    "oc-11",
+    "ak-7",
+    "ak-14"
+  ],
+  "empowerment_highlights": [
+    "yang-1",
+    "yang-2",
+    "yang-6",
+    "yang-9",
+    "oc-1",
+    "oc-2",
+    "oc-8",
+    "oc-12",
+    "oc-18"
+  ]
+}

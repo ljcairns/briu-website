@@ -103,6 +103,7 @@ Real Numbers (/build/the-real-numbers/): Daily spend charts, model breakdown (So
 Building with Agents (/build/how-we-built-briu-using-our-own-agent-stack/): Exact toolchain, security model. "The agent cannot feel the gap between 'correct' and 'right.'"
 Brand in a Session (/build/brand-in-a-session/): Claude + Midjourney + OpenClaw, one evening, ~$120.
 From Comment to Fix in One Loop (/build/from-comment-to-fix-in-one-loop/): Automated customer feedback cycle for chatbot SaaS. Comment detected via Discord webhook → agent reads conversation context → navigates platform dashboard via browser automation → updates live chatbot prompts → verifies changes persisted → looks up correct client contact from database → emails client → marks processed. Eliminated 20-min context reload per request. Built shared knowledge tables (client_chatbots, client_contacts) replacing hardcoded references across 6 files. Heartbeat cron runs every 30 minutes.
+Six Layers Deep (/build/six-layers-deep/): Zero-trust security architecture for AI agents. Six independent layers: (1) Network isolation — gateway on loopback only, Tailscale VPN, invisible to internet. (2) Permission isolation — 4 agents with different permission levels enforced at infrastructure, not prompts. Main (Sonnet 4.6) full access, Heartbeat (Haiku 4.5) read-only, Sandbox (Haiku 4.5) classify-only. (3) Exec-approvals — deny-by-default command allowlist, dangerous shell patterns blocked at hook level. (4) Sandbox architecture — untrusted content processed by isolated agent, output re-sanitized by jq script before main sees it, 16-pattern injection detection. (5) CVE monitoring every 2 hours + kill switch auto-locks on unpatched critical vuln. (6) Security context injected fresh every agent turn. For injection to succeed: must fool sanitizer + sandbox agent + jq extraction + main agent + exec-approvals. Each layer independent.
 Security: every skill built in-house, defined scopes, internal security agent audits access patterns. Multi-agent architecture with model routing.`,
 
   whynow: `Why Now (/why-now/):
@@ -120,7 +121,8 @@ Framework is open source (OpenClaw). One developer built it using an AI coding a
 /build/the-real-numbers/ — Interactive cost charts
 /build/brand-in-a-session/ — Brand case study
 /build/how-we-built-briu-using-our-own-agent-stack/ — Full build narrative
-/build/from-comment-to-fix-in-one-loop/ — Automated customer feedback loop (newest article)`
+/build/from-comment-to-fix-in-one-loop/ — Automated customer feedback loop
+/build/six-layers-deep/ — Zero-trust security architecture for AI agents (newest article)`
 };
 
 // ─── Keyword → chunk mapping ───
@@ -129,7 +131,7 @@ const TOPIC_MAP = {
   economics: ['economics', 'roi', 'savings', 'save', 'comparison', 'vs', 'versus', 'traditional', 'agency', 'hire', 'hiring', 'employee', 'salary', 'headcount', 'per day', 'api cost', 'token', 'platform', '$376', '$200', 'cheaper'],
   capabilities: ['email', 'crm', 'sales', 'hubspot', 'salesforce', 'slack', 'calendar', 'report', 'prospect', 'outreach', 'automate', 'automation', 'workflow', 'integrate', 'integration', 'tool', 'gmail', 'discord', 'whatsapp', 'agent', 'what can', 'what do', 'capability', 'support', 'assistant'],
   proof: ['proof', 'evidence', 'example', 'case study', 'calacanis', 'cuban', 'chamath', 'quote', 'podcast', 'all-in', 'real world', 'who else', 'testimonial', 'result'],
-  build: ['build', 'built', 'how you built', 'your agent', 'open source', 'openclaw', 'security', 'toolchain', 'brand', 'logo', 'midjourney', 'dashboard', 'timeline', 'commit', 'real numbers', 'technical', 'comment', 'feedback', 'customer service', 'loop', 'chatbot', 'subsights'],
+  build: ['build', 'built', 'how you built', 'your agent', 'open source', 'openclaw', 'security', 'toolchain', 'brand', 'logo', 'midjourney', 'dashboard', 'timeline', 'commit', 'real numbers', 'technical', 'comment', 'feedback', 'customer service', 'loop', 'chatbot', 'subsights', 'zero trust', 'sandbox', 'injection', 'prompt injection', 'cve', 'vulnerability', 'kill switch', 'guardrail', 'permissions', 'layers'],
   whynow: ['why now', 'why should', 'timing', 'wait', 'risk', 'competitive', 'advantage', 'future', 'trend', 'market', 'opportunity', 'urgent', 'when', 'depreciate', 'appreciate', 'capital']
 };
 
