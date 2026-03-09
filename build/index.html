@@ -46,11 +46,97 @@ a.stat-box { text-decoration: none; color: inherit; cursor: pointer; }
 a.stat-box:hover .stat-label::after { content: ' \2192'; }
 @keyframes statPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; text-shadow: 0 0 8px rgba(212,160,90,0.3); } }
 .stat-pulse .stat-value { animation: statPulse 3s ease-in-out infinite; }
+
+/* ===================== */
+/* HUD Bar               */
+/* ===================== */
+.hud-bar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.hud-stat { text-align: center; padding: 1.25rem 0.5rem; position: relative; cursor: default; transition: background 0.3s ease; }
+.hud-stat:hover { background: rgba(255,255,255,0.02); }
+.hud-stat + .hud-stat::before { content: ''; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: rgba(255,255,255,0.04); }
+.hud-value { font-family: var(--serif); font-size: 1.5rem; color: var(--text); line-height: 1.2; margin-bottom: 0.3rem; font-variant-numeric: tabular-nums; animation: statPulse 4s ease-in-out infinite; animation-delay: var(--pulse-delay, 0s); }
+.hud-label { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); }
+/* HUD tooltips */
+.hud-stat[data-tooltip] { position: relative; }
+.hud-stat[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%); white-space: nowrap; padding: 0.4rem 0.75rem; background: var(--surface-2); border: 1px solid rgba(212,160,90,0.15); font-size: 0.68rem; color: var(--text-muted); z-index: 10; box-shadow: 0 6px 20px rgba(0,0,0,0.3); pointer-events: none; }
+.hud-stat[data-tooltip]:hover::before { content: ''; position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: rgba(212,160,90,0.15); z-index: 10; }
+@media (max-width: 768px) {
+  .hud-bar { grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .hud-stat:nth-child(5)::before { display: none; }
+  .hud-value { font-size: 1.25rem; }
+}
+@media (max-width: 480px) {
+  .hud-bar { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
+  .hud-stat:nth-child(odd)::before { display: none; }
+}
+
+/* ======================== */
+/* Project Vitals           */
+/* ======================== */
+.vitals-summary { text-align: center; font-size: 0.88rem; color: var(--text-muted); margin-top: 1rem; line-height: 1.6; }
+.vitals-summary strong { color: var(--text); font-weight: 500; }
+.vitals-summary .vitals-trad { color: var(--text-muted); opacity: 0.6; text-decoration: line-through; text-decoration-color: rgba(224,123,95,0.4); }
+
+/* ======================== */
+/* Skill Tree               */
+/* ======================== */
+.skill-category { margin-bottom: 2rem; }
+.skill-category-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
+.skill-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+.skill-cat-dot.cat-infrastructure { background: var(--teal); box-shadow: 0 0 8px rgba(90,157,172,0.3); }
+.skill-cat-dot.cat-operations { background: var(--gold); box-shadow: 0 0 8px rgba(212,160,90,0.3); }
+.skill-cat-dot.cat-security { background: var(--coral); box-shadow: 0 0 8px rgba(224,123,95,0.3); }
+.skill-cat-dot.cat-brand { background: var(--forest); box-shadow: 0 0 8px rgba(77,128,112,0.3); }
+.skill-cat-dot.cat-sales { background: var(--text-muted); }
+.skill-cat-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); }
+.skill-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; }
+
+/* Skill card */
+.skill-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; display: flex; flex-direction: column; transition: all 0.35s ease; position: relative; }
+.skill-card:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
+.skill-card.planned { opacity: 0.45; }
+.skill-card.planned:hover { transform: none; box-shadow: none; background: var(--surface); }
+.skill-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
+.skill-badge { display: flex; align-items: center; gap: 0.4rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; }
+.skill-badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.skill-badge[data-cat="infrastructure"] .skill-badge-dot { background: var(--teal); }
+.skill-badge[data-cat="infrastructure"] { color: var(--teal); }
+.skill-badge[data-cat="operations"] .skill-badge-dot { background: var(--gold); }
+.skill-badge[data-cat="operations"] { color: var(--gold); }
+.skill-badge[data-cat="security"] .skill-badge-dot { background: var(--coral); }
+.skill-badge[data-cat="security"] { color: var(--coral); }
+.skill-badge[data-cat="brand"] .skill-badge-dot { background: var(--forest); }
+.skill-badge[data-cat="brand"] { color: var(--forest); }
+.skill-badge[data-cat="sales"] .skill-badge-dot { background: var(--text-muted); }
+.skill-badge[data-cat="sales"] { color: var(--text-muted); }
+.skill-status { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.15rem 0.5rem; border: 1px solid; display: flex; align-items: center; gap: 0.35rem; }
+.skill-status.status-live { color: #4dbd74; border-color: rgba(77,189,116,0.3); }
+.skill-status.status-live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #4dbd74; animation: livePulse 2s ease-in-out infinite; }
+@keyframes livePulse { 0%,100% { opacity: 1; box-shadow: 0 0 8px rgba(77,189,116,0.4); } 50% { opacity: 0.5; box-shadow: 0 0 4px rgba(77,189,116,0.2); } }
+.skill-status.status-shipped { color: #4dbd74; border-color: rgba(77,189,116,0.25); }
+.skill-status.status-planned { color: var(--text-muted); border-color: rgba(255,255,255,0.06); }
+.skill-status.status-planned::before { content: '\1F512'; font-size: 0.55rem; }
+.skill-card h3 { font-family: var(--serif); font-size: 1.1rem; line-height: 1.25; margin-bottom: 0.35rem; color: var(--text); transition: color 0.2s; }
+.skill-card:hover h3 { color: var(--gold-light); }
+.skill-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 0.75rem; }
+.skill-metric { font-family: var(--serif); font-size: 0.95rem; color: var(--gold); margin-bottom: 0.75rem; }
+.skill-links { display: flex; gap: 1rem; margin-top: auto; }
+.skill-links a { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; transition: color 0.2s; }
+.skill-links a.skill-read { color: var(--gold); }
+.skill-links a.skill-read:hover { color: var(--gold-light); }
+.skill-links a.skill-read::after { content: ' \2192'; }
+.skill-links a.skill-service { color: var(--text-muted); }
+.skill-links a.skill-service:hover { color: var(--gold); }
+.skill-links a.skill-service::after { content: ' \2192'; }
+.skill-card.planned .skill-links a { color: var(--text-muted); opacity: 0.5; pointer-events: none; }
+
 /* Cost spectrum */
 .cost-spectrum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.spectrum-tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; }
+.spectrum-tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; position: relative; }
 .spectrum-tier:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
 .spectrum-baseline { border-color: rgba(77,128,112,0.25); }
+.spectrum-you-badge { position: absolute; top: 0.75rem; right: 0.75rem; font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); border: 1px solid rgba(77,128,112,0.3); padding: 0.15rem 0.45rem; display: flex; align-items: center; gap: 0.3rem; }
+.spectrum-you-badge::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--forest); animation: livePulse 2s ease-in-out infinite; }
 .spectrum-marker { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 0.75rem; }
 .spectrum-value { font-family: var(--serif); font-size: 1.6rem; color: var(--text); line-height: 1.2; margin-bottom: 0.25rem; }
 .spectrum-value span { font-size: 0.85rem; color: var(--text-muted); }
@@ -76,7 +162,6 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 /* Live badge */
 .stats-live-badge { display: flex; align-items: center; justify-content: center; gap: 0.5rem; max-width: 1060px; margin: 0 auto 1.5rem; padding: 0 2rem; }
 .live-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--forest); box-shadow: 0 0 8px rgba(77,128,112,0.4); animation: livePulse 2s ease-in-out infinite; flex-shrink: 0; }
-@keyframes livePulse { 0%,100% { opacity: 1; box-shadow: 0 0 8px rgba(77,128,112,0.4); } 50% { opacity: 0.5; box-shadow: 0 0 4px rgba(77,128,112,0.2); } }
 .stats-meta { text-align: center; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; }
 /* Commit tooltip */
 .stat-box[data-tooltip] { position: relative; }
@@ -111,11 +196,18 @@ section { padding-bottom: 2rem; }
 /* Dot on horizontal line */
 .vtl-dot { position: absolute; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); top: calc(2rem - 5px); left: 1.5rem; z-index: 2; transition: all 0.25s ease; }
 .vtl-entry:hover .vtl-dot { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
+/* Category-colored dots */
+.vtl-entry[data-category="agent"] .vtl-dot { background: var(--gold); }
+.vtl-entry[data-category="website"] .vtl-dot { background: var(--teal); }
+.vtl-entry[data-category="business"] .vtl-dot { background: var(--coral); }
+.vtl-entry[data-category="brand"] .vtl-dot { background: var(--forest); }
+.vtl-entry[data-category="security"] .vtl-dot { background: var(--coral); }
 /* Card styling */
 .vtl-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1rem 1.25rem; margin-right: 1rem; transition: all 0.3s ease; position: relative; }
 .vtl-card::before { content: ''; position: absolute; top: -1rem; left: 1.5rem; width: 1px; height: 1rem; background: rgba(212,160,90,0.2); }
 .vtl-entry:hover .vtl-card { border-color: rgba(212,160,90,0.15); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(0,0,0,0.25); }
 .vtl-date { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(212,160,90,0.6); margin-bottom: 0.3rem; }
+.vtl-relative { font-size: 0.6rem; color: var(--text-muted); opacity: 0.5; margin-left: 0.5rem; font-weight: 400; letter-spacing: 0; text-transform: none; }
 .vtl-title { font-family: var(--serif); font-size: 1rem; line-height: 1.25; margin-bottom: 0.3rem; color: var(--text); transition: color 0.2s; }
 .vtl-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; transition: color 0.2s; }
 .vtl-entry:hover .vtl-title { color: var(--gold-light); }
@@ -127,6 +219,10 @@ section { padding-bottom: 2rem; }
 .vtl-entry.major:hover .vtl-card { border-color: rgba(212,160,90,0.25); }
 .vtl-entry.major .vtl-date { color: var(--gold); }
 .vtl-entry.major .vtl-title { font-size: 1.1rem; }
+/* "You are here" marker */
+.vtl-entry.vtl-now .vtl-dot { background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 20px rgba(212,160,90,0.3); animation: youAreHerePulse 2s ease-in-out infinite; }
+@keyframes youAreHerePulse { 0%,100% { box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 20px rgba(212,160,90,0.3); } 50% { box-shadow: 0 0 0 8px rgba(212,160,90,0.1), 0 0 30px rgba(212,160,90,0.4); } }
+.vtl-now-label { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); position: absolute; top: calc(2rem - 22px); left: 1rem; white-space: nowrap; }
 
 /* Timeline progressive fill */
 .vtl { --vtl-fill: 0px; }
@@ -159,30 +255,6 @@ section { padding-bottom: 2rem; }
   .cost-compare tfoot .agent-cost { font-size: 1.05rem; }
 }
 
-/* Articles grid */
-.articles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 0.5rem; }
-.article-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; display: flex; flex-direction: column; transition: all 0.35s ease; }
-.article-card:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.25); }
-.article-card.coming-soon:hover { transform: none; box-shadow: none; background: var(--surface); }
-.article-card .card-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--forest); margin-bottom: 0.75rem; display: flex; gap: 0.75rem; align-items: center; }
-.card-category { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.2rem 0.55rem; border: 1px solid; }
-.card-category[data-cat="agent"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
-.card-category[data-cat="operations"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
-.card-category[data-cat="brand"] { color: var(--forest); border-color: rgba(77,128,112,0.25); }
-.card-category[data-cat="website"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
-.card-category[data-cat="infrastructure"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
-.card-category[data-cat="security"] { color: var(--coral); border-color: rgba(224,123,95,0.25); }
-.card-category[data-cat="business"] { color: var(--coral); border-color: rgba(224,123,95,0.25); }
-.article-card h4 { font-family: var(--sans); font-size: 0.82rem; color: var(--text-muted); font-weight: 400; margin-bottom: 0.75rem; line-height: 1.5; }
-.article-card h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.65rem; line-height: 1.25; }
-.article-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 1rem; flex: 1; }
-.article-card .card-link { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; transition: color 0.2s; }
-.article-card .card-link:hover { color: var(--gold-light); }
-.article-card .card-link::after { content: ' \2192'; }
-.article-card.coming-soon { opacity: 0.55; }
-.article-card.coming-soon .card-link { color: var(--text-muted); cursor: default; }
-.article-card.coming-soon .card-link::after { content: ''; }
-
 /* CTA */
 .build-cta { text-align: center; padding: 4rem 2rem 6rem; max-width: 1060px; margin: 0 auto; position: relative; z-index: 1; }
 .build-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
@@ -202,6 +274,7 @@ section { padding-bottom: 2rem; }
   .roi-multiplier { font-size: 1.8rem; }
   section { padding-bottom: 2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
+  .skill-grid { grid-template-columns: 1fr; }
 }
 </style>
 </head>
@@ -220,58 +293,393 @@ section { padding-bottom: 2rem; }
   <p>One person, multiple agents. Agent, brand, website, sales, operations. All built and run on the same stack we deploy for clients.</p>
 </section>
 
+<!-- 1. HUD Bar -->
 <div class="stats-live-badge">
   <span class="live-dot"></span>
   <span class="stats-meta">Live dashboard · Updated every 6 hours from GitHub</span>
 </div>
 
-<!-- 1. Speed hook -->
-<div class="stats-group">
-  <div class="stats-group-label">The Journey</div>
-  <div class="stats stats-4" id="buildStats">
-    <a href="/build/the-real-numbers/" class="stat-box reveal-scale">
-      <div class="stat-value">3 days</div>
-      <div class="stat-label">Agent to Production</div>
-    </a>
-    <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value">1 session</div>
-      <div class="stat-label">Brand Created</div>
-    </a>
-    <a href="https://github.com/ljcairns/briu-website" target="_blank" rel="noopener" class="stat-box reveal-scale reveal-delay-2" data-tooltip="Pulled from GitHub every 6 hours">
-      <div class="stat-value" data-count="480" data-dynamic="commits">480+</div>
-      <div class="stat-label" data-dynamic-label="commit-days">Changes Shipped</div>
-    </a>
-    <div class="stat-box reveal-scale reveal-delay-3 stat-pulse">
-      <div class="stat-value" data-dynamic="build-days">27</div>
-      <div class="stat-label">Days Since Day Zero</div>
-    </div>
+<div class="hud-bar">
+  <div class="hud-stat" data-tooltip="Running since Feb 10, 2026" style="--pulse-delay: 0s;">
+    <div class="hud-value" id="hud-days">27</div>
+    <div class="hud-label">Days Running</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Lines of code across 3 repositories" style="--pulse-delay: 0.5s;">
+    <div class="hud-value">15.2K</div>
+    <div class="hud-label">Lines of Code</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Pulled from GitHub every 6 hours" style="--pulse-delay: 1s;">
+    <div class="hud-value" data-dynamic="commits" data-count="480" id="hud-commits">480+</div>
+    <div class="hud-label">Commits</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Live articles documenting production capabilities" style="--pulse-delay: 1.5s;">
+    <div class="hud-value" id="hud-skills">7</div>
+    <div class="hud-label">Agent Skills</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Security sanitizer v4: 30 adversarial payloads, 0 bypasses" style="--pulse-delay: 2s;">
+    <div class="hud-value">30/30</div>
+    <div class="hud-label">Attacks Blocked</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Average daily API spend across all agents" style="--pulse-delay: 2.5s;">
+    <div class="hud-value">$3.20</div>
+    <div class="hud-label">Daily API Cost</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Agent uptime since deployment" style="--pulse-delay: 3s;">
+    <div class="hud-value">99.7%</div>
+    <div class="hud-label">Uptime</div>
   </div>
 </div>
 
-<!-- 2. Project costs — immediate and concrete -->
-<div class="stats-group">
-  <div class="stats-group-label">What Each Project Cost</div>
+<!-- 2. Project Vitals -->
+<div class="stats-group" style="margin-top: 2.5rem;">
+  <div class="stats-group-label">What It Cost to Build</div>
   <div class="stats stats-4">
     <a href="/build/the-real-numbers/" class="stat-box reveal-scale">
       <div class="stat-value">$376</div>
-      <div class="stat-label">Production Agent</div>
+      <div class="stat-label">Agent Stack</div>
     </a>
     <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-1">
       <div class="stat-value">~$105</div>
-      <div class="stat-label">Brand, Logo &amp; Domain</div>
+      <div class="stat-label">Brand &amp; Domain</div>
     </a>
-    <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-2">
+    <div class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value">$710</div>
-      <div class="stat-label">Trademark (2 Classes)</div>
-    </a>
+      <div class="stat-label">Legal (Trademark)</div>
+    </div>
     <div class="stat-box reveal-scale reveal-delay-3">
       <div class="stat-value">$200<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
       <div class="stat-label">Platform (Claude Max)</div>
     </div>
   </div>
+  <p class="vitals-summary">Total project cost: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
 </div>
 
-<!-- 3. ROI punchlines -->
+<!-- 3. Skill Tree -->
+<section>
+  <p class="section-label reveal">Skill Tree</p>
+
+  <!-- Infrastructure -->
+  <div class="skill-category">
+    <div class="skill-category-header">
+      <div class="skill-cat-dot cat-infrastructure"></div>
+      <div class="skill-cat-label">Infrastructure</div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="infrastructure"><span class="skill-badge-dot"></span> Infrastructure</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Full Agent Stack</h3>
+        <div class="skill-desc">From zero to production agent in 3 days</div>
+        <div class="skill-metric">$376 total cost</div>
+        <div class="skill-links">
+          <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="infrastructure"><span class="skill-badge-dot"></span> Infrastructure</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>The Real Numbers</h3>
+        <div class="skill-desc">Every API call, every cost decision, live</div>
+        <div class="skill-metric">$2&ndash;5/day operating cost</div>
+        <div class="skill-links">
+          <a href="/build/the-real-numbers/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Operations -->
+  <div class="skill-category">
+    <div class="skill-category-header">
+      <div class="skill-cat-dot cat-operations"></div>
+      <div class="skill-cat-label">Operations</div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="operations"><span class="skill-badge-dot"></span> Operations</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Email Triage &amp; Drafting</h3>
+        <div class="skill-desc">Morning briefing, response drafts, CRM sync</div>
+        <div class="skill-metric">2 accounts, ~50 emails/day</div>
+        <div class="skill-links">
+          <a href="/services/#personal-assistants" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="operations"><span class="skill-badge-dot"></span> Operations</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Voice Profile</h3>
+        <div class="skill-desc">34,201 lines analyzed, two-file architecture</div>
+        <div class="skill-metric">$6 in API, permanent asset</div>
+        <div class="skill-links">
+          <a href="/build/voice-profile/" class="skill-read">Read</a>
+          <a href="/services/#personal-assistants" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="operations"><span class="skill-badge-dot"></span> Operations</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Customer Feedback Loop</h3>
+        <div class="skill-desc">Comment to fix to client email, one automated loop</div>
+        <div class="skill-metric">20-min context reload &rarr; 0</div>
+        <div class="skill-links">
+          <a href="/build/from-comment-to-fix-in-one-loop/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Security -->
+  <div class="skill-category">
+    <div class="skill-category-header">
+      <div class="skill-cat-dot cat-security"></div>
+      <div class="skill-cat-label">Security</div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Zero-Trust Architecture</h3>
+        <div class="skill-desc">Six layers, each assumes the others failed</div>
+        <div class="skill-metric">7 defense layers</div>
+        <div class="skill-links">
+          <a href="/build/six-layers-deep/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Red Team Testing</h3>
+        <div class="skill-desc">Automated adversarial testing against our own defenses</div>
+        <div class="skill-metric">30/30 blocked, 0% bypass</div>
+        <div class="skill-links">
+          <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
+          <div class="skill-status status-shipped">Shipped</div>
+        </div>
+        <h3>Sanitizer v4</h3>
+        <div class="skill-desc">Input sanitizer hardened against 28 novel attack vectors</div>
+        <div class="skill-metric">90+ detection patterns, 13 languages</div>
+        <div class="skill-links">
+          <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Brand -->
+  <div class="skill-category">
+    <div class="skill-category-header">
+      <div class="skill-cat-dot cat-brand"></div>
+      <div class="skill-cat-label">Brand</div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="brand"><span class="skill-badge-dot"></span> Brand</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Brand Identity</h3>
+        <div class="skill-desc">400+ generations, one logo, one session</div>
+        <div class="skill-metric">~$30, hours not months</div>
+        <div class="skill-links">
+          <a href="/build/brand-in-a-session/" class="skill-read">Read</a>
+          <a href="/services/#capabilities" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="brand"><span class="skill-badge-dot"></span> Brand</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Voice Profile</h3>
+        <div class="skill-desc">34,201 lines analyzed, two-file architecture</div>
+        <div class="skill-metric">$6 in API, permanent asset</div>
+        <div class="skill-links">
+          <a href="/build/voice-profile/" class="skill-read">Read</a>
+          <a href="/services/#personal-assistants" class="skill-service">See as service</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sales (Future) -->
+  <div class="skill-category">
+    <div class="skill-category-header">
+      <div class="skill-cat-dot cat-sales"></div>
+      <div class="skill-cat-label">Sales</div>
+    </div>
+    <div class="skill-grid">
+      <div class="skill-card planned">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="sales"><span class="skill-badge-dot"></span> Sales</div>
+          <div class="skill-status status-planned">Planned</div>
+        </div>
+        <h3>Prospecting Pipeline</h3>
+        <div class="skill-desc">Apollo to HubSpot to outreach, automated</div>
+        <div class="skill-metric">&mdash;</div>
+        <div class="skill-links">
+          <a href="#" class="skill-read">Coming soon</a>
+        </div>
+      </div>
+      <div class="skill-card planned">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="sales"><span class="skill-badge-dot"></span> Sales</div>
+          <div class="skill-status status-planned">Planned</div>
+        </div>
+        <h3>Outreach Automation</h3>
+        <div class="skill-desc">Personalized sequences at agent speed</div>
+        <div class="skill-metric">&mdash;</div>
+        <div class="skill-links">
+          <a href="#" class="skill-read">Coming soon</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. Timeline -->
+<section style="overflow:hidden">
+  <p class="section-label reveal">Timeline</p>
+  <div class="vtl-filters">
+    <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
+    <button class="vtl-filter" onclick="filterTimeline('agent',this)">Agent</button>
+    <button class="vtl-filter" onclick="filterTimeline('brand',this)">Brand</button>
+    <button class="vtl-filter" onclick="filterTimeline('website',this)">Website</button>
+    <button class="vtl-filter" onclick="filterTimeline('business',this)">Business</button>
+    <button class="vtl-filter" onclick="filterTimeline('security',this)">Security</button>
+  </div>
+  <div class="vtl">
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-10">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 10<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Day zero</div>
+        <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-12">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 12<span class="vtl-relative"></span></div>
+        <div class="vtl-title">36 commits</div>
+        <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-25">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 25<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Costs drop 90%</div>
+        <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-28">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 28<span class="vtl-relative"></span></div>
+        <div class="vtl-title">First sales run</div>
+        <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry major" data-category="business" data-date="2026-03-01">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 1<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Briu launched</div>
+        <div class="vtl-desc">Brand, domain, trademark. One session.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="website" data-date="2026-03-06">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 6<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Site goes live</div>
+        <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="business" data-date="2026-03-07">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 7<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Services launched</div>
+        <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="website" data-date="2026-03-08">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 8<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Chart library shipped</div>
+        <div class="vtl-desc">22 interactive data visualizations built from podcast transcript data. Deployed across all pages.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-03-09">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Comment-to-fix loop</div>
+        <div class="vtl-desc">Automated customer feedback cycle: notification to config update to client email. Context reload eliminated.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="security" data-date="2026-03-09">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Security hardening</div>
+        <div class="vtl-desc">Sanitizer v4 shipped. 28 novel attack vectors blocked. 90+ detection patterns across 13 languages.</div>
+      </div>
+    </div>
+
+    <!-- "You are here" marker — dynamically positioned -->
+    <div class="vtl-entry vtl-now" data-category="all" id="vtl-today">
+      <div class="vtl-now-label">You are here</div>
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date" id="vtl-today-date">Today</div>
+        <div class="vtl-title">Building continues</div>
+        <div class="vtl-desc">The system is running. New skills shipping weekly.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 5. ROI Comparison -->
 <div class="stats-group">
   <div class="stats-group-label">Agent ROI</div>
   <div class="roi-compare">
@@ -291,7 +699,7 @@ section { padding-bottom: 2rem; }
     </div>
     <div class="roi-col roi-trad reveal-scale reveal-delay-2">
       <div class="roi-header">Traditional Route</div>
-      <div class="roi-value">$40–75K+</div>
+      <div class="roi-value">$40&ndash;75K+</div>
       <div class="roi-items">
         <span>Dev agency — $15-30K</span>
         <span>Branding agency — $15-25K</span>
@@ -321,7 +729,7 @@ section { padding-bottom: 2rem; }
     </div>
     <div class="roi-col roi-trad reveal-scale reveal-delay-2">
       <div class="roi-header">Traditional Timeline</div>
-      <div class="roi-value">4–6 months</div>
+      <div class="roi-value">4&ndash;6 months</div>
       <div class="roi-items">
         <span>Custom dev — 3-6 months</span>
         <span>Branding agency — 4-8 weeks</span>
@@ -332,166 +740,12 @@ section { padding-bottom: 2rem; }
   </div>
 </div>
 
-<!-- 4. How it runs — org chart -->
+<!-- Org chart -->
 <div class="stats-group">
   <div id="build-org-chart"></div>
 </div>
 
-<!-- 5. Capability numbers -->
-<div class="stats-group">
-  <div class="stats-group-label">The Stack</div>
-  <div class="stats stats-4">
-    <div class="stat-box reveal-scale">
-      <div class="stat-value" data-count="12">12</div>
-      <div class="stat-label">Agent Skills</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value" data-count="8">8</div>
-      <div class="stat-label">Tools Integrated</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value" data-count="22">22</div>
-      <div class="stat-label">Data Visualizations</div>
-    </div>
-    <div class="stat-box reveal-scale reveal-delay-3">
-      <div class="stat-value">3</div>
-      <div class="stat-label">Specialist Agents</div>
-    </div>
-  </div>
-</div>
-
-<!-- 6. Ongoing cost spectrum -->
-<div class="stats-group">
-  <div class="stats-group-label">What It Costs to Run</div>
-  <div class="cost-spectrum">
-    <div class="spectrum-tier spectrum-baseline reveal-scale">
-      <div class="spectrum-marker" style="color: var(--forest);">Baseline</div>
-      <div class="spectrum-value">~$310<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
-      <div class="spectrum-desc">Daily reports, security checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
-    </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-1">
-      <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
-      <div class="spectrum-value">$1-3K<span>/mo</span></div>
-      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
-      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
-      <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
-    </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-2">
-      <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
-      <div class="spectrum-value">$5-10K<span>/mo</span></div>
-      <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
-      <div class="spectrum-desc">Full deployment: 5-7 agents, each on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily. Still a fraction of equivalent headcount.</div>
-      <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
-    </div>
-  </div>
-</div>
-
-
-<section style="overflow:hidden">
-  <p class="section-label reveal">Timeline</p>
-  <div class="vtl-filters">
-    <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
-    <button class="vtl-filter" onclick="filterTimeline('agent',this)">Agent</button>
-    <button class="vtl-filter" onclick="filterTimeline('brand',this)">Brand</button>
-    <button class="vtl-filter" onclick="filterTimeline('website',this)">Website</button>
-    <button class="vtl-filter" onclick="filterTimeline('business',this)">Business</button>
-  </div>
-  <div class="vtl">
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 10</div>
-        <div class="vtl-title">Day zero</div>
-        <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 12</div>
-        <div class="vtl-title">36 commits</div>
-        <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 25</div>
-        <div class="vtl-title">Costs drop 90%</div>
-        <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 28</div>
-        <div class="vtl-title">First sales run</div>
-        <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry major" data-category="business">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 5</div>
-        <div class="vtl-title">Briu founded</div>
-        <div class="vtl-desc">Domain, trademark, website. One session. 28 commits.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="website">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 6</div>
-        <div class="vtl-title">Site goes live</div>
-        <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="business">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 7</div>
-        <div class="vtl-title">Services launched</div>
-        <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="website">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 8</div>
-        <div class="vtl-title">Chart library shipped</div>
-        <div class="vtl-desc">22 interactive data visualizations built from podcast transcript data. Deployed across all pages.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 9</div>
-        <div class="vtl-title">Comment-to-fix loop</div>
-        <div class="vtl-desc">Automated customer feedback cycle: notification to config update to client email. Context reload eliminated.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 9</div>
-        <div class="vtl-title">Six-layer security</div>
-        <div class="vtl-desc">Zero-trust architecture: network isolation, permission boundaries, sandbox agent, exec-guardrails, CVE monitoring, kill switch.</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
+<!-- Detailed cost comparison table -->
 <section>
   <p class="section-label reveal">What It Actually Cost</p>
   <h2 class="reveal">Agent-driven vs. traditional.</h2>
@@ -515,8 +769,8 @@ section { padding-bottom: 2rem; }
           <span class="agent-time">3 days · API costs only</span>
         </td>
         <td>
-          <span class="trad-cost">$15,000–30,000</span>
-          <span class="trad-time">3–6 months · dev agency or internal hire</span>
+          <span class="trad-cost">$15,000&ndash;30,000</span>
+          <span class="trad-time">3&ndash;6 months · dev agency or internal hire</span>
         </td>
       </tr>
       <tr>
@@ -526,8 +780,8 @@ section { padding-bottom: 2rem; }
           <span class="agent-time">1 session · 400+ generations</span>
         </td>
         <td>
-          <span class="trad-cost">$15,000–25,000</span>
-          <span class="trad-time">4–8 weeks · branding agency</span>
+          <span class="trad-cost">$15,000&ndash;25,000</span>
+          <span class="trad-time">4&ndash;8 weeks · branding agency</span>
         </td>
       </tr>
       <tr>
@@ -537,8 +791,8 @@ section { padding-bottom: 2rem; }
           <span class="agent-time">Ongoing · built in-terminal with Claude Code</span>
         </td>
         <td>
-          <span class="trad-cost">$8,000–20,000</span>
-          <span class="trad-time">4–6 weeks · dev shop</span>
+          <span class="trad-cost">$8,000&ndash;20,000</span>
+          <span class="trad-time">4&ndash;6 weeks · dev shop</span>
         </td>
       </tr>
       <tr>
@@ -557,7 +811,7 @@ section { padding-bottom: 2rem; }
       <tr>
         <td>Total (project costs)</td>
         <td><span class="agent-cost">~$1,391</span></td>
-        <td><span class="trad-cost">$40,000–75,000+</span></td>
+        <td><span class="trad-cost">$40,000&ndash;75,000+</span></td>
       </tr>
     </tfoot>
   </table>
@@ -565,76 +819,35 @@ section { padding-bottom: 2rem; }
   <p class="cost-footer"><strong>1 person + agents.</strong> No employees, no agencies, no project managers. The agents do the work. The human provides judgment, taste, and approval. That's the model we deploy for clients.</p>
 </section>
 
-<section>
-  <p class="section-label reveal">Deep Dives</p>
-  <div class="articles-grid">
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
-      <h3>Agent Architecture</h3>
-      <h4>12 skills, multi-model routing, and the real cost breakdown</h4>
-      <p>From first skill to 12 production capabilities. Multi-model routing, cost controls, approval gates, and the real numbers behind every decision.</p>
-      <a href="/build/the-real-numbers/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
+<!-- 6. Cost to Run -->
+<div class="stats-group">
+  <div class="stats-group-label">What It Costs to Run</div>
+  <div class="cost-spectrum">
+    <div class="spectrum-tier spectrum-baseline reveal-scale">
+      <span class="spectrum-you-badge">You are here</span>
+      <div class="spectrum-marker" style="color: var(--forest);">Baseline</div>
+      <div class="spectrum-value">~$310<span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
+      <div class="spectrum-desc">Daily reports, security checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
     </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="infrastructure">Infrastructure</span> Live</div>
-      <h3>Full Build Story</h3>
-      <h4>One person, multiple agents, everything documented</h4>
-      <p>The full story of building Briu. Toolchain, costs, security architecture, and what the agent can't do. One person, multiple agents, everything documented.</p>
-      <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="card-link">Read</a>
-      <a href="/services/#personal-assistants" class="card-service-link">See this as a service</a>
+    <div class="spectrum-tier reveal-scale reveal-delay-1">
+      <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
+      <div class="spectrum-value">$1-3K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
+      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
+      <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
     </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="brand">Brand</span> Live</div>
-      <h3>Brand Creation</h3>
-      <h4>400+ generations, hundreds of name candidates, one logo</h4>
-      <p>How agents and founder taste produced a brand identity in hours, not months. Midjourney directed by Claude, automated trademark screening, domain search across seven languages.</p>
-      <a href="/build/brand-in-a-session/" class="card-link">Read</a>
-      <a href="/services/#capabilities" class="card-service-link">See this as a service</a>
+    <div class="spectrum-tier reveal-scale reveal-delay-2">
+      <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
+      <div class="spectrum-value">$5-10K<span>/mo</span></div>
+      <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
+      <div class="spectrum-desc">Full deployment: 5-7 agents, each on its own email, Slack, and CRM. A meta-agent managing the others, checking work, summarizing daily. Still a fraction of equivalent headcount.</div>
+      <div class="spectrum-quote">"Our agents hit $300 a day per agent. That's $100,000 a year per agent." — Calacanis, E261</div>
     </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
-      <h3>Customer Feedback Automation</h3>
-      <h4>From customer comment to live fix to client email, one loop</h4>
-      <p>The hardest part of servicing a customer isn't the fix. It's the 20-minute context reload. We built a loop that handles notification to resolution to client communication, so the context switch disappears.</p>
-      <a href="/build/from-comment-to-fix-in-one-loop/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
-    </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="security">Security</span> Live</div>
-      <h3>Security Architecture</h3>
-      <h4>Zero-trust security for an AI agent handling real client data</h4>
-      <p>Network isolation, permission boundaries, a sandbox agent for untrusted content, exec-guardrails, automated CVE monitoring, and a kill switch. Each layer assumes the others failed.</p>
-      <a href="/build/six-layers-deep/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
-    </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="security">Security</span> Live</div>
-      <h3>Red Team Testing</h3>
-      <h4>15 attack categories, 96% bypass rate, and everything we fixed</h4>
-      <p>We pointed DeepSeek at our own security layer and told it to find every way through. Automated red team testing across 15 bypass categories, then published the results and the fixes.</p>
-      <a href="/build/we-tried-to-break-our-own-sanitizer/" class="card-link">Read</a>
-      <a href="/services/#autonomous-operations" class="card-service-link">See this as a service</a>
-    </div>
-
-    <div class="article-card">
-      <div class="card-tag"><span class="card-category" data-cat="operations">Operations</span> Live</div>
-      <h3>Voice Profile</h3>
-      <h4>34,201 lines of real writing, two files, $6 in API</h4>
-      <p>Your agent drafts emails and talks to customers. If it doesn't sound like you, none of it works. Five sources, a two-file architecture, and a website audit that found 25+ em dashes the founder never would have written.</p>
-      <a href="/build/voice-profile/" class="card-link">Read</a>
-      <a href="/services/#personal-assistants" class="card-service-link">See this as a service</a>
-    </div>
-
   </div>
-</section>
+</div>
 
+<!-- 7. CTA -->
 <div class="build-cta">
   <p>If you read this and thought "I could do this," you're right.</p>
   <a href="#" onclick="openContactForm();return false" class="cta-btn">Book a Call</a>
@@ -656,6 +869,50 @@ Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js"></script>
 <script>
+/* HUD: Days Running counter */
+(function() {
+  var startDate = new Date('2026-02-10T00:00:00');
+  function updateDays() {
+    var now = new Date();
+    var diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+    var el = document.getElementById('hud-days');
+    if (el) el.textContent = diff;
+  }
+  updateDays();
+  setInterval(updateDays, 60000);
+})();
+
+/* HUD: Skill count (count LIVE skill cards) */
+(function() {
+  var liveCards = document.querySelectorAll('.skill-status.status-live');
+  var el = document.getElementById('hud-skills');
+  if (el && liveCards.length > 0) el.textContent = liveCards.length;
+})();
+
+/* Timeline: relative dates */
+(function() {
+  var now = new Date();
+  var entries = document.querySelectorAll('.vtl-entry[data-date]');
+  entries.forEach(function(entry) {
+    var dateStr = entry.getAttribute('data-date');
+    if (!dateStr) return;
+    var date = new Date(dateStr + 'T00:00:00');
+    var diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
+    var relEl = entry.querySelector('.vtl-relative');
+    if (relEl) {
+      if (diffDays === 0) relEl.textContent = 'today';
+      else if (diffDays === 1) relEl.textContent = '1d ago';
+      else relEl.textContent = diffDays + 'd ago';
+    }
+  });
+  /* Set today's date on the "You are here" entry */
+  var todayEl = document.getElementById('vtl-today-date');
+  if (todayEl) {
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    todayEl.textContent = months[now.getMonth()] + ' ' + now.getDate();
+  }
+})();
+
 /* Timeline progressive fill */
 (function() {
   var vtl = document.querySelector('.vtl');

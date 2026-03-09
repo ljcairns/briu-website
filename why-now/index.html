@@ -3,41 +3,150 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Briu | Why Now</title>
-<meta name="description" content="A founder case for why businesses should start deploying AI agents carefully now, with the economics, quotes, and operating logic behind the argument.">
-<meta property="og:title" content="Briu | Why Now">
-<meta property="og:description" content="A founder case for why businesses should start deploying AI agents carefully now, with the economics, quotes, and operating logic behind the argument.">
+<title>Briu | The Window</title>
+<meta name="description" content="The next 18 months decide who leads and who catches up. A timeline of what changed, what it costs, and why the businesses deploying agents now are building advantages that compound daily.">
+<meta property="og:title" content="Briu | The Window">
+<meta property="og:description" content="The next 18 months decide who leads and who catches up. A timeline of what changed, what it costs, and why the businesses deploying agents now are building advantages that compound daily.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/why-now/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Briu | Why Now">
-<meta name="twitter:description" content="A founder case for why businesses should start deploying AI agents carefully now, with the economics, quotes, and operating logic behind the argument.">
+<meta name="twitter:title" content="Briu | The Window">
+<meta name="twitter:description" content="The next 18 months decide who leads and who catches up. A timeline of what changed, what it costs, and why the businesses deploying agents now are building advantages that compound daily.">
 <link rel="canonical" href="https://briu.ai/why-now/">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260309x">
-<link rel="stylesheet" href="/charts.css?v=20260309x">
 <style>
-/* Override: shared hero has padding-bottom: 2rem, this page uses 2.5rem */
+/* Hero override */
 .hero { padding-bottom: 2.5rem; }
-/* Page-specific */
-.problem::before { content: ''; position: absolute; top: 15%; left: -25%; width: 500px; height: 450px; background: radial-gradient(ellipse, rgba(90,157,172,0.05), rgba(77,128,112,0.02) 50%, transparent 70%); pointer-events: none; filter: blur(50px); }
-.wuc-subhead { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.7rem); line-height: 1.25; color: var(--text); margin-top: 3.5rem; margin-bottom: 1.5rem; }
-.wuc-highlight { color: var(--text); }
+
+/* Page-specific prose */
+.wn-section { max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.wn-section h2 { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem); line-height: 1.25; color: var(--text); margin-bottom: 1.25rem; margin-top: 3.5rem; }
+.wn-section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; margin-bottom: 1.25rem; }
+.wn-highlight { color: var(--text); }
+.wn-strong-frame { color: var(--text); font-weight: 600; }
+
+/* Essay links in hero */
 .essay-links { display: flex; gap: 1.25rem; flex-wrap: wrap; align-items: center; margin-top: 2rem; }
 .hero-cta-primary { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.4); transition: all 0.35s ease; }
 .hero-cta-primary:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); box-shadow: 0 0 30px rgba(212,160,90,0.1); }
 .hero-cta-secondary { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.3s ease; }
 .hero-cta-secondary:hover { color: var(--text); }
+
+/* ===== Timeline ===== */
+.timeline-wrapper { position: relative; max-width: 1060px; margin: 0 auto; padding: 3rem 2rem 4rem; z-index: 1; }
+.timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.06); transform: translateX(-50%); }
+.timeline-line::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+
+/* Timeline node */
+.tl-node { position: relative; display: flex; align-items: flex-start; margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.tl-node.tl-visible { opacity: 1; transform: translateY(0); }
+.tl-node.tl-projected { opacity: 0.5; }
+.tl-node.tl-projected.tl-visible { opacity: 0.5; }
+
+/* Left/right alternation */
+.tl-node .tl-content { width: 44%; }
+.tl-node.tl-left .tl-content { margin-right: auto; text-align: right; padding-right: 3rem; }
+.tl-node.tl-right .tl-content { margin-left: auto; text-align: left; padding-left: 3rem; }
+
+/* Center dot */
+.tl-dot { position: absolute; left: 50%; top: 0.35rem; width: 14px; height: 14px; border-radius: 50%; transform: translateX(-50%); z-index: 2; border: 2px solid var(--bg); }
+.tl-dot.cat-industry { background: #3B82F6; box-shadow: 0 0 8px rgba(59,130,246,0.3); }
+.tl-dot.cat-openclaw { background: #F97316; box-shadow: 0 0 8px rgba(249,115,22,0.3); }
+.tl-dot.cat-cost { background: #10B981; box-shadow: 0 0 8px rgba(16,185,129,0.3); }
+.tl-dot.cat-briu { background: #EF4444; box-shadow: 0 0 8px rgba(239,68,68,0.3); }
+
+/* Connector from dot to content */
+.tl-connector { position: absolute; top: 0.7rem; height: 1px; width: calc(6% - 7px); }
+.tl-node.tl-left .tl-connector { right: calc(50% + 7px); background: linear-gradient(to left, rgba(255,255,255,0.12), transparent); }
+.tl-node.tl-right .tl-connector { left: calc(50% + 7px); background: linear-gradient(to right, rgba(255,255,255,0.12), transparent); }
+.tl-node.tl-projected .tl-connector { background: repeating-linear-gradient(90deg, rgba(255,255,255,0.08) 0, rgba(255,255,255,0.08) 4px, transparent 4px, transparent 8px); }
+
+/* Content card */
+.tl-date { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.15rem; }
+.tl-relative { font-size: 0.72rem; font-weight: 700; margin-bottom: 0.4rem; }
+.tl-relative.cat-industry { color: #3B82F6; }
+.tl-relative.cat-openclaw { color: #F97316; }
+.tl-relative.cat-cost { color: #10B981; }
+.tl-relative.cat-briu { color: #EF4444; }
+.tl-title { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.3rem; line-height: 1.3; }
+.tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+.tl-projected-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 0.3rem; }
+
+/* "You are here" marker */
+.tl-here { position: absolute; left: 50%; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; }
+.tl-here-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--gold); border: 3px solid var(--bg); animation: tlPulse 2s ease-in-out infinite; box-shadow: 0 0 16px rgba(212,160,90,0.4); }
+@keyframes tlPulse {
+  0%, 100% { box-shadow: 0 0 16px rgba(212,160,90,0.4); transform: scale(1); }
+  50% { box-shadow: 0 0 28px rgba(212,160,90,0.6); transform: scale(1.15); }
+}
+.tl-here-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-top: 0.35rem; white-space: nowrap; }
+
+/* Content sections woven between timeline */
+.tl-content-section { position: relative; max-width: 660px; margin: 4rem auto; padding: 0 2rem; z-index: 2; }
+.tl-content-section h2 { font-family: var(--serif); font-size: clamp(1.5rem, 2.8vw, 2rem); line-height: 1.25; color: var(--text); margin-bottom: 1.25rem; }
+.tl-content-section p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; margin-bottom: 1.25rem; }
+.tl-content-section .wn-highlight { color: var(--text); }
+
+/* Section divider */
+.tl-section-break { text-align: center; padding: 2rem 0; position: relative; }
+.tl-section-break::before { content: ''; display: block; width: 40px; height: 1px; background: rgba(212,160,90,0.3); margin: 0 auto; }
+
+/* Cost table */
+.cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; }
+.cost-table th { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cost-table td { font-size: 0.92rem; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.cost-table td:first-child { color: var(--text); font-weight: 500; }
+.cost-table tr:last-child td { border-bottom: none; }
+
+/* Advantages list */
+.advantages { list-style: none; padding: 0; margin: 1.5rem 0; }
+.advantages li { display: flex; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+.advantages li strong { color: var(--text); }
+.advantages li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 0.55rem; }
+
+/* Live counters */
+.tl-counters { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
+.tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; text-align: center; }
+.tl-counter-num { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); margin-bottom: 0.25rem; }
+.tl-counter-label { font-size: 0.78rem; color: var(--text-muted); }
+
+/* Timeline legend */
+.tl-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; justify-content: center; margin-bottom: 2.5rem; }
+.tl-legend-item { display: flex; align-items: center; gap: 0.4rem; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+.tl-legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+.tl-legend-dot.cat-industry { background: #3B82F6; }
+.tl-legend-dot.cat-openclaw { background: #F97316; }
+.tl-legend-dot.cat-cost { background: #10B981; }
+.tl-legend-dot.cat-briu { background: #EF4444; }
+
+/* Footer links */
 .footer-links { display: flex; gap: 2rem; }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .timeline-line { left: 1.25rem; }
+  .tl-node { display: block; padding-left: 3rem; }
+  .tl-node .tl-content { width: 100%; text-align: left; padding: 0; margin: 0; }
+  .tl-node.tl-left .tl-content { text-align: left; padding-right: 0; padding-left: 0; }
+  .tl-node.tl-right .tl-content { padding-left: 0; }
+  .tl-dot { left: 1.25rem; }
+  .tl-connector { display: none; }
+  .tl-here { left: 1.25rem; }
+  .tl-here-label { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); }
+  .tl-counters { grid-template-columns: 1fr; }
+  .tl-legend { gap: 1rem; }
+}
 
 @media (max-width: 640px) {
   .footer-links { justify-content: center; }
+  .timeline-wrapper { padding: 2rem 1.25rem 3rem; }
+  .tl-content-section { padding: 0 1.25rem; margin: 3rem auto; }
 }
 </style>
 </head>
@@ -51,150 +160,59 @@
 
 <main>
 <section class="hero hero-breathe">
-  <p class="hero-eyebrow">Why Now</p>
-  <h1>A founder case for acting early without acting recklessly.</h1>
-  <p>What changes when businesses start deploying AI agents in real workflows, how the cost curve evolves, and why the practical challenge is trust and execution, not hype.</p>
+  <p class="hero-eyebrow">The Window</p>
+  <h1>The next 18 months decide who leads and who catches up.</h1>
+  <p>Here's what changed, what it costs, and why the businesses deploying now are building advantages that compound daily.</p>
   <div class="essay-links">
     <a href="/" class="hero-cta-primary">Back to homepage</a>
     <a href="#" onclick="openContactForm();return false" class="hero-cta-secondary">Book a Call</a>
   </div>
 </section>
 
-<section class="problem">
-  <p class="section-label reveal">The Wake-Up Call</p>
-  <h2 class="reveal">This isn't about replacing your team.<br><span style="color: var(--gold);">It's about what your team becomes.</span></h2>
-
-  <p class="reveal">In early 2026, investor and entrepreneur Jason Calacanis deployed AI agents across his 20-person venture firm. Not to cut headcount. To find out what happens when every employee has an AI counterpart working alongside them.</p>
-
-  <p class="reveal">He started with the most technical staff and worked his way down. Each person got their own agent. Each agent got its own email, Slack, and CRM accounts. A master agent manages the others, checks their work, and summarizes everything daily.</p>
-
-  <div class="quote-card quote-decorated reveal">
-    <p>"Out of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%."</p>
-    <p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> on his OpenClaw deployment — All-In Podcast E259</p>
+<!-- Timeline legend -->
+<div class="timeline-wrapper" style="padding-bottom:0;">
+  <div class="tl-legend">
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-industry"></span> Industry</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-openclaw"></span> OpenClaw</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-briu"></span> Briu</span>
+    <span class="tl-legend-item"><span class="tl-legend-dot cat-cost"></span> Cost</span>
   </div>
+</div>
 
-  <p class="reveal">His assistant's workload was reduced by 30%. 20% of the average investment team individual's work is now done by agents. The agents took the repetitive tasks. The humans moved up.</p>
-
-  <div id="wn-then-vs-now"></div>
-
-  <h3 class="wuc-subhead reveal">Your employees become agent operators</h3>
-
-  <p class="wuc-highlight reveal">This is the real transition. Not AI replacing people. People learning to operate AI.</p>
-
-  <p class="reveal">Employees who adopt these tools don't do less work. They do more, at a higher level. Routine tasks move to agents. Thinking, judgment, and relationships stay with people. The employees who learn to structure work for agents become far more productive than those who don't.</p>
-
-  <p class="reveal">It starts simple: an agent that reads your email and prepares a morning briefing. Then it drafts responses for your review. Then it manages your CRM. Then it runs overnight, researching prospects and preparing reports so your team wakes up to work already done. Each step builds trust. Each step builds skill.</p>
-
-  <p class="reveal">Your employees go from using AI as a search tool to managing a team of agents that handles the operational load of your business. That capability compounds. And you can't hire for it yet.</p>
-
-  <h3 class="wuc-subhead reveal">The cost question</h3>
-
-  <p class="reveal">None of this is free. Calacanis reported hitting $300 a day per agent using the Claude API — $100,000 a year per agent — and that was doing maybe 10-20% of what these agents can do.</p>
-
-  <p class="reveal">Mark Cuban responded publicly. He called it "the smartest counter I've seen to AI taking over jobs, in the short term." His math: eight agents at $300/day each plus maintenance cost more than the employee they support. He compared current agents to "college interns that come in hungover, make mistakes, and don't take responsibility for them."</p>
-
-  <p class="reveal">He's asking the right question. But he's treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>
-
-  <p class="wuc-highlight reveal"><strong>That is the wrong frame.</strong></p>
-
-  <h3 class="wuc-subhead reveal">Every dollar builds something permanent</h3>
-
-  <p class="wuc-highlight reveal">The agent isn't just doing today's work. It's learning your business.</p>
-
-  <p class="reveal">Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer. That knowledge is permanent. It doesn't leave when an employee quits. It doesn't need to be retrained when you hire someone new. It doesn't forget over the weekend.</p>
-
-  <p class="wuc-highlight reveal">This isn't an operating cost. It's a capital investment. You're building infrastructure that compounds in value every day it runs. And unlike physical infrastructure, it doesn't depreciate. It appreciates.</p>
-
-  <h3 class="wuc-subhead reveal">Cheaper and better, every quarter</h3>
-
-  <p class="reveal">Cuban's math is a snapshot. Here's the trajectory.</p>
-
-  <div id="wn-compression-meter"></div>
-  <div id="wn-salary-crossover"></div>
-
-  <p class="wuc-highlight reveal" style="margin-top: 2rem;">$300 per day is the most you'll ever pay for this level of capability. The models get cheaper and smarter every quarter. The agent that performs like an intern today will perform like a senior employee at a fraction of the cost within 18 months.</p>
-
-  <div class="calc-grid reveal" style="margin-top: 2.5rem;">
-    <div class="calc-inputs">
-      <div class="calc-field">
-        <label>Hours of work to automate <span class="calc-value" id="calcHoursVal">4h/day</span></label>
-        <input type="range" class="calc-slider" id="calcHours" min="1" max="10" step="0.5" value="4" oninput="updateCalc()">
-      </div>
-      <div class="calc-field">
-        <label>Current cost of that work <span class="calc-value" id="calcRateVal">$50/hr</span></label>
-        <input type="range" class="calc-slider" id="calcRate" min="15" max="150" step="5" value="50" oninput="updateCalc()">
-      </div>
-      <div class="calc-field">
-        <label>Deployment level</label>
-        <div class="calc-toggles">
-          <button class="calc-toggle active" data-val="practical" onclick="setComplexity('practical',this)">Practical<span>$2–5/day</span></button>
-          <button class="calc-toggle" data-val="moderate" onclick="setComplexity('moderate',this)">Moderate<span>$10–20/day</span></button>
-          <button class="calc-toggle" data-val="frontier" onclick="setComplexity('frontier',this)">Frontier<span>$30–100/day</span></button>
-        </div>
-      </div>
+<!-- Live counters -->
+<div class="tl-content-section">
+  <div class="tl-counters" id="tlCounters">
+    <div class="tl-counter reveal">
+      <div class="tl-counter-num" id="counterOCLaunch">--</div>
+      <div class="tl-counter-label">days since OpenClaw launched</div>
     </div>
-    <div class="calc-output">
-      <div class="calc-comparison">
-        <div class="calc-row">
-          <span class="calc-row-label">Current monthly cost</span>
-          <span class="calc-row-value" style="color:var(--coral)" id="calcCurrentCost">$4,400</span>
-        </div>
-        <div class="calc-row">
-          <span class="calc-row-label">Agent monthly cost</span>
-          <span class="calc-row-value" style="color:var(--forest)" id="calcAgentCost">$305</span>
-        </div>
-        <div class="calc-row" style="border:none;padding-top:0">
-          <span class="calc-row-label"></span>
-          <span id="calcAgentBreakdown" style="font-size:0.75rem;color:var(--text-muted)">($105 API + $200 platform)</span>
-        </div>
-      </div>
-      <div class="calc-savings positive" id="calcSavings">
-        <div class="calc-savings-num">$4,095<span>/mo</span></div>
-        <div class="calc-savings-label">Estimated savings (93% reduction)</div>
-      </div>
+    <div class="tl-counter reveal reveal-delay-1">
+      <div class="tl-counter-num" id="counterBriuDeploy">--</div>
+      <div class="tl-counter-label">days Briu has deployed agents</div>
+    </div>
+    <div class="tl-counter reveal reveal-delay-2">
+      <div class="tl-counter-num" id="counterEcosystem">--</div>
+      <div class="tl-counter-label">days of community development</div>
+    </div>
+    <div class="tl-counter reveal reveal-delay-3">
+      <div class="tl-counter-num" id="counterCostDrop">--</div>
+      <div class="tl-counter-label">est. cost drop since Calacanis deployment</div>
     </div>
   </div>
-  <div class="chart-source" style="margin-top:16px">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>
+</div>
 
-  <div class="quote-card quote-decorated reveal">
-    <p>"When do tokens outpace the salary of the employee? Because you're about to hit it."</p>
-    <p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> — All-In Podcast E261</p>
-  </div>
+<!-- Timeline + content sections rendered by JS -->
+<div class="timeline-wrapper" id="timelineContainer">
+  <div class="timeline-line" id="timelineLine"></div>
+  <!-- Nodes injected by JS -->
+</div>
 
-  <h3 class="wuc-subhead reveal">You don't need to spend $300 a day</h3>
-
-  <p class="reveal">That's what it costs to run agents at full capacity around the clock across an entire team. That's where the early adopters with venture-scale budgets are spending.</p>
-
-  <p class="reveal">Most businesses don't start there. And they shouldn't.</p>
-
-  <p class="reveal">We run a fully capable AI agent managing two email accounts, a CRM, sales prospecting, automated client reporting, calendar, and cost monitoring. Our API cost: <span data-config="costs.daily_operating" data-config-format="dollar-day">$2-5/day</span>, on top of a <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> Claude Max subscription shared across the agent, coding, and strategy work. Not because we cut corners. Because we built the architecture to be efficient. A personal agent that coordinates task-specific agents. Each one has a defined job, a defined budget, and a defined scope. They run when there's work to do and stop when it's done.</p>
-
-  <p class="wuc-highlight reveal">The progression for most businesses looks like this:</p>
-
-  <div id="wn-leverage-rings"></div>
-
-  <p class="reveal">The $300/day fully autonomous setup is a destination, not a starting point. And by the time you get there, the cost to run it will be significantly lower than it is today.</p>
-
-  <h3 class="wuc-subhead reveal">What happens if you wait</h3>
-
-  <p class="reveal">This isn't a warning about AI taking over. It's a straightforward competitive reality.</p>
-
-  <p class="reveal">AI adoption in 2026 isn't coming from the top down. Not from CEO transformation initiatives or enterprise RFP processes. It's coming from individual employees who figure it out themselves, bringing in consumerized AI tools from the bottom up.</p>
-
-  <p class="reveal">Somewhere right now, a business that competes with yours has an employee figuring this out. They are building an agent that handles their inbox. They are automating their CRM updates. They are running prospect research overnight. And they are getting better at it every week.</p>
-
-  <p class="wuc-highlight reveal">The businesses that start now get three advantages that compound over time:</p>
-
-  <div id="wn-ownership-risk"></div>
-  <div id="wn-infra-scale"></div>
-  <div id="wn-energy-bottleneck"></div>
-  <div id="wn-sublinear-scaling"></div>
-
-  <p class="reveal">You don't need to wait for a big corporation to build this for you. The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>
-
-  <div style="text-align: center; margin-top: 2rem;" class="reveal">
-    <a href="#" onclick="openContactForm();return false" class="hero-cta-primary" data-stage-cta>See What This Looks Like For Your Business</a>
-  </div>
+<!-- Bottom CTA -->
+<section class="cta-section">
+  <p class="section-label reveal">Start Now</p>
+  <h2 class="reveal">The framework is open source.<br>The window is open.</h2>
+  <p class="reveal">You build what your business needs, you own it, and you start getting value this week.</p>
+  <a href="#" onclick="openContactForm();return false" class="cta-button cta-shimmer reveal" data-stage-cta>See What This Looks Like For Your Business</a>
 </section>
 </main>
 
@@ -206,20 +224,316 @@
 <script src="/shared.js?v=20260309x"></script>
 <script src="/ambient.js?v=20260309x"></script>
 <script src="/chat-bubble.js?v=20260309x"></script>
-<script src="/charts.js?v=20260309x"></script>
 <script src="/interactive.js?v=20260309x"></script>
 <script>
-Briu.charts.compressionMeter('wn-compression-meter');
-Briu.charts.salaryCrossover('wn-salary-crossover');
-Briu.charts.leverageRings('wn-leverage-rings');
-Briu.charts.ownershipRisk('wn-ownership-risk');
-Briu.charts.infraScale('wn-infra-scale');
-Briu.charts.thenVsNow('wn-then-vs-now');
-Briu.charts.sublinearScaling('wn-sublinear-scaling');
-Briu.charts.energyBottleneck('wn-energy-bottleneck');
-if (document.getElementById('calcHours')) updateCalc();
-// Show chat bubble on this high-intent page regardless of prior engagement
-if (window.briuShowChatBubble) window.briuShowChatBubble();
+(function() {
+  'use strict';
+
+  // ===== Timeline Data =====
+  var TIMELINE = [
+    { date: '2024-03-01', category: 'industry', title: 'Claude 3 launches', desc: 'First models capable enough for sustained agent work. API pricing makes experimentation viable.' },
+    { date: '2024-06-01', category: 'industry', title: 'Claude 3.5 Sonnet', desc: 'The model that changed the math. Agent frameworks go from demos to daily drivers.' },
+    { date: '2024-11-25', category: 'industry', title: 'Anthropic launches MCP', desc: 'Open standard for connecting AI to tools. The plumbing layer that makes agents practical.' },
+    { date: '2025-11-01', category: 'openclaw', title: 'Clawdbot launches', desc: 'Peter Steinberger publishes a weekend project. 9,000 GitHub stars in a week.' },
+    { date: '2026-01-27', category: 'openclaw', title: 'OpenClaw goes viral', desc: '60,000 GitHub stars in 72 hours. Triple rebrand in 3 days. Fastest in open source history.' },
+    { date: '2026-01-28', category: 'industry', title: 'Mac Mini shortage', desc: "M4 Mac Mini delivery times hit 6 weeks. Tom's Hardware: 'OpenClaw-fueled ordering frenzy.'" },
+    { date: '2026-02-01', category: 'briu', title: 'We start building our agent', desc: 'Built the agent stack for ourselves first. Email, CRM, security, cost monitoring. $2\u20135/day.' },
+    { date: '2026-02-15', category: 'openclaw', title: 'OpenAI acquires OpenClaw', desc: 'Steinberger joins OpenAI. Non-negotiable: stays open source. 145,000+ GitHub stars.' },
+    { date: '2026-02-20', category: 'industry', title: 'Calacanis deploys agents firm-wide', desc: 'Every employee gets an agent. 95% of SDR work automated. Cost: $300/day per agent.' },
+    { date: '2026-02-22', category: 'industry', title: 'Cuban vs. Calacanis debate', desc: "Cuban: 'college interns that come in hungover.' Right about the snapshot. Wrong about the trajectory." },
+    { date: '2026-03-01', category: 'briu', title: 'Briu founded', desc: 'Started deploying agents for businesses. First client onboarded within the week.' },
+    { date: '2026-03-09', category: 'openclaw', title: '163,000 stars, 5,700+ skills', desc: 'OpenClaw marketplace hits 5,700 community-built skills. 50+ integrations. The ecosystem is real.' },
+    { date: '2026-09-01', category: 'cost', projected: true, title: 'Cost curve inflection', desc: 'Based on current trajectory: $300/day agents run for $30. $5/day agents run for $1.' }
+  ];
+
+  // ===== Content sections to weave between timeline events =====
+  // Each has an `after` date: it renders after that timeline event
+  var SECTIONS = [
+    {
+      after: '2026-02-20',
+      id: 'what-happened',
+      html: '<h2>What Happened</h2>' +
+        '<p>In early 2026, Jason Calacanis deployed AI agents across his 20-person venture firm. Every employee got an agent with its own email, Slack, and CRM accounts. A master agent manages the others, checks their work, summarizes everything daily.</p>' +
+        '<div class="quote-card quote-decorated">' +
+          '<p>\u201COut of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%.\u201D</p>' +
+          '<p class="quote-attr"><span class="quote-speaker">Jason Calacanis</span> \u2014 All-In Podcast E259</p>' +
+        '</div>' +
+        '<p>His assistant\u2019s workload dropped 30%. The agents took the repetitive tasks. The humans moved up.</p>'
+    },
+    {
+      after: '2026-02-22',
+      id: 'your-team',
+      html: '<h2>Your Team Changes</h2>' +
+        '<p>Employees who adopt these tools don\u2019t do less work. They do more, at a higher level. Routine tasks move to agents. Thinking, judgment, and relationships stay with people.</p>' +
+        '<p>It starts simple. An agent reads your email and prepares a morning briefing. Then it drafts responses. Then it manages your CRM. Then it runs overnight, researching prospects and preparing reports so your team wakes up to work already done.</p>' +
+        '<p class="wn-highlight">Your employees go from using AI as a search tool to managing a team of agents that handles the operational load of your business. That capability compounds. You can\u2019t hire for it yet.</p>'
+    },
+    {
+      after: '2026-02-22',
+      id: 'cost-question',
+      html: '<h2>The Cost Question</h2>' +
+        '<p>Mark Cuban responded publicly to Calacanis. He called agents \u201Ccollege interns that come in hungover, make mistakes, and don\u2019t take responsibility for them.\u201D His math: eight agents at $300/day each cost more than the employee they support.</p>' +
+        '<p>He\u2019s asking the right question. But he\u2019s treating agents as an operating expense. You pay for them, they do work, the money is consumed.</p>' +
+        '<p class="wn-highlight"><strong>Wrong frame.</strong></p>'
+    },
+    {
+      after: '2026-03-01',
+      id: 'permanent',
+      html: '<h2>Every Dollar Builds Something Permanent</h2>' +
+        '<p>The agent isn\u2019t doing today\u2019s work and forgetting it. Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer.</p>' +
+        '<p>That knowledge doesn\u2019t leave when an employee quits. Doesn\u2019t need retraining when you hire someone new. Doesn\u2019t forget over the weekend.</p>' +
+        '<p class="wn-highlight">This isn\u2019t an operating cost. It\u2019s infrastructure that appreciates.</p>'
+    },
+    {
+      after: '2026-03-01',
+      id: 'real-numbers',
+      html: '<h2>The Real Numbers</h2>' +
+        '<p>$300/day is the most you\u2019ll ever pay for this level of capability. The models get cheaper every quarter. The agent that performs like an intern today performs like a senior employee at a fraction of the cost within 18 months.</p>' +
+        '<table class="cost-table">' +
+          '<thead><tr><th>Level</th><th>Daily cost</th><th>What you get</th></tr></thead>' +
+          '<tbody>' +
+            '<tr><td>Practical</td><td>$2\u20135/day</td><td>Email, CRM, reporting, calendar</td></tr>' +
+            '<tr><td>Moderate</td><td>$10\u201320/day</td><td>+ prospecting, research, multi-agent</td></tr>' +
+            '<tr><td>Frontier</td><td>$30\u2013100/day</td><td>Full autonomous operation</td></tr>' +
+          '</tbody>' +
+        '</table>' +
+        '<div class="calc-grid reveal" style="margin-top: 2rem;">' +
+          '<div class="calc-inputs">' +
+            '<div class="calc-field">' +
+              '<label>Hours of work to automate <span class="calc-value" id="calcHoursVal">4h/day</span></label>' +
+              '<input type="range" class="calc-slider" id="calcHours" min="1" max="10" step="0.5" value="4" oninput="updateCalc()">' +
+            '</div>' +
+            '<div class="calc-field">' +
+              '<label>Current cost of that work <span class="calc-value" id="calcRateVal">$50/hr</span></label>' +
+              '<input type="range" class="calc-slider" id="calcRate" min="15" max="150" step="5" value="50" oninput="updateCalc()">' +
+            '</div>' +
+            '<div class="calc-field">' +
+              '<label>Deployment level</label>' +
+              '<div class="calc-toggles">' +
+                '<button class="calc-toggle active" data-val="practical" onclick="setComplexity(\'practical\',this)">Practical<span>$2\u20135/day</span></button>' +
+                '<button class="calc-toggle" data-val="moderate" onclick="setComplexity(\'moderate\',this)">Moderate<span>$10\u201320/day</span></button>' +
+                '<button class="calc-toggle" data-val="frontier" onclick="setComplexity(\'frontier\',this)">Frontier<span>$30\u2013100/day</span></button>' +
+              '</div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="calc-output">' +
+            '<div class="calc-comparison">' +
+              '<div class="calc-row">' +
+                '<span class="calc-row-label">Current monthly cost</span>' +
+                '<span class="calc-row-value" style="color:var(--coral)" id="calcCurrentCost">$4,400</span>' +
+              '</div>' +
+              '<div class="calc-row">' +
+                '<span class="calc-row-label">Agent monthly cost</span>' +
+                '<span class="calc-row-value" style="color:var(--forest)" id="calcAgentCost">$305</span>' +
+              '</div>' +
+              '<div class="calc-row" style="border:none;padding-top:0">' +
+                '<span class="calc-row-label"></span>' +
+                '<span id="calcAgentBreakdown" style="font-size:0.75rem;color:var(--text-muted)">($105 API + $200 platform)</span>' +
+              '</div>' +
+            '</div>' +
+            '<div class="calc-savings positive" id="calcSavings">' +
+              '<div class="calc-savings-num">$4,095<span>/mo</span></div>' +
+              '<div class="calc-savings-label">Estimated savings (93% reduction)</div>' +
+            '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="chart-source" style="margin-top:16px;font-size:0.78rem;color:var(--text-muted);">Based on 22 working days/month. Agent API at practical ($3.50/day), moderate ($15/day), or frontier ($50/day). Claude Max <span data-config="pricing.claude_max" data-config-format="dollar-mo">$200/mo</span> shared platform.</div>' +
+        '<div class="quote-card quote-decorated" style="margin-top:2rem;">' +
+          '<p>\u201CWhen do tokens outpace the salary of the employee? Because you\u2019re about to hit it.\u201D</p>' +
+          '<p class="quote-attr"><span class="quote-speaker">Chamath Palihapitiya</span> \u2014 All-In Podcast E261</p>' +
+        '</div>'
+    },
+    {
+      after: '2026-03-09',
+      id: 'no-300',
+      html: '<h2>You Don\u2019t Need $300 a Day</h2>' +
+        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day on top of a $200/mo subscription shared across the agent, coding, and strategy work.</p>' +
+        '<p>Not because we cut corners. Because we built the architecture to be efficient. A personal agent coordinates task-specific agents. Each one has a defined job, budget, and scope. They run when there\u2019s work to do and stop when it\u2019s done.</p>'
+    },
+    {
+      after: '2026-09-01',
+      id: 'if-you-wait',
+      html: '<h2>What Happens If You Wait</h2>' +
+        '<p>AI adoption in 2026 isn\u2019t coming from CEO transformation initiatives. It\u2019s coming from individual employees who figure it out themselves, bringing consumerized AI tools from the bottom up.</p>' +
+        '<p>Somewhere right now, a business that competes with yours has an employee building an agent that handles their inbox. Automating their CRM updates. Running prospect research overnight. Getting better at it every week.</p>' +
+        '<p class="wn-highlight">The businesses that start now get three advantages:</p>' +
+        '<ol class="advantages">' +
+          '<li><strong>Knowledge accumulation</strong> \u2014 every day the agent runs, it learns your business</li>' +
+          '<li><strong>Team capability</strong> \u2014 your people learn to operate agents before your competitors\u2019 people do</li>' +
+          '<li><strong>Cost trajectory</strong> \u2014 you lock in the architecture now, costs drop every quarter, your ROI accelerates</li>' +
+        '</ol>' +
+        '<p>The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>'
+    }
+  ];
+
+  // ===== Helpers =====
+  var NOW = new Date();
+
+  function daysBetween(d1, d2) {
+    return Math.floor((d2 - d1) / (1000 * 60 * 60 * 24));
+  }
+
+  function relativeTime(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    var diffMs = NOW - d;
+    var diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+    if (diffDays === 0) return 'Today';
+    if (diffDays === 1) return 'Yesterday';
+    if (diffDays === -1) return 'Tomorrow';
+
+    try {
+      var rtf = new Intl.RelativeTimeFormat('en', { numeric: 'auto' });
+      if (Math.abs(diffDays) < 30) return rtf.format(-diffDays, 'day');
+      if (Math.abs(diffDays) < 365) {
+        var months = Math.round(diffDays / 30);
+        return rtf.format(-months, 'month');
+      }
+      var years = Math.round(diffDays / 365);
+      return rtf.format(-years, 'year');
+    } catch(e) {
+      if (diffDays > 0) return diffDays + ' days ago';
+      return 'in ' + Math.abs(diffDays) + ' days';
+    }
+  }
+
+  function formatDate(dateStr) {
+    var d = new Date(dateStr + 'T00:00:00');
+    return d.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
+  }
+
+  function isFuture(dateStr) {
+    return new Date(dateStr + 'T00:00:00') > NOW;
+  }
+
+  // ===== Build the timeline =====
+  // Sort by date
+  TIMELINE.sort(function(a, b) { return new Date(a.date) - new Date(b.date); });
+
+  var container = document.getElementById('timelineContainer');
+  var isLeft = true;
+
+  // Build a lookup: after rendering a timeline node with this date, inject the section
+  var sectionMap = {};
+  SECTIONS.forEach(function(s) {
+    if (!sectionMap[s.after]) sectionMap[s.after] = [];
+    sectionMap[s.after].push(s);
+  });
+
+  // Find where "you are here" goes
+  var hereInserted = false;
+
+  function insertHereMarker() {
+    if (hereInserted) return;
+    hereInserted = true;
+    var here = document.createElement('div');
+    here.className = 'tl-here';
+    here.id = 'tlHere';
+    here.style.position = 'relative';
+    here.style.display = 'flex';
+    here.style.alignItems = 'center';
+    here.style.justifyContent = 'center';
+    here.style.margin = '2rem 0';
+    here.innerHTML = '<div style="position:relative;display:flex;align-items:center;justify-content:center;width:100%;">' +
+      '<div style="position:absolute;left:50%;transform:translateX(-50%);" class="tl-here">' +
+        '<div class="tl-here-dot"></div>' +
+        '<div class="tl-here-label">You are here</div>' +
+      '</div>' +
+    '</div>';
+    container.appendChild(here);
+  }
+
+  TIMELINE.forEach(function(evt, idx) {
+    var eventDate = new Date(evt.date + 'T00:00:00');
+
+    // Insert "you are here" before the first future event
+    if (!hereInserted && eventDate > NOW) {
+      insertHereMarker();
+    }
+
+    var side = isLeft ? 'tl-left' : 'tl-right';
+    var projected = evt.projected || isFuture(evt.date);
+
+    var node = document.createElement('div');
+    node.className = 'tl-node ' + side + (projected ? ' tl-projected' : '');
+    node.setAttribute('data-date', evt.date);
+
+    var dotHtml = '<div class="tl-dot cat-' + evt.category + '"></div>';
+    var connectorHtml = '<div class="tl-connector"></div>';
+    var projectedLabel = projected ? '<div class="tl-projected-label">Projected</div>' : '';
+
+    node.innerHTML = dotHtml + connectorHtml +
+      '<div class="tl-content">' +
+        projectedLabel +
+        '<div class="tl-date">' + formatDate(evt.date) + '</div>' +
+        '<div class="tl-relative cat-' + evt.category + '">' + relativeTime(evt.date) + '</div>' +
+        '<div class="tl-title">' + evt.title + '</div>' +
+        '<div class="tl-desc">' + evt.desc + '</div>' +
+      '</div>';
+
+    container.appendChild(node);
+    isLeft = !isLeft;
+
+    // Check if we need to inject content sections after this node
+    if (sectionMap[evt.date]) {
+      sectionMap[evt.date].forEach(function(s) {
+        var sec = document.createElement('div');
+        sec.className = 'tl-content-section reveal';
+        sec.id = s.id;
+        sec.innerHTML = s.html;
+        container.appendChild(sec);
+      });
+    }
+  });
+
+  // Insert "you are here" at the end if all events are in the past
+  if (!hereInserted) {
+    insertHereMarker();
+  }
+
+  // ===== Scroll-triggered fade-in for timeline nodes =====
+  var tlNodes = document.querySelectorAll('.tl-node, .tl-content-section');
+  var tlObs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('tl-visible');
+        entry.target.classList.add('visible'); // for .reveal
+        tlObs.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  tlNodes.forEach(function(n) { tlObs.observe(n); });
+
+  // ===== Live counters =====
+  function updateCounters() {
+    var ocLaunch = daysBetween(new Date('2026-01-27'), NOW);
+    var briuDeploy = daysBetween(new Date('2026-03-01'), NOW);
+    var ecosystem = daysBetween(new Date('2025-11-01'), NOW);
+
+    // Cost drop: ~2% per month from Feb 20 2026
+    var monthsSinceCalacanis = daysBetween(new Date('2026-02-20'), NOW) / 30;
+    var costDrop = Math.max(0, Math.round((1 - Math.pow(0.98, monthsSinceCalacanis)) * 100));
+
+    var el1 = document.getElementById('counterOCLaunch');
+    var el2 = document.getElementById('counterBriuDeploy');
+    var el3 = document.getElementById('counterEcosystem');
+    var el4 = document.getElementById('counterCostDrop');
+
+    if (el1) el1.textContent = Math.max(0, ocLaunch).toLocaleString();
+    if (el2) el2.textContent = Math.max(0, briuDeploy).toLocaleString();
+    if (el3) el3.textContent = Math.max(0, ecosystem).toLocaleString();
+    if (el4) el4.textContent = '~' + costDrop + '%';
+  }
+  updateCounters();
+
+  // ===== Init calculator if present =====
+  if (document.getElementById('calcHours') && window.updateCalc) {
+    window.updateCalc();
+  }
+
+  // Show chat bubble on this high-intent page
+  if (window.briuShowChatBubble) window.briuShowChatBubble();
+})();
 </script>
 </body>
 </html>
