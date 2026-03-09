@@ -29,8 +29,14 @@
 .hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 4.5vw, 3.5rem); line-height: 1.1; margin-bottom: 1rem; max-width: 820px; position: relative; }
 .hero p { max-width: 720px; color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; position: relative; }
 
+/* Stat groups */
+.stats-group { max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.stats-group:first-of-type { margin-top: 2.5rem; }
+.stats-group + .stats-group { margin-top: 1.5rem; }
+.stats-group-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--forest); margin-bottom: 0.75rem; }
+
 /* Stat boxes */
-.stats { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; padding: 0 2rem; max-width: 1060px; margin: 2.5rem auto 0; position: relative; z-index: 1; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .stat-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: all 0.35s ease; cursor: default; }
 .stat-box:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,160,90,0.08); }
 .stat-value { font-family: var(--serif); font-size: 1.35rem; color: var(--text); line-height: 1.2; margin-bottom: 0.35rem; transition: color 0.3s ease; }
@@ -39,7 +45,13 @@
 .stat-box:hover .stat-label { color: var(--text); }
 @keyframes statPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.7; text-shadow: 0 0 8px rgba(212,160,90,0.3); } }
 .stat-pulse .stat-value { animation: statPulse 3s ease-in-out infinite; }
-.stats-meta { text-align: center; margin-top: 0.75rem; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; max-width: 1060px; margin-left: auto; margin-right: auto; padding: 0 2rem; }
+.stats-coming .stat-box { opacity: 0.4; }
+.stats-coming .stat-box:hover { transform: none; box-shadow: none; background: var(--surface); }
+.stat-soon { color: var(--text-muted); font-size: 1.6rem; }
+.stats-coming-note { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.6rem; }
+.stats-coming-note a { color: var(--gold); text-decoration: none; transition: color 0.2s; }
+.stats-coming-note a:hover { color: var(--gold-light); }
+.stats-meta { text-align: center; margin-top: 1.25rem; font-size: 0.68rem; color: var(--text-muted); opacity: 0.5; max-width: 1060px; margin-left: auto; margin-right: auto; padding: 0 2rem; }
 
 /* Timeline filters */
 .vtl-filters { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
@@ -137,16 +149,13 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .cta-btn { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
-@media (max-width: 900px) {
-  .stats { grid-template-columns: repeat(3, 1fr); }
-}
-
 @media (max-width: 640px) {
   .vtl { margin-left: calc(-50vw + 50%); margin-right: calc(-50vw + 50%); padding-left: 1.25rem; padding-right: 1.25rem; }
   .vtl-entry { flex: 0 0 180px; }
   .vtl-entry:last-child { padding-right: 1.25rem; }
   .hero { padding: 7rem 1.25rem 2rem; }
-  .stats { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
+  .stats-group { padding: 0 1.25rem; }
+  .stats { grid-template-columns: 1fr; }
   section { padding: 3rem 1.25rem 2rem; }
   .build-cta { padding: 3rem 1.25rem 4rem; }
 }
@@ -174,36 +183,65 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 <main>
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
-  <h1>What it actually costs to build with agents.</h1>
-  <p>Briu was built by agents from day one. This is the operating log.</p>
+  <h1>Building a company with agents. Every workflow, every cost, live.</h1>
+  <p>One person, multiple agents. Agent, brand, website, sales, operations — all built and run on the same stack we deploy for clients. This is the live operating dashboard.</p>
 </section>
 
-<div class="stats" id="buildStats">
-  <div class="stat-box reveal-scale stat-pulse">
-    <div class="stat-value">Mar 5, 2026</div>
-    <div class="stat-label">Founded</div>
-  </div>
-  <div class="stat-box reveal-scale reveal-delay-1">
-    <div class="stat-value" data-count="711" data-prefix="~$">~$711</div>
-    <div class="stat-label">Total Build Cost</div>
-  </div>
-  <div class="stat-box reveal-scale reveal-delay-2">
-    <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
-    <div class="stat-label" data-dynamic-label="commit-days">Total Commits</div>
-  </div>
-  <div class="stat-box reveal-scale" style="transition-delay:0.3s">
-    <div class="stat-value" data-count="12">12</div>
-    <div class="stat-label">Skills Deployed</div>
-  </div>
-  <div class="stat-box reveal-scale" style="transition-delay:0.4s">
-    <div class="stat-value" data-count="3">3</div>
-    <div class="stat-label">Days to Production Agent</div>
-  </div>
-  <div class="stat-box reveal-scale" style="transition-delay:0.5s">
-    <div class="stat-value" data-count="400" data-suffix="+">400+</div>
-    <div class="stat-label">Midjourney Generations</div>
+<div class="stats-group">
+  <div class="stats-group-label">The Build</div>
+  <div class="stats stats-3" id="buildStats">
+    <div class="stat-box reveal-scale stat-pulse">
+      <div class="stat-value">Mar 5, 2026</div>
+      <div class="stat-label">Founded</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value" data-count="711" data-prefix="~$">~$711</div>
+      <div class="stat-label">Total Build Cost</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-2">
+      <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
+      <div class="stat-label" data-dynamic-label="commit-days">Total Commits</div>
+    </div>
   </div>
 </div>
+
+<div class="stats-group">
+  <div class="stats-group-label">Operations</div>
+  <div class="stats stats-3">
+    <div class="stat-box reveal-scale">
+      <div class="stat-value">$2-5<span style="font-size: 0.9rem; color: var(--text-muted)">/day</span></div>
+      <div class="stat-label">Agent Operating Cost</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value" data-count="12">12</div>
+      <div class="stat-label">Skills Running</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-2">
+      <div class="stat-value" data-dynamic="build-days">26</div>
+      <div class="stat-label">Days Operating</div>
+    </div>
+  </div>
+</div>
+
+<div class="stats-group">
+  <div class="stats-group-label">Business Outcomes</div>
+  <div class="stats stats-3 stats-coming">
+    <div class="stat-box reveal-scale">
+      <div class="stat-value stat-soon">&mdash;</div>
+      <div class="stat-label">Customers</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value stat-soon">&mdash;</div>
+      <div class="stat-label">Revenue</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-2">
+      <div class="stat-value stat-soon">&mdash;</div>
+      <div class="stat-label">Cost per Acquisition</div>
+    </div>
+  </div>
+  <div class="stats-coming-note">Tracking starts with first customer. <a href="#" onclick="openContactForm();return false">Be the first &rarr;</a></div>
+</div>
+
 <div class="stats-meta">Last updated: Mar 8, 2026 PT</div>
 
 <section>
