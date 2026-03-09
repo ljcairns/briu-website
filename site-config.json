@@ -5,7 +5,9 @@
     "retainer_from": 500,
     "implementation_single": "8-20K",
     "implementation_multi": "20-50K+",
-    "claude_max": 200
+    "claude_max": 200,
+    "speaking_keynote": 5000,
+    "speaking_half_day": 7500
   },
   "costs": {
     "agent_api_total": 376,
