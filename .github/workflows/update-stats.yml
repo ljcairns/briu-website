@@ -132,13 +132,22 @@ jobs:
             # Fetch last 30 days of cost data
             START_DATE=$(date -u -d '30 days ago' +"%Y-%m-%dT00:00:00Z" 2>/dev/null || date -u -v-30d +"%Y-%m-%dT00:00:00Z" 2>/dev/null || echo "")
             END_DATE=$(date -u +"%Y-%m-%dT23:59:59Z")
+            echo "Cost API: start=$START_DATE end=$END_DATE"
             if [ -n "$START_DATE" ]; then
-              COST_DATA=$(curl -s -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
+              # Try the admin API endpoint
+              COST_DATA=$(curl -s -w "\n%{http_code}" -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
                 -H "anthropic-version: 2023-06-01" \
                 "https://api.anthropic.com/v1/organizations/cost_report?start_date=${START_DATE}&end_date=${END_DATE}&bucket_size=1d" 2>/dev/null || echo "{}")
 
+              HTTP_CODE=$(echo "$COST_DATA" | tail -1)
+              COST_DATA=$(echo "$COST_DATA" | sed '$d')
+              echo "Cost API response code: $HTTP_CODE"
+              echo "Cost API response keys: $(echo "$COST_DATA" | jq 'keys' 2>/dev/null || echo 'not json')"
+              echo "Cost API first 500 chars: $(echo "$COST_DATA" | head -c 500)"
+
               if echo "$COST_DATA" | jq -e '.data' >/dev/null 2>&1; then
                 DAYS_WITH_DATA=$(echo "$COST_DATA" | jq '[.data[] | select(.cost_cents > 0)] | length')
+                echo "Days with cost data: $DAYS_WITH_DATA"
                 if [ "$DAYS_WITH_DATA" -gt 0 ]; then
                   TOTAL_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | add')
                   PEAK_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | max')
@@ -148,7 +157,14 @@ jobs:
                   echo "Anthropic costs: avg=$AVG_DAILY_COST/day, peak=$PEAK_DAILY_COST/day, total=$TOTAL_API_SPEND"
                 fi
               else
-                echo "No cost data from Anthropic API (may need admin key)"
+                echo "No .data field in response, checking alternate formats..."
+                # Try alternate field names
+                if echo "$COST_DATA" | jq -e '.results' >/dev/null 2>&1; then
+                  echo "Found .results field"
+                fi
+                if echo "$COST_DATA" | jq -e '.error' >/dev/null 2>&1; then
+                  echo "API error: $(echo "$COST_DATA" | jq -r '.error')"
+                fi
               fi
             fi
           else
