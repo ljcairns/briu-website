@@ -187,16 +187,16 @@
       <div class="tl-counter-label">days since OpenClaw launched</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
-      <div class="tl-counter-num" id="counterBriuDeploy">--</div>
-      <div class="tl-counter-label">days Briu has deployed agents</div>
+      <div class="tl-counter-num" id="counterFounder">--</div>
+      <div class="tl-counter-label">days founder building agentic AI</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num" id="counterEcosystem">--</div>
-      <div class="tl-counter-label">days of community development</div>
+      <div class="tl-counter-num" id="counterCommits">--</div>
+      <div class="tl-counter-label">total commits across repos</div>
     </div>
     <div class="tl-counter reveal reveal-delay-3">
-      <div class="tl-counter-num" id="counterCostDrop">--</div>
-      <div class="tl-counter-label">est. cost drop since Calacanis deployment</div>
+      <div class="tl-counter-num" id="counterBuildCost">$711</div>
+      <div class="tl-counter-label">total build cost — domain to deployment</div>
     </div>
   </div>
 </div>
@@ -241,7 +241,7 @@
     { date: '2026-02-15', category: 'openclaw', title: 'OpenAI acquires OpenClaw', desc: 'Steinberger joins OpenAI. Non-negotiable: stays open source. 145,000+ GitHub stars.' },
     { date: '2026-02-20', category: 'industry', title: 'Calacanis deploys agents firm-wide', desc: 'Every employee gets an agent. 95% of SDR work automated. Cost: $300/day per agent.' },
     { date: '2026-02-22', category: 'industry', title: 'Cuban vs. Calacanis debate', desc: "Cuban: 'college interns that come in hungover.' Right about the snapshot. Wrong about the trajectory." },
-    { date: '2026-03-01', category: 'briu', title: 'Briu founded', desc: 'Started deploying agents for businesses. First client onboarded within the week.' },
+    { date: '2026-03-06', category: 'briu', title: 'Briu launches', desc: 'Brand goes live. Agent stack already running for a month. First client conversations within hours.' },
     { date: '2026-03-09', category: 'openclaw', title: '163,000 stars, 5,700+ skills', desc: 'OpenClaw marketplace hits 5,700 community-built skills. 50+ integrations. The ecosystem is real.' },
     { date: '2026-09-01', category: 'cost', projected: true, title: 'Cost curve inflection', desc: 'Based on current trajectory: $300/day agents run for $30. $5/day agents run for $1.' }
   ];
@@ -507,22 +507,21 @@
   // ===== Live counters =====
   function updateCounters() {
     var ocLaunch = daysBetween(new Date('2026-01-27'), NOW);
-    var briuDeploy = daysBetween(new Date('2026-03-01'), NOW);
-    var ecosystem = daysBetween(new Date('2025-11-01'), NOW);
-
-    // Cost drop: ~2% per month from Feb 20 2026
-    var monthsSinceCalacanis = daysBetween(new Date('2026-02-20'), NOW) / 30;
-    var costDrop = Math.max(0, Math.round((1 - Math.pow(0.98, monthsSinceCalacanis)) * 100));
+    var founderDays = daysBetween(new Date('2024-06-01'), NOW); // building since Claude 3.5 era
 
     var el1 = document.getElementById('counterOCLaunch');
-    var el2 = document.getElementById('counterBriuDeploy');
-    var el3 = document.getElementById('counterEcosystem');
-    var el4 = document.getElementById('counterCostDrop');
+    var el2 = document.getElementById('counterFounder');
+    var el3 = document.getElementById('counterCommits');
 
     if (el1) el1.textContent = Math.max(0, ocLaunch).toLocaleString();
-    if (el2) el2.textContent = Math.max(0, briuDeploy).toLocaleString();
-    if (el3) el3.textContent = Math.max(0, ecosystem).toLocaleString();
-    if (el4) el4.textContent = '~' + costDrop + '%';
+    if (el2) el2.textContent = Math.max(0, founderDays).toLocaleString();
+
+    // Pull commit count from stats.json (same source as /build/ page)
+    if (el3) {
+      fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
+        if (data.total_commits) el3.textContent = data.total_commits.toLocaleString();
+      }).catch(function() { el3.textContent = '244+'; });
+    }
   }
   updateCounters();
 
