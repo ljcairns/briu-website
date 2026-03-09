@@ -233,25 +233,17 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
   }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
 });
 
-/* Scroll Progress Bar */
+/* Scroll Progress Bar — fixed to top of viewport, independent of nav */
 (function() {
-  var bar = document.getElementById('navProgress');
-  if (!bar) {
-    var nav = document.querySelector('nav');
-    if (nav) {
-      bar = document.createElement('div');
-      bar.className = 'nav-progress';
-      bar.id = 'navProgress';
-      nav.appendChild(bar);
-    }
-  }
-  if (bar) {
-    window.addEventListener('scroll', function() {
-      var scrollTop = window.scrollY;
-      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-      if (docHeight > 0) bar.style.width = (scrollTop / docHeight) * 100 + '%';
-    }, { passive: true });
-  }
+  var bar = document.createElement('div');
+  bar.className = 'nav-progress';
+  bar.id = 'navProgress';
+  document.body.appendChild(bar);
+  window.addEventListener('scroll', function() {
+    var scrollTop = window.scrollY;
+    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    if (docHeight > 0) bar.style.width = (scrollTop / docHeight) * 100 + '%';
+  }, { passive: true });
 })();
 
 /* Scroll Reveal */

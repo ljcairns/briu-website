@@ -26,7 +26,6 @@
       '    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>\n' +
       '  </div>\n' +
       '  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>\n' +
-      '  <div class="nav-progress" id="navProgress"></div>\n' +
       '</nav>';
   }
 

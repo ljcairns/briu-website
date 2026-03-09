@@ -31,7 +31,7 @@ body::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-in
 main { overflow-x: hidden; width: 100%; }
 
 /* Navigation */
-nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); overflow: visible; isolation: isolate; }
+nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem; display: flex; justify-content: space-between; align-items: center; gap: 1.5rem; background: rgba(7,9,14,0.82); backdrop-filter: blur(24px); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .logo { text-decoration: none; display: flex; align-items: center; }
 .logo img { height: 96px; width: auto; transition: transform 0.4s ease, filter 0.4s ease; }
 .logo:hover img { transform: scale(1.05); filter: brightness(1.15); }
@@ -40,7 +40,7 @@ nav { position: sticky; top: 0; width: 100%; z-index: 100; padding: 1.25rem 2rem
 .nav-links a:hover, .nav-links a.active { color: var(--gold); }
 .cta-nav { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.5rem 1.2rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-nav:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
-.nav-progress { position: absolute; bottom: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; z-index: 101; transform: translateY(100%); }
+.nav-progress { position: fixed; top: 0; left: 0; height: 3px; background: linear-gradient(90deg, var(--gold), var(--coral), var(--river)); width: 0%; transition: width 0.1s linear; z-index: 101; pointer-events: none; }
 
 /* Ambient Orbs */
 @keyframes orbFloat1 { 0%, 100% { transform: translate(0, 0); } 33% { transform: translate(30px, -50px); } 66% { transform: translate(-20px, 30px); } }
