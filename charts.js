@@ -767,111 +767,53 @@ Briu.charts.briuOrg = function(containerId) {
   var container = document.getElementById(containerId);
   if (!container) return;
 
+  function layer(cls, label, nodes) {
+    var h = '<div class="org-layer ' + cls + '">';
+    if (label) h += '<div class="org-layer-label">' + label + '</div>';
+    h += '<div class="org-layer-nodes">';
+    for (var i = 0; i < nodes.length; i++) {
+      var n = nodes[i];
+      h += '<div class="org-node' + (n.cls ? ' ' + n.cls : '') + '">' +
+        '<div class="org-icon' + (n.iconCls ? ' ' + n.iconCls : '') + '">' + n.icon + '</div>' +
+        '<div class="org-name">' + n.name + '</div>' +
+        '<div class="org-detail">' + n.detail + '</div>' +
+        (n.env ? '<div class="org-env">' + n.env + '</div>' : '') +
+        '</div>';
+    }
+    h += '</div></div>';
+    return h;
+  }
+
   var html = '<div class="chart-surface" style="padding:24px 18px 14px">' +
     '<div class="chart-label">How this company actually runs</div>' +
-    '<div class="constellation">' +
+    '<div class="org-tree">' +
 
-    /* SVG lines — gradient flowing connections */
-    '<svg class="constellation-lines" viewBox="0 0 700 480" preserveAspectRatio="xMidYMid meet">' +
-    '<defs>' +
-    '<linearGradient id="orgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">' +
-    '<stop offset="0%" stop-color="#D4A05A" stop-opacity="0.6"/>' +
-    '<stop offset="50%" stop-color="#E07B5F" stop-opacity="0.4"/>' +
-    '<stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.5"/>' +
-    '</linearGradient>' +
-    '<linearGradient id="orgGrad2" x1="100%" y1="0%" x2="0%" y2="100%">' +
-    '<stop offset="0%" stop-color="#5A9DAC" stop-opacity="0.5"/>' +
-    '<stop offset="50%" stop-color="#E07B5F" stop-opacity="0.35"/>' +
-    '<stop offset="100%" stop-color="#D4A05A" stop-opacity="0.5"/>' +
-    '</linearGradient>' +
-    '<linearGradient id="orgFlowGold" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4A05A"/><stop offset="100%" stop-color="#E07B5F"/></linearGradient>' +
-    '<linearGradient id="orgFlowTeal" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#5A9DAC"/><stop offset="100%" stop-color="#D4A05A"/></linearGradient>' +
-    '</defs>' +
-    /* Founder to 3 interfaces — gradient lines */
-    '<line x1="350" y1="80" x2="140" y2="190" class="c-line-main c-line-m1" />' +
-    '<line x1="350" y1="80" x2="350" y2="190" class="c-line-main c-line-m2" />' +
-    '<line x1="350" y1="80" x2="560" y2="190" class="c-line-main c-line-m3" />' +
-    /* Founder to audit models — subtle */
-    '<line x1="350" y1="55" x2="530" y2="40" class="c-line-audit" />' +
-    '<line x1="350" y1="55" x2="600" y2="40" class="c-line-audit" />' +
-    /* Claw down to 3 skills */
-    '<line x1="140" y1="270" x2="140" y2="370" class="c-line-main c-line-m4" />' +
-    '<line x1="140" y1="270" x2="350" y2="370" class="c-line-main c-line-m5" />' +
-    '<line x1="140" y1="270" x2="560" y2="370" class="c-line-main c-line-m6" />' +
-    /* Data flow pulses */
-    '<line x1="350" y1="80" x2="140" y2="190" class="c-flow c-flow-1" stroke="url(#orgFlowGold)" />' +
-    '<line x1="350" y1="80" x2="350" y2="190" class="c-flow c-flow-2" stroke="url(#orgFlowTeal)" />' +
-    '<line x1="350" y1="80" x2="560" y2="190" class="c-flow c-flow-3" stroke="url(#orgFlowGold)" />' +
-    '<line x1="140" y1="270" x2="140" y2="370" class="c-flow c-flow-4" stroke="url(#orgFlowTeal)" />' +
-    '<line x1="140" y1="270" x2="350" y2="370" class="c-flow c-flow-5" stroke="url(#orgFlowGold)" />' +
-    '<line x1="140" y1="270" x2="560" y2="370" class="c-flow c-flow-6" stroke="url(#orgFlowTeal)" />' +
-    '</svg>' +
+    layer('org-human', '', [
+      { icon: 'You', iconCls: 'org-icon-human', name: 'Founder', detail: 'Judgment &middot; taste &middot; approval' }
+    ]) +
+    '<div class="org-stem"></div>' +
 
-    /* Row 1: Founder — centered, with audit models as subtle satellites */
-    '<div class="c-row c-row-founder">' +
-    '<div class="c-node c-founder">' +
-    '<div class="c-circle c-human"><span>You</span></div>' +
-    '<div class="c-label">Founder</div>' +
-    '<div class="c-sub">Judgment &middot; taste &middot; approval</div>' +
-    '</div>' +
-    '</div>' +
-    /* Audit models positioned separately */
-    '<div class="c-audit-group">' +
-    '<div class="c-node c-secondary"><div class="c-circle c-audit"><span>G</span></div><div class="c-label">Gemini</div></div>' +
-    '<div class="c-node c-secondary"><div class="c-circle c-audit"><span>O</span></div><div class="c-label">GPT</div></div>' +
-    '</div>' +
-    '<div class="c-connector"></div>' +
+    layer('org-interfaces', 'Interfaces', [
+      { icon: '&#x1f9e0;', iconCls: 'org-icon-gold', name: 'Claw', detail: 'Discord &middot; OpenClaw', env: 'Sandboxed VPS' },
+      { icon: '&#x2318;', iconCls: 'org-icon-forest', name: 'Claude Code', detail: 'Terminal &middot; GitHub', env: 'Local' },
+      { icon: '&#x25CE;', iconCls: 'org-icon-teal', name: 'Claude Web', detail: 'Planning &middot; orchestration', env: 'Browser' }
+    ]) +
+    '<div class="org-stem"></div>' +
 
-    /* Row label */
-    '<div class="c-row-label c-row-label-interfaces">Interfaces</div>' +
+    layer('org-agents', 'Specialist Agents', [
+      { icon: '&#x2709;', iconCls: 'org-icon-forest', name: 'Email &amp; CRM', detail: 'Gmail &middot; HubSpot &middot; Apollo' },
+      { icon: '&#x1f50d;', iconCls: 'org-icon-teal', name: 'Research', detail: 'Web &middot; LinkedIn &middot; Docs' },
+      { icon: '&#x2699;', iconCls: 'org-icon-forest', name: 'Daily Ops', detail: 'Reports &middot; Security &middot; Cron' },
+      { icon: '+', iconCls: 'org-icon-add', name: 'Your Agent', detail: 'Custom-built for you', cls: 'org-node-future' }
+    ]) +
 
-    /* Row 2: Direct interfaces */
-    '<div class="c-row c-row-primary">' +
-    '<div class="c-node c-primary">' +
-    '<div class="c-circle c-orchestrator"><span>&#x1f9e0;</span></div>' +
-    '<div class="c-label">Claw</div>' +
-    '<div class="c-sub">Discord &middot; OpenClaw</div>' +
-    '<div class="c-env">Sandboxed VPS</div>' +
-    '</div>' +
-    '<div class="c-node c-primary">' +
-    '<div class="c-circle c-code"><span>&#x2318;</span></div>' +
-    '<div class="c-label">Claude Code</div>' +
-    '<div class="c-sub">Terminal &middot; GitHub</div>' +
-    '<div class="c-env">Local</div>' +
-    '</div>' +
-    '<div class="c-node c-primary">' +
-    '<div class="c-circle c-web"><span>&#x25CE;</span></div>' +
-    '<div class="c-label">Claude Web</div>' +
-    '<div class="c-sub">Planning &middot; orchestration</div>' +
-    '<div class="c-env">Browser</div>' +
-    '</div>' +
-    '</div>' +
-    '<div class="c-connector"></div>' +
-
-    /* Row label */
-    '<div class="c-row-label c-row-label-skills">Specialist Agents <span>(under Claw)</span></div>' +
-
-    /* Row 3: Specialist agents */
-    '<div class="c-row c-row-skills">' +
-    '<div class="c-node c-skill">' +
-    '<div class="c-circle c-agent"><span>&#x2709;</span></div>' +
-    '<div class="c-label">Email &amp; CRM</div>' +
-    '<div class="c-sub">Gmail &middot; HubSpot &middot; Apollo</div>' +
-    '</div>' +
-    '<div class="c-node c-skill">' +
-    '<div class="c-circle c-agent"><span>&#x1f50d;</span></div>' +
-    '<div class="c-label">Research</div>' +
-    '<div class="c-sub">Web &middot; LinkedIn &middot; Docs</div>' +
-    '</div>' +
-    '<div class="c-node c-skill">' +
-    '<div class="c-circle c-agent"><span>&#x2699;</span></div>' +
-    '<div class="c-label">Daily Ops</div>' +
-    '<div class="c-sub">Reports &middot; Security &middot; Cron</div>' +
-    '</div>' +
+    '<div class="org-audit">' +
+      '<span class="org-audit-label">Audit layer</span>' +
+      '<span class="org-audit-models">Gemini &middot; GPT verify every action</span>' +
     '</div>' +
 
-    '</div>' + /* end constellation */
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models.</div></div>';
+    '</div>' +
+    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3+ specialist agents, 2 audit models.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');
