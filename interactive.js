@@ -210,6 +210,15 @@
 
   function fetchChat(callback) {
     isWaiting = true;
+
+    // Timeout after 25s
+    var timedOut = false;
+    var timer = setTimeout(function() {
+      timedOut = true;
+      isWaiting = false;
+      callback(null);
+    }, 25000);
+
     var payload = {
       quiz: answers,
       page: window.location.pathname,
@@ -228,15 +237,41 @@
     })
     .then(function(r) { return r.json(); })
     .then(function(data) {
+      if (timedOut) return;
+      clearTimeout(timer);
       isWaiting = false;
       sessionId = data.sessionId || sessionId;
       callback(data);
     })
     .catch(function() {
+      if (timedOut) return;
+      clearTimeout(timer);
       isWaiting = false;
       callback(null);
     });
   }
+
+  // ─── Email domain pitch ───
+  window.submitCollected = function(field) {
+    var input = document.getElementById('convCollect_' + field);
+    if (!input) return;
+    var val = input.value.trim();
+    if (!val) return;
+
+    // If email with work domain, extract company domain for pitch
+    if (field === 'email' && val.indexOf('@') !== -1) {
+      var domain = val.split('@')[1];
+      var freeProviders = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com'];
+      if (freeProviders.indexOf(domain.toLowerCase()) === -1) {
+        // Work email — trigger domain pitch
+        submitMessage('My email is ' + val + ' — I work at ' + domain);
+        return;
+      }
+    }
+
+    var labels = { company: 'My company is ', name: 'My name is ', email: 'My email is ', website: 'Our website is ', workflow: '' };
+    submitMessage((labels[field] || '') + val);
+  };
 
   // ─── Message rendering ───
   function appendUserMessage(thread, text) {
@@ -255,7 +290,7 @@
 
     // Render inline action cards (estimate, page, collect)
     var inlineActions = (actions || []).filter(function(a) {
-      return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff';
+      return a.type === 'estimate' || a.type === 'page' || a.type === 'collect' || a.type === 'handoff' || a.type === 'pitch';
     });
     for (var i = 0; i < inlineActions.length; i++) {
       div.appendChild(renderActionCard(inlineActions[i]));
@@ -351,6 +386,27 @@
         '<button class="conv-action-btn conv-handoff-btn" onclick="sendConversation()">Send to Lucas</button>';
     }
 
+    if (action.type === 'pitch') {
+      var ph = '<div class="conv-pitch-header">' +
+        '<div class="conv-card-label">Pitch for ' + escapeHtml(action.company || action.domain) + '</div>' +
+        '</div>';
+      if (action.points && action.points.length) {
+        ph += '<ul class="conv-pitch-points">';
+        for (var p = 0; p < action.points.length; p++) {
+          ph += '<li>' + escapeHtml(action.points[p]) + '</li>';
+        }
+        ph += '</ul>';
+      }
+      if (action.estimate) {
+        ph += '<div class="conv-pitch-estimate">' +
+          '<div class="conv-estimate-row"><span>Starting tier</span><span class="conv-estimate-cost">' + escapeHtml(action.estimate.tier || '') + '</span></div>' +
+          '<div class="conv-estimate-row"><span>Build</span><span class="conv-estimate-cost">' + escapeHtml(action.estimate.build || '') + '</span></div>' +
+          '<div class="conv-estimate-row"><span>Monthly</span><span class="conv-estimate-cost">' + escapeHtml(action.estimate.monthly || '') + '</span></div>' +
+          '</div>';
+      }
+      card.innerHTML = ph;
+    }
+
     return card;
   }
 
@@ -358,16 +414,6 @@
     var replies = document.getElementById('convReplies');
     if (replies) replies.innerHTML = '';
   }
-
-  window.submitCollected = function(field) {
-    var input = document.getElementById('convCollect_' + field);
-    if (!input) return;
-    var val = input.value.trim();
-    if (!val) return;
-
-    var labels = { company: 'My company is ', name: 'My name is ', email: 'My email is ', website: 'Our website is ', workflow: '' };
-    submitMessage((labels[field] || '') + val);
-  };
 
   // ─── Message formatting ───
   function formatMessage(text) {

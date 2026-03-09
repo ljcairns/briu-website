@@ -36,6 +36,9 @@ Fields: "company", "name", "email", "website", "workflow" (free text about their
 6. Handoff — trigger the send-to-team flow:
 {"type":"handoff","message":"Ready to connect you with Lucas"}
 
+7. Company pitch — personalized pitch for a specific company (use after domain lookup):
+{"type":"pitch","company":"Acme Corp","domain":"acme.com","points":["Email triage across your support team","CRM automation for your sales pipeline","Weekly reporting dashboards"],"estimate":{"tier":"Team Kickoff","build":"$5,000","monthly":"$250-400/mo"}}
+
 ## Action Guidelines
 - ALWAYS include "replies" on every response (2-3 contextual suggestions + one like "Tell me more about X")
 - Show "progress" periodically — start at 20 after quiz, increase as you learn more (company, workflow, tools, team)
@@ -116,6 +119,61 @@ const TOPIC_MAP = {
 
 // Default chunks for first message (when we only have quiz context)
 const DEFAULT_CHUNKS = ['pricing', 'capabilities', 'pages'];
+
+// ─── Domain lookup for work email pitches ───
+const DOMAIN_RE = /I work at ([\w.-]+\.\w{2,})/i;
+
+async function fetchCompanyInfo(domain) {
+  try {
+    const res = await fetch('https://' + domain, {
+      headers: { 'User-Agent': 'Briu-Agent/1.0' },
+      redirect: 'follow',
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!res.ok) return null;
+    const html = await res.text();
+
+    // Extract useful text: title, meta description, and first ~1500 chars of visible text
+    const title = (html.match(/<title[^>]*>([^<]+)<\/title>/i) || [])[1] || '';
+    const metaDesc = (html.match(/<meta[^>]*name=["']description["'][^>]*content=["']([^"']+)["']/i) || [])[1] || '';
+
+    // Strip tags, scripts, styles — get visible text
+    let text = html
+      .replace(/<script[\s\S]*?<\/script>/gi, '')
+      .replace(/<style[\s\S]*?<\/style>/gi, '')
+      .replace(/<nav[\s\S]*?<\/nav>/gi, '')
+      .replace(/<footer[\s\S]*?<\/footer>/gi, '')
+      .replace(/<[^>]+>/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim()
+      .slice(0, 1500);
+
+    return `Company website (${domain}):
+Title: ${title}
+Description: ${metaDesc}
+Content: ${text}`;
+  } catch (e) {
+    return null;
+  }
+}
+
+// ─── Cost estimation formula ───
+const COST_ESTIMATE_PROMPT = `
+## Cost Estimation Formula
+When you know enough about a prospect's needs, estimate costs using this framework:
+- Agent complexity: Simple (email triage, notifications) = $2-5/day API | Medium (CRM updates, reporting) = $5-15/day | Complex (multi-step orchestration, research) = $15-50/day
+- Platform cost: ~$200/mo shared across all agents
+- Build cost: Simple agent = $1-3K | Medium = $3-8K | Complex multi-agent = $8-20K
+- Number of agents: multiply daily API cost × agents × 30 for monthly
+- Monthly total = (daily API × agents × 30) + platform + retainer ($500-2K/mo)
+- Always compare to traditional cost: equivalent hire = $4-8K/mo salary + benefits + training + management overhead
+
+When a work domain is detected, personalize your pitch:
+1. Reference what the company actually does (from their website)
+2. Suggest 2-3 specific workflows that would apply to their business
+3. Estimate a starting package (which tier fits, likely first agent, rough monthly cost)
+4. Frame it as: "Here's what I'd pitch if I were sitting across from your team"`;
+
 
 const ROLE_MAP = { founder: 'Founder/CEO', leader: 'Team Lead/Manager', ic: 'Individual Contributor', exploring: 'Exploring for their company' };
 const TEAM_MAP = { solo: 'Solo operator', small: '2-10 person team', medium: '11-50 person team', large: '50+ person company' };
@@ -303,12 +361,25 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
   // Get the latest user message for chunk selection
   const lastUserMsg = [...managedMessages].reverse().find(m => m.role === 'user');
   const isFirstTurn = managedMessages.length <= 2;
+  const lastText = lastUserMsg ? lastUserMsg.content : '';
+
+  // Check if user mentioned a work domain — fetch their company website
+  let companyContext = '';
+  const domainMatch = lastText.match(DOMAIN_RE);
+  if (domainMatch) {
+    const domain = domainMatch[1];
+    const info = await fetchCompanyInfo(domain);
+    if (info) {
+      companyContext = '\n\n' + info + '\n' + COST_ESTIMATE_PROMPT;
+    } else {
+      companyContext = '\n\n' + COST_ESTIMATE_PROMPT +
+        '\n\nNote: Could not fetch ' + domain + ' — ask the visitor to describe their business instead.';
+    }
+  }
 
   // Build system prompt with relevant chunks only
-  const systemPrompt = buildSystemPrompt(
-    lastUserMsg ? lastUserMsg.content : '',
-    isFirstTurn
-  );
+  const dynamicContent = buildSystemPrompt(lastText, isFirstTurn)
+    .replace(CORE_PROMPT + '\n\n', '') + companyContext;
 
   // Use prompt caching for the stable core prompt
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -320,7 +391,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
     },
     body: JSON.stringify({
       model: 'claude-4-sonnet-20250514',
-      max_tokens: 600,
+      max_tokens: 800,
       system: [
         {
           type: 'text',
@@ -329,8 +400,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
         },
         {
           type: 'text',
-          text: buildSystemPrompt(lastUserMsg ? lastUserMsg.content : '', isFirstTurn)
-            .replace(CORE_PROMPT + '\n\n', '') // Only the dynamic chunk part
+          text: dynamicContent
         }
       ],
       messages: managedMessages,
