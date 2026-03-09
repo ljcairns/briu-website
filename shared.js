@@ -234,15 +234,25 @@ document.getElementById('contactForm').addEventListener('submit', function(e) {
 });
 
 /* Scroll Progress Bar */
-var navProgress = document.getElementById('navProgress');
-if (navProgress) {
-  window.addEventListener('scroll', function() {
-    var scrollTop = window.scrollY;
-    var docHeight = document.documentElement.scrollHeight - window.innerHeight;
-    var scrollPercent = (scrollTop / docHeight) * 100;
-    navProgress.style.width = scrollPercent + '%';
-  });
-}
+(function() {
+  var bar = document.getElementById('navProgress');
+  if (!bar) {
+    var nav = document.querySelector('nav');
+    if (nav) {
+      bar = document.createElement('div');
+      bar.className = 'nav-progress';
+      bar.id = 'navProgress';
+      nav.appendChild(bar);
+    }
+  }
+  if (bar) {
+    window.addEventListener('scroll', function() {
+      var scrollTop = window.scrollY;
+      var docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      if (docHeight > 0) bar.style.width = (scrollTop / docHeight) * 100 + '%';
+    }, { passive: true });
+  }
+})();
 
 /* Scroll Reveal */
 var revealEls = document.querySelectorAll('.reveal, .reveal-scale');
