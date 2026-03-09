@@ -142,26 +142,24 @@ jobs:
               HTTP_CODE=$(echo "$COST_DATA" | tail -1)
               COST_DATA=$(echo "$COST_DATA" | sed '$d')
               echo "Cost API response code: $HTTP_CODE"
-              echo "Cost API response keys: $(echo "$COST_DATA" | jq 'keys' 2>/dev/null || echo 'not json')"
-              echo "Cost API first 500 chars: $(echo "$COST_DATA" | head -c 500)"
 
               if echo "$COST_DATA" | jq -e '.data' >/dev/null 2>&1; then
-                DAYS_WITH_DATA=$(echo "$COST_DATA" | jq '[.data[] | select(.cost_cents > 0)] | length')
+                # Each day: .data[].results[].amount (USD string)
+                # Sum results per day, then compute stats
+                DAILY_TOTALS=$(echo "$COST_DATA" | jq '[.data[] | {day: .starting_at, total: ([.results[].amount | tonumber] | add // 0)}]')
+                DAYS_WITH_DATA=$(echo "$DAILY_TOTALS" | jq '[.[] | select(.total > 0)] | length')
                 echo "Days with cost data: $DAYS_WITH_DATA"
+                echo "Daily totals: $(echo "$DAILY_TOTALS" | jq -c '[.[] | select(.total > 0) | {d: .day[0:10], t: (.total * 100 | round / 100)}]')"
                 if [ "$DAYS_WITH_DATA" -gt 0 ]; then
-                  TOTAL_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | add')
-                  PEAK_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | max')
-                  AVG_DAILY_COST=$(echo "scale=2; $TOTAL_CENTS / $DAYS_WITH_DATA / 100" | bc)
-                  PEAK_DAILY_COST=$(echo "scale=2; $PEAK_CENTS / 100" | bc)
-                  TOTAL_API_SPEND=$(echo "scale=2; $TOTAL_CENTS / 100" | bc)
+                  TOTAL_USD=$(echo "$DAILY_TOTALS" | jq '[.[].total] | add')
+                  PEAK_USD=$(echo "$DAILY_TOTALS" | jq '[.[].total] | max')
+                  AVG_DAILY_COST=$(echo "$DAILY_TOTALS" | jq "([.[] | select(.total > 0) | .total] | add) / $DAYS_WITH_DATA | . * 100 | round / 100")
+                  PEAK_DAILY_COST=$(echo "$DAILY_TOTALS" | jq '[.[] | .total] | max | . * 100 | round / 100')
+                  TOTAL_API_SPEND=$(echo "$DAILY_TOTALS" | jq '[.[].total] | add | . * 100 | round / 100')
                   echo "Anthropic costs: avg=$AVG_DAILY_COST/day, peak=$PEAK_DAILY_COST/day, total=$TOTAL_API_SPEND"
                 fi
               else
-                echo "No .data field in response, checking alternate formats..."
-                # Try alternate field names
-                if echo "$COST_DATA" | jq -e '.results' >/dev/null 2>&1; then
-                  echo "Found .results field"
-                fi
+                echo "No .data field in response"
                 if echo "$COST_DATA" | jq -e '.error' >/dev/null 2>&1; then
                   echo "API error: $(echo "$COST_DATA" | jq -r '.error')"
                 fi
