@@ -120,6 +120,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
 .card-category[data-cat="agent"] { color: var(--gold); border-color: rgba(212,160,90,0.25); }
 .card-category[data-cat="brand"] { color: var(--forest); border-color: rgba(77,128,112,0.25); }
 .card-category[data-cat="website"] { color: var(--teal); border-color: rgba(90,157,172,0.25); }
+.card-category[data-cat="business"] { color: var(--coral); border-color: rgba(224,123,95,0.25); }
 .article-card h4 { font-family: var(--sans); font-size: 0.82rem; color: var(--text-muted); font-weight: 400; margin-bottom: 0.75rem; line-height: 1.5; }
 .article-card h3 { font-family: var(--serif); font-size: 1.15rem; margin-bottom: 0.65rem; line-height: 1.25; }
 .article-card p { color: var(--text-muted); font-size: 0.88rem; line-height: 1.7; margin-bottom: 1rem; flex: 1; }
@@ -187,7 +188,7 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
     <div class="stat-label">Total Build Cost</div>
   </div>
   <div class="stat-box reveal-scale reveal-delay-2">
-    <div class="stat-value" data-count="91" data-dynamic="commits">91</div>
+    <div class="stat-value" data-count="354" data-dynamic="commits">354</div>
     <div class="stat-label" data-dynamic-label="commit-days">Total Commits</div>
   </div>
   <div class="stat-box reveal-scale" style="transition-delay:0.3s">
@@ -276,6 +277,15 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
         <div class="vtl-date">Mar 7</div>
         <div class="vtl-title">Services launched</div>
         <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="website">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 8</div>
+        <div class="vtl-title">Chart library shipped</div>
+        <div class="vtl-desc">13 interactive data visualizations built from podcast transcript data. Deployed across all pages.</div>
       </div>
     </div>
 
@@ -391,6 +401,22 @@ section { padding: 4rem 2rem 2rem; max-width: 1060px; margin: 0 auto; position: 
       <h3>What the Agent Does Every Day</h3>
       <h4>Skills, security, multi-model routing, real conversations</h4>
       <p>What the agent actually does daily. The skill inventory, how it decides which model to use, and real Discord conversations with Claw.</p>
+      <span class="card-link">In progress</span>
+    </div>
+
+    <div class="article-card coming-soon">
+      <div class="card-tag"><span class="card-category" data-cat="business">Business</span> Coming Soon</div>
+      <h3>Getting Customers with Agents</h3>
+      <h4>Outreach, qualification, pipeline — automated from day one</h4>
+      <p>How agents handle prospecting, lead qualification, and follow-up sequences. The sales automation stack behind Briu's go-to-market, with real numbers on cost-per-lead.</p>
+      <span class="card-link">In progress</span>
+    </div>
+
+    <div class="article-card coming-soon">
+      <div class="card-tag"><span class="card-category" data-cat="business">Business</span> Coming Soon</div>
+      <h3>Revenue &amp; Unit Economics</h3>
+      <h4>What it costs to run vs what it generates</h4>
+      <p>The full P&amp;L of an agent-first business. Operating costs, revenue per client, and how the economics shift as agent infrastructure compounds.</p>
       <span class="card-link">In progress</span>
     </div>
 
