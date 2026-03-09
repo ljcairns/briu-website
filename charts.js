@@ -834,7 +834,6 @@ Briu.charts.briuOrg = function(containerId) {
     card({ name: 'Email &amp; CRM', accent: 'forest', status: 'active', tools: 'Gmail &middot; HubSpot &middot; Apollo', metric: '100% of email/CRM &middot; 2 accounts' }) +
     card({ name: 'Research', accent: 'teal', status: 'active', tools: 'Web &middot; LinkedIn &middot; Docs', metric: 'Overnight &middot; parallel &middot; continuous' }) +
     card({ name: 'Daily Ops', accent: 'forest', status: 'active', tools: 'Reports &middot; Security &middot; Cron', metric: 'Morning briefing &middot; cost monitor' }) +
-    card({ name: 'Your Agent', status: 'open', future: true, tools: 'Custom-built for your business', metric: 'We build it, you own it' }) +
     '</div>' +
 
     '</div>' + /* end sb-grid */
@@ -845,7 +844,7 @@ Briu.charts.briuOrg = function(containerId) {
       '<span>Audit layer: Gemini &amp; GPT independently verify every agent action</span>' +
     '</div>' +
 
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3+ specialist agents, 2 audit models. Running cost: $2&ndash;5/day.</div></div>';
+    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: $2&ndash;5/day.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');
