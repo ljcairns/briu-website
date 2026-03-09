@@ -275,6 +275,12 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-cta-group { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
 .assess-retake { font-size: 0.78rem; color: var(--text-muted); cursor: pointer; background: none; border: none; font-family: var(--sans); text-decoration: underline; margin-top: 1.5rem; }
 .assess-retake:hover { color: var(--text); }
+.assess-company-greeting { font-size: 0.82rem; color: var(--gold); margin-bottom: 1.25rem; letter-spacing: 0.03em; }
+.assess-chat-toggle { margin-top: 1.5rem; text-align: center; }
+.assess-chat-btn { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); color: var(--text-muted); font-family: var(--sans); font-size: 0.88rem; padding: 0.75rem 1.5rem; cursor: pointer; transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+.assess-chat-btn:hover { border-color: rgba(212,160,90,0.3); color: var(--gold); background: rgba(212,160,90,0.04); }
+.assess-chat-arrow { font-size: 0.75rem; transition: transform 0.2s; }
+.assess-chat-panel { margin-top: 1rem; border-top: 1px solid rgba(255,255,255,0.06); padding-top: 1rem; animation: fadeUp 0.4s ease; }
 .rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
 
 /* Conversation UI */
@@ -1055,9 +1061,9 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/privacy/">Privacy</a></div>
 </footer>
 
-<script src="/shared.js?v=20260309f"></script>
-<script src="/interactive.js?v=20260309f"></script>
-<script src="/dynamic-stats.js?v=20260309f"></script>
+<script src="/shared.js?v=20260309g"></script>
+<script src="/interactive.js?v=20260309g"></script>
+<script src="/dynamic-stats.js?v=20260309g"></script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {

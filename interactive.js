@@ -20,16 +20,19 @@
 
   var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
-  // Restore saved conversation
-  var CONV_VERSION = 4; // bump to clear stale conversations
+  // Restore saved state
+  var CONV_VERSION = 5; // bump to clear stale conversations
   try {
+    var savedEmail = localStorage.getItem('briu_email');
+    if (savedEmail) userEmail = savedEmail;
+    var savedCompany = localStorage.getItem('briu_company');
+    if (savedCompany) companyData = JSON.parse(savedCompany);
     var saved = localStorage.getItem(KEY);
     if (saved) {
       answers = JSON.parse(saved);
       var savedConv = localStorage.getItem(CONV_KEY);
       if (savedConv) {
         var parsed = JSON.parse(savedConv);
-        // Clear stale conversations from before actions support
         if (parsed._v === CONV_VERSION) {
           conversation = parsed.msgs || [];
         } else {
@@ -68,6 +71,8 @@
     try {
       localStorage.removeItem(KEY);
       localStorage.removeItem(CONV_KEY);
+      localStorage.removeItem('briu_email');
+      localStorage.removeItem('briu_company');
     } catch(e) {}
     answers = {};
     conversation = [];
@@ -110,6 +115,7 @@
       return;
     }
     userEmail = email;
+    try { localStorage.setItem('briu_email', email); } catch(e) {}
     var domain = email.split('@')[1].toLowerCase();
 
     // Advance to step 1
@@ -131,6 +137,7 @@
         companyFetching = false;
         if (data && data.found) {
           companyData = data;
+          try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
           // Show badge on current step if still in quiz
           var activeStep = document.querySelector('.assess-step.active');
           if (activeStep && !document.getElementById('companyBadge')) {
@@ -204,6 +211,50 @@
     return suggestions;
   }
 
+  // ─── Recommendations based on quiz + company data ───
+  function recs() {
+    var r = [];
+    var uc = {
+      email: { t: 'Start with email triage', d: 'An agent that reads, categorizes, and drafts responses. Most founders save 1-2 hours daily.' },
+      sales: { t: 'Start with sales prospecting', d: 'Agent-powered lead research, personalized outreach drafts, and CRM updates.' },
+      reporting: { t: 'Start with automated reporting', d: 'Daily and weekly reports from your existing data. PDF delivery, trend analysis, anomaly alerts.' },
+      ops: { t: 'Start with operations automation', d: 'CRM hygiene, calendar management, task routing. Admin work that eats hours but needs minimal judgment.' },
+      support: { t: 'Start with support triage', d: 'Inbound request sorting, draft responses, smart routing. Nothing sends without approval.' }
+    };
+
+    // Company-specific workflows if available
+    if (companyData && companyData.workflows && companyData.workflows.length > 0) {
+      r.push({ title: 'For ' + companyData.name, desc: companyData.workflows.slice(0, 3).join(', ') + ' — all on your infrastructure, your API keys.' });
+    }
+
+    var pick = uc[answers.q4] || uc.email;
+    r.push({ title: pick.t, desc: pick.d });
+
+    if (answers.q2 === 'solo' || answers.q2 === 'small')
+      r.push({ title: 'Founder Kickoff — $3,500', desc: 'One working session. Workflow mapping, first agent deployed, written architecture plan.' });
+    else
+      r.push({ title: 'Team Kickoff — $5,000', desc: 'Full team briefing, exec sessions, first agent deployed, and a roadmap your whole team can execute.' });
+
+    if (answers.q3 === 'none' || answers.q3 === 'free')
+      r.push({ title: 'Read: Why Now', desc: 'The economics, timing, and case for controlled early deployment.', link: '/why-now/' });
+    else
+      r.push({ title: 'Read: How we built Briu', desc: 'Our exact toolchain, costs, and what agents can and cannot do.', link: '/build/' });
+
+    return r;
+  }
+
+  function countUp(el, from, to, dur) {
+    var start = null;
+    function tick(ts) {
+      if (!start) start = ts;
+      var p = Math.min((ts - start) / dur, 1);
+      var ease = p < 0.5 ? 2*p*p : -1 + (4 - 2*p)*p;
+      el.textContent = Math.round(from + (to - from) * ease);
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
   function showResults(instant) {
     var el = document.getElementById('assessResult');
     if (!el) return;
@@ -217,103 +268,124 @@
     var bar = document.getElementById('assessProgress');
     if (bar) bar.style.width = '100%';
 
-    // If we have a saved conversation, restore it
-    if (instant && conversation.length > 0) {
-      renderConversation(el, s, true);
-      personalizePageSections();
-      return;
-    }
-
-    // Fresh quiz completion — show programmatic readiness result (no API call)
-    // If company data is still fetching, wait briefly then proceed
-    var showReadiness = function() {
-      renderConversation(el, s, false);
-      var thread = document.getElementById('convThread');
+    var buildResult = function() {
       var p = persona(s);
+      var rc = recs();
+      var angle = (s / 100) * 360;
 
-      var roleLabels = { founder: 'Founder', leader: 'Team Lead', ic: 'Individual Contributor', exploring: 'Exploring' };
-      var teamLabels = { solo: 'solo', small: '2-10 person team', medium: '11-50 person team', large: '50+ company' };
-      var focusLabels = { email: 'email & communication', sales: 'sales & prospecting', reporting: 'reporting & data', ops: 'operations & admin', support: 'customer support' };
-
-      var readinessText;
+      var companyGreeting = '';
       if (companyData && companyData.found) {
-        readinessText = 'Welcome from ' + companyData.name + '. ' + p.desc + '\n\n';
-        if (companyData.workflows && companyData.workflows.length > 0) {
-          readinessText += 'Based on what you do, here are workflows agents could handle: ' +
-            companyData.workflows.slice(0, 3).join(', ').toLowerCase() + '.';
-        }
-      } else {
-        readinessText = p.desc + '\n\n' +
-          'Based on your answers — ' + (roleLabels[answers.q1] || 'your role') +
-          ', ' + (teamLabels[answers.q2] || 'your team') +
-          ', focused on ' + (focusLabels[answers.q4] || 'your workflows') + '.';
+        companyGreeting = '<div class="assess-company-greeting">Personalized for <strong>' + escapeHtml(companyData.name) + '</strong></div>';
       }
 
-      var startProgress = companyData ? 30 : 20;
-      var readinessActions = [
-        { type: 'progress', value: Math.min(s, startProgress), label: p.label },
-        { type: 'replies', options: buildReadinessActions() }
-      ];
+      var h = companyGreeting +
+        '<div class="assess-gauge" style="background:conic-gradient(var(--gold) 0deg,var(--gold) ' + angle + 'deg,rgba(255,255,255,0.06) ' + angle + 'deg)">' +
+        '<div class="assess-gauge-inner"><div class="assess-gauge-score">' + (instant ? s : '0') + '</div><div class="assess-gauge-label">Readiness</div></div></div>' +
+        '<h3 class="assess-persona">' + p.label + '</h3>' +
+        '<p class="assess-desc">' + p.desc + '</p><div class="assess-recs">';
 
-      var entry = { role: 'assistant', content: readinessText, actions: readinessActions };
-      conversation.push(entry);
-      saveConversation();
-      appendAssistantMessage(thread, readinessText, []);
-      renderActions(readinessActions);
+      for (var i = 0; i < rc.length; i++) {
+        h += '<div class="assess-rec"><p><strong>' + rc[i].title + '</strong> — ' + rc[i].desc;
+        if (rc[i].link) h += ' <a href="' + rc[i].link + '" style="color:var(--gold)">Read →</a>';
+        h += '</p></div>';
+      }
+
+      h += '</div><div class="assess-cta-group">' +
+        '<a href="#" onclick="openContactFromAssess();return false" class="hero-cta-primary cta-shimmer">Book a Call</a>' +
+        '<a href="#services" class="hero-cta-secondary">See pricing</a></div>';
+
+      // Chat section — expandable
+      h += '<div class="assess-chat-toggle">' +
+        '<button class="assess-chat-btn" onclick="toggleAssessChat()">' +
+        'Have questions? Chat with our agent' +
+        '<span class="assess-chat-arrow" id="chatArrow">↓</span></button></div>' +
+        '<div class="assess-chat-panel" id="assessChatPanel" style="display:none;">' +
+        '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Getting started</span></div>' +
+        '<div class="conv-thread" id="convThread"></div>' +
+        '<div class="conv-quick-replies" id="convReplies"></div>' +
+        '<div class="conv-input-row" id="convInputRow">' +
+        '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
+        '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
+        '</div></div>';
+
+      h += '<button class="assess-retake" onclick="resetAssess()">Retake assessment</button>';
+
+      el.innerHTML = h;
+      el.classList.add('active');
+
+      // Animate score
+      if (!instant) {
+        var scoreEl = el.querySelector('.assess-gauge-score');
+        if (scoreEl) countUp(scoreEl, 0, s, 1200);
+      }
+
+      // If conversation exists, auto-open chat and restore
+      if (conversation.length > 0) {
+        var panel = document.getElementById('assessChatPanel');
+        if (panel) panel.style.display = '';
+        var arrow = document.getElementById('chatArrow');
+        if (arrow) arrow.textContent = '↑';
+        var thread = document.getElementById('convThread');
+        for (var ci = 0; ci < conversation.length; ci++) {
+          var msg = conversation[ci];
+          if (msg.role === 'user') appendUserMessage(thread, msg.content);
+          else appendAssistantMessage(thread, msg.content, msg.actions || []);
+        }
+        var lastA = null;
+        for (var lj = conversation.length - 1; lj >= 0; lj--) {
+          if (conversation[lj].role === 'assistant') { lastA = conversation[lj]; break; }
+        }
+        if (lastA && lastA.actions) renderActions(lastA.actions);
+      } else {
+        // Pre-populate quick replies for the chat
+        var replies = document.getElementById('convReplies');
+        if (replies) {
+          var suggestions = buildReadinessActions();
+          for (var si = 0; si < suggestions.length; si++) {
+            var btn = document.createElement('button');
+            btn.className = 'conv-reply-btn';
+            btn.textContent = suggestions[si];
+            btn.setAttribute('data-reply', suggestions[si]);
+            btn.addEventListener('click', function() {
+              submitMessage(this.getAttribute('data-reply'));
+            });
+            replies.appendChild(btn);
+          }
+        }
+      }
+
+      bindInput();
       personalizePageSections();
     };
 
     // Wait up to 2s for company fetch if it's still in flight
-    if (companyFetching) {
+    if (!instant && companyFetching) {
       var waited = 0;
       var checkInterval = setInterval(function() {
         waited += 200;
         if (!companyFetching || waited >= 2000) {
           clearInterval(checkInterval);
-          showReadiness();
+          buildResult();
         }
       }, 200);
     } else {
-      showReadiness();
+      buildResult();
     }
   }
 
-  function renderConversation(el, s, showHistory) {
-    var h = '<div class="conv-progress-bar" id="convProgress"><div class="conv-progress-fill" style="width:20%"></div><span class="conv-progress-label">Getting started</span></div>' +
-      '<div class="conv-thread" id="convThread"></div>' +
-      '<div class="conv-quick-replies" id="convReplies"></div>' +
-      '<div class="conv-input-row" id="convInputRow">' +
-      '<input type="text" class="conv-input" id="convInput" placeholder="Ask about agents, pricing, or your specific workflow..." autocomplete="off">' +
-      '<button class="conv-send" id="convSend" aria-label="Send">&#8593;</button>' +
-      '</div>' +
-      '<div class="conv-bottom-actions">' +
-      '<button class="assess-retake" onclick="resetAssess()">Start over</button>' +
-      '</div>';
-
-    el.innerHTML = h;
-    el.classList.add('active');
-
-    // Restore history
-    if (showHistory && conversation.length > 0) {
-      var thread = document.getElementById('convThread');
-      for (var i = 0; i < conversation.length; i++) {
-        var msg = conversation[i];
-        if (msg.role === 'user') {
-          appendUserMessage(thread, msg.content);
-        } else {
-          appendAssistantMessage(thread, msg.content, msg.actions || []);
-        }
-      }
-      // Show last set of actions
-      var lastAssistant = null;
-      for (var j = conversation.length - 1; j >= 0; j--) {
-        if (conversation[j].role === 'assistant') { lastAssistant = conversation[j]; break; }
-      }
-      if (lastAssistant && lastAssistant.actions) renderActions(lastAssistant.actions);
+  window.toggleAssessChat = function() {
+    var panel = document.getElementById('assessChatPanel');
+    var arrow = document.getElementById('chatArrow');
+    if (!panel) return;
+    if (panel.style.display === 'none') {
+      panel.style.display = '';
+      if (arrow) arrow.textContent = '↑';
+      scrollThread();
+    } else {
+      panel.style.display = 'none';
+      if (arrow) arrow.textContent = '↓';
     }
-
-    bindInput();
-  }
+  };
 
   function bindInput() {
     var input = document.getElementById('convInput');
