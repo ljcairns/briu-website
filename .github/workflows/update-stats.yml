@@ -19,6 +19,7 @@ jobs:
       - name: Fetch commit counts
         env:
           PRIVATE_REPO_TOKEN: ${{ secrets.PRIVATE_REPO_TOKEN }}
+          ANTHROPIC_ADMIN_KEY: ${{ secrets.ANTHROPIC_ADMIN_KEY }}
           PRIVATE_REPO: ljcairns/openclaw-config
           PUBLIC_REPO: ljcairns/briu-website
         run: |
@@ -123,6 +124,37 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.wrangler/*' | wc -l | tr -d ' ')
           echo "Page count: ${PAGE_COUNT}"
 
+          # Anthropic API costs (last 30 days)
+          AVG_DAILY_COST="3.20"
+          PEAK_DAILY_COST="8.40"
+          TOTAL_API_SPEND="0"
+          if [ -n "$ANTHROPIC_ADMIN_KEY" ]; then
+            # Fetch last 30 days of cost data
+            START_DATE=$(date -u -d '30 days ago' +"%Y-%m-%dT00:00:00Z" 2>/dev/null || date -u -v-30d +"%Y-%m-%dT00:00:00Z" 2>/dev/null || echo "")
+            END_DATE=$(date -u +"%Y-%m-%dT23:59:59Z")
+            if [ -n "$START_DATE" ]; then
+              COST_DATA=$(curl -s -H "x-api-key: ${ANTHROPIC_ADMIN_KEY}" \
+                -H "anthropic-version: 2023-06-01" \
+                "https://api.anthropic.com/v1/organizations/cost_report?start_date=${START_DATE}&end_date=${END_DATE}&bucket_size=1d" 2>/dev/null || echo "{}")
+
+              if echo "$COST_DATA" | jq -e '.data' >/dev/null 2>&1; then
+                DAYS_WITH_DATA=$(echo "$COST_DATA" | jq '[.data[] | select(.cost_cents > 0)] | length')
+                if [ "$DAYS_WITH_DATA" -gt 0 ]; then
+                  TOTAL_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | add')
+                  PEAK_CENTS=$(echo "$COST_DATA" | jq '[.data[].cost_cents] | max')
+                  AVG_DAILY_COST=$(echo "scale=2; $TOTAL_CENTS / $DAYS_WITH_DATA / 100" | bc)
+                  PEAK_DAILY_COST=$(echo "scale=2; $PEAK_CENTS / 100" | bc)
+                  TOTAL_API_SPEND=$(echo "scale=2; $TOTAL_CENTS / 100" | bc)
+                  echo "Anthropic costs: avg=$AVG_DAILY_COST/day, peak=$PEAK_DAILY_COST/day, total=$TOTAL_API_SPEND"
+                fi
+              else
+                echo "No cost data from Anthropic API (may need admin key)"
+              fi
+            fi
+          else
+            echo "No ANTHROPIC_ADMIN_KEY set, using defaults"
+          fi
+
           cat > stats.json << EOF
           {
             "websiteCommits": ${WEBSITE_COMMITS},
@@ -135,6 +167,9 @@ jobs:
             "articleCount": ${ARTICLE_COUNT},
             "wordsOfContent": ${WORDS_OF_CONTENT},
             "pageCount": ${PAGE_COUNT},
+            "avgDailyCost": ${AVG_DAILY_COST},
+            "peakDailyCost": ${PEAK_DAILY_COST},
+            "totalApiSpend": ${TOTAL_API_SPEND},
             "lastUpdated": "${UPDATED}"
           }
           EOF

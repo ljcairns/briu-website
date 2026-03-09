@@ -113,7 +113,7 @@
 .advantages li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 0.55rem; }
 
 /* Live counters */
-.tl-counters { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin: 0; }
+.tl-counters { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 0; }
 .tl-counter { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); border-top: 2px solid rgba(255,255,255,0.06); padding: 1.75rem 1rem 1.5rem; text-align: center; position: relative; transition: all 0.4s ease; cursor: default; overflow: hidden; }
 .tl-counter::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 0; height: 1px; transition: width 0.4s ease; }
 .tl-counter:hover { transform: translateY(-3px); }
@@ -131,6 +131,9 @@
 .tl-counter:nth-child(4) { border-top-color: var(--coral); }
 .tl-counter:nth-child(4)::after { background: var(--coral); }
 .tl-counter:nth-child(4) .tl-counter-num { color: var(--coral); }
+.tl-counter:nth-child(5) { border-top-color: var(--gold-light); }
+.tl-counter:nth-child(5)::after { background: var(--gold-light); }
+.tl-counter:nth-child(5) .tl-counter-num { color: var(--gold-light); }
 .tl-counter:hover { border-color: rgba(255,255,255,0.08); }
 .tl-counter-num { font-family: var(--serif); font-size: 1.8rem; margin-bottom: 0.4rem; position: relative; }
 .tl-counter-label { font-size: 0.72rem; color: var(--text-muted); position: relative; line-height: 1.5; }
@@ -165,6 +168,7 @@
   .tl-here { left: 1.25rem; }
   .tl-here-label { position: absolute; left: 1.5rem; top: 50%; transform: translateY(-50%); }
   .tl-counters { grid-template-columns: repeat(2, 1fr); }
+  .tl-counter:nth-child(5) { grid-column: span 2; }
   .tl-legend { gap: 1rem; }
 }
 
@@ -198,19 +202,24 @@
 <div class="timeline-wrapper" style="padding-bottom:0;">
   <div class="tl-counters" id="tlCounters">
     <div class="tl-counter reveal">
-      <div class="tl-counter-num" id="counterOCLaunch">--</div>
-      <div class="tl-counter-label">days since OpenClaw launched</div>
-      <div class="tl-counter-detail">Jan 27, 2026 — 60k stars in 72 hours</div>
+      <div class="tl-counter-num" id="counterCommits">--</div>
+      <div class="tl-counter-label">commits</div>
+      <div class="tl-counter-detail">Public + private repos</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
       <div class="tl-counter-num" id="counterLOC">--</div>
       <div class="tl-counter-label">lines of code</div>
-      <div class="tl-counter-detail" id="counterCommitsDetail">across 577+ commits</div>
+      <div class="tl-counter-detail" id="counterLOCDetail">Website + agent stack</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num">$3.20</div>
-      <div class="tl-counter-label">baseline cost per day</div>
-      <div class="tl-counter-detail">Email, CRM, research, reporting, security</div>
+      <div class="tl-counter-num" id="counterAvgCost">$3.20</div>
+      <div class="tl-counter-label">avg daily API cost</div>
+      <div class="tl-counter-detail">On top of $200/mo Claude Max</div>
+    </div>
+    <div class="tl-counter reveal reveal-delay-3">
+      <div class="tl-counter-num" id="counterPeakCost">$8.40</div>
+      <div class="tl-counter-label">peak daily cost</div>
+      <div class="tl-counter-detail">Heavy research + prospecting day</div>
     </div>
     <div class="tl-counter reveal reveal-delay-3">
       <div class="tl-counter-num">1</div>
@@ -562,21 +571,26 @@
 
   // ===== Live counters =====
   function updateCounters() {
-    var ocLaunch = daysBetween(new Date('2026-01-27'), NOW);
+    var elCommits = document.getElementById('counterCommits');
+    var elLOC = document.getElementById('counterLOC');
+    var elLOCDetail = document.getElementById('counterLOCDetail');
 
-    var el1 = document.getElementById('counterOCLaunch');
-    var el2 = document.getElementById('counterLOC');
-    var el2detail = document.getElementById('counterCommitsDetail');
+    var elAvgCost = document.getElementById('counterAvgCost');
+    var elPeakCost = document.getElementById('counterPeakCost');
 
-    if (el1) el1.textContent = Math.max(0, ocLaunch).toLocaleString();
-
-    // Pull lines of code + commits from stats.json
-    if (el2) {
-      fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
-        if (data.linesOfCode) el2.textContent = data.linesOfCode.toLocaleString();
-        if (data.totalCommits && el2detail) el2detail.textContent = 'across ' + data.totalCommits.toLocaleString() + ' commits';
-      }).catch(function() { el2.textContent = '37,500+'; });
-    }
+    // Pull stats from stats.json
+    fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
+      if (data.totalCommits && elCommits) elCommits.textContent = data.totalCommits.toLocaleString();
+      if (data.linesOfCode && elLOC) elLOC.textContent = data.linesOfCode.toLocaleString();
+      if (elLOCDetail && data.websiteLinesOfCode && data.agentLinesOfCode) {
+        elLOCDetail.textContent = data.websiteLinesOfCode.toLocaleString() + ' website + ' + data.agentLinesOfCode.toLocaleString() + ' agent';
+      }
+      if (data.avgDailyCost && elAvgCost) elAvgCost.textContent = '$' + parseFloat(data.avgDailyCost).toFixed(2);
+      if (data.peakDailyCost && elPeakCost) elPeakCost.textContent = '$' + parseFloat(data.peakDailyCost).toFixed(2);
+    }).catch(function() {
+      if (elCommits) elCommits.textContent = '580+';
+      if (elLOC) elLOC.textContent = '37,500+';
+    });
   }
   updateCounters();
 
