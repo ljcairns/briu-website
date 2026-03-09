@@ -233,7 +233,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .faq-item.faq-hidden { display: none; }
 
 /* Assessment */
-.assess-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem; max-width: 640px; margin: 0 auto; }
+.assess-teaser { text-align: center; max-width: 640px; margin: 0 auto; cursor: pointer; }
+.assess-teaser-btn { display: inline-block; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); padding: 1rem 2.5rem; border: 1px solid rgba(212,160,90,0.3); background: linear-gradient(135deg, rgba(212,160,90,0.06), rgba(212,160,90,0.02)); transition: all 0.4s ease; position: relative; overflow: hidden; }
+.assess-teaser-btn:hover { background: rgba(212,160,90,0.12); border-color: rgba(212,160,90,0.5); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,160,90,0.1); }
+.assess-teaser-btn::after { content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; background: linear-gradient(90deg, transparent, rgba(212,160,90,0.08), transparent); animation: shimmerSlide 4s ease-in-out infinite; }
+@keyframes shimmerSlide { 0%,100% { left: -100%; } 50% { left: 100%; } }
+.assess-teaser-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.75rem; }
+.assess-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2.5rem; max-width: 640px; margin: 0 auto; display: none; }
+.assess-container.assess-open { display: block; animation: fadeUp 0.5s ease; }
 .assess-progress { height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 2rem; overflow: hidden; }
 .assess-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-light)); width: 0%; transition: width 0.4s ease; }
 .assess-step { display: none; }
@@ -453,9 +460,13 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <section id="assessment">
   <p class="section-label reveal">Find Your Starting Point</p>
   <h2 class="reveal">What could an agent handle for your business?</h2>
-  <p class="reveal">Four questions. Personalized recommendation. 30 seconds.</p>
 
-  <div class="assess-container reveal">
+  <div class="assess-teaser reveal" id="assessTeaser" onclick="document.getElementById('assessTeaser').style.display='none';document.getElementById('assessBox').classList.add('assess-open');">
+    <div class="assess-teaser-btn">See What Fits Your Business</div>
+    <div class="assess-teaser-sub">4 questions &middot; 30 seconds &middot; personalized recommendation</div>
+  </div>
+
+  <div class="assess-container" id="assessBox">
     <div class="assess-progress"><div class="assess-progress-fill" id="assessProgress"></div></div>
 
     <div class="assess-step active" id="assess-1">

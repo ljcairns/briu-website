@@ -738,75 +738,77 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="chart-label">How this company actually runs</div>' +
     '<div class="constellation">' +
 
-    /* SVG lines connecting nodes */
+    /* SVG lines — desktop only */
     '<svg class="constellation-lines" viewBox="0 0 700 420" preserveAspectRatio="xMidYMid meet">' +
-    '<line x1="350" y1="72" x2="160" y2="200" />' +  /* Founder → Claw */
-    '<line x1="350" y1="72" x2="350" y2="200" />' +  /* Founder → Code */
-    '<line x1="350" y1="72" x2="540" y2="200" />' +  /* Founder → Web */
-    '<line x1="350" y1="72" x2="620" y2="100" />' +  /* Founder → Gemini */
-    '<line x1="350" y1="72" x2="620" y2="160" />' +  /* Founder → GPT */
-    '<line x1="160" y1="200" x2="70" y2="340" />' +  /* Claw → Email */
-    '<line x1="160" y1="200" x2="190" y2="340" />' + /* Claw → Research */
-    '<line x1="160" y1="200" x2="310" y2="340" />' + /* Claw → Ops */
+    '<line x1="350" y1="72" x2="160" y2="200" />' +
+    '<line x1="350" y1="72" x2="350" y2="200" />' +
+    '<line x1="350" y1="72" x2="540" y2="200" />' +
+    '<line x1="350" y1="72" x2="620" y2="100" />' +
+    '<line x1="350" y1="72" x2="620" y2="160" />' +
+    '<line x1="160" y1="200" x2="70" y2="340" />' +
+    '<line x1="160" y1="200" x2="190" y2="340" />' +
+    '<line x1="160" y1="200" x2="310" y2="340" />' +
     '</svg>' +
 
-    /* Founder — center top */
-    '<div class="c-node c-founder" style="top:32px;left:50%;transform:translateX(-50%)">' +
+    /* Row 1: Founder */
+    '<div class="c-row c-row-founder">' +
+    '<div class="c-node c-founder">' +
     '<div class="c-circle c-human"><span>You</span></div>' +
     '<div class="c-label">Founder</div>' +
     '<div class="c-sub">Judgment &middot; taste &middot; approval</div>' +
     '</div>' +
+    '<div class="c-node c-secondary">' +
+    '<div class="c-circle c-audit"><span>G</span></div>' +
+    '<div class="c-label">Gemini</div>' +
+    '</div>' +
+    '<div class="c-node c-secondary">' +
+    '<div class="c-circle c-audit"><span>O</span></div>' +
+    '<div class="c-label">GPT</div>' +
+    '</div>' +
+    '</div>' +
+    '<div class="c-connector"></div>' +
 
-    /* Middle row — three direct tools */
-    '<div class="c-node c-primary" style="top:160px;left:23%;transform:translateX(-50%)">' +
+    /* Row 2: Direct interfaces */
+    '<div class="c-row c-row-primary">' +
+    '<div class="c-node c-primary">' +
     '<div class="c-circle c-orchestrator"><span>&#x1f9e0;</span></div>' +
     '<div class="c-label">Claw</div>' +
     '<div class="c-sub">Discord &middot; OpenClaw</div>' +
     '<div class="c-env">Sandboxed VPS</div>' +
     '</div>' +
-
-    '<div class="c-node c-primary" style="top:160px;left:50%;transform:translateX(-50%)">' +
+    '<div class="c-node c-primary">' +
     '<div class="c-circle c-code"><span>&#x2318;</span></div>' +
     '<div class="c-label">Claude Code</div>' +
     '<div class="c-sub">Terminal &middot; GitHub</div>' +
     '<div class="c-env">Local</div>' +
     '</div>' +
-
-    '<div class="c-node c-primary" style="top:160px;left:77%;transform:translateX(-50%)">' +
+    '<div class="c-node c-primary">' +
     '<div class="c-circle c-web"><span>&#x25CE;</span></div>' +
     '<div class="c-label">Claude Web</div>' +
     '<div class="c-sub">Planning &middot; orchestration</div>' +
     '<div class="c-env">Browser</div>' +
     '</div>' +
-
-    /* Secondary audit models — small */
-    '<div class="c-node c-secondary" style="top:60px;left:88%;transform:translateX(-50%)">' +
-    '<div class="c-circle c-audit"><span>G</span></div>' +
-    '<div class="c-label">Gemini</div>' +
     '</div>' +
+    '<div class="c-connector"></div>' +
+    '<div class="c-note">Any interface can spawn sub-agents for complex tasks — research, multi-step analysis, parallel workstreams.</div>' +
 
-    '<div class="c-node c-secondary" style="top:120px;left:88%;transform:translateX(-50%)">' +
-    '<div class="c-circle c-audit"><span>O</span></div>' +
-    '<div class="c-label">GPT</div>' +
-    '</div>' +
-
-    /* Bottom row — Claw's specialist skills */
-    '<div class="c-node c-skill" style="top:300px;left:10%;transform:translateX(-50%)">' +
+    /* Row 3: Specialist agents under Claw */
+    '<div class="c-row c-row-skills">' +
+    '<div class="c-node c-skill">' +
     '<div class="c-circle c-agent"><span>&#x2709;</span></div>' +
     '<div class="c-label">Email &amp; CRM</div>' +
     '<div class="c-sub">Gmail &middot; HubSpot &middot; Apollo</div>' +
     '</div>' +
-
-    '<div class="c-node c-skill" style="top:300px;left:27%;transform:translateX(-50%)">' +
+    '<div class="c-node c-skill">' +
     '<div class="c-circle c-agent"><span>&#x1f50d;</span></div>' +
     '<div class="c-label">Research</div>' +
     '<div class="c-sub">Web &middot; LinkedIn &middot; Docs</div>' +
     '</div>' +
-
-    '<div class="c-node c-skill" style="top:300px;left:44%;transform:translateX(-50%)">' +
+    '<div class="c-node c-skill">' +
     '<div class="c-circle c-agent"><span>&#x2699;</span></div>' +
     '<div class="c-label">Daily Ops</div>' +
     '<div class="c-sub">Reports &middot; Security &middot; Cron</div>' +
+    '</div>' +
     '</div>' +
 
     '</div>' + /* end constellation */
