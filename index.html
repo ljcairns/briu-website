@@ -149,22 +149,22 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .kickoff-card-body { padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); }
 .tier-cta { display: block; margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05); font-size: 0.85rem; color: var(--gold); text-decoration: none; letter-spacing: 0.03em; transition: opacity 0.3s ease; }
 .tier-cta:hover { opacity: 0.7; }
-.gaudi-art { margin-top: 1.25rem; flex-grow: 1; display: flex; align-items: flex-end; }
-.gaudi-art svg { width: 100%; height: auto; opacity: 0.7; }
+.gaudi-art { margin-top: 1.5rem; flex-grow: 1; display: flex; align-items: flex-end; min-height: 120px; }
+.gaudi-art svg { width: 100%; height: 100%; }
 .gaudi-line { stroke-dasharray: 600; stroke-dashoffset: 600; }
 .gaudi-spiral { stroke-dasharray: 300; stroke-dashoffset: 300; }
 .gaudi-dot { opacity: 0; }
-.reveal.in-view .gaudi-line-1 { animation: gaudiDraw 3s ease-out 0.3s forwards; }
-.reveal.in-view .gaudi-line-2 { animation: gaudiDraw 3.5s ease-out 0.6s forwards; }
-.reveal.in-view .gaudi-line-3 { animation: gaudiDraw 4s ease-out 0.9s forwards; }
-.reveal.in-view .gaudi-spiral { animation: gaudiDraw 2.5s ease-out 1.2s forwards; }
-.reveal.in-view .gaudi-dot-1 { animation: gaudiDotIn 0.6s ease-out 1.5s forwards; }
-.reveal.in-view .gaudi-dot-2 { animation: gaudiDotIn 0.6s ease-out 1.8s forwards; }
-.reveal.in-view .gaudi-dot-3 { animation: gaudiDotIn 0.6s ease-out 2.1s forwards; }
-.reveal.in-view .gaudi-dot-4 { animation: gaudiDotIn 0.6s ease-out 2.4s forwards; }
-.reveal.in-view .gaudi-dot-5 { animation: gaudiDotIn 0.6s ease-out 2.7s forwards; }
+.gaudi-line-1 { animation: gaudiDraw 3s ease-out 0.5s forwards; }
+.gaudi-line-2 { animation: gaudiDraw 3.5s ease-out 1s forwards; }
+.gaudi-line-3 { animation: gaudiDraw 4s ease-out 1.5s forwards; }
+.gaudi-spiral { animation: gaudiDraw 2.5s ease-out 2s forwards; }
+.gaudi-dot-1 { animation: gaudiDotIn 0.8s ease-out 2.5s forwards; }
+.gaudi-dot-2 { animation: gaudiDotIn 0.8s ease-out 2.8s forwards; }
+.gaudi-dot-3 { animation: gaudiDotIn 0.8s ease-out 3.1s forwards; }
+.gaudi-dot-4 { animation: gaudiDotIn 0.8s ease-out 3.4s forwards; }
+.gaudi-dot-5 { animation: gaudiDotIn 0.8s ease-out 3.7s forwards; }
 @keyframes gaudiDraw { to { stroke-dashoffset: 0; } }
-@keyframes gaudiDotIn { to { opacity: 0.2; } }
+@keyframes gaudiDotIn { to { opacity: 1; } }
 .followup-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 1rem; }
 .followup-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.5rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); }
 .followup-name { font-family: var(--serif); font-size: 1.05rem; color: var(--text); }
@@ -723,32 +723,32 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
           <svg viewBox="0 0 400 180" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
             <defs>
               <linearGradient id="gaudiGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#D4A05A" stop-opacity="0.25"/>
-                <stop offset="50%" stop-color="#E07B5F" stop-opacity="0.15"/>
-                <stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.2"/>
+                <stop offset="0%" stop-color="#D4A05A" stop-opacity="0.6"/>
+                <stop offset="50%" stop-color="#E07B5F" stop-opacity="0.4"/>
+                <stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.5"/>
               </linearGradient>
               <linearGradient id="gaudiGrad2" x1="100%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stop-color="#5A9DAC" stop-opacity="0.2"/>
-                <stop offset="50%" stop-color="#D4A05A" stop-opacity="0.12"/>
-                <stop offset="100%" stop-color="#E07B5F" stop-opacity="0.18"/>
+                <stop offset="0%" stop-color="#5A9DAC" stop-opacity="0.5"/>
+                <stop offset="50%" stop-color="#D4A05A" stop-opacity="0.35"/>
+                <stop offset="100%" stop-color="#E07B5F" stop-opacity="0.45"/>
               </linearGradient>
               <linearGradient id="gaudiGrad3" x1="0%" y1="100%" x2="100%" y2="0%">
-                <stop offset="0%" stop-color="#D4A05A" stop-opacity="0.15"/>
-                <stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.1"/>
+                <stop offset="0%" stop-color="#D4A05A" stop-opacity="0.5"/>
+                <stop offset="100%" stop-color="#5A9DAC" stop-opacity="0.35"/>
               </linearGradient>
             </defs>
             <!-- Organic flowing curves inspired by Gaudi's natural forms -->
-            <path d="M-20,140 C40,120 60,60 120,80 C180,100 160,30 220,50 C280,70 260,130 320,110 C380,90 400,60 420,80" fill="none" stroke="url(#gaudiGrad1)" stroke-width="1.5" stroke-linecap="round" class="gaudi-line gaudi-line-1"/>
-            <path d="M-10,160 C50,130 80,80 140,100 C200,120 190,50 250,70 C310,90 290,140 350,120 C390,108 410,90 430,100" fill="none" stroke="url(#gaudiGrad2)" stroke-width="1.2" stroke-linecap="round" class="gaudi-line gaudi-line-2"/>
-            <path d="M-30,100 C30,80 70,120 130,90 C190,60 170,110 230,95 C290,80 310,50 370,70 C400,80 420,40 440,50" fill="none" stroke="url(#gaudiGrad1)" stroke-width="0.8" stroke-linecap="round" class="gaudi-line gaudi-line-3"/>
+            <path d="M-20,140 C40,120 60,60 120,80 C180,100 160,30 220,50 C280,70 260,130 320,110 C380,90 400,60 420,80" fill="none" stroke="url(#gaudiGrad1)" stroke-width="1.8" stroke-linecap="round" class="gaudi-line gaudi-line-1"/>
+            <path d="M-10,160 C50,130 80,80 140,100 C200,120 190,50 250,70 C310,90 290,140 350,120 C390,108 410,90 430,100" fill="none" stroke="url(#gaudiGrad2)" stroke-width="1.4" stroke-linecap="round" class="gaudi-line gaudi-line-2"/>
+            <path d="M-30,100 C30,80 70,120 130,90 C190,60 170,110 230,95 C290,80 310,50 370,70 C400,80 420,40 440,50" fill="none" stroke="url(#gaudiGrad1)" stroke-width="1" stroke-linecap="round" class="gaudi-line gaudi-line-3"/>
             <!-- Mosaic dots along the curves -->
-            <circle cx="120" cy="80" r="3" fill="#D4A05A" opacity="0.15" class="gaudi-dot gaudi-dot-1"/>
-            <circle cx="220" cy="50" r="2.5" fill="#E07B5F" opacity="0.12" class="gaudi-dot gaudi-dot-2"/>
-            <circle cx="320" cy="110" r="2" fill="#5A9DAC" opacity="0.18" class="gaudi-dot gaudi-dot-3"/>
-            <circle cx="70" cy="110" r="1.8" fill="#D4A05A" opacity="0.1" class="gaudi-dot gaudi-dot-4"/>
-            <circle cx="270" cy="85" r="2.2" fill="#E07B5F" opacity="0.1" class="gaudi-dot gaudi-dot-5"/>
+            <circle cx="120" cy="80" r="3.5" fill="#D4A05A" opacity="0" class="gaudi-dot gaudi-dot-1"/>
+            <circle cx="220" cy="50" r="3" fill="#E07B5F" opacity="0" class="gaudi-dot gaudi-dot-2"/>
+            <circle cx="320" cy="110" r="2.5" fill="#5A9DAC" opacity="0" class="gaudi-dot gaudi-dot-3"/>
+            <circle cx="70" cy="110" r="2.2" fill="#D4A05A" opacity="0" class="gaudi-dot gaudi-dot-4"/>
+            <circle cx="270" cy="85" r="2.8" fill="#E07B5F" opacity="0" class="gaudi-dot gaudi-dot-5"/>
             <!-- Spiraling organic form (Gaudi shell) -->
-            <path d="M200,90 C200,75 215,65 225,70 C235,75 230,90 220,95 C210,100 195,95 190,85 C185,75 192,60 205,55 C218,50 235,58 240,72 C245,86 235,105 218,110 C201,115 182,105 177,88" fill="none" stroke="url(#gaudiGrad3)" stroke-width="1" stroke-linecap="round" class="gaudi-spiral"/>
+            <path d="M200,90 C200,75 215,65 225,70 C235,75 230,90 220,95 C210,100 195,95 190,85 C185,75 192,60 205,55 C218,50 235,58 240,72 C245,86 235,105 218,110 C201,115 182,105 177,88" fill="none" stroke="url(#gaudiGrad3)" stroke-width="1.2" stroke-linecap="round" class="gaudi-spiral"/>
           </svg>
         </div>
       </div>
