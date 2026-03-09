@@ -414,6 +414,11 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // Stripe webhook — must read raw body before JSON parse for signature verification
+    if (path === '/api/stripe-webhook') {
+      return await handleStripeWebhook(request, env, corsHeaders);
+    }
+
     // Rate limiting (uses KV if bound, otherwise in-memory Map)
     const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
     {
@@ -454,6 +459,10 @@ export default {
 
       if (path === '/api/company') {
         return await handleCompanyLookup(body, corsHeaders);
+      }
+
+      if (path === '/api/checkout') {
+        return await handleCheckout(body, env, corsHeaders);
       }
 
       return new Response(JSON.stringify({ error: 'Not found' }), {
@@ -926,5 +935,201 @@ async function handleCompanyLookup(body, corsHeaders) {
   }), {
     status: 200,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ─── Stripe Checkout ───
+// Product tiers — update prices here and in site-config.json
+const TIERS = {
+  founder: { name: 'Founder Kickoff', price: 3500, description: '2-3 hour working session, workflow mapping, first agent deployed, written architecture plan' },
+  team: { name: 'Team Kickoff', price: 5000, description: '4-5 hour engagement, full team AI briefing, exec sessions, first agent deployed, architecture plan' },
+};
+
+async function handleCheckout(body, env, corsHeaders) {
+  if (!env.STRIPE_SECRET_KEY) {
+    return new Response(JSON.stringify({ error: 'Payment system not configured' }), {
+      status: 503,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  const { tier, email, name, company } = body;
+  if (!tier || !TIERS[tier]) {
+    return new Response(JSON.stringify({ error: 'Invalid tier. Use "founder" or "team".' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  const product = TIERS[tier];
+  const origin = env.ALLOWED_ORIGIN || 'https://briu.ai';
+
+  // Create Stripe Checkout Session via API (no SDK needed in Workers)
+  const params = new URLSearchParams();
+  params.append('mode', 'payment');
+  params.append('success_url', origin + '/services/?booked=' + tier);
+  params.append('cancel_url', origin + '/services/?cancelled=1');
+  params.append('line_items[0][price_data][currency]', 'usd');
+  params.append('line_items[0][price_data][product_data][name]', product.name);
+  params.append('line_items[0][price_data][product_data][description]', product.description);
+  params.append('line_items[0][price_data][unit_amount]', String(product.price * 100)); // cents
+  params.append('line_items[0][quantity]', '1');
+  params.append('payment_method_types[0]', 'card');
+  if (email) params.append('customer_email', email);
+  // Store metadata for webhook processing
+  params.append('metadata[tier]', tier);
+  params.append('metadata[name]', name || '');
+  params.append('metadata[company]', company || '');
+
+  const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+    method: 'POST',
+    headers: {
+      'Authorization': 'Basic ' + btoa(env.STRIPE_SECRET_KEY + ':'),
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: params.toString(),
+  });
+
+  if (!stripeRes.ok) {
+    const err = await stripeRes.text();
+    console.error('Stripe error:', stripeRes.status, err);
+    return new Response(JSON.stringify({ error: 'Payment service error. Please try again.' }), {
+      status: 502,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
+  const session = await stripeRes.json();
+
+  return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
+    status: 200,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+}
+
+// ─── Stripe Webhook ───
+async function verifyStripeSignature(payload, sigHeader, secret) {
+  // Stripe signature: t=timestamp,v1=signature
+  const parts = {};
+  for (const item of sigHeader.split(',')) {
+    const [key, val] = item.split('=');
+    parts[key] = val;
+  }
+  const signedPayload = parts.t + '.' + payload;
+  const key = await crypto.subtle.importKey(
+    'raw',
+    new TextEncoder().encode(secret),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  const sig = await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(signedPayload));
+  const expected = Array.from(new Uint8Array(sig)).map(b => b.toString(16).padStart(2, '0')).join('');
+  // Constant-time comparison
+  if (expected.length !== parts.v1.length) return false;
+  let match = true;
+  for (let i = 0; i < expected.length; i++) {
+    if (expected[i] !== parts.v1[i]) match = false;
+  }
+  return match;
+}
+
+async function handleStripeWebhook(request, env, corsHeaders) {
+  if (!env.STRIPE_WEBHOOK_SECRET) {
+    return new Response('Webhook not configured', { status: 503 });
+  }
+
+  const payload = await request.text();
+  const sigHeader = request.headers.get('Stripe-Signature') || '';
+
+  const valid = await verifyStripeSignature(payload, sigHeader, env.STRIPE_WEBHOOK_SECRET);
+  if (!valid) {
+    console.error('Invalid Stripe signature');
+    return new Response('Invalid signature', { status: 400 });
+  }
+
+  const event = JSON.parse(payload);
+
+  if (event.type === 'checkout.session.completed') {
+    const session = event.data.object;
+    const tier = session.metadata?.tier || 'unknown';
+    const customerEmail = session.customer_email || session.customer_details?.email || '';
+    const customerName = session.metadata?.name || '';
+    const company = session.metadata?.company || '';
+
+    // Store booking in KV
+    if (env.CONVERSATIONS) {
+      const booking = {
+        type: 'booking',
+        tier,
+        name: customerName,
+        email: customerEmail,
+        company,
+        amount: session.amount_total / 100,
+        currency: session.currency,
+        stripeSessionId: session.id,
+        paymentStatus: session.payment_status,
+        createdAt: new Date().toISOString(),
+      };
+      await env.CONVERSATIONS.put(
+        'booking:' + Date.now() + '_' + customerEmail,
+        JSON.stringify(booking),
+        { expirationTtl: 7776000 } // 90 days
+      );
+    }
+
+    // Notify via OpenClaw webhook
+    if (env.OPENCLAW_WEBHOOK) {
+      try {
+        const headers = { 'Content-Type': 'application/json' };
+        if (env.OPENCLAW_WEBHOOK_TOKEN) headers['Authorization'] = 'Bearer ' + env.OPENCLAW_WEBHOOK_TOKEN;
+        await fetch(env.OPENCLAW_WEBHOOK, {
+          method: 'POST',
+          headers,
+          body: JSON.stringify({
+            type: 'booking',
+            tier,
+            name: customerName,
+            email: customerEmail,
+            company,
+            amount: session.amount_total / 100,
+            createdAt: new Date().toISOString(),
+          }),
+          signal: AbortSignal.timeout(10000),
+        });
+      } catch (e) {
+        console.error('OpenClaw booking notification error:', e);
+      }
+    }
+
+    // Discord notification fallback
+    if (env.DISCORD_WEBHOOK) {
+      try {
+        await fetch(env.DISCORD_WEBHOOK, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            content: `💰 **NEW BOOKING: ${TIERS[tier]?.name || tier}**`,
+            embeds: [{
+              color: 0xd4a05a,
+              fields: [
+                { name: 'Customer', value: customerName || customerEmail || 'Unknown', inline: true },
+                { name: 'Tier', value: TIERS[tier]?.name || tier, inline: true },
+                { name: 'Amount', value: '$' + (session.amount_total / 100).toLocaleString(), inline: true },
+                { name: 'Company', value: company || 'Not provided', inline: true },
+                { name: 'Email', value: customerEmail || 'Not provided', inline: false },
+              ],
+            }],
+          }),
+        });
+      } catch (e) {
+        console.error('Discord booking notification error:', e);
+      }
+    }
+  }
+
+  return new Response(JSON.stringify({ received: true }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
   });
 }

@@ -117,6 +117,16 @@
 .tier-scope-item { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
 .tier-scope-item strong { color: var(--text); font-weight: 500; }
 
+/* Book buttons */
+.tier-cta-row { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+.tier-book-btn { display: inline-block; padding: 0.75rem 1.5rem; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--bg); background: var(--gold); border: 1px solid var(--gold); cursor: pointer; font-family: var(--sans); transition: all 0.3s ease; }
+.tier-book-btn:hover { background: var(--gold-light); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(212,160,90,0.25); }
+.tier-cta-or { font-size: 0.78rem; color: var(--text-muted); }
+.tier-talk-link { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1); transition: color 0.2s, border-color 0.2s; }
+.tier-talk-link:hover { color: var(--gold); border-color: var(--gold); }
+.tier-community { border-color: rgba(77,128,112,0.2); }
+.tier-community .tier-body { border-left-color: rgba(77,128,112,0.15); }
+
 /* Retainer SLAs */
 .sla-detail { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin-top: 0.4rem; padding-left: 1.25rem; }
 
@@ -387,6 +397,11 @@
             <div class="expect-item"><strong>Hour 2:</strong> Live build — your first agent deployed on your infrastructure</div>
             <div class="expect-item"><strong>Hour 3:</strong> Architecture plan and roadmap for expansion</div>
           </div>
+          <div class="tier-cta-row">
+            <button class="tier-book-btn" onclick="bookTier('founder')">Book Founder Kickoff</button>
+            <span class="tier-cta-or">or</span>
+            <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
+          </div>
         </div>
       </div>
 
@@ -419,6 +434,11 @@
             <div class="expect-item"><strong>Hours 2-3:</strong> One-on-one sessions with key operators</div>
             <div class="expect-item"><strong>Hour 4:</strong> Current tooling audit and recommendations</div>
             <div class="expect-item"><strong>Hour 5:</strong> Architecture plan, first agent deployed, implementation quote</div>
+          </div>
+          <div class="tier-cta-row">
+            <button class="tier-book-btn" onclick="bookTier('team')">Book Team Kickoff</button>
+            <span class="tier-cta-or">or</span>
+            <a href="#" onclick="openContactForm();return false" class="tier-talk-link">Start a conversation first</a>
           </div>
         </div>
       </div>
@@ -486,6 +506,26 @@
           <div class="deliverable">Team training as your internal capacity grows</div>
           <div class="deliverable">First access to new patterns from our work across industries</div>
           <div class="sla-detail">Weekly strategy sessions. One new agent or major upgrade per sprint. Priority access to new tools and patterns.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="tier tier-community">
+      <div class="tier-header">
+        <div>
+          <div class="tier-number" style="color:var(--forest)">♡</div>
+          <div class="tier-name">Nonprofits & Community</div>
+        </div>
+        <div>
+          <div class="tier-price" style="color:var(--forest)">Discounted</div>
+          <div class="tier-price-note">For mission-driven organizations</div>
+        </div>
+      </div>
+      <div class="tier-body">
+        <p>If you're a nonprofit, community organization, music collective, or mission-driven business — we want to help. Significant discounts are available, and in some cases we work pro bono.</p>
+        <p>Same quality, same architecture, same commitment to your success. The only difference is the price.</p>
+        <div class="tier-cta-row">
+          <a href="#" onclick="openContactForm();return false" class="tier-book-btn" style="background:var(--forest);border-color:var(--forest);">Tell Us About Your Mission</a>
         </div>
       </div>
     </div>
@@ -591,9 +631,9 @@ function tfAnswer(q, val) {
     else if (tfAnswers.q2 === 'few') score += 1;
     var result = document.getElementById('tfResult');
     if (score >= 3) {
-      result.innerHTML = '<p class="tf-rec">Team Kickoff — <span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Team Kickoff →</a>';
+      result.innerHTML = '<p class="tf-rec">Team Kickoff — <span data-config="pricing.team_kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Team Kickoff gives everyone alignment and a clear roadmap. Includes individual sessions with key people and a full AI tool audit.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'team\')">Book & Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     } else {
-      result.innerHTML = '<p class="tf-rec">Founder Kickoff — <span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><a href="#" onclick="openContactForm();return false" class="tf-rec-link">Book a Founder Kickoff →</a>';
+      result.innerHTML = '<p class="tf-rec">Founder Kickoff — <span data-config="pricing.founder_kickoff" data-config-format="dollar">$3,500</span></p><p class="tf-rec-reason">You know what you want to build. The Founder Kickoff gets straight to the architecture and delivers your first agent in one session. Fast, focused, no presentations.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'founder\')">Book & Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     }
     result.style.display = '';
   }
@@ -610,6 +650,24 @@ function tfAnswer(q, val) {
       target.classList.add('highlighted');
       if (target.classList.contains('build-item')) target.classList.add('expanded');
     }, 300);
+  }
+})();
+
+/* Booking confirmation */
+(function() {
+  var params = new URLSearchParams(location.search);
+  var booked = params.get('booked');
+  if (booked) {
+    var tierNames = { founder: 'Founder Kickoff', team: 'Team Kickoff' };
+    var name = tierNames[booked] || booked;
+    var banner = document.createElement('div');
+    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--forest,#4D8070);color:white;text-align:center;padding:1rem;font-size:0.9rem;font-weight:600;animation:fadeUp 0.5s ease;';
+    banner.innerHTML = '✓ ' + name + ' booked successfully. We\'ll be in touch within 24 hours to schedule your session. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;margin-left:1rem;cursor:pointer;">&times;</button>';
+    document.body.prepend(banner);
+    history.replaceState(null, '', location.pathname);
+  }
+  if (params.get('cancelled')) {
+    history.replaceState(null, '', location.pathname);
   }
 })();
 

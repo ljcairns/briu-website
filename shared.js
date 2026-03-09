@@ -263,3 +263,38 @@ revealEls.forEach(function(el) { revealObs.observe(el); });
     });
   });
 })();
+
+/* ─── Stripe Checkout (shared across pages) ─── */
+window.bookTier = function(tier) {
+  var btn = event.target;
+  var origText = btn.textContent;
+  btn.textContent = 'Redirecting...';
+  btn.disabled = true;
+
+  fetch('https://briu-assess.briu.workers.dev/api/checkout', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ tier: tier }),
+  })
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    if (data.url) {
+      window.location.href = data.url;
+    } else {
+      btn.textContent = origText;
+      btn.disabled = false;
+      if (window.openContactForm) {
+        openContactForm();
+      } else {
+        alert('Payment not available right now. Please reach out to hi@briu.ai');
+      }
+    }
+  })
+  .catch(function() {
+    btn.textContent = origText;
+    btn.disabled = false;
+    if (window.openContactForm) {
+      openContactForm();
+    }
+  });
+};
