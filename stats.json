@@ -1,11 +1,13 @@
 {
-  "websiteCommits": 248,
+  "websiteCommits": 250,
   "privateAgentCommits": 263,
-  "totalCommits": 511,
-  "linesOfCode": 11759,
+  "totalCommits": 513,
+  "websiteLinesOfCode": 18322,
+  "agentLinesOfCode": 16373,
+  "linesOfCode": 34695,
   "chartCount": 64,
   "articleCount": 7,
   "wordsOfContent": 16623,
   "pageCount": 14,
-  "lastUpdated": "2026-03-09T17:50:33Z"
+  "lastUpdated": "2026-03-09T17:53:09Z"
 }
