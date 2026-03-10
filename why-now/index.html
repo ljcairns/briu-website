@@ -230,7 +230,7 @@
       <div class="tl-counter-detail" id="counterLOCDetail">Website + agent stack</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num" id="counterAvgCost">$14.44</div>
+      <div class="tl-counter-num" id="counterAvgCost">$14.68</div>
       <div class="tl-counter-label">avg daily API cost</div>
       <div class="tl-counter-detail">On top of $200/mo Claude Max</div>
     </div>
@@ -606,8 +606,8 @@
       if (data.avgDailyCost && elAvgCost) elAvgCost.textContent = '$' + parseFloat(data.avgDailyCost).toFixed(2);
       if (data.peakDailyCost && elPeakCost) elPeakCost.textContent = '$' + parseFloat(data.peakDailyCost).toFixed(2);
     }).catch(function() {
-      if (elCommits) elCommits.textContent = '580+';
-      if (elLOC) elLOC.textContent = '37,500+';
+      if (elCommits) elCommits.textContent = '625';
+      if (elLOC) elLOC.textContent = '15,811';
     });
   }
   updateCounters();
