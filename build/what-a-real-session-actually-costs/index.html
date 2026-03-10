@@ -22,6 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260310b">
 <link rel="stylesheet" href="/articles.css?v=20260310b">
 <style>
@@ -33,51 +34,6 @@
 .stat-card .val.green { color: var(--forest); }
 .stat-card .val.muted { color: var(--text-muted); font-size: 1.1rem; }
 .stat-card .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
-
-/* Comparison bar chart */
-.comp-section { margin: 2.5rem 0; }
-.comp-row { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; }
-.comp-label { min-width: 160px; font-size: 0.85rem; color: var(--text-muted); text-align: right; }
-.comp-track { flex: 1; height: 32px; background: rgba(255,255,255,0.02); position: relative; overflow: hidden; }
-.comp-fill { height: 100%; display: flex; align-items: center; padding-left: 0.75rem; font-size: 0.78rem; font-weight: 600; white-space: nowrap; transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-.comp-fill.human { background: rgba(224,123,95,0.25); color: var(--coral); }
-.comp-fill.agent { background: rgba(106,174,156,0.25); color: var(--forest); }
-.comp-total { margin-top: 1.5rem; padding: 1.25rem; background: rgba(212,160,90,0.06); border: 1px solid rgba(212,160,90,0.12); text-align: center; }
-.comp-total p { margin: 0; font-size: 0.95rem; line-height: 1.8; }
-
-/* Donut chart */
-.donut-wrap { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; margin: 2rem 0; }
-.donut-chart { flex: 0 0 220px; }
-.donut-legend { flex: 1; min-width: 220px; }
-.legend-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
-.legend-item:last-child { border-bottom: none; }
-.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
-.legend-name { font-size: 0.85rem; font-weight: 500; flex: 1; }
-.legend-pct { font-size: 0.72rem; color: var(--text-muted); }
-.legend-cost { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
-
-/* Context cost chart */
-.ctx-chart { margin: 2rem 0; }
-.ctx-bar-group { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.75rem; }
-.ctx-label { min-width: 100px; font-size: 0.82rem; color: var(--text-muted); text-align: right; }
-.ctx-track { flex: 1; height: 24px; background: rgba(255,255,255,0.02); position: relative; }
-.ctx-fill { height: 100%; display: flex; align-items: center; padding-left: 0.6rem; font-size: 0.72rem; font-weight: 600; color: var(--gold); transition: width 1.2s cubic-bezier(0.22, 1, 0.36, 1); }
-.ctx-annotation { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; text-align: center; }
-
-/* Timeline */
-.session-tl { position: relative; padding-left: 2rem; margin: 2rem 0; }
-.session-tl::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--gold), var(--river), var(--coral), var(--forest)); }
-.tl-entry { position: relative; margin-bottom: 2rem; }
-.tl-entry::before { content: ''; position: absolute; left: -1.65rem; top: 0.4rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--bg); }
-.tl-time { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.25rem; }
-.tl-title { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.3rem; }
-.tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
-.tl-cost { font-size: 0.78rem; color: var(--forest); margin-top: 0.25rem; }
-
-/* Callout box */
-.insight-box { background: rgba(90,157,172,0.06); border: 1px solid rgba(90,157,172,0.15); padding: 1.5rem; margin: 2rem 0; }
-.insight-box p { margin: 0; font-size: 0.95rem; line-height: 1.7; }
-.insight-box strong { color: var(--text); }
 
 /* Shipped grid */
 .shipped-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1rem; margin: 1.75rem 0 2.5rem; }
@@ -96,17 +52,57 @@
 
 /* Chart box */
 .chart-box { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; margin-bottom: 2rem; }
+.chart-note { color: var(--text-muted); font-size: 0.85rem; line-height: 1.6; margin-bottom: 1rem; }
+.chart-summary { text-align: center; margin-top: 1.25rem; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,0.04); }
+.chart-summary .big { font-family: var(--serif); font-size: 1.8rem; color: var(--gold); }
+.chart-summary .sub { color: var(--text-muted); font-size: 0.85rem; margin-left: 0.5rem; }
+
+/* Donut layout */
+.donut-wrap { display: flex; gap: 2.5rem; align-items: center; flex-wrap: wrap; margin: 1.5rem 0; }
+.donut-chart-area { flex: 0 0 240px; position: relative; }
+.donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+.donut-center .dc-val { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); }
+.donut-center .dc-lbl { font-size: 0.68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; }
+.donut-legend { flex: 1; min-width: 220px; }
+.legend-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.legend-item:last-child { border-bottom: none; }
+.legend-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+.legend-name { font-size: 0.85rem; font-weight: 500; flex: 1; }
+.legend-pct { font-size: 0.72rem; color: var(--text-muted); }
+.legend-cost { font-size: 0.95rem; font-weight: 600; color: var(--gold); }
+
+/* Context multiplier visual */
+.ctx-multiplier { display: flex; align-items: flex-end; gap: 2px; justify-content: center; margin: 2rem 0 1rem; height: 180px; }
+.ctx-bar { display: flex; flex-direction: column; align-items: center; justify-content: flex-end; flex: 1; max-width: 100px; }
+.ctx-bar-fill { width: 100%; border-radius: 3px 3px 0 0; transition: height 1.2s cubic-bezier(0.22, 1, 0.36, 1); position: relative; }
+.ctx-bar-val { position: absolute; top: -22px; left: 50%; transform: translateX(-50%); font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+.ctx-bar-lbl { font-size: 0.62rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 0.5rem; text-align: center; }
+
+/* Callout box */
+.insight-box { background: rgba(90,157,172,0.06); border: 1px solid rgba(90,157,172,0.15); padding: 1.5rem; margin: 2rem 0; }
+.insight-box p { margin: 0; font-size: 0.95rem; line-height: 1.7; }
+.insight-box strong { color: var(--text); }
+
+/* Timeline */
+.session-tl { position: relative; padding-left: 2rem; margin: 2rem 0; }
+.session-tl::before { content: ''; position: absolute; left: 0.5rem; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, var(--gold), var(--river), var(--coral), var(--forest)); }
+.tl-entry { position: relative; margin-bottom: 2rem; }
+.tl-entry::before { content: ''; position: absolute; left: -1.65rem; top: 0.4rem; width: 10px; height: 10px; border-radius: 50%; background: var(--gold); border: 2px solid var(--bg); }
+.tl-time { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.25rem; }
+.tl-title { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.3rem; }
+.tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+.tl-cost { font-size: 0.78rem; color: var(--forest); margin-top: 0.25rem; }
 
 @media (max-width: 900px) {
   .stats-strip { grid-template-columns: repeat(2, 1fr); }
   .donut-wrap { flex-direction: column; }
-  .donut-chart { flex: none; width: 100%; display: flex; justify-content: center; }
-  .comp-label, .ctx-label { min-width: 80px; font-size: 0.72rem; }
+  .donut-chart-area { flex: none; width: 100%; display: flex; justify-content: center; }
+  .ctx-multiplier { height: 140px; }
 }
 @media (max-width: 640px) {
   .stats-strip { grid-template-columns: 1fr 1fr; }
-  .comp-row { gap: 0.5rem; }
-  .comp-label { min-width: 60px; font-size: 0.72rem; }
+  .ctx-multiplier { height: 120px; }
+  .ctx-bar { max-width: 70px; }
 }
 </style>
 <script type="application/ld+json">
@@ -169,16 +165,16 @@
     </div>
     <div class="stat-card">
       <div class="val muted">1 session</div>
-      <div class="lbl">~9 hours, 1 AM to 10 AM</div>
+      <div class="lbl">~9 hours overnight</div>
     </div>
   </div>
 
-  <!-- ============================================ -->
-  <!-- SECTION 1: What we shipped                   -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- What we shipped          -->
+  <!-- ======================== -->
 
   <p class="section-label reveal">What we shipped</p>
-  <p>This was not a single-purpose session. It started as a site review and kept going. By 10 AM, we had shipped production work across four distinct domains, any one of which would have been a standalone engagement with a human team.</p>
+  <p>This was not a single-purpose session. It started as a site review and kept going. By morning, we had shipped production work across four distinct domains, any one of which would have been a standalone engagement with a human team.</p>
 
   <div class="shipped-grid">
     <div class="shipped-card">
@@ -203,64 +199,49 @@
     </div>
     <div class="shipped-card">
       <h4>Cost Visibility Plugin v7</h4>
-      <p>Placeholder contract so the model never authors cost figures. Pre-render in system prompt, adaptive model routing, spike alert injection. The model shows numbers from the API, not from its imagination.</p>
+      <p>Placeholder contract so the model never authors cost figures. Pre-render in system prompt, adaptive model routing, spike alert injection.</p>
     </div>
   </div>
 
-  <!-- ============================================ -->
-  <!-- SECTION 2: What it would have cost           -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- Interactive charts        -->
+  <!-- ======================== -->
 
-  <h2 class="reveal">What this would cost with humans</h2>
-  <p>Each work stream maps to a real role. These are conservative estimates based on freelance market rates for the equivalent scope.</p>
+  <h2 class="reveal">The economics</h2>
+  <p>Four views of the same session: what it cost, where the money went, how context size drives cost, and the hour-by-hour timeline.</p>
 
-  <!-- Tab navigation -->
   <div class="tab-nav">
-    <button class="tab-btn active" onclick="switchTab('comparison')">vs. Human Cost</button>
-    <button class="tab-btn" onclick="switchTab('breakdown')">Cost Breakdown</button>
-    <button class="tab-btn" onclick="switchTab('context')">Context Economics</button>
-    <button class="tab-btn" onclick="switchTab('timeline')">Session Timeline</button>
+    <button class="tab-btn active" data-tab="comparison">vs. Human Cost</button>
+    <button class="tab-btn" data-tab="hourly">Hourly Spend</button>
+    <button class="tab-btn" data-tab="breakdown">Cost Breakdown</button>
+    <button class="tab-btn" data-tab="context">Context Economics</button>
+    <button class="tab-btn" data-tab="timeline">Session Timeline</button>
   </div>
 
   <!-- vs. Human Cost -->
   <div class="tab-panel active" id="panel-comparison">
     <div class="chart-box">
-      <div class="comp-section" id="comp-bars">
-        <div class="comp-row">
-          <div class="comp-label">Site Redesign</div>
-          <div class="comp-track">
-            <div class="comp-fill human" data-width="42" style="width:0%">$2,000&ndash;3,000</div>
-          </div>
-        </div>
-        <div class="comp-row">
-          <div class="comp-label">Security Review</div>
-          <div class="comp-track">
-            <div class="comp-fill human" data-width="25" style="width:0%">$1,200&ndash;2,000</div>
-          </div>
-        </div>
-        <div class="comp-row">
-          <div class="comp-label">Agent Architecture</div>
-          <div class="comp-track">
-            <div class="comp-fill human" data-width="21" style="width:0%">$800&ndash;1,500</div>
-          </div>
-        </div>
-        <div class="comp-row">
-          <div class="comp-label">DevOps / Monitoring</div>
-          <div class="comp-track">
-            <div class="comp-fill human" data-width="17" style="width:0%">$600&ndash;1,200</div>
-          </div>
-        </div>
-        <div class="comp-row" style="margin-top:1rem;padding-top:1rem;border-top:1px solid rgba(255,255,255,0.04)">
-          <div class="comp-label" style="font-weight:600;color:var(--text)">Agent session</div>
-          <div class="comp-track">
-            <div class="comp-fill agent" data-width="1.3" style="width:0%">$64.30</div>
-          </div>
-        </div>
+      <p class="chart-note">Each work stream maps to a real role. Conservative freelance market rates for equivalent scope.</p>
+      <div style="height:320px;position:relative">
+        <canvas id="chart-comparison"></canvas>
       </div>
-      <div class="comp-total">
-        <p>Human equivalent: <strong style="color:var(--coral)">~$4,600&ndash;7,700</strong><br>
-        Agent cost: <strong style="color:var(--forest)">$64.30</strong><br>
-        <span style="font-size:0.85rem;color:var(--text-muted)">Same output. One session. No coordination overhead between four separate contractors.</span></p>
+      <div class="chart-summary">
+        <span class="big">75x</span>
+        <span class="sub">cost ratio &mdash; human equivalent ~$4,800 vs. agent cost $64.30</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Hourly Spend (area chart) -->
+  <div class="tab-panel" id="panel-hourly">
+    <div class="chart-box">
+      <p class="chart-note">Cumulative spend through the session. The steepest climb is 5&ndash;6 AM when 14 source files were read at 180K context. That single hour cost ~$19 &mdash; 30% of the total session.</p>
+      <div style="height:320px;position:relative">
+        <canvas id="chart-hourly"></canvas>
+      </div>
+      <div class="chart-summary">
+        <span class="big">$64.30</span>
+        <span class="sub">total &mdash; the curve flattens as context was managed better in later hours</span>
       </div>
     </div>
   </div>
@@ -268,36 +249,40 @@
   <!-- Cost Breakdown (donut) -->
   <div class="tab-panel" id="panel-breakdown">
     <div class="chart-box">
-      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1.5rem;">Where the $64.30 actually went. Cache operations are 89% of total spend. The actual model reasoning and writing is 10%.</p>
+      <p class="chart-note">Where the $64.30 actually went. You are not paying for the model to think. You are paying for it to remember.</p>
       <div class="donut-wrap">
-        <div class="donut-chart">
-          <svg id="cost-donut" viewBox="0 0 220 220" width="220" height="220"></svg>
+        <div class="donut-chart-area">
+          <canvas id="chart-donut" width="240" height="240"></canvas>
+          <div class="donut-center">
+            <div class="dc-val">$64.30</div>
+            <div class="dc-lbl">Total</div>
+          </div>
         </div>
         <div class="donut-legend">
           <div class="legend-item">
-            <div class="legend-dot" style="background:var(--gold)"></div>
-            <div class="legend-name">Cache Write<div class="legend-pct">53% of spend</div></div>
+            <div class="legend-dot" style="background:#D4A05A"></div>
+            <div class="legend-name">Cache Write (5m+1h TTL)<div class="legend-pct">53% of spend</div></div>
             <div class="legend-cost">$34.36</div>
           </div>
           <div class="legend-item">
-            <div class="legend-dot" style="background:var(--river)"></div>
+            <div class="legend-dot" style="background:#5A9DAC"></div>
             <div class="legend-name">Cache Read<div class="legend-pct">36% of spend</div></div>
             <div class="legend-cost">$23.37</div>
           </div>
           <div class="legend-item">
-            <div class="legend-dot" style="background:var(--coral)"></div>
+            <div class="legend-dot" style="background:#E07B5F"></div>
             <div class="legend-name">Output (reasoning + writing)<div class="legend-pct">10% of spend</div></div>
             <div class="legend-cost">$6.47</div>
           </div>
           <div class="legend-item">
-            <div class="legend-dot" style="background:var(--text-muted)"></div>
+            <div class="legend-dot" style="background:#94909A"></div>
             <div class="legend-name">Input<div class="legend-pct">&lt;1% of spend</div></div>
             <div class="legend-cost">$0.10</div>
           </div>
         </div>
       </div>
       <div class="insight-box" style="margin-top:1.5rem">
-        <p><strong>The insight:</strong> You are not paying for the model to think. You are paying for it to remember. Cache writes (loading context into the model's working memory) are the dominant cost. The actual reasoning and output generation is only 10% of the bill.</p>
+        <p><strong>The insight:</strong> Cache writes (loading context into the model's working memory) are the dominant cost. The actual reasoning and output generation &mdash; the part that writes code, designs architecture, fixes bugs &mdash; is only 10% of the bill.</p>
       </div>
     </div>
   </div>
@@ -305,54 +290,41 @@
   <!-- Context Economics -->
   <div class="tab-panel" id="panel-context">
     <div class="chart-box">
-      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1.5rem;">Context size is the cost multiplier. Every turn has a floor cost from cache operations that scales with how much the model is holding in memory.</p>
-      <div class="ctx-chart" id="ctx-bars">
-        <div class="ctx-bar-group">
-          <div class="ctx-label">20K tokens</div>
-          <div class="ctx-track">
-            <div class="ctx-fill" data-width="12" style="width:0%;background:rgba(106,174,156,0.35)">~$0.08/turn</div>
+      <p class="chart-note">Context size is the cost multiplier. Every turn has a floor cost from cache operations that scales with how much the model is holding in memory. Same operation, different context size, 8x price difference.</p>
+      <div class="ctx-multiplier" id="ctx-bars">
+        <div class="ctx-bar">
+          <div class="ctx-bar-fill" style="height:0%;background:rgba(106,174,156,0.5)" data-height="12">
+            <div class="ctx-bar-val" style="color:var(--forest)">$0.08</div>
           </div>
+          <div class="ctx-bar-lbl">20K<br>tokens</div>
         </div>
-        <div class="ctx-bar-group">
-          <div class="ctx-label">50K tokens</div>
-          <div class="ctx-track">
-            <div class="ctx-fill" data-width="29" style="width:0%;background:rgba(212,160,90,0.3)">~$0.19/turn</div>
+        <div class="ctx-bar">
+          <div class="ctx-bar-fill" style="height:0%;background:rgba(212,160,90,0.4)" data-height="28">
+            <div class="ctx-bar-val" style="color:var(--gold)">$0.19</div>
           </div>
+          <div class="ctx-bar-lbl">50K<br>tokens</div>
         </div>
-        <div class="ctx-bar-group">
-          <div class="ctx-label">100K tokens</div>
-          <div class="ctx-track">
-            <div class="ctx-fill" data-width="56" style="width:0%;background:rgba(212,160,90,0.45)">~$0.38/turn</div>
+        <div class="ctx-bar">
+          <div class="ctx-bar-fill" style="height:0%;background:rgba(212,160,90,0.55)" data-height="56">
+            <div class="ctx-bar-val" style="color:var(--gold)">$0.38</div>
           </div>
+          <div class="ctx-bar-lbl">100K<br>tokens</div>
         </div>
-        <div class="ctx-bar-group">
-          <div class="ctx-label">180K tokens</div>
-          <div class="ctx-track">
-            <div class="ctx-fill" data-width="100" style="width:0%;background:rgba(224,123,95,0.4)">~$0.68/turn</div>
+        <div class="ctx-bar">
+          <div class="ctx-bar-fill" style="height:0%;background:rgba(224,123,95,0.5)" data-height="100">
+            <div class="ctx-bar-val" style="color:var(--coral)">$0.68</div>
           </div>
+          <div class="ctx-bar-lbl">180K<br>tokens</div>
         </div>
       </div>
-      <div class="ctx-annotation"><strong>8x cost difference</strong> between a fresh session and a bloated one, for identical operations</div>
+      <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:2rem"><strong style="color:var(--text)">8x cost difference</strong> for identical operations</p>
 
-      <div style="margin-top:2rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.04)">
-        <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1rem">The most expensive hour: 05:00&ndash;06:00 PT. Reading 14 source files sequentially at 180K context.</p>
-        <div class="comp-section">
-          <div class="comp-row">
-            <div class="comp-label">Main session (180K)</div>
-            <div class="comp-track">
-              <div class="comp-fill human" data-width="100" style="width:0%">~$9.52 in cache writes</div>
-            </div>
-          </div>
-          <div class="comp-row">
-            <div class="comp-label">Subagent (20K)</div>
-            <div class="comp-track">
-              <div class="comp-fill agent" data-width="5" style="width:0%">~$0.50</div>
-            </div>
-          </div>
-        </div>
-        <div class="insight-box">
-          <p><strong>The fix is not avoiding expensive operations.</strong> It is keeping sessions short and delegating leaf work to subagents. The same file analysis that cost $9.52 in the main session would cost ~$0.50 via a subagent in a fresh 20K context.</p>
-        </div>
+      <p class="chart-note">The most expensive hour vs. what it would have cost with subagent delegation:</p>
+      <div style="height:200px;position:relative">
+        <canvas id="chart-subagent"></canvas>
+      </div>
+      <div class="insight-box">
+        <p><strong>The fix is not avoiding expensive operations.</strong> It is keeping sessions short and delegating leaf work to subagents. The same 14-file source analysis that cost ~$9.52 in the main session would cost ~$0.50 via a subagent in a fresh 20K context.</p>
       </div>
     </div>
   </div>
@@ -360,46 +332,46 @@
   <!-- Session Timeline -->
   <div class="tab-panel" id="panel-timeline">
     <div class="chart-box">
-      <p style="color:var(--text-muted);font-size:0.88rem;margin-bottom:1.5rem;">What happened hour by hour. One session, four major work streams, from 1 AM to 10 AM.</p>
+      <p class="chart-note">What happened hour by hour. One session, four major work streams.</p>
       <div class="session-tl">
         <div class="tl-entry">
-          <div class="tl-time">1:00 AM</div>
+          <div class="tl-time">~1:00 AM</div>
           <div class="tl-title">Site review begins</div>
           <div class="tl-desc">Started as a visual pass on briu.ai. Quickly became a data integrity audit. Hardcoded stats, stale claims, unverifiable security section.</div>
           <div class="tl-cost">~$4 estimated</div>
         </div>
         <div class="tl-entry">
-          <div class="tl-time">2:00 AM</div>
+          <div class="tl-time">~2:00 AM</div>
           <div class="tl-title">Stats centralization + security rewrite</div>
           <div class="tl-desc">dynamic-stats.js rewritten. Three-bucket security model. Every claim on the site backed by a specific, measurable number.</div>
           <div class="tl-cost">~$6 estimated</div>
         </div>
         <div class="tl-entry">
-          <div class="tl-time">3:00 AM</div>
+          <div class="tl-time">~3:00 AM</div>
           <div class="tl-title">Gate agent built</div>
           <div class="tl-desc">Execution safety layer. Separate agent with its own system prompt, tier model, scope declarations, evidence schema. Tier 0 validated.</div>
           <div class="tl-cost">~$8 estimated</div>
         </div>
         <div class="tl-entry">
-          <div class="tl-time">4:00 AM</div>
+          <div class="tl-time">~4:00 AM</div>
           <div class="tl-title">Cost watchdog fixed</div>
-          <div class="tl-desc">Four bugs in the cost monitoring script. State persistence, threshold batching, API fallback, diagnostic logging. All fixed.</div>
+          <div class="tl-desc">Four bugs in the cost monitoring script. State persistence, threshold batching, API fallback, diagnostic logging.</div>
           <div class="tl-cost">~$5 estimated</div>
         </div>
-        <div class="tl-entry" style="--tl-color: var(--coral)">
+        <div class="tl-entry">
           <div class="tl-time">5:00&ndash;6:00 AM</div>
           <div class="tl-title">Source analysis spike</div>
           <div class="tl-desc">Reading 14 source files from the OpenClaw bundle to trace the Discord delivery path. Context at 180K. Most expensive hour of the session.</div>
-          <div class="tl-cost" style="color:var(--coral)">~$19 estimated (the lesson)</div>
+          <div class="tl-cost" style="color:var(--coral)">~$19 estimated &mdash; the lesson</div>
         </div>
         <div class="tl-entry">
-          <div class="tl-time">7:00 AM</div>
+          <div class="tl-time">~7:00 AM</div>
           <div class="tl-title">Canonical cost pipeline</div>
           <div class="tl-desc">cost_canonical.py written. Unified collection from JSONL, billing API, and gateway. Freshness labels. Single source of truth.</div>
           <div class="tl-cost">~$6 estimated</div>
         </div>
         <div class="tl-entry">
-          <div class="tl-time">8:00 AM</div>
+          <div class="tl-time">~8:00 AM</div>
           <div class="tl-title">Double-count bug found</div>
           <div class="tl-desc">Watchdog reported $107. Actual cost was $64.30. Compaction was duplicating messages across JSONL files. Fixed with message-ID deduplication.</div>
           <div class="tl-cost">~$4 estimated</div>
@@ -414,9 +386,9 @@
     </div>
   </div>
 
-  <!-- ============================================ -->
-  <!-- SECTION 3: The measurement bug story         -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- The measurement bug       -->
+  <!-- ======================== -->
 
   <h2 class="reveal">The measurement bug</h2>
   <p>Halfway through the session, our cost watchdog reported $107.01. We nearly started optimizing around that number. Instead, we audited the tool.</p>
@@ -439,15 +411,15 @@
   </div>
 
   <div class="insight-box">
-    <p><strong>Lesson:</strong> A cost tracker that double-counts is worse than no cost tracker. When the watchdog reported $107, the instinct was to start reasoning about why the session was so expensive. The correct response was to audit the measurement tool first. Any aggregation over mutable, derived, or compacted data needs deduplication logic, or the numbers are untrustworthy by construction.</p>
+    <p><strong>Lesson:</strong> A cost tracker that double-counts is worse than no cost tracker. When the watchdog reported $107, the instinct was to start reasoning about why the session was so expensive. The correct response was to audit the measurement tool first.</p>
   </div>
 
-  <!-- ============================================ -->
-  <!-- SECTION 4: How the session cost breaks down  -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- Understanding cost        -->
+  <!-- ======================== -->
 
   <h2 class="reveal">Understanding the cost structure</h2>
-  <p>Cache operations are 89% of the total spend. The output, the actual model reasoning and writing, is 10%. This is the fundamental insight about AI session economics: <strong>you are paying for memory, not thinking.</strong></p>
+  <p>Cache operations are 89% of the total spend. The output &mdash; the actual model reasoning and writing &mdash; is 10%. This is the fundamental insight about AI session economics: <strong>you are paying for memory, not thinking.</strong></p>
 
   <p>The Anthropic pricing for Claude Sonnet 4.6:</p>
   <ul>
@@ -456,11 +428,9 @@
     <li>Output: $15.00 per million tokens</li>
   </ul>
   <p>At 180,000 tokens of context, every turn that causes a cache write costs approximately <strong>$0.68 just to touch the cache</strong> before a single output token is billed. At 20,000 tokens, that same turn costs $0.08. The 8x difference comes entirely from context size.</p>
-
   <p>The 05:00&ndash;06:00 PT hour was the most expensive single hour. Reading 14 large source files in sequence, each invalidating the cache, each re-warming at 180K tokens. The hour totaled ~$19, but the cause was not "source analysis is expensive." The cause was: <strong>the session had already grown to 180K tokens before the source analysis started.</strong></p>
 
   <h3>The correct pattern</h3>
-  <p>Any large-file analysis should happen in a fresh subagent context:</p>
   <pre><code>sessions_spawn(
     agentId="haiku",
     task="Read /path/to/large/file and return: [specific question]",
@@ -468,19 +438,16 @@
 )</code></pre>
   <p>A full source analysis that costs $4.00 in the main session at 180K costs approximately $0.20 via subagent delegation. The savings are from context isolation, not from the model being cheaper per token.</p>
 
-  <!-- ============================================ -->
-  <!-- SECTION 5: Cost optimization framework       -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- Cost optimization         -->
+  <!-- ======================== -->
 
   <h2 class="reveal">The cost optimization framework</h2>
-  <p>The session's cost postmortem had an obvious next step: if uncontrolled context growth is the cost multiplier, build controls. The result was the Context Logistics Layer.</p>
+  <p>If uncontrolled context growth is the cost multiplier, build controls. The result was the Context Logistics Layer.</p>
   <p><strong>The core contract:</strong> the main session coordinates. It does not do leaf work. Any task requiring more than 2-3 tool calls should be scoped, budgeted, and delegated to a subagent.</p>
 
-  <p><strong>Budget class system:</strong></p>
   <table class="cost-table">
-    <thead>
-      <tr><th>Class</th><th>Token Budget</th><th>Use Case</th></tr>
-    </thead>
+    <thead><tr><th>Class</th><th>Token Budget</th><th>Use Case</th></tr></thead>
     <tbody>
       <tr><td>Quick</td><td>5K</td><td>Single-tool, single-file, trivial operations</td></tr>
       <tr><td>Bounded</td><td>10-15K</td><td>File edits, targeted code changes</td></tr>
@@ -490,61 +457,40 @@
     </tbody>
   </table>
 
-  <p><strong>Mandatory subagent routing</strong> &mdash; any of these task types goes to a subagent, no exceptions:</p>
-  <ul>
-    <li>3 or more source files to inspect</li>
-    <li>Minified or compiled bundle inspection</li>
-    <li>JSONL or log analysis</li>
-    <li>QA audits</li>
-    <li>Multi-source research</li>
-  </ul>
-
   <p>The architectural takeaway:</p>
   <pre><code>Main session = coordination
 Leaf work = subagents
 Context does not accumulate across work items</code></pre>
 
-  <!-- ============================================ -->
-  <!-- SECTION 6: Operational lessons               -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- Operational lessons       -->
+  <!-- ======================== -->
 
   <h2 class="reveal">Operational lessons</h2>
+  <p><strong>1. Context size is the cost multiplier.</strong> The 8x difference between a 20K and 180K session is entirely from context growth. Keep sessions short.</p>
+  <p><strong>2. Compact earlier than you think.</strong> A misconfigured threshold let this session run to 180K when it should have flushed at 80K.</p>
+  <p><strong>3. Transcript mutation is not delivery mutation.</strong> Discord delivery and JSONL storage operate on different objects.</p>
+  <p><strong>4. Read static files once.</strong> Re-reading invalidates the cache and costs a full re-warm.</p>
+  <p><strong>5. Batch gateway restarts.</strong> Each restart costs one full cache re-warm on the next turn.</p>
+  <p><strong>6. The model should not author operational metadata.</strong> Cost figures should come from the system, not the model.</p>
+  <p><strong>7. Four cost surfaces = zero cost visibility.</strong> Everything should read the same canonical state.</p>
+  <p><strong>8. Audit the tool before trusting the number.</strong></p>
 
-  <p><strong>1. Context size is the cost multiplier, not individual operation cost.</strong> The 8x difference between a 20K and 180K session is entirely from context growth. Keep sessions short and compact aggressively.</p>
-
-  <p><strong>2. Compact earlier than you think.</strong> A misconfigured <code>softThresholdTokens</code> let this session run to 180K when it should have flushed at 80K. Hours of expensive turns that could have been cheap.</p>
-
-  <p><strong>3. Transcript mutation is not delivery mutation.</strong> If you build a plugin that modifies message content, you need to know which pipeline your channel uses. Discord delivery and JSONL storage operate on different objects.</p>
-
-  <p><strong>4. Read static files once.</strong> Re-reading a large reference file invalidates the cache and costs a full re-warm. Once it is in context, reference it from memory.</p>
-
-  <p><strong>5. Batch gateway restarts.</strong> Each restart costs one full cache re-warm on the next turn. Write all changes first, then restart once.</p>
-
-  <p><strong>6. The model should not author operational metadata.</strong> Cost figures, deployment status, API responses should come from the system. The placeholder contract exists so the model cannot hallucinate a cost figure.</p>
-
-  <p><strong>7. When you have four cost surfaces, you have zero cost visibility.</strong> The briefing, the watchdog, the dashboard, and the interactive block should all read the same canonical state.</p>
-
-  <p><strong>8. Audit the measurement tool before trusting the number.</strong> When the watchdog reported $107, the instinct was to optimize. The correct response was to verify the tool first.</p>
-
-  <!-- ============================================ -->
-  <!-- SECTION 7: The thesis                        -->
-  <!-- ============================================ -->
+  <!-- ======================== -->
+  <!-- Thesis                    -->
+  <!-- ======================== -->
 
   <h2 class="reveal">The thesis</h2>
   <p>Building a system you can trust is not primarily a question of capability. It is a question of evidentiary discipline.</p>
-  <p>Gate's result schema is not bureaucratic overhead. It is the difference between a system that tells you it worked and a system that shows you it worked.</p>
-  <p>The cost block placeholder is not a design nicety. It is a commitment that the system will not invent operational facts.</p>
-  <p>The security three-bucket model on the website is not aesthetic. It is the same principle applied to public claims: say what you measured, not what you imply.</p>
-  <p>Everything we built in this session is about building a system that does not require you to trust it blindly. It provides evidence. You verify the evidence. Trust is a conclusion, not a premise.</p>
-  <p>That is the actual product we are building.</p>
+  <p>Gate's result schema is the difference between a system that tells you it worked and one that shows you it worked. The cost block placeholder is a commitment that the system will not invent operational facts. The security three-bucket model says what you measured, not what you imply.</p>
+  <p>Trust is a conclusion, not a premise. That is the actual product we are building.</p>
 
   <h2 class="reveal">Technical debt</h2>
-  <p>Stated explicitly, not buried:</p>
   <ul>
-    <li><strong>Discord cost injection is model-compliance-dependent</strong> until <code>before_reply_deliver</code> hook exists. Works in practice, not a delivery guarantee.</li>
+    <li><strong>Discord cost injection is model-compliance-dependent</strong> until <code>before_reply_deliver</code> hook exists.</li>
     <li><strong>The Anthropic usage_report API has ~24-hour lag.</strong> "Today's cost" is always an estimate until tomorrow.</li>
-    <li><strong>Gate Tier 1 is not yet implemented.</strong> Read-only (Tier 0) is validated. Scope-gated writes are designed but not built.</li>
-    <li><strong>QA fixes to briu.ai are not committed.</strong> Changes staged in <code>/tmp/briu-redesign</code> but not pushed.</li>
+    <li><strong>Gate Tier 1 is not yet implemented.</strong> Read-only (Tier 0) is validated.</li>
+    <li><strong>QA fixes to briu.ai are not committed.</strong> Changes staged but not pushed.</li>
   </ul>
 
   <div style="max-width:780px;margin:4rem auto;padding:0 2rem;">
@@ -560,102 +506,311 @@ Context does not accumulate across work items</code></pre>
 <script src="/ambient.js?v=20260310b"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
 <script>
-/* ---- Tab switching ---- */
-function switchTab(id) {
-  document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-  document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
-  document.getElementById('panel-' + id).classList.add('active');
-  event.currentTarget.classList.add('active');
-  // Trigger animations for newly visible bars
-  animateBars(document.getElementById('panel-' + id));
+/* ===== DATA ===== */
+var hourlyData = [
+  { hour: '1 AM', cost: 4, cumulative: 4, label: 'Site review' },
+  { hour: '2 AM', cost: 6, cumulative: 10, label: 'Stats + security' },
+  { hour: '3 AM', cost: 8, cumulative: 18, label: 'Gate agent' },
+  { hour: '4 AM', cost: 5, cumulative: 23, label: 'Watchdog fixes' },
+  { hour: '5 AM', cost: 19, cumulative: 42, label: 'Source analysis spike' },
+  { hour: '6 AM', cost: 4, cumulative: 46, label: 'Hook investigation' },
+  { hour: '7 AM', cost: 6, cumulative: 52, label: 'Canonical pipeline' },
+  { hour: '8 AM', cost: 4, cumulative: 56, label: 'Double-count fix' },
+  { hour: '9 AM', cost: 5, cumulative: 61, label: 'Context layer' },
+  { hour: '10 AM', cost: 3.3, cumulative: 64.3, label: 'Wrap-up' }
+];
+
+var comparisonData = {
+  labels: ['Site Redesign', 'Security Review', 'Agent Architecture', 'DevOps / Monitoring', 'Agent Session'],
+  human: [2500, 1600, 1150, 900, 0],
+  agent: [0, 0, 0, 0, 64.30]
+};
+
+/* ===== CHART.JS DEFAULTS ===== */
+function initDefaults() {
+  if (typeof Chart === 'undefined') return false;
+  Chart.defaults.color = '#94909A';
+  Chart.defaults.font.family = "'DM Sans', sans-serif";
+  Chart.defaults.font.size = 11;
+  Chart.defaults.plugins.legend.display = false;
+  return true;
 }
 
-/* ---- Animate comparison bars on scroll ---- */
-function animateBars(container) {
-  container.querySelectorAll('[data-width]').forEach(function(el) {
-    el.style.width = el.getAttribute('data-width') + '%';
+/* ===== COMPARISON CHART (horizontal bar) ===== */
+function renderComparison() {
+  var ctx = document.getElementById('chart-comparison');
+  if (!ctx || !initDefaults()) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: comparisonData.labels,
+      datasets: [
+        {
+          label: 'Human Cost',
+          data: comparisonData.human,
+          backgroundColor: 'rgba(224,123,95,0.4)',
+          borderColor: 'rgba(224,123,95,0.8)',
+          borderWidth: 1,
+          borderRadius: 3
+        },
+        {
+          label: 'Agent Cost',
+          data: comparisonData.agent,
+          backgroundColor: 'rgba(106,174,156,0.4)',
+          borderColor: 'rgba(106,174,156,0.8)',
+          borderWidth: 1,
+          borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { callback: function(v) { return '$' + v.toLocaleString(); } }
+        },
+        y: {
+          grid: { display: false },
+          ticks: { font: { size: 12 } }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': $' + ctx.raw.toLocaleString(); }
+          }
+        },
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 20, color: '#C4B9A8' } }
+      }
+    }
   });
 }
 
-/* ---- SVG Donut Chart ---- */
-function drawDonut() {
-  var svg = document.getElementById('cost-donut');
-  if (!svg) return;
-  var data = [
-    { value: 53, color: 'var(--gold)', label: 'Cache Write' },
-    { value: 36, color: 'var(--river)', label: 'Cache Read' },
-    { value: 10, color: 'var(--coral)', label: 'Output' },
-    { value: 1,  color: 'var(--text-muted)', label: 'Input' }
-  ];
-  var cx = 110, cy = 110, r = 85, strokeWidth = 28;
-  var circumference = 2 * Math.PI * r;
-  var offset = 0;
-
-  data.forEach(function(d) {
-    var dashLen = (d.value / 100) * circumference;
-    var dashGap = circumference - dashLen;
-    var circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', cx);
-    circle.setAttribute('cy', cy);
-    circle.setAttribute('r', r);
-    circle.setAttribute('fill', 'none');
-    circle.setAttribute('stroke', d.color);
-    circle.setAttribute('stroke-width', strokeWidth);
-    circle.setAttribute('stroke-dasharray', dashLen + ' ' + dashGap);
-    circle.setAttribute('stroke-dashoffset', -offset);
-    circle.setAttribute('transform', 'rotate(-90 ' + cx + ' ' + cy + ')');
-    circle.style.transition = 'stroke-dasharray 1s ease';
-    svg.appendChild(circle);
-    offset += dashLen;
+/* ===== HOURLY SPEND (area + bar combo) ===== */
+function renderHourly() {
+  var ctx = document.getElementById('chart-hourly');
+  if (!ctx || !initDefaults()) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: hourlyData.map(function(d) { return d.hour; }),
+      datasets: [
+        {
+          type: 'line',
+          label: 'Cumulative',
+          data: hourlyData.map(function(d) { return d.cumulative; }),
+          borderColor: '#D4A05A',
+          backgroundColor: 'rgba(212,160,90,0.08)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 4,
+          pointBackgroundColor: '#D4A05A',
+          pointBorderWidth: 0,
+          yAxisID: 'y1',
+          order: 1
+        },
+        {
+          type: 'bar',
+          label: 'Hourly Cost',
+          data: hourlyData.map(function(d) { return d.cost; }),
+          backgroundColor: hourlyData.map(function(d) {
+            return d.cost >= 15 ? 'rgba(224,123,95,0.5)' : 'rgba(90,157,172,0.35)';
+          }),
+          borderColor: hourlyData.map(function(d) {
+            return d.cost >= 15 ? 'rgba(224,123,95,0.8)' : 'rgba(90,157,172,0.6)';
+          }),
+          borderWidth: 1,
+          borderRadius: 3,
+          yAxisID: 'y',
+          order: 2
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.04)' } },
+        y: {
+          position: 'left',
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { callback: function(v) { return '$' + v; } },
+          title: { display: true, text: 'Hourly', color: '#94909A' }
+        },
+        y1: {
+          position: 'right',
+          grid: { display: false },
+          ticks: { callback: function(v) { return '$' + v; } },
+          title: { display: true, text: 'Cumulative', color: '#D4A05A' }
+        }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            afterBody: function(ctx) {
+              var idx = ctx[0].dataIndex;
+              return hourlyData[idx].label;
+            },
+            label: function(ctx) {
+              return ctx.dataset.label + ': $' + ctx.raw.toFixed(2);
+            }
+          }
+        },
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 20, color: '#C4B9A8' } }
+      }
+    }
   });
-
-  // Center text
-  var text1 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  text1.setAttribute('x', cx);
-  text1.setAttribute('y', cy - 6);
-  text1.setAttribute('text-anchor', 'middle');
-  text1.setAttribute('fill', 'var(--gold)');
-  text1.setAttribute('font-family', 'var(--serif)');
-  text1.setAttribute('font-size', '26');
-  text1.textContent = '$64.30';
-  svg.appendChild(text1);
-
-  var text2 = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-  text2.setAttribute('x', cx);
-  text2.setAttribute('y', cy + 16);
-  text2.setAttribute('text-anchor', 'middle');
-  text2.setAttribute('fill', 'var(--text-muted)');
-  text2.setAttribute('font-size', '11');
-  text2.textContent = 'total session';
-  svg.appendChild(text2);
 }
 
-/* ---- Intersection observer for bar animations ---- */
-function initObservers() {
+/* ===== DONUT CHART ===== */
+function renderDonut() {
+  var ctx = document.getElementById('chart-donut');
+  if (!ctx || !initDefaults()) return;
+  new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+      labels: ['Cache Write', 'Cache Read', 'Output', 'Input'],
+      datasets: [{
+        data: [34.36, 23.37, 6.47, 0.10],
+        backgroundColor: ['#D4A05A', '#5A9DAC', '#E07B5F', '#94909A'],
+        borderColor: '#0E1219',
+        borderWidth: 3,
+        hoverOffset: 6
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      cutout: '62%',
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(ctx) {
+              var total = 64.30;
+              var pct = ((ctx.raw / total) * 100).toFixed(0);
+              return ctx.label + ': $' + ctx.raw.toFixed(2) + ' (' + pct + '%)';
+            }
+          }
+        }
+      }
+    }
+  });
+}
+
+/* ===== SUBAGENT COMPARISON (horizontal bar) ===== */
+function renderSubagent() {
+  var ctx = document.getElementById('chart-subagent');
+  if (!ctx || !initDefaults()) return;
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['14-file source analysis', 'Single file read', 'git status + log'],
+      datasets: [
+        {
+          label: 'Main session (180K ctx)',
+          data: [9.52, 0.68, 0.68],
+          backgroundColor: 'rgba(224,123,95,0.4)',
+          borderColor: 'rgba(224,123,95,0.8)',
+          borderWidth: 1,
+          borderRadius: 3
+        },
+        {
+          label: 'Subagent (20K ctx)',
+          data: [0.50, 0.08, 0.08],
+          backgroundColor: 'rgba(106,174,156,0.4)',
+          borderColor: 'rgba(106,174,156,0.8)',
+          borderWidth: 1,
+          borderRadius: 3
+        }
+      ]
+    },
+    options: {
+      indexAxis: 'y',
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: {
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: { callback: function(v) { return '$' + v.toFixed(2); } }
+        },
+        y: { grid: { display: false } }
+      },
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function(ctx) { return ctx.dataset.label + ': $' + ctx.raw.toFixed(2); }
+          }
+        },
+        legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 20, color: '#C4B9A8' } }
+      }
+    }
+  });
+}
+
+/* ===== CONTEXT BAR ANIMATION ===== */
+function animateCtxBars() {
+  document.querySelectorAll('.ctx-bar-fill[data-height]').forEach(function(el) {
+    el.style.height = el.getAttribute('data-height') + '%';
+  });
+}
+
+/* ===== TAB SWITCHING ===== */
+var chartRendered = {};
+document.querySelectorAll('.tab-btn').forEach(function(btn) {
+  btn.addEventListener('click', function() {
+    var id = this.getAttribute('data-tab');
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+    document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.remove('active'); });
+    this.classList.add('active');
+    document.getElementById('panel-' + id).classList.add('active');
+    renderTabChart(id);
+  });
+});
+
+function renderTabChart(id) {
+  if (chartRendered[id]) return;
+  chartRendered[id] = true;
+  if (id === 'comparison') renderComparison();
+  if (id === 'hourly') renderHourly();
+  if (id === 'breakdown') renderDonut();
+  if (id === 'context') { renderSubagent(); animateCtxBars(); }
+}
+
+/* ===== INIT ===== */
+function initCharts() {
+  if (typeof Chart === 'undefined') {
+    setTimeout(initCharts, 100);
+    return;
+  }
+  // Render first visible tab
+  renderTabChart('comparison');
+
+  // Observe for scroll-triggered animations
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {
-        animateBars(entry.target);
+        var panel = entry.target.closest('.tab-panel');
+        if (panel) {
+          var id = panel.id.replace('panel-', '');
+          renderTabChart(id);
+        }
+        if (entry.target.id === 'ctx-bars') animateCtxBars();
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.15 });
 
-  document.querySelectorAll('.chart-box, .stats-strip').forEach(function(el) {
+  document.querySelectorAll('.chart-box, #ctx-bars').forEach(function(el) {
     observer.observe(el);
   });
 }
 
-/* ---- Init ---- */
-document.addEventListener('DOMContentLoaded', function() {
-  drawDonut();
-  initObservers();
-  // Animate first visible tab
-  var firstPanel = document.querySelector('.tab-panel.active');
-  if (firstPanel) {
-    setTimeout(function() { animateBars(firstPanel); }, 300);
-  }
-});
+document.addEventListener('DOMContentLoaded', initCharts);
 </script>
 </body>
 </html>
