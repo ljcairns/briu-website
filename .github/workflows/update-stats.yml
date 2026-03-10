@@ -123,6 +123,13 @@ jobs:
             -not -path '*/node_modules/*' -not -path '*/.wrangler/*' | wc -l | tr -d ' ')
           echo "Page count: ${PAGE_COUNT}"
 
+          # Agent skills count — read from site-config.json (canonical source)
+          AGENT_SKILLS=9
+          if [ -f site-config.json ]; then
+            AGENT_SKILLS=$(jq -r '.build.skills // 9' site-config.json)
+          fi
+          echo "Agent skills: ${AGENT_SKILLS}"
+
           # Anthropic API costs (last 30 days)
           AVG_DAILY_COST="3.20"
           PEAK_DAILY_COST="8.40"
@@ -198,6 +205,7 @@ jobs:
             "articleCount": ${ARTICLE_COUNT},
             "wordsOfContent": ${WORDS_OF_CONTENT},
             "pageCount": ${PAGE_COUNT},
+            "agentSkills": ${AGENT_SKILLS},
             "avgDailyCost": ${AVG_DAILY_COST},
             "peakDailyCost": ${PEAK_DAILY_COST},
             "totalApiSpend": ${TOTAL_API_SPEND},

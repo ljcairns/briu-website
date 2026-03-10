@@ -126,6 +126,7 @@
     }
     if (data.websiteLinesOfCode) updateEls('website-loc', data.websiteLinesOfCode.toLocaleString());
     if (data.agentLinesOfCode) updateEls('agent-loc', data.agentLinesOfCode.toLocaleString());
+    if (data.agentSkills) updateEls('agent-skills', data.agentSkills);
     if (data.chartCount) updateEls('chart-count', data.chartCount.toLocaleString());
     if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
     if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());
