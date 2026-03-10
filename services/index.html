@@ -278,7 +278,7 @@
       <h4>Email, CRM & Sales</h4>
       <p>Triage inbound email, draft responses, update HubSpot or Salesforce, qualify leads, send outreach, schedule follow-ups. Nothing sends without your OK.</p>
       <div class="build-detail">
-        <p>Connects to HubSpot, Salesforce, Apollo, Gmail. Your agent researches prospects, drafts personalized outreach, logs every interaction, and keeps your pipeline current. Runs overnight, every night.</p>
+        <p>Connects to HubSpot, Salesforce, Apollo, Gmail. Your agent researches prospects, drafts personalized outreach, logs every interaction, and keeps your pipeline current. Runs on your schedule — typically overnight.</p>
         <div class="build-meta">
           <div class="build-meta-item"><strong>Time to production</strong>3-4 weeks</div>
           <div class="build-meta-item"><strong>Success metric</strong>Qualified leads per week, CRM accuracy</div>
@@ -290,7 +290,7 @@
     </div>
     <div class="build-item" id="reporting-monitoring" onclick="toggleCapability(this)">
       <h4>Reporting & Monitoring</h4>
-      <p>Automated reports, cost tracking, PDF generation and delivery on a schedule. Real-time spend visibility across all agents.</p>
+      <p>Automated reports, cost tracking, PDF generation and delivery on a schedule. Continuous spend visibility across all agents.</p>
       <div class="build-detail">
         <p>Daily summaries, weekly dashboards, cost alerts when spending exceeds thresholds. PDF reports generated and emailed on your schedule. Every agent's token usage tracked and visible.</p>
         <div class="build-meta">
@@ -386,6 +386,20 @@
       <div style="font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:0.75rem;">Professional Services · CRM &amp; Reporting</div>
       <p style="font-size:0.92rem;color:var(--text);line-height:1.65;margin:0;">"We had the first agent in production before the session ended. The second one shipped two weeks later."</p>
       <div style="font-size:0.78rem;color:var(--text-muted);margin-top:0.75rem;">Founder — Early client</div>
+    </div>
+  </div>
+
+  <div style="margin:2.5rem 0;" class="reveal">
+    <div style="font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);margin-bottom:1.25rem;">Detailed example · Briu internal deployment</div>
+    <div style="background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-left:3px solid rgba(212,160,90,0.4);padding:1.75rem;max-width:680px;">
+      <div style="font-size:0.68rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;color:var(--gold);margin-bottom:0.75rem;">AI Services Company · Inbox, CRM &amp; Morning Ops</div>
+      <div style="display:grid;gap:0.6rem;font-size:0.9rem;color:var(--text);line-height:1.65;">
+        <div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Problem</span><br>Founder spending 60–90 min/day on email triage, CRM updates, and status reviews across three accounts and four tools. Context-switching was the bottleneck.</div>
+        <div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Deployed</span><br>Morning briefing agent (email triage, calendar, CRM pull, cost monitoring). Heartbeat checks every 30 min. 9 skills in production across Gmail, HubSpot, Apollo, and internal reporting.</div>
+        <div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Timeline</span><br>First skill live in week one. Full stack in production by week three.</div>
+        <div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Economics</span><br>$0.20–0.40/briefing. $14.68/day average across all agents. $376 total build cost. $30/day budget ceiling. No runaway spend.</div>
+        <div><span style="color:var(--text-muted);font-size:0.78rem;text-transform:uppercase;letter-spacing:0.08em;">Result</span><br>Morning ops down to a 6-minute review. No missed emails. CRM stays current without manual entry. This is the same stack we deploy for clients.</div>
+      </div>
     </div>
   </div>
 </section>
@@ -724,7 +738,7 @@ function tfAnswer(q, val) {
     else if (tfAnswers.q2 === 'few') score += 1;
     var result = document.getElementById('tfResult');
     if (score >= 3) {
-      result.innerHTML = '<p class="tf-rec">Kickoff + Workshop Add-on</p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Kickoff gets your architecture in place and the Workshop add-on (<span data-config="pricing.workshop_addon" data-config-format="dollar">$2,500</span>) ensures your whole team is aligned and trained. We recommend both.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'kickoff\')">Book Kickoff + Workshop</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
+      result.innerHTML = '<p class="tf-rec">Kickoff + Workshop Add-on</p><p class="tf-rec-reason">With multiple stakeholders and workflows to consider, the Kickoff gets your architecture in place and the Workshop add-on (<span data-config="pricing.workshop_addon" data-config-format="dollar">$2,500</span>) ensures your whole team is aligned and trained. We recommend both.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'kickoff\')">Reserve Kickoff + Workshop</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     } else {
       result.innerHTML = '<p class="tf-rec">Kickoff: <span data-config="pricing.kickoff" data-config-format="dollar">$5,000</span></p><p class="tf-rec-reason">You know what you want to build. The Kickoff gets straight to the architecture and delivers your first agent. Fast, focused, and we do the prep work before we even meet.</p><div class="tier-cta-row" style="border:none;padding:0;margin-top:1rem;"><button class="tier-book-btn" onclick="bookTier(\'kickoff\')">Book &amp; Pay Now</button><span class="tier-cta-or">or</span><a href="#" onclick="openContactForm();return false" class="tier-talk-link">Talk first</a></div>';
     }
