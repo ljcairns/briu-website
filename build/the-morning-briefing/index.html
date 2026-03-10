@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | The Morning Briefing</title>
+<meta name="description" content="$0.44 per briefing. 10 data sources. 3 email accounts. Delivered to Discord at 7:04 AM. How we built a daily intelligence brief that costs less than a cup of coffee.">
+<meta property="og:title" content="Briu | The Morning Briefing">
+<meta property="og:description" content="$0.44 per briefing. 10 data sources. Delivered at 7:04 AM. How we built a daily intelligence brief for less than a cup of coffee.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/build/the-morning-briefing/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Briu | The Morning Briefing">
+<meta name="twitter:description" content="$0.44 per briefing. 10 data sources. Delivered at 7:04 AM. How we built a daily intelligence brief for less than a cup of coffee.">
+<link rel="canonical" href="https://briu.ai/build/the-morning-briefing/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/articles.css?v=20260310b">
+<style>
+/* Pipeline stages */
+.pipeline { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.75rem 0 2rem; counter-reset: stage; }
+.pipeline-stage { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; position: relative; transition: border-color 0.3s; }
+.pipeline-stage:hover { border-color: rgba(212,160,90,0.15); }
+.pipeline-stage::before { counter-increment: stage; content: counter(stage); font-family: var(--serif); font-size: 1.8rem; color: rgba(212,160,90,0.2); position: absolute; top: 0.8rem; right: 1rem; line-height: 1; }
+.pipeline-stage h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; font-weight: 400; }
+.pipeline-stage p { margin: 0; font-size: 0.9rem; }
+.pipeline-stage .stage-time { font-size: 0.72rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-top: 0.5rem; }
+
+/* Cost comparison */
+.cost-compare { display: flex; gap: 1.5rem; margin: 1.75rem 0 2rem; align-items: stretch; }
+.cost-col { flex: 1; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; }
+.cost-col h3 { font-family: var(--serif); font-size: 1.1rem; margin-bottom: 0.75rem; font-weight: 400; }
+.cost-col.traditional h3 { color: var(--text-muted); }
+.cost-col.agent h3 { color: var(--gold); }
+.cost-col .cost-value { font-family: var(--serif); font-size: 2rem; margin-bottom: 0.5rem; }
+.cost-col.traditional .cost-value { color: var(--text-muted); text-decoration: line-through; text-decoration-color: rgba(224,123,95,0.4); }
+.cost-col.agent .cost-value { color: var(--gold); }
+.cost-col p { font-size: 0.88rem; margin: 0; }
+.cost-col .cost-annual { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.5rem; }
+
+/* Briefing sections grid */
+.sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.75rem; margin: 1.75rem 0 2rem; }
+.section-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1rem 1.25rem; transition: border-color 0.3s; }
+.section-card:hover { border-color: rgba(212,160,90,0.15); }
+.section-card h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+.section-card p { font-size: 0.78rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+.section-card .section-num { font-family: var(--serif); font-size: 0.72rem; color: rgba(212,160,90,0.4); margin-bottom: 0.3rem; }
+
+/* Data sources */
+.sources { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 0.75rem; margin: 1.75rem 0 2rem; }
+.source { display: flex; align-items: baseline; gap: 0.75rem; font-size: 0.88rem; color: var(--text-muted); padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.source strong { color: var(--text); font-weight: 500; min-width: 100px; }
+
+/* Build stats */
+.build-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.75rem 0 2rem; }
+.build-stat { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.3s; }
+.build-stat:hover { border-color: rgba(212,160,90,0.2); }
+.build-stat .val { font-family: var(--serif); font-size: 1.35rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
+.build-stat .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+@media (max-width: 640px) {
+  .pipeline { grid-template-columns: 1fr; }
+  .cost-compare { flex-direction: column; }
+  .build-stats { grid-template-columns: repeat(2, 1fr); }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "The Morning Briefing",
+  "description": "$0.44 per briefing. 10 data sources. 3 email accounts. Delivered to Discord at 7:04 AM.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-10",
+  "dateModified": "2026-03-10",
+  "url": "https://briu.ai/build/the-morning-briefing/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/the-morning-briefing/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "The Morning Briefing", "item": "https://briu.ai/build/the-morning-briefing/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>The Morning Briefing</h1>
+  <p>10 data sources. 3 email accounts. 2 calendars. Delivered to Discord at 7:04 AM for $0.44.</p>
+</section>
+
+<article>
+  <div class="build-stats reveal">
+    <div class="build-stat">
+      <div class="val">$0.44</div>
+      <div class="lbl">Cost Per Briefing</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">~2 min</div>
+      <div class="lbl">Delivery Time</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">$9.60</div>
+      <div class="lbl">Monthly Cost</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">~500</div>
+      <div class="lbl">Lines of Code</div>
+    </div>
+  </div>
+
+  <p class="section-label reveal">What It Does</p>
+  <p>Every weekday at 6:54 AM, a shell script fires. It queries 10 separate database tables, checks 3 email accounts (9 queries total), pulls CRM pipeline data from HubSpot, fetches 2 calendars, gets cost data from the gateway API, and pulls a daily report from Subsights. All of it gets assembled into a single JSON snapshot file.</p>
+  <p>At 7:04 AM, the agent reads that snapshot and composes a structured briefing. Before writing a single line, it runs a reconciliation pass: cross-checking email subjects against state-db action records, flagging anything that doesn't match. Then it writes 10 sections and posts to Discord.</p>
+  <p><strong>Total time from trigger to delivery: about 2 minutes.</strong> A human doing this same work across the same sources would need 30&ndash;45 minutes. Every morning.</p>
+
+  <h2 class="reveal">The Three-Stage Pipeline</h2>
+  <p>The briefing isn't one script. It's three stages, each with a specific job and failure mode.</p>
+
+  <div class="pipeline reveal">
+    <div class="pipeline-stage">
+      <h3>Pre-Fetch</h3>
+      <p>235-line shell script. Runs 10 minutes before composition. Queries state-db, 3 email accounts, HubSpot CRM, 2 calendars, cost API, Subsights. Assembles everything into one JSON file with atomic rename for safety.</p>
+      <div class="stage-time">6:54 AM &middot; ~30 seconds</div>
+    </div>
+    <div class="pipeline-stage">
+      <h3>Preflight</h3>
+      <p>31-line validation script. Checks that the snapshot is fresh (&lt;15 min old), all data sources are populated, and cost data is current. Blocks composition if anything is stale.</p>
+      <div class="stage-time">7:03 AM &middot; ~2 seconds</div>
+    </div>
+    <div class="pipeline-stage">
+      <h3>Composition</h3>
+      <p>230-line prompt. Sonnet 4.6 reads the snapshot, runs reconciliation, composes 10 sections with chain-format grouping. Posts to Discord #home. 7&ndash;21 turns, 165K&ndash;750K tokens.</p>
+      <div class="stage-time">7:04 AM &middot; ~90 seconds</div>
+    </div>
+  </div>
+
+  <h2 class="reveal">What's In the Briefing</h2>
+  <p>10 sections. Each serves a specific decision or action. Related items are chain-grouped, not listed separately.</p>
+
+  <div class="sections-grid reveal">
+    <div class="section-card">
+      <div class="section-num">01</div>
+      <h4>Needs Your Input</h4>
+      <p>Decisions only a human can make. Approvals, judgment calls, blocked items.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">02</div>
+      <h4>Follow-ups Today</h4>
+      <p>Threads that need a response today. Cross-referenced against calendar and CRM.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">03</div>
+      <h4>Pipeline</h4>
+      <p>HubSpot deals with stage, value, and next action. Pinned contacts filtered via jq.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">04</div>
+      <h4>Calendar</h4>
+      <p>Today and tomorrow across 2 accounts. Conflicts flagged.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">05</div>
+      <h4>Backlog</h4>
+      <p>Tasks that have been sitting. Sorted by age, not priority theater.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">06</div>
+      <h4>Cost Report</h4>
+      <p>Yesterday's API spend, running total, per-model breakdown. The briefing reports its own system's costs.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">07</div>
+      <h4>Subsights Comments</h4>
+      <p>New customer feedback across all workspaces. Linked to the feedback loop automation.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">08</div>
+      <h4>Security Status</h4>
+      <p>Last audit timestamp, any flagged events, sanitizer health.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">09</div>
+      <h4>Drift Detection</h4>
+      <p>Flags when email threads don't match state-db records. Catches when reality diverges from what the system thinks is true.</p>
+    </div>
+    <div class="section-card">
+      <div class="section-num">10</div>
+      <h4>Reconciliation</h4>
+      <p>Orphaned actions, unmatched email subjects, state inconsistencies found during pre-composition checks.</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Data Sources</h2>
+  <p>The pre-fetch script hits all of these before the agent runs. The agent never makes API calls during composition &mdash; it reads from a pre-assembled snapshot. This keeps token usage predictable and composition fast.</p>
+
+  <div class="sources reveal">
+    <div class="source"><strong>State DB</strong> 10 queries: actions, decisions, tasks, clients, contacts, notes, config, costs, security events, reconciliation log</div>
+    <div class="source"><strong>Email</strong> 3 accounts &times; 3 queries each: unread count, recent subjects, flagged messages</div>
+    <div class="source"><strong>HubSpot CRM</strong> Pipeline deals with pinned contact/deal filtering via jq</div>
+    <div class="source"><strong>Calendar</strong> 2 accounts: today + tomorrow events</div>
+    <div class="source"><strong>Cost API</strong> Gateway spend data: yesterday, running total, per-model</div>
+    <div class="source"><strong>Subsights</strong> Daily report: new comments, conversation metrics</div>
+  </div>
+
+  <h2 class="reveal">Why Pre-Fetch Matters</h2>
+  <p>Without pre-fetch, the agent would need to make 20+ API calls during composition. Each call burns tokens on the request, the response, and the agent reasoning about what to do with it. A 750K-token briefing becomes a 2M-token briefing. Cost triples. Latency goes from 90 seconds to 8 minutes.</p>
+  <p>The pre-fetch pipeline also acts as a circuit breaker. If an email API is down, the snapshot still has partial data and the preflight script flags what's missing. The agent doesn't hallucinate data it couldn't fetch &mdash; it sees explicit gaps in the snapshot and reports them.</p>
+  <p><strong>The snapshot is an atomic boundary.</strong> Everything the agent needs to compose the briefing is in one file. If the file is fresh and complete, composition succeeds. If it's stale or partial, preflight blocks it. No hidden dependencies.</p>
+
+  <h2 class="reveal">What It Cost to Build</h2>
+
+  <div class="cost-compare reveal">
+    <div class="cost-col agent">
+      <h3>Agent Briefing</h3>
+      <div class="cost-value">$0.44/day</div>
+      <p>Sonnet 4.6 composition. 165K&ndash;750K tokens per run. Pre-fetch is shell scripts with zero API cost.</p>
+      <div class="cost-annual">$9.60/month &middot; $115/year</div>
+    </div>
+    <div class="cost-col traditional">
+      <h3>Human EA</h3>
+      <div class="cost-value">$12&ndash;$38/day</div>
+      <p>$25&ndash;50/hr &times; 30&ndash;45 min. Check 3 email accounts, CRM, 2 calendars, project management, costs, security.</p>
+      <div class="cost-annual">$275&ndash;$825/month &middot; $3,300&ndash;$9,900/year</div>
+    </div>
+  </div>
+
+  <p><strong>Build time:</strong> 2 days for the initial version. 2 weeks to production &mdash; adding the reconciliation layer, pre-composition checks, snapshot pipeline, and preflight validation. ~500 lines of infrastructure code total (230-line prompt, 235-line snapshot script, 31-line preflight script).</p>
+  <p><strong>Savings:</strong> 97&ndash;99% vs a human EA doing the same work. The briefing never misses a day, never forgets a source, and the reconciliation layer catches drift automatically.</p>
+
+  <h2 class="reveal">What Makes It Non-Trivial</h2>
+  <p>A daily summary sounds simple. Read some email, check the calendar, post to Slack. The hard parts are the parts you don't see until you try to build it:</p>
+  <ul>
+    <li><strong>Cross-referencing across 6+ data sources.</strong> An email about a deal needs to match the CRM record and the calendar meeting and the state-db action. The briefing chains these together instead of listing them as separate items.</li>
+    <li><strong>Reconciliation.</strong> The agent checks whether email threads match state-db records before composing. If someone replied to a thread the agent doesn't know about, it flags it as an orphan rather than ignoring it.</li>
+    <li><strong>Self-referential cost tracking.</strong> The briefing includes a cost report for the system that generates the briefing. The cost section tells you what you're paying for the thing you're reading.</li>
+    <li><strong>Drift detection.</strong> When the system's model of reality diverges from actual state &mdash; a deal moved in CRM but the state-db still shows the old stage &mdash; the briefing surfaces it explicitly.</li>
+  </ul>
+  <p>The pre-fetch architecture means the agent doesn't waste tokens discovering what's happening. It already knows. Composition is just formatting and judgment &mdash; which items to chain together, which to flag, which to surface at the top.</p>
+
+  <div class="article-links">
+    <a href="/build/" class="primary-link">Back to Build</a>
+    <a href="#" onclick="openContactForm();return false" class="secondary-link">Book a Call</a>
+  </div>
+</article>
+</main>
+
+<div id="site-modal"></div>
+
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260310b"></script>
+<script src="/shared.js?v=20260310b"></script>
+<script src="/ambient.js?v=20260310b"></script>
+<script src="/chat-bubble.js?v=20260310b"></script>
+</body>
+</html>
