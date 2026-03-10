@@ -81,6 +81,33 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .vitals-summary .vitals-trad { color: var(--text-muted); opacity: 0.6; text-decoration: line-through; text-decoration-color: rgba(224,123,95,0.4); }
 
 /* ======================== */
+/* Security Architecture    */
+.security-arch-section { max-width: 1060px; margin: 3rem auto 0; padding: 0 2rem; }
+.sec-arch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.05); }
+.sec-arch-card { background: var(--surface); padding: 2rem 1.75rem; display: flex; flex-direction: column; gap: 0; }
+.sec-arch-card-label { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 1.25rem; }
+.sec-arch-primary { display: flex; align-items: baseline; gap: 0.5rem; margin-bottom: 0.4rem; }
+.sec-arch-num { font-size: 3rem; font-weight: 700; line-height: 1; color: var(--text); font-family: var(--serif); }
+.sec-arch-unit { font-size: 1rem; color: var(--text-muted); line-height: 1.3; max-width: 140px; }
+.sec-arch-primary-text { font-size: 1.25rem; font-weight: 600; line-height: 1.35; color: var(--text); margin-bottom: 0.4rem; display: block; }
+.sec-arch-sub { font-size: 0.8rem; color: var(--text-muted); margin: 0 0 1.25rem; letter-spacing: 0.02em; }
+.sec-layer-list { padding-left: 1.1rem; margin: 0 0 1.5rem; display: flex; flex-direction: column; gap: 0.75rem; }
+.sec-layer-list li { font-size: 0.88rem; color: var(--text); line-height: 1.5; }
+.sec-layer-list li strong { color: var(--text); display: block; margin-bottom: 0.1rem; }
+.sec-layer-list li br + * { color: var(--text-muted); font-size: 0.82rem; }
+.sec-test-stats { display: flex; flex-direction: column; gap: 0.75rem; margin: 0 0 1.25rem; border-top: 1px solid rgba(255,255,255,0.06); border-bottom: 1px solid rgba(255,255,255,0.06); padding: 1rem 0; }
+.sec-test-row { display: flex; align-items: baseline; gap: 0.6rem; }
+.sec-test-val { font-size: 1.3rem; font-weight: 700; color: var(--text); font-family: var(--serif); min-width: 3rem; }
+.sec-test-desc { font-size: 0.82rem; color: var(--text-muted); }
+.sec-posture-list { padding-left: 1rem; margin: 0.5rem 0 1.25rem; display: flex; flex-direction: column; gap: 0.6rem; list-style: none; }
+.sec-posture-list li { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; padding-left: 0.75rem; position: relative; }
+.sec-posture-list li::before { content: '—'; position: absolute; left: 0; color: var(--gold); opacity: 0.5; }
+.sec-scope-note { font-size: 0.78rem; color: var(--text-muted); line-height: 1.65; margin: 0 0 1.25rem; padding: 0.75rem; background: rgba(255,255,255,0.02); border-left: 2px solid rgba(255,255,255,0.08); }
+.sec-arch-link { font-size: 0.82rem; color: var(--gold); text-decoration: none; margin-top: auto; letter-spacing: 0.02em; }
+.sec-arch-link:hover { color: var(--gold-light); }
+@media (max-width: 768px) { .sec-arch-grid { grid-template-columns: 1fr; } }
+@media (max-width: 480px) { .sec-arch-card { padding: 1.5rem 1.25rem; } }
+
 /* Skill Tree               */
 /* ======================== */
 .skill-category { margin-bottom: 2rem; }
@@ -360,6 +387,74 @@ section { padding-bottom: 2rem; }
   </div>
   <p class="vitals-summary">Total project cost: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
 </div>
+
+<!-- Security Architecture Section -->
+<section class="security-arch-section">
+  <p class="section-label reveal">Security Architecture</p>
+  <h2 class="reveal">Three dimensions. No single score.</h2>
+  <p class="reveal" style="color:var(--text-muted);max-width:600px;margin-bottom:2rem;">An AI agent that handles email, CRM, and financial data needs more than a single defense. Here is how this stack is structured, tested, and operated.</p>
+
+  <div class="sec-arch-grid reveal">
+
+    <!-- Card 1: Architecture -->
+    <div class="sec-arch-card">
+      <div class="sec-arch-card-label">Architecture</div>
+      <div class="sec-arch-primary">
+        <span class="sec-arch-num" data-dynamic="sec-defense-layers">6</span>
+        <span class="sec-arch-unit">Defense Layers</span>
+      </div>
+      <p class="sec-arch-sub">Each assumes the others failed.</p>
+      <ol class="sec-layer-list">
+        <li><strong>Network isolation</strong><br>VPS hardening, firewall, no inbound services exposed</li>
+        <li><strong>Permission isolation</strong><br>Deny-by-default allowlist — every tool explicitly permitted before use</li>
+        <li><strong>Human approval gates</strong><br>External actions require explicit human sign-off before they run</li>
+        <li><strong>Exec sandbox</strong><br>Restricted shell environment, dangerous patterns blocked at hook level</li>
+        <li><strong>Per-turn security context</strong><br>Execution conditioned on injected security policy and runtime risk checks</li>
+        <li><strong>Monitoring + kill switch</strong><br>Cost ceilings, anomaly alerts, automatic lockdown on threshold breach</li>
+      </ol>
+      <a href="/build/six-layers-deep/" class="sec-arch-link">Full architecture &rarr;</a>
+    </div>
+
+    <!-- Card 2: Adversarial Testing -->
+    <div class="sec-arch-card">
+      <div class="sec-arch-card-label">Adversarial Testing</div>
+      <div class="sec-arch-primary">
+        <span class="sec-arch-num" data-dynamic="sec-open-bypasses">0</span>
+        <span class="sec-arch-unit">Open Known Bypasses</span>
+      </div>
+      <p class="sec-arch-sub">Sanitizer layer &middot; red-team taxonomy only</p>
+      <div class="sec-test-stats">
+        <div class="sec-test-row">
+          <span class="sec-test-val"><span data-dynamic="sec-bypasses-closed">26</span>/<span data-dynamic="sec-bypasses-total">26</span></span>
+          <span class="sec-test-desc">known payloads caught</span>
+        </div>
+        <div class="sec-test-row">
+          <span class="sec-test-val"><span data-dynamic="sec-attack-categories">15</span></span>
+          <span class="sec-test-desc">attack categories &middot; 3 automated rounds</span>
+        </div>
+      </div>
+      <p class="sec-scope-note">Scope: sanitizer stress-tested in isolation against our current red-team taxonomy. Other layers were excluded deliberately &mdash; that is how layer isolation testing works.</p>
+      <a href="/build/we-tried-to-break-our-own-sanitizer/" class="sec-arch-link">Read the red-team results &rarr;</a>
+    </div>
+
+    <!-- Card 3: Operating Posture -->
+    <div class="sec-arch-card">
+      <div class="sec-arch-card-label">Operating Posture</div>
+      <div class="sec-arch-primary sec-arch-primary-text">
+        Human approval<br>for external actions
+      </div>
+      <ul class="sec-posture-list">
+        <li>Every external action requires explicit approval before it runs</li>
+        <li>Per-agent budget ceiling &mdash; hard stop at threshold, no overrides</li>
+        <li>Permission scope locked at deployment, not adjustable at runtime</li>
+        <li>All inbound content sanitized before reaching any model</li>
+        <li>Anomaly detection &plus; automatic lockdown on threshold breach</li>
+      </ul>
+      <p class="sec-scope-note">We use frontier models for stronger instruction resistance, but we do not rely on model behavior alone. These controls are how we contain failures when they happen.</p>
+    </div>
+
+  </div>
+</section>
 
 <!-- 3. Skill Tree -->
 <section>
