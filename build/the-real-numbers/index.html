@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/the-real-numbers/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | One Agent, 12 Skills, 26 Days">
 <meta name="twitter:description" content="$376 to build a production agent system. 26 days. Every receipt included. Interactive cost dashboard from the Briu build.">
@@ -20,24 +23,21 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/articles.css?v=20260310b">
 <style>
 :root {
   --opus: #8a5a7a;
   --haiku: #5a8a6a;
 }
 
-/* Hero overrides (base in shared.css) */
-.hero::before { width: 760px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
+/* Hero overrides specific to this page */
+.hero::before { width: 760px; }
 .hero h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); margin-bottom: 0.5rem; }
 .hero h1 em { color: var(--gold); font-style: italic; -webkit-text-fill-color: unset; background: none; }
 .hero .hero-sub { max-width: 640px; color: var(--text-muted); font-size: 1rem; line-height: 1.8; position: relative; margin-top: 1rem; }
 
-/* Content sections */
-.content { max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
-.section-label { margin-bottom: 1.5rem; }
-article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 3rem 0 1rem; }
-article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
-article p strong { color: var(--text); font-weight: 600; }
+/* Override article h2 margin for this page */
+article h2 { margin: 3rem 0 1rem; }
 
 /* Stat boxes */
 .stats { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 2.5rem 0 3rem; }
@@ -123,11 +123,6 @@ article p strong { color: var(--text); font-weight: 600; }
 /* Commit chart */
 .commit-chart-wrap { margin: 1.5rem 0; }
 
-/* Quote */
-.quote-block { border-left: 2px solid var(--gold); padding: 1.5rem 0 1.5rem 1.5rem; margin: 2.5rem 0; max-width: 700px; }
-.quote-block blockquote { font-family: var(--serif); font-size: 1.1rem; font-style: italic; color: var(--text); line-height: 1.55; margin-bottom: 0.5rem; }
-.quote-block cite { font-size: 0.78rem; color: var(--text-muted); font-style: normal; }
-
 /* CTA */
 .build-cta { text-align: center; padding: 3rem 0 5rem; }
 .build-cta p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; }
@@ -151,7 +146,6 @@ article p strong { color: var(--text); font-weight: 600; }
   .wf-arrow { font-size: 0.9rem; }
 }
 @media (max-width: 640px) {
-  .content { padding: 0 1.25rem; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .inv-table td, .inv-table th { padding: 0.6rem 0.75rem; font-size: 0.82rem; }
 }
@@ -191,7 +185,7 @@ article p strong { color: var(--text); font-weight: 600; }
 
 <div id="site-nav"></div>
 
-<main>
+<main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build &mdash; The Real Numbers</p>
   <h1><span data-config="costs.agent_api_total" data-config-format="dollar">$376</span> to build a production agent system. <em>26 days. Every receipt included.</em></h1>
@@ -382,13 +376,13 @@ article p strong { color: var(--text); font-weight: 600; }
   <p>Claude Max handles strategic thinking and code generation. The OpenClaw agent (running Sonnet) handles autonomous daily operations. GPT reviews output for blind spots. Gemini validates facts. The human sits in the center, orchestrating which model handles what, and making every decision that requires judgment.</p>
 
   <!-- Commit Velocity -->
-  <h2 class="reveal">Commit velocity: <span data-dynamic="commits">480+</span> commits in <span data-dynamic="build-days">27</span> days</h2>
+  <h2 class="reveal">Commit velocity: <span data-dynamic="commits">613</span> commits in <span data-dynamic="build-days">27</span> days</h2>
   <p>Every commit in the OpenClaw repository, plotted by day. Commit density tracks closely with API spend. The heaviest build days are also the most expensive. Day one (Feb 12) had 36 commits. The Briu launch day (Mar 5) had 28.</p>
 
   <div class="chart-box">
     <div id="commit-chart" style="height:260px;position:relative"></div>
     <div class="chart-summary">
-      <span class="big" data-dynamic="commits">480+</span>
+      <span class="big" data-dynamic="commits">613</span>
       <span class="sub">commits across <span data-dynamic="build-days">27</span> days</span>
     </div>
   </div>
@@ -425,7 +419,7 @@ article p strong { color: var(--text); font-weight: 600; }
 <script src="/shared.js?v=20260310b"></script>
 <script src="/ambient.js?v=20260310b"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
-<script src="/dynamic-stats.js"></script>
+<script src="/dynamic-stats.js?v=20260310b"></script>
 <script>
 // === DATA ===
 var dailyData = [

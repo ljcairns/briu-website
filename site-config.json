@@ -21,7 +21,7 @@
   "build": {
     "skills": 12,
     "tools": 8,
-    "charts": 22,
+    "charts": 64,
     "agents": 3,
     "midjourney_generations": 400,
     "name_candidates": 50,

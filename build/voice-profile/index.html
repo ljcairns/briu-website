@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/voice-profile/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | Voice Profile">
 <meta name="twitter:description" content="34,201 lines of real writing. Two files. $6 in API. If your agent doesn't sound like you, none of it works.">
@@ -20,32 +23,16 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/articles.css?v=20260310b">
 <style>
-/* Hero/section base now in shared.css */
-.hero { max-width: 980px; }
-.hero::before { background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
-.hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; }
-.hero p { max-width: 760px; }
-article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
-.section-label { margin-bottom: 1.5rem; }
-article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
+/* Page-specific overrides */
 article h3 { font-family: var(--serif); font-size: clamp(1.1rem, 2vw, 1.35rem); line-height: 1.3; margin: 2rem 0 0.75rem; color: var(--text); }
-article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
-article strong { color: var(--text); }
-article ul { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; padding-left: 1.5rem; }
 article li { margin-bottom: 0.5rem; }
 /* Corpus table */
 .corpus-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
 .corpus-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
 .corpus-table td { padding: 0.75rem 1rem; font-size: 0.95rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); }
 .corpus-table td:first-child { color: var(--text); font-weight: 500; }
-/* Cost table */
-.cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
-.cost-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.cost-table td { padding: 0.75rem 1rem; font-size: 0.95rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); }
-.cost-table td:last-child { text-align: right; }
-.cost-table th:last-child { text-align: right; }
-.cost-table tr:last-child td { border-bottom: 1px solid rgba(212,160,90,0.3); font-weight: 600; color: var(--gold); }
 /* Pattern cards */
 .pattern-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin: 1.5rem 0 2rem; }
 .pattern-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; }
@@ -64,10 +51,7 @@ article li { margin-bottom: 0.5rem; }
 .file-card ul { font-size: 0.88rem; margin-bottom: 0; padding-left: 1.25rem; }
 .file-card li { margin-bottom: 0.25rem; }
 @media (max-width: 640px) {
-  article { padding: 2rem 1.25rem 4rem; }
-  article h2 { margin-top: 2rem; }
   .corpus-table td, .corpus-table th { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
-  .cost-table td, .cost-table th { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
 }
 </style>
 <script type="application/ld+json">
@@ -105,7 +89,7 @@ article li { margin-bottom: 0.5rem; }
 
 <div id="site-nav"></div>
 
-<main>
+<main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>How We Built a Voice Profile From 34,000 Lines of Writing</h1>

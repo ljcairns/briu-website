@@ -158,7 +158,7 @@
   var footerTarget = document.getElementById('site-footer');
   var modalTarget = document.getElementById('site-modal');
 
-  if (navTarget) navTarget.outerHTML = buildNav();
+  if (navTarget) navTarget.outerHTML = '<a href="#main" class="skip-link">Skip to main content</a>\n' + buildNav();
   if (footerTarget) footerTarget.outerHTML = footerHtml;
   if (modalTarget) modalTarget.outerHTML = modalHtml;
 

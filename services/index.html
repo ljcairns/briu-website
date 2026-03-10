@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/services/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | Services">
 <meta name="twitter:description" content="AI agent deployment services. Kickoff, implementation, and retainer. Transparent pricing, no vendor lock-in, you own everything.">
@@ -164,6 +167,36 @@
   .tier-scope { flex-direction: column; gap: 0.75rem; }
 }
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Briu AI Agent Deployment",
+  "description": "Custom AI agent deployment for businesses. Email, CRM, sales, reporting, and security automation.",
+  "provider": {
+    "@type": "Organization",
+    "name": "Briu",
+    "url": "https://briu.ai"
+  },
+  "url": "https://briu.ai/services/",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Kickoff",
+      "price": "5000",
+      "priceCurrency": "USD",
+      "description": "Discovery, first agent built and deployed in 3 days"
+    },
+    {
+      "@type": "Offer",
+      "name": "Workshop Add-on",
+      "price": "2500",
+      "priceCurrency": "USD",
+      "description": "Half-day hands-on session with your team"
+    }
+  ]
+}
+</script>
 </head>
 <body>
 <div class="vignette"></div>
@@ -173,7 +206,7 @@
 
 <div id="site-nav"></div>
 
-<main>
+<main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Services</p>
   <h1>We deploy your agents. <em>Your team learns to run them.</em></h1>

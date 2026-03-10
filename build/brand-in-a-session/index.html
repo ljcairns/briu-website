@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/brand-in-a-session/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | Brand in a Session">
 <meta name="twitter:description" content="400+ Midjourney generations. Hundreds of name candidates. One logo. How agents and founder taste produced a brand identity in hours, not months.">
@@ -20,17 +23,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/articles.css?v=20260310b">
 <style>
-/* Hero/section base now in shared.css — only page-specific overrides below */
-.hero { max-width: 980px; }
-.hero::before { background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
-.hero h1 { font-size: clamp(2.4rem, 5vw, 4rem); line-height: 1.08; }
-.hero p { max-width: 760px; }
-article { padding: 2rem 2rem 6rem; max-width: 980px; margin: 0 auto; position: relative; z-index: 1; }
-.section-label { margin-bottom: 1.5rem; }
-article h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.2; margin: 2.8rem 0 1rem; }
-article p { color: var(--text-muted); font-size: 1rem; line-height: 1.85; margin-bottom: 1.1rem; }
-article strong { color: var(--text); }
 /* Phase filmstrip */
 .phase-strip { display: flex; gap: 1.25rem; overflow-x: auto; padding: 1rem 2rem 1.5rem; scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch; scrollbar-width: thin; scrollbar-color: rgba(212,160,90,0.3) transparent; }
 .phase-strip::-webkit-scrollbar { height: 4px; }
@@ -44,24 +38,13 @@ article strong { color: var(--text); }
 .phase-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.4rem; }
 .phase-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin: 0; }
 .scroll-hint { font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.12em; margin-top: 0.5rem; opacity: 0.6; }
-/* Cost table */
-.cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
-.cost-table th { text-align: left; font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
-.cost-table td { padding: 0.75rem 1rem; font-size: 0.95rem; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.04); }
-.cost-table tr:last-child td { border-bottom: 1px solid rgba(212,160,90,0.3); font-weight: 600; color: var(--gold); }
-.cost-table td:last-child { text-align: right; }
-.cost-table th:last-child { text-align: right; }
 .mj-link { display: inline-block; font-size: 0.82rem; font-weight: 600; color: var(--gold); text-decoration: none; margin-top: 1.5rem; transition: color 0.2s; }
 .mj-link:hover { color: var(--gold-light); }
 .mj-link::after { content: ' \2192'; }
 @media (max-width: 640px) {
-  /* .hero mobile override now in shared.css */
-  article { padding: 2rem 1.25rem 4rem; }
-  article h2 { margin-top: 2rem; }
   .phase-strip { padding-left: 1.25rem; padding-right: 1.25rem; }
   .phase-card { flex: 0 0 260px; }
   .phase-img { height: 300px; }
-  .cost-table td, .cost-table th { padding: 0.6rem 0.75rem; font-size: 0.85rem; }
 }
 </style>
 <script type="application/ld+json">
@@ -99,7 +82,7 @@ article strong { color: var(--text); }
 
 <div id="site-nav"></div>
 
-<main>
+<main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>Brand in a Session</h1>

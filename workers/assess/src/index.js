@@ -123,8 +123,8 @@ Cost curves falling — $300/day is the most you'll ever pay for this capability
 Competitive advantage compounds — businesses that start now build 3 compounding advantages.
 Framework is open source (OpenClaw). One developer built it using an AI coding agent.`,
 
-  charts: `Data Visualizations (22 interactive charts on the site):
-The site includes 22 animated data visualizations built from real podcast transcript data — All-In E259/E261, Lex Fridman #491, Elon Musk/Stripe, Diamandis #237, Karpathy #333.
+  charts: `Data Visualizations (64 interactive charts on the site):
+The site includes 64 animated data visualizations built from real podcast transcript data — All-In E259/E261, Lex Fridman #491, Elon Musk/Stripe, Diamandis #237, Karpathy #333.
 
 Key charts you can reference and explain:
 - Automation Bars: SDR 95% automated, Producer 80%, EA 30%, Investment team 20% (Calacanis E259/E261)

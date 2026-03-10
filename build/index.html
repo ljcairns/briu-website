@@ -10,6 +10,9 @@
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Briu | Build">
 <meta name="twitter:description" content="What it actually costs to build with agents. The operating log of a company built by agents from day one.">
@@ -286,7 +289,7 @@ section { padding-bottom: 2rem; }
 
 <div id="site-nav"></div>
 
-<main>
+<main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>Building a company with agents. Every workflow, every cost, live.</h1>
@@ -305,11 +308,11 @@ section { padding-bottom: 2rem; }
     <div class="hud-label">Days Running</div>
   </div>
   <div class="hud-stat" data-tooltip="Lines of code across website + agent repos" style="--pulse-delay: 0.5s;">
-    <div class="hud-value" data-dynamic="lines-of-code" id="hud-loc">38.6K</div>
+    <div class="hud-value" data-dynamic="lines-of-code" id="hud-loc">15.5K</div>
     <div class="hud-label">Lines of Code</div>
   </div>
   <div class="hud-stat" data-tooltip="Pulled from GitHub every 6 hours" style="--pulse-delay: 1s;">
-    <div class="hud-value" data-dynamic="commits" data-count="611" id="hud-commits">611</div>
+    <div class="hud-value" data-dynamic="commits" data-count="613" id="hud-commits">613</div>
     <div class="hud-label">Commits</div>
   </div>
   <div class="hud-stat" data-tooltip="Live articles documenting production capabilities" style="--pulse-delay: 1.5s;">
@@ -841,7 +844,7 @@ section { padding-bottom: 2rem; }
 Briu.charts.briuOrg('build-org-chart');
 Briu.charts.costPerHour('build-cost-per-hour');
 </script>
-<script src="/dynamic-stats.js"></script>
+<script src="/dynamic-stats.js?v=20260310b"></script>
 <script>
 /* HUD: Days Running counter */
 (function() {
