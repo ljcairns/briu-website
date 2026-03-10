@@ -117,6 +117,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .skill-status.status-live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: #4dbd74; animation: livePulse 2s ease-in-out infinite; }
 @keyframes livePulse { 0%,100% { opacity: 1; box-shadow: 0 0 8px rgba(77,189,116,0.4); } 50% { opacity: 0.5; box-shadow: 0 0 4px rgba(77,189,116,0.2); } }
 .skill-status.status-shipped { color: #4dbd74; border-color: rgba(77,189,116,0.25); }
+.skill-status.status-shipped::before { content: '\2713'; font-size: 0.55rem; }
 .skill-status.status-planned { color: var(--text-muted); border-color: rgba(255,255,255,0.06); }
 .skill-status.status-planned::before { content: '\1F512'; font-size: 0.55rem; }
 .skill-card h3 { font-family: var(--serif); font-size: 1.1rem; line-height: 1.25; margin-bottom: 0.35rem; color: var(--text); transition: color 0.2s; }
@@ -315,8 +316,8 @@ section { padding-bottom: 2rem; }
     <div class="hud-value" data-dynamic="commits" data-count="613" id="hud-commits">613</div>
     <div class="hud-label">Commits</div>
   </div>
-  <div class="hud-stat" data-tooltip="Live articles documenting production capabilities" style="--pulse-delay: 1.5s;">
-    <div class="hud-value" id="hud-skills">7</div>
+  <div class="hud-stat" data-tooltip="Live + shipped skills across the agent stack" style="--pulse-delay: 1.5s;">
+    <div class="hud-value" id="hud-skills">9</div>
     <div class="hud-label">Agent Skills</div>
   </div>
   <div class="hud-stat" data-tooltip="Security sanitizer v4: 30 adversarial payloads, 0 bypasses" style="--pulse-delay: 2s;">
@@ -470,9 +471,22 @@ section { padding-bottom: 2rem; }
           <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
           <div class="skill-status status-live">Live</div>
         </div>
-        <h3>Red Team &amp; Sanitizer</h3>
-        <div class="skill-desc">Adversarial testing + input sanitizer hardened against 28 attack vectors</div>
-        <div class="skill-metric">30/30 blocked, 90+ patterns</div>
+        <h3>Red Team Testing</h3>
+        <div class="skill-desc">Adversarial testing across 28 attack vectors</div>
+        <div class="skill-metric">30/30 attacks blocked</div>
+        <div class="skill-links">
+          <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
+          <div class="skill-status status-shipped">Shipped</div>
+        </div>
+        <h3>Sanitizer v4</h3>
+        <div class="skill-desc">Input sanitizer hardened against 28 novel attack vectors</div>
+        <div class="skill-metric">90+ detection patterns, 13 languages</div>
         <div class="skill-links">
           <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
@@ -521,6 +535,7 @@ section { padding-bottom: 2rem; }
         <div class="skill-metric">&mdash;</div>
         <div class="skill-links">
           <a href="#" class="skill-read">Coming soon</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
         </div>
       </div>
       <div class="skill-card planned">
@@ -533,6 +548,7 @@ section { padding-bottom: 2rem; }
         <div class="skill-metric">&mdash;</div>
         <div class="skill-links">
           <a href="#" class="skill-read">Coming soon</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
         </div>
       </div>
     </div>
@@ -861,7 +877,7 @@ Briu.charts.costPerHour('build-cost-per-hour');
 
 /* HUD: Skill count (count LIVE skill cards) */
 (function() {
-  var liveCards = document.querySelectorAll('.skill-status.status-live');
+  var liveCards = document.querySelectorAll('.skill-status.status-live, .skill-status.status-shipped');
   var el = document.getElementById('hud-skills');
   if (el && liveCards.length > 0) el.textContent = liveCards.length;
 })();
