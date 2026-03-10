@@ -1,0 +1,12 @@
+{
+  "defenseLayers": 6,
+  "defenseLayerLabels": "Network, permissions, approvals, sandbox, monitoring, per-turn context",
+  "knownSanitizerBypassesClosed": 26,
+  "knownSanitizerBypassesTotal": 26,
+  "openKnownSanitizerBypasses": 0,
+  "attackCategoriesTested": 15,
+  "attackCategoriesPassing": 15,
+  "lastRedTeamDate": "2026-03-09",
+  "sanitizerVersion": "v4",
+  "note": "Scoped to sanitizer red-team taxonomy only. Not a claim about total system security."
+}

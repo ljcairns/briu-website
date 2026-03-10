@@ -319,9 +319,13 @@ section { padding-bottom: 2rem; }
     <div class="hud-value" data-dynamic="agent-skills" id="hud-skills">9</div>
     <div class="hud-label">Agent Skills</div>
   </div>
-  <div class="hud-stat" data-tooltip="Security sanitizer v4: 30 adversarial payloads, 0 bypasses" style="--pulse-delay: 2s;">
-    <div class="hud-value">30/30</div>
-    <div class="hud-label">Attacks Blocked</div>
+  <div class="hud-stat" data-tooltip="Network, permissions, approvals, sandbox, monitoring, per-turn context — one layer of a broader zero-trust stack" style="--pulse-delay: 2s;">
+    <div class="hud-value" data-dynamic="sec-defense-layers">6</div>
+    <div class="hud-label">Defense Layers</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Known sanitizer bypasses within our current red-team taxonomy · 15 attack categories · Last tested 2026-03-09" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
+    <div class="hud-value" data-dynamic="sec-open-bypasses">0</div>
+    <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(sanitizer taxonomy)</span></div>
   </div>
   <div class="hud-stat" data-tooltip="Average daily baseline cost across all agents" style="--pulse-delay: 2.5s;">
     <div class="hud-value" data-dynamic="avg-daily-cost" id="hud-cost">$14.68</div>
@@ -472,8 +476,8 @@ section { padding-bottom: 2rem; }
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Red Team Testing</h3>
-        <div class="skill-desc">Adversarial testing across 28 attack vectors</div>
-        <div class="skill-metric">30/30 attacks blocked</div>
+        <div class="skill-desc"><span data-dynamic="sec-attack-categories">15</span> attack categories · 3 automated rounds · bypass rate to zero</div>
+        <div class="skill-metric"><span data-dynamic="sec-open-bypasses">0</span> open known bypasses</div>
         <div class="skill-links">
           <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
@@ -485,7 +489,7 @@ section { padding-bottom: 2rem; }
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Sanitizer v4</h3>
-        <div class="skill-desc">Input sanitizer hardened against 28 novel attack vectors</div>
+        <div class="skill-desc">Input sanitizer hardened via automated red-team · <span data-dynamic="sec-bypasses-closed">26</span>/<span data-dynamic="sec-bypasses-total">26</span> known payloads caught</div>
         <div class="skill-metric">90+ detection patterns, 13 languages</div>
         <div class="skill-links">
           <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>

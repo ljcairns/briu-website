@@ -22,7 +22,14 @@
     totalApiSpend:     '$411.16',
     agentSkills:       9,     // live skills in production
     chartCount:        64,
-    articleCount:      9
+    articleCount:      9,
+    // Security — scoped to sanitizer red-team taxonomy
+    secDefenseLayers:            6,
+    secOpenBypasses:             0,
+    secBypassesClosed:           26,
+    secBypassesTotal:            26,
+    secAttackCategories:         15,
+    secAttackCategoriesPassing:  15
   };
 
   function pacificNow() {
@@ -47,18 +54,23 @@
   }
 
   // Apply fallback values immediately so no element shows a stale hardcode
-  // while waiting for the stats.json fetch
+  // while waiting for the stats.json / security-metrics.json fetch
   function initFallbacks() {
-    updateEls('commits',         FALLBACKS.commits.toLocaleString());
-    updateEls('website-commits', FALLBACKS.websiteCommits.toLocaleString());
-    updateEls('agent-commits',   FALLBACKS.agentCommits.toLocaleString());
-    updateEls('lines-of-code',   FALLBACKS.linesOfCode);
-    updateEls('avg-daily-cost',  FALLBACKS.avgDailyCost);
-    updateEls('peak-daily-cost', FALLBACKS.peakDailyCost);
-    updateEls('total-api-spend', FALLBACKS.totalApiSpend);
-    updateEls('agent-skills',    FALLBACKS.agentSkills);
-    updateEls('chart-count',     FALLBACKS.chartCount);
-    updateEls('article-count',   FALLBACKS.articleCount);
+    updateEls('commits',              FALLBACKS.commits.toLocaleString());
+    updateEls('website-commits',      FALLBACKS.websiteCommits.toLocaleString());
+    updateEls('agent-commits',        FALLBACKS.agentCommits.toLocaleString());
+    updateEls('lines-of-code',        FALLBACKS.linesOfCode);
+    updateEls('avg-daily-cost',       FALLBACKS.avgDailyCost);
+    updateEls('peak-daily-cost',      FALLBACKS.peakDailyCost);
+    updateEls('total-api-spend',      FALLBACKS.totalApiSpend);
+    updateEls('agent-skills',         FALLBACKS.agentSkills);
+    updateEls('chart-count',          FALLBACKS.chartCount);
+    updateEls('article-count',        FALLBACKS.articleCount);
+    updateEls('sec-defense-layers',   FALLBACKS.secDefenseLayers);
+    updateEls('sec-open-bypasses',    FALLBACKS.secOpenBypasses);
+    updateEls('sec-bypasses-closed',  FALLBACKS.secBypassesClosed);
+    updateEls('sec-bypasses-total',   FALLBACKS.secBypassesTotal);
+    updateEls('sec-attack-categories',FALLBACKS.secAttackCategories);
   }
 
   function updateComputed() {
@@ -173,11 +185,35 @@
       .catch(function() { /* fail silently, keep hardcoded defaults */ });
   }
 
+  // ─── Security Metrics (manually maintained, separate from auto-updated stats) ───
+  function loadSecurityMetrics() {
+    fetch('/security-metrics.json?v=' + Date.now())
+      .then(function(r) { return r.json(); })
+      .then(function(sec) {
+        if (!sec) return;
+        if (sec.defenseLayers !== undefined)           updateEls('sec-defense-layers',   sec.defenseLayers);
+        if (sec.openKnownSanitizerBypasses !== undefined) updateEls('sec-open-bypasses', sec.openKnownSanitizerBypasses);
+        if (sec.knownSanitizerBypassesClosed !== undefined) updateEls('sec-bypasses-closed', sec.knownSanitizerBypassesClosed);
+        if (sec.knownSanitizerBypassesTotal !== undefined)  updateEls('sec-bypasses-total',  sec.knownSanitizerBypassesTotal);
+        if (sec.attackCategoriesTested !== undefined)  updateEls('sec-attack-categories', sec.attackCategoriesTested);
+        if (sec.attackCategoriesPassing !== undefined) updateEls('sec-attack-categories-passing', sec.attackCategoriesPassing);
+        // Update any tooltip data-attributes that reference security stats
+        var hudSec = document.getElementById('hud-open-bypasses');
+        if (hudSec && sec.lastRedTeamDate) {
+          var tip = hudSec.closest('[data-tooltip]');
+          if (tip) tip.setAttribute('data-tooltip',
+            'Known sanitizer bypasses within our current red-team taxonomy · Last tested ' + sec.lastRedTeamDate);
+        }
+      })
+      .catch(function() { /* fail silently, keep FALLBACKS */ });
+  }
+
   function init() {
     initFallbacks();   // immediate — no flicker, no stale hardcodes
     updateComputed();
     fetchStats();
     loadConfig();
+    loadSecurityMetrics();
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
