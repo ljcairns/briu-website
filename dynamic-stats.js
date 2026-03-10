@@ -13,16 +13,16 @@
   // These are used to initialize all data-dynamic elements on page load
   // before stats.json arrives. Update here when numbers change.
   var FALLBACKS = {
-    commits:           636,
-    linesOfCode:       '15.9K',
-    avgDailyCost:      '$14.68',
+    commits:           641,   // totalCommits (website + agent repos)
+    websiteCommits:    371,   // website repo only (ljcairns/briu-website)
+    agentCommits:      270,   // private agent config repo
+    linesOfCode:       '16.0K', // total (website + agent)
+    avgDailyCost:      '$14.68', // Briu internal baseline (full stack)
     peakDailyCost:     '$42.58',
     totalApiSpend:     '$411.16',
-    agentSkills:       9,
+    agentSkills:       9,     // live skills in production
     chartCount:        64,
-    articleCount:      9,
-    websiteCommits:    366,
-    agentCommits:      270
+    articleCount:      9
   };
 
   function pacificNow() {

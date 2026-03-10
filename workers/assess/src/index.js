@@ -90,7 +90,7 @@ Trust: You own everything. No margin on costs. Approval gates on every action. I
   economics: `Economics:
 Agent API costs: $2-5/day practical, $10-20/day moderate, $30-100/day frontier. Platform ~$200/mo (Claude Max) shared across all agents.
 Briu's own agent: $376 total API, 3 days to production. Month-one all-in ~$711, total with ongoing agents ~$1,391. Traditional equivalent $40-75K+. 30x less, 7x faster.
-Brand identity: one evening, 400+ Midjourney generations, ~$120 total. 12 agent skills, 8 tools integrated, nearly 500 commits.
+Brand identity: one evening, 400+ Midjourney generations, ~$120 total. 9 agent skills in production, 8 tools integrated, 641+ commits.
 "When do tokens outpace the salary of the employee? You're about to hit it." — Chamath Palihapitiya, All-In E261`,
 
   capabilities: `What Agents Do:

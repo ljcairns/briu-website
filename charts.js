@@ -824,7 +824,7 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="sb-col sb-col-interfaces">' +
     '<div class="sb-col-label">Interfaces</div>' +
     card({ name: 'Claw', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
-    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '<span data-dynamic="commits">636</span>+ commits', env: 'Local machine' }) +
+    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '<span data-dynamic="website-commits">371</span> website commits', env: 'Local machine' }) +
     card({ name: 'Claude Web', accent: 'teal', status: 'active', role: 'Strategy', tools: 'Planning &middot; research', metric: 'Long-context ops', env: 'Browser' }) +
     '</div>' +
 

@@ -23,7 +23,7 @@
     '$2-5/day. Not $200K/year.',
     'Your API keys. Your infrastructure.',
     'Knowledge compounds, salaries don\'t.',
-    'One developer. 354 commits. 12 agent skills.',
+    'One developer. 641 commits. 9 agent skills.',
     'No vendor lock-in. Everything you own.',
     '30x less cost. 7x faster delivery.',
     'Agents as capital, not expense.'

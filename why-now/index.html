@@ -221,8 +221,8 @@
   <div class="tl-counters" id="tlCounters">
     <div class="tl-counter reveal">
       <div class="tl-counter-num" id="counterCommits">--</div>
-      <div class="tl-counter-label">commits</div>
-      <div class="tl-counter-detail">Public + private repos</div>
+      <div class="tl-counter-label">project commits</div>
+      <div class="tl-counter-detail">Website + agent repos</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
       <div class="tl-counter-num" id="counterLOC">--</div>
@@ -606,7 +606,7 @@
       if (data.avgDailyCost && elAvgCost) elAvgCost.textContent = '$' + parseFloat(data.avgDailyCost).toFixed(2);
       if (data.peakDailyCost && elPeakCost) elPeakCost.textContent = '$' + parseFloat(data.peakDailyCost).toFixed(2);
     }).catch(function() {
-      if (elCommits) elCommits.textContent = '636';
+      if (elCommits) elCommits.textContent = '641';
       if (elLOC) elLOC.textContent = '15,811';
     });
   }

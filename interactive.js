@@ -764,7 +764,7 @@
     'Your API keys. Your infrastructure.',
     'Knowledge compounds, salaries don\'t.',
     'Agents work nights, weekends, holidays.',
-    'One developer. 354 commits. 12 agent skills.',
+    'One developer. 641 commits. 9 agent skills.',
     'The cheapest this capability will ever be.',
     'No vendor lock-in. Everything you own.',
     'Approval gates on every action.',
