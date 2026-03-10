@@ -823,8 +823,8 @@ Briu.charts.briuOrg = function(containerId) {
     /* Center: Interfaces */
     '<div class="sb-col sb-col-interfaces">' +
     '<div class="sb-col-label">Interfaces</div>' +
-    card({ name: 'Claw', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw', metric: '12 skills &middot; 24/7', env: 'Sandboxed VPS' }) +
-    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '480+ commits', env: 'Local machine' }) +
+    card({ name: 'Claw', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
+    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '<span data-dynamic="commits">636</span>+ commits', env: 'Local machine' }) +
     card({ name: 'Claude Web', accent: 'teal', status: 'active', role: 'Strategy', tools: 'Planning &middot; research', metric: 'Long-context ops', env: 'Browser' }) +
     '</div>' +
 
@@ -844,7 +844,7 @@ Briu.charts.briuOrg = function(containerId) {
       '<span>Audit layer: Gemini &amp; GPT independently verify every agent action</span>' +
     '</div>' +
 
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: $2&ndash;5/day.</div></div>';
+    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: <span data-dynamic="avg-daily-cost">$14.68</span>/day.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');

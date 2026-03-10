@@ -9,6 +9,22 @@
   var CACHE_TTL = 3600000; // 1 hour
   var FIRST_COMMIT = new Date('2026-02-10T00:00:00-08:00');
 
+  // ─── Single source of truth for all stat fallbacks ───
+  // These are used to initialize all data-dynamic elements on page load
+  // before stats.json arrives. Update here when numbers change.
+  var FALLBACKS = {
+    commits:           636,
+    linesOfCode:       '15.9K',
+    avgDailyCost:      '$14.68',
+    peakDailyCost:     '$42.58',
+    totalApiSpend:     '$411.16',
+    agentSkills:       9,
+    chartCount:        64,
+    articleCount:      9,
+    websiteCommits:    366,
+    agentCommits:      270
+  };
+
   function pacificNow() {
     return new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' }));
   }
@@ -28,6 +44,21 @@
       els[i].textContent = value;
       if (els[i].hasAttribute('data-count')) els[i].setAttribute('data-count', value);
     }
+  }
+
+  // Apply fallback values immediately so no element shows a stale hardcode
+  // while waiting for the stats.json fetch
+  function initFallbacks() {
+    updateEls('commits',         FALLBACKS.commits.toLocaleString());
+    updateEls('website-commits', FALLBACKS.websiteCommits.toLocaleString());
+    updateEls('agent-commits',   FALLBACKS.agentCommits.toLocaleString());
+    updateEls('lines-of-code',   FALLBACKS.linesOfCode);
+    updateEls('avg-daily-cost',  FALLBACKS.avgDailyCost);
+    updateEls('peak-daily-cost', FALLBACKS.peakDailyCost);
+    updateEls('total-api-spend', FALLBACKS.totalApiSpend);
+    updateEls('agent-skills',    FALLBACKS.agentSkills);
+    updateEls('chart-count',     FALLBACKS.chartCount);
+    updateEls('article-count',   FALLBACKS.articleCount);
   }
 
   function updateComputed() {
@@ -142,6 +173,7 @@
   }
 
   function init() {
+    initFallbacks();   // immediate — no flicker, no stale hardcodes
     updateComputed();
     fetchStats();
     loadConfig();
