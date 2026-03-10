@@ -59,6 +59,32 @@
 .source { display: flex; align-items: baseline; gap: 0.75rem; font-size: 0.88rem; color: var(--text-muted); padding: 0.6rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .source strong { color: var(--text); font-weight: 500; min-width: 100px; }
 
+/* Session data table */
+.session-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.session-table th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.session-table td { font-size: 0.88rem; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.session-table tr:last-child td { font-weight: 600; color: var(--text); border-bottom: none; }
+.session-table td:last-child { color: var(--gold); font-weight: 600; }
+
+/* Verbatim output */
+.briefing-example { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-family: 'DM Sans', monospace; font-size: 0.82rem; line-height: 1.7; color: var(--text-muted); white-space: pre-wrap; overflow-x: auto; }
+.briefing-example .ex-label { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; display: block; font-family: var(--sans); }
+
+/* Notable catches */
+.catches { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin: 1.75rem 0 2rem; }
+.catch-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; transition: border-color 0.3s; }
+.catch-card:hover { border-color: rgba(212,160,90,0.15); }
+.catch-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--gold); margin-bottom: 0.5rem; }
+.catch-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
+
+/* Before/after table */
+.ba-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.ba-table th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); text-align: left; }
+.ba-table th:first-child { color: var(--text-muted); }
+.ba-table th:last-child { color: var(--gold); }
+.ba-table td { font-size: 0.85rem; color: var(--text-muted); padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.ba-table td:last-child { color: var(--text); }
+
 /* Build stats */
 .build-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.75rem 0 2rem; }
 .build-stat { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.3s; }
@@ -136,7 +162,7 @@
 
   <p class="section-label reveal">What It Does</p>
   <p>Every weekday at 6:54 AM, a shell script fires. It queries 10 separate database tables, checks 3 email accounts (9 queries total), pulls CRM pipeline data from HubSpot, fetches 2 calendars, gets cost data from the gateway API, and pulls a daily report from Subsights. All of it gets assembled into a single JSON snapshot file.</p>
-  <p>At 7:04 AM, the agent reads that snapshot and composes a structured briefing. Before writing a single line, it runs a reconciliation pass: cross-checking email subjects against state-db action records, flagging anything that doesn't match. Then it writes 10 sections and posts to Discord.</p>
+  <p>At 7:04 AM, the agent reads that snapshot and composes a structured briefing. Before writing a single line, it runs a reconciliation pass: cross-checking email subjects against state-db action records, flagging anything that doesn't match. Then it writes 9&ndash;11 sections and posts to Discord, split across 3&ndash;4 messages due to Discord's 2K character limit.</p>
   <p><strong>Total time from trigger to delivery: about 2 minutes.</strong> A human doing this same work across the same sources would need 30&ndash;45 minutes. Every morning.</p>
 
   <h2 class="reveal">The Three-Stage Pipeline</h2>
@@ -161,58 +187,53 @@
   </div>
 
   <h2 class="reveal">What's In the Briefing</h2>
-  <p>10 sections. Each serves a specific decision or action. Related items are chain-grouped, not listed separately.</p>
+  <p>9 core sections per run. Drift Detection appears only when something is wrong &mdash; omitted when clean. Items are grouped by <strong>person or company</strong>, not by source. Mark Cairns's email, HubSpot record, state-db thread status, and calendar events all appear in one block &mdash; not scattered across four tools.</p>
 
   <div class="sections-grid reveal">
     <div class="section-card">
       <div class="section-num">01</div>
       <h4>Needs Your Input</h4>
-      <p>Decisions only a human can make. Approvals, judgment calls, blocked items.</p>
+      <p>Binary decisions, blockers, things only a human can resolve.</p>
     </div>
     <div class="section-card">
       <div class="section-num">02</div>
       <h4>Follow-ups Today</h4>
-      <p>Threads that need a response today. Cross-referenced against calendar and CRM.</p>
+      <p>Threads requiring action. Cross-referenced against calendar and CRM.</p>
     </div>
     <div class="section-card">
       <div class="section-num">03</div>
       <h4>Pipeline</h4>
-      <p>HubSpot deals with stage, value, and next action. Pinned contacts filtered via jq.</p>
+      <p>HubSpot deals cross-referenced with state-db. Pinned contacts filtered via jq.</p>
     </div>
     <div class="section-card">
       <div class="section-num">04</div>
       <h4>Calendar</h4>
-      <p>Today and tomorrow across 2 accounts. Conflicts flagged.</p>
+      <p>Today + tomorrow from 2 accounts. Conflicts flagged.</p>
     </div>
     <div class="section-card">
       <div class="section-num">05</div>
       <h4>Backlog</h4>
-      <p>Tasks that have been sitting. Sorted by age, not priority theater.</p>
+      <p>Stale tasks with age flags. &ldquo;&gt;14d&rdquo; means it's been sitting.</p>
     </div>
     <div class="section-card">
       <div class="section-num">06</div>
       <h4>Cost Report</h4>
-      <p>Yesterday's API spend, running total, per-model breakdown. The briefing reports its own system's costs.</p>
+      <p>Daily API spend, per-model breakdown. The briefing reports its own system's costs.</p>
     </div>
     <div class="section-card">
       <div class="section-num">07</div>
       <h4>Subsights Comments</h4>
-      <p>New customer feedback across all workspaces. Linked to the feedback loop automation.</p>
+      <p>Customer feedback across all workspaces. Linked to the feedback loop automation.</p>
     </div>
     <div class="section-card">
       <div class="section-num">08</div>
       <h4>Security Status</h4>
-      <p>Last audit timestamp, any flagged events, sanitizer health.</p>
+      <p>Patch status, vulnerability check, sanitizer health.</p>
     </div>
     <div class="section-card">
       <div class="section-num">09</div>
       <h4>Drift Detection</h4>
-      <p>Flags when email threads don't match state-db records. Catches when reality diverges from what the system thinks is true.</p>
-    </div>
-    <div class="section-card">
-      <div class="section-num">10</div>
-      <h4>Reconciliation</h4>
-      <p>Orphaned actions, unmatched email subjects, state inconsistencies found during pre-composition checks.</p>
+      <p>Only appears when sources disagree. Catches when reality diverges from system state.</p>
     </div>
   </div>
 
@@ -232,6 +253,108 @@
   <p>Without pre-fetch, the agent would need to make 20+ API calls during composition. Each call burns tokens on the request, the response, and the agent reasoning about what to do with it. A 750K-token briefing becomes a 2M-token briefing. Cost triples. Latency goes from 90 seconds to 8 minutes.</p>
   <p>The pre-fetch pipeline also acts as a circuit breaker. If an email API is down, the snapshot still has partial data and the preflight script flags what's missing. The agent doesn't hallucinate data it couldn't fetch &mdash; it sees explicit gaps in the snapshot and reports them.</p>
   <p><strong>The snapshot is an atomic boundary.</strong> Everything the agent needs to compose the briefing is in one file. If the file is fresh and complete, composition succeeds. If it's stale or partial, preflight blocks it. No hidden dependencies.</p>
+
+  <h2 class="reveal">Real Session Data</h2>
+  <p>Every briefing run is logged. Here are three consecutive sessions from March 2026:</p>
+
+  <table class="session-table reveal">
+    <thead>
+      <tr><th>Date</th><th>Turns</th><th>Tokens</th><th>Cost</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Mar 9</td><td>7</td><td>166K</td><td>$0.36</td></tr>
+      <tr><td>Mar 7</td><td>21</td><td>750K</td><td>$0.50</td></tr>
+      <tr><td>Mar 6</td><td>15</td><td>466K</td><td>$0.45</td></tr>
+      <tr><td><strong>Average</strong></td><td><strong>14</strong></td><td><strong>460K</strong></td><td>$0.44</td></tr>
+    </tbody>
+  </table>
+
+  <p>Token split: 51% cache write, 26% cache read, 23% output. Model split: Sonnet 91%, Haiku 9%. The pre-fetch pipeline means the agent reads a snapshot instead of making API calls, keeping the token budget predictable run to run.</p>
+
+  <h2 class="reveal">What the Output Looks Like</h2>
+  <p>Verbatim from the Feb 27 briefing. This is what arrives in Discord at 7:04 AM:</p>
+
+  <div class="briefing-example reveal">
+    <span class="ex-label">Priority Actions &mdash; Feb 27</span>Log Mark M (Sales Pipeline Gurus) in HubSpot as inbound-sales + reply
+  with referral ask. He emailed 2/26 with Apollo Summit replay link.
+  5-msg thread since 2/4, still not logged. [overdue]
+
+Log WatchTower IT Solutions (Tony + Rebekka) in HubSpot as inbound-sales
+  + reply with referral ask. [overdue]
+
+Google AI Studio: Migrate to Gemini 3.1 Pro Preview before March 9.
+  Email in work inbox from 2/26. Decide: migrate or drop the API.
+
+Tax prep: calendar event Tue 3/3 8am. Anthropic monthly invoice arrived
+  2/26, pull for records.</div>
+
+  <div class="briefing-example reveal">
+    <span class="ex-label">Home Dashboard &mdash; Feb 28</span> SUBSIGHTS x OPENCLAW
+ Status: OPERATIONAL
+ Version: 2026.2.21 | Model: Sonnet 4.6
+-------------------------------------
+ THREADS
+ -> Mark Cairns -- OpenClaw Setup [blocked-on-us, stale]
+ -> Emily Burke -- Gartner Vendor Directory [waiting-on-them]
+-------------------------------------
+ TASKS             3 open actions | 2 open tasks
+ CLIENTS           3 active | 0 alerts
+ PIPELINE          Empty | 1 orphaned HubSpot deal (Visit Sun Valley)
+-------------------------------------
+ TODAY
+ -> Clear calendar (Saturday)
+ -> Tax docs download stale 16d (action needed)</div>
+
+  <p>Every item is actionable. No summaries of things you already know. The overdue tags, stale flags, and cross-references are the parts a human would miss or forget.</p>
+
+  <h2 class="reveal">What It Catches</h2>
+  <p>The briefing's value isn't the summary &mdash; it's the things it surfaces that you wouldn't have noticed.</p>
+
+  <div class="catches reveal">
+    <div class="catch-card">
+      <h4>Vanishing Records</h4>
+      <p>Between 6:08 AM and 7:04 AM on Feb 28, actions #9 and #10 disappeared from state-db. Briefing caught the delta: &ldquo;Verify both HubSpot entries were actually created &mdash; or confirm actions were intentionally closed.&rdquo; They hadn't been created.</p>
+    </div>
+    <div class="catch-card">
+      <h4>18-Month Stale Deal</h4>
+      <p>Visit Sun Valley HubSpot deal (stage: presentationscheduled, last touched Aug 2024) appeared under DRIFT in every briefing. Cross-referenced against state-db pipeline, found no matching entry. Flagged daily until resolved.</p>
+    </div>
+    <div class="catch-card">
+      <h4>12-Hour Deadline Surface</h4>
+      <p>Google AI Studio deprecation email (March 9 deadline) arrived Feb 26. Surfaced as Priority #3 by 7:04 AM Feb 27: &ldquo;decide: migrate or drop the API.&rdquo; Turned a buried email into a binary decision.</p>
+    </div>
+    <div class="catch-card">
+      <h4>Cross-Source Linking</h4>
+      <p>Anthropic invoice in personal Gmail (Feb 26, 9:29 AM) cross-referenced with pre-scheduled &ldquo;Do all taxes&rdquo; calendar event (Mar 3, 8 AM). Surfaced as single linked item. Neither obvious alone.</p>
+    </div>
+    <div class="catch-card">
+      <h4>Self-Recovery</h4>
+      <p>Feb 28, 6:08 AM cron session timed out. Briefing re-ran at 7:04 AM with warning header, reported snapshot failure, still delivered complete briefing. Zero manual intervention.</p>
+    </div>
+    <div class="catch-card">
+      <h4>Client State Mismatch</h4>
+      <p>Dylan's Tours showed &ldquo;active&rdquo; in state-db but &ldquo;churned Feb 2026&rdquo; in MEMORY.md. Briefing flagged under DRIFT: &ldquo;Update state-db to churned.&rdquo;</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Before and After</h2>
+
+  <table class="ba-table reveal">
+    <thead>
+      <tr><th>Before (Manual)</th><th>After (Morning Briefing)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Open Gmail (2 accounts) separately</td><td>3 email accounts scanned automatically</td></tr>
+      <tr><td>Open HubSpot separately</td><td>Deals cross-referenced against state-db</td></tr>
+      <tr><td>Open Google Calendar separately</td><td>2 calendars merged with thread context</td></tr>
+      <tr><td>No cross-referencing between sources</td><td>Items grouped by person/company</td></tr>
+      <tr><td>HubSpot deal stale 18 months unnoticed</td><td>Stale items flagged with age (&gt;14d)</td></tr>
+      <tr><td>Overdue threads in mental state only</td><td>Threads tracked with status tags</td></tr>
+      <tr><td>No cost visibility</td><td>Daily API cost reported</td></tr>
+      <tr><td>No security awareness</td><td>Patch status checked each morning</td></tr>
+      <tr><td>30&ndash;45 min of morning recon</td><td>Single Discord post, 2 min to read</td></tr>
+    </tbody>
+  </table>
 
   <h2 class="reveal">What It Cost to Build</h2>
 
