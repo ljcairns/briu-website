@@ -23,7 +23,7 @@
     totalApiSpend:     '$411.16',
     agentSkills:       9,     // live skills in production
     chartCount:        64,
-    articleCount:      9,
+    articleCount:      10,
     // Security — scoped to sanitizer red-team taxonomy
     secDefenseLayers:            6,
     secOpenBypasses:             0,
