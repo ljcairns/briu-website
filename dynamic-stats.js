@@ -17,8 +17,9 @@
     websiteCommits:    371,   // website repo only (ljcairns/briu-website)
     agentCommits:      270,   // private agent config repo
     linesOfCode:       '16.0K', // total (website + agent)
-    avgDailyCost:      '$14.68', // Briu internal baseline (full stack)
+    avgDailyCost:      '$14.68', // Briu internal baseline (full stack, active ops)
     peakDailyCost:     '$42.58',
+    lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
     totalApiSpend:     '$411.16',
     agentSkills:       9,     // live skills in production
     chartCount:        64,

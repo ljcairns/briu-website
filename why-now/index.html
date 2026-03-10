@@ -220,24 +220,19 @@
 <div class="timeline-wrapper" style="padding-bottom:0;">
   <div class="tl-counters" id="tlCounters">
     <div class="tl-counter reveal">
-      <div class="tl-counter-num" id="counterCommits">--</div>
-      <div class="tl-counter-label">project commits</div>
-      <div class="tl-counter-detail">Website + agent repos</div>
+      <div class="tl-counter-num">3 days</div>
+      <div class="tl-counter-label">to production agent</div>
+      <div class="tl-counter-detail">From zero to live</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1">
-      <div class="tl-counter-num" id="counterLOC">--</div>
-      <div class="tl-counter-label">lines of code</div>
-      <div class="tl-counter-detail" id="counterLOCDetail">Website + agent stack</div>
+      <div class="tl-counter-num">$376</div>
+      <div class="tl-counter-label">API cost to build</div>
+      <div class="tl-counter-detail">First production agent</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num" id="counterAvgCost">$14.68</div>
-      <div class="tl-counter-label">avg daily API cost</div>
-      <div class="tl-counter-detail">On top of $200/mo Claude Max</div>
-    </div>
-    <div class="tl-counter reveal reveal-delay-3">
-      <div class="tl-counter-num" id="counterPeakCost">$42.58</div>
-      <div class="tl-counter-label">peak daily cost</div>
-      <div class="tl-counter-detail">Heavy research + prospecting day</div>
+      <div class="tl-counter-num">$2&ndash;5/day</div>
+      <div class="tl-counter-label">light-use baseline</div>
+      <div class="tl-counter-detail">Personal-assistant style</div>
     </div>
     <div class="tl-counter reveal reveal-delay-3">
       <div class="tl-counter-num">1</div>
@@ -430,7 +425,7 @@
       after: '2026-03-09',
       id: 'no-300',
       html: '<h2>You Don\u2019t Need $300 a Day</h2>' +
-        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day on top of a $200/mo subscription shared across the agent, coding, and strategy work.</p>' +
+        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day for personal-assistant style usage, on top of a $200/mo platform subscription. Running the full Briu internal stack, which includes active prospecting, reporting, and multi-session ops, averages $14.68/day. The architecture keeps costs proportional to the work being done.</p>' +
         '<p>Not because we cut corners. Because we built the architecture to be efficient. A personal agent coordinates task-specific agents. Each one has a defined job, budget, and scope. They run when there\u2019s work to do and stop when it\u2019s done.</p>'
     },
     {
@@ -589,26 +584,7 @@
 
   // ===== Live counters =====
   function updateCounters() {
-    var elCommits = document.getElementById('counterCommits');
-    var elLOC = document.getElementById('counterLOC');
-    var elLOCDetail = document.getElementById('counterLOCDetail');
-
-    var elAvgCost = document.getElementById('counterAvgCost');
-    var elPeakCost = document.getElementById('counterPeakCost');
-
-    // Pull stats from stats.json
-    fetch('/stats.json').then(function(r) { return r.json(); }).then(function(data) {
-      if (data.totalCommits && elCommits) elCommits.textContent = data.totalCommits.toLocaleString();
-      if (data.linesOfCode && elLOC) elLOC.textContent = data.linesOfCode.toLocaleString();
-      if (elLOCDetail && data.websiteLinesOfCode && data.agentLinesOfCode) {
-        elLOCDetail.textContent = data.websiteLinesOfCode.toLocaleString() + ' website + ' + data.agentLinesOfCode.toLocaleString() + ' agent';
-      }
-      if (data.avgDailyCost && elAvgCost) elAvgCost.textContent = '$' + parseFloat(data.avgDailyCost).toFixed(2);
-      if (data.peakDailyCost && elPeakCost) elPeakCost.textContent = '$' + parseFloat(data.peakDailyCost).toFixed(2);
-    }).catch(function() {
-      if (elCommits) elCommits.textContent = '641';
-      if (elLOC) elLOC.textContent = '15,811';
-    });
+    // Counters on this page are now static. No dynamic updates needed.
   }
   updateCounters();
 

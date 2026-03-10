@@ -161,7 +161,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .skill-card.planned .skill-links a { color: var(--text-muted); opacity: 0.5; pointer-events: none; }
 
 /* Cost spectrum */
-.cost-spectrum { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.cost-spectrum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
 .spectrum-tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.35s ease; position: relative; }
 .spectrum-tier:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
 .spectrum-baseline { border-color: rgba(77,128,112,0.25); }
@@ -366,26 +366,40 @@ section { padding-bottom: 2rem; }
 
 <!-- 2. Project Vitals -->
 <div class="stats-group" style="margin-top: 2.5rem;">
-  <div class="stats-group-label">What It Cost to Build</div>
-  <div class="stats stats-4">
+  <div class="stats-group-label">Direct Build Cost</div>
+  <div class="stats">
     <a href="/build/the-real-numbers/" class="stat-box reveal-scale">
       <div class="stat-value">$376</div>
-      <div class="stat-label">Agent Stack</div>
+      <div class="stat-label">First Production Agent</div>
     </a>
     <a href="/build/brand-in-a-session/" class="stat-box reveal-scale reveal-delay-1">
-      <div class="stat-value">~$105</div>
-      <div class="stat-label">Brand &amp; Domain</div>
+      <div class="stat-value">~$30</div>
+      <div class="stat-label">Brand Identity</div>
     </a>
     <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value">$710</div>
-      <div class="stat-label">Legal (Trademark)</div>
+      <div class="stat-value">$0</div>
+      <div class="stat-label">Website API Cost</div>
     </div>
-    <div class="stat-box reveal-scale reveal-delay-3">
+  </div>
+</div>
+
+<div class="stats-group">
+  <div class="stats-group-label">Launch Costs</div>
+  <div class="stats">
+    <div class="stat-box reveal-scale">
+      <div class="stat-value">$710</div>
+      <div class="stat-label">Trademark (2 Classes)</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-1">
+      <div class="stat-value">~$75</div>
+      <div class="stat-label">Domain &amp; Misc</div>
+    </div>
+    <div class="stat-box reveal-scale reveal-delay-2">
       <div class="stat-value">$200<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
       <div class="stat-label">Platform (Claude Max)</div>
     </div>
   </div>
-  <p class="vitals-summary">Total project cost: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
+  <p class="vitals-summary">Build cost: <strong>~$406</strong>. Total to launch: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
 </div>
 
 <!-- Security Architecture Section -->
@@ -487,7 +501,7 @@ section { padding-bottom: 2rem; }
         </div>
         <h3>The Real Numbers</h3>
         <div class="skill-desc">Every API call, every cost decision, live</div>
-        <div class="skill-metric">$2&ndash;5/day operating cost</div>
+        <div class="skill-metric">$2&ndash;5/day light &middot; $14.68/day avg</div>
         <div class="skill-links">
           <a href="/build/the-real-numbers/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
@@ -913,23 +927,29 @@ section { padding-bottom: 2rem; }
 
 <!-- 6. Cost to Run -->
 <div class="stats-group">
-  <div class="stats-group-label">What It Costs to Run</div>
+  <div class="stats-group-label">Operating Cost Ranges</div>
   <div class="cost-spectrum">
-    <div class="spectrum-tier spectrum-baseline reveal-scale">
-      <span class="spectrum-you-badge">You are here</span>
-      <div class="spectrum-marker" style="color: var(--forest);">Baseline</div>
-      <div class="spectrum-value">~$310<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + $2-5/day API</div>
-      <div class="spectrum-desc">Daily reports, security checks, email triage, CRM updates, scheduled tasks. Agents run when there's work and stop when it's done.</div>
+    <div class="spectrum-tier reveal-scale">
+      <div class="spectrum-marker" style="color: var(--forest);">Light Usage</div>
+      <div class="spectrum-value">~$260&ndash;350<span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo platform + $2&ndash;5/day API</div>
+      <div class="spectrum-desc">Personal-assistant style. Daily briefings, email triage, CRM updates, scheduled tasks. Agents run when there&rsquo;s work and stop when it&rsquo;s done.</div>
     </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-1">
+    <div class="spectrum-tier spectrum-baseline reveal-scale reveal-delay-1">
+      <span class="spectrum-you-badge">Briu internal</span>
+      <div class="spectrum-marker" style="color: var(--forest);">Briu Average</div>
+      <div class="spectrum-value">~$640<span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo platform + $14.68/day avg API</div>
+      <div class="spectrum-desc">Active ops, prospecting, multi-session work, and ongoing build overhead. What it costs to run the system and keep building it at the same time.</div>
+    </div>
+    <div class="spectrum-tier reveal-scale reveal-delay-2">
       <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
       <div class="spectrum-value">$1-3K<span>/mo</span></div>
       <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
       <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
       <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
     </div>
-    <div class="spectrum-tier reveal-scale reveal-delay-2">
+    <div class="spectrum-tier reveal-scale reveal-delay-3">
       <div class="spectrum-marker" style="color: var(--coral);">Full Agent Team</div>
       <div class="spectrum-value">$5-10K<span>/mo</span></div>
       <div class="spectrum-breakdown">Multiple seats + Opus-class agents running 24/7</div>
