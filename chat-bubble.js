@@ -6,10 +6,10 @@
   'use strict';
 
   var API_BASE = 'https://briu-assess.briu.workers.dev';
-  var CONV_KEY = 'briu_conv';
-  var CONV_VERSION = 8;
+  var SESSION_KEY = 'briu_sid';
   var conversation = [];
   var sessionId = null;
+  var conversationLoaded = false;
   var isWaiting = false;
   var userEmail = '';
   var companyData = null;
@@ -37,10 +37,17 @@
     if (savedCompany) companyData = JSON.parse(savedCompany);
     var savedAnswers = localStorage.getItem('briu_assess');
     if (savedAnswers) answers = JSON.parse(savedAnswers);
-    var savedConv = localStorage.getItem(CONV_KEY);
-    if (savedConv) {
-      var parsed = JSON.parse(savedConv);
-      if (parsed._v === CONV_VERSION) conversation = parsed.msgs || [];
+    var savedSid = localStorage.getItem(SESSION_KEY);
+    if (savedSid) sessionId = savedSid;
+    // Migrate legacy conversation format
+    var legacyConv = localStorage.getItem('briu_conv');
+    if (legacyConv) {
+      try {
+        var parsed = JSON.parse(legacyConv);
+        if (parsed.msgs && parsed.msgs.length > 0) conversation = parsed.msgs;
+        conversationLoaded = true;
+      } catch(e2) {}
+      localStorage.removeItem('briu_conv');
     }
   } catch(e) {}
 
@@ -244,6 +251,21 @@
     });
   }
 
+  // Load conversation history from D1 via API
+  function loadConversationFromAPI(callback) {
+    if (!sessionId || conversationLoaded) { callback(); return; }
+    fetch(API_BASE + '/api/conversation?sessionId=' + encodeURIComponent(sessionId))
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (data.messages && data.messages.length > 0) {
+          conversation = data.messages;
+        }
+        conversationLoaded = true;
+        callback();
+      })
+      .catch(function() { conversationLoaded = true; callback(); });
+  }
+
   window.briuToggleChatPanel = function(opts) {
     var panel = document.getElementById('briuChatPanel');
     if (!panel) return;
@@ -261,10 +283,12 @@
         renderEmailGate(opts && opts.prefill ? opts.prefill : '');
         return;
       }
-      // Refresh thread from conversation array on open
-      refreshThread();
-      var input = document.getElementById('bcInput');
-      if (input) setTimeout(function() { input.focus(); }, 100);
+      // Load conversation from API if needed, then render
+      loadConversationFromAPI(function() {
+        refreshThread();
+        var input = document.getElementById('bcInput');
+        if (input) setTimeout(function() { input.focus(); }, 100);
+      });
     }
   };
 
@@ -918,7 +942,10 @@
   }
 
   function saveConversation() {
-    try { localStorage.setItem(CONV_KEY, JSON.stringify({ _v: CONV_VERSION, msgs: conversation })); } catch(e) {}
+    // Only persist sessionId — conversation history loaded from D1 on open
+    if (sessionId) {
+      try { localStorage.setItem(SESSION_KEY, sessionId); } catch(e) {}
+    }
   }
 
   function escapeHtml(t) {

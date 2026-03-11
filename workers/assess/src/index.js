@@ -252,7 +252,48 @@ const TEAM_MAP = { solo: 'Solo operator', small: '2-10 person team', medium: '11
 const AI_MAP = { none: 'No AI usage yet', free: 'Using free tools like ChatGPT', paid: 'Paid AI accounts', building: 'Already building agents' };
 const FOCUS_MAP = { email: 'Email & communication', sales: 'Sales & prospecting', reporting: 'Reporting & data', ops: 'Operations & admin', support: 'Customer support' };
 
-// ─── Content retrieval ───
+// ─── Content retrieval (Vectorize RAG with keyword fallback) ───
+
+// Vectorize-based semantic search
+async function retrieveContext(query, env, topK = 4) {
+  if (!env.AI || !env.VECTORIZE) return null;
+  try {
+    const embResult = await env.AI.run('@cf/baai/bge-base-en-v1.5', { text: [query] });
+    if (!embResult?.data?.[0]) return null;
+
+    const results = await env.VECTORIZE.query(embResult.data[0], {
+      topK,
+      returnMetadata: 'all',
+    });
+
+    if (!results?.matches?.length) return null;
+
+    // Deduplicate by path (keep highest score per page)
+    const seen = new Set();
+    const chunks = [];
+    for (const match of results.matches) {
+      const key = match.metadata?.path || match.id;
+      if (seen.has(key) && match.metadata?.source === 'page') continue;
+      seen.add(key);
+      chunks.push({
+        text: match.metadata?.text || '',
+        score: match.score,
+        source: match.metadata?.source || 'unknown',
+        path: match.metadata?.path || '',
+      });
+    }
+
+    return {
+      text: chunks.map(c => c.text).join('\n\n'),
+      sources: chunks.map(c => c.path),
+    };
+  } catch (e) {
+    console.error('Vectorize query error:', e);
+    return null;
+  }
+}
+
+// Legacy keyword-based fallback
 function selectChunks(userMessage, maxChunks) {
   if (!userMessage) return DEFAULT_CHUNKS;
 
@@ -266,14 +307,12 @@ function selectChunks(userMessage, maxChunks) {
     }
   }
 
-  // Sort by score, take top N
   const ranked = Object.entries(scores)
     .filter(([, s]) => s > 0)
     .sort((a, b) => b[1] - a[1])
     .slice(0, maxChunks || 2)
     .map(([topic]) => topic);
 
-  // Always include pages for navigation context if we have room
   if (ranked.length < (maxChunks || 2) && !ranked.includes('pages')) {
     ranked.push('pages');
   }
@@ -281,17 +320,29 @@ function selectChunks(userMessage, maxChunks) {
   return ranked.length > 0 ? ranked : DEFAULT_CHUNKS;
 }
 
-function buildSystemPrompt(userMessage, isFirstTurn) {
-  const chunkKeys = isFirstTurn
-    ? DEFAULT_CHUNKS
-    : selectChunks(userMessage, 2);
+// Build dynamic content — tries Vectorize first, falls back to keywords
+async function buildDynamicContent(userMessage, isFirstTurn, env) {
+  // For first turn, always include pricing + capabilities
+  if (isFirstTurn) {
+    return {
+      content: [CHUNKS.pricing, CHUNKS.capabilities].filter(Boolean).join('\n\n'),
+      chunkKeys: DEFAULT_CHUNKS,
+    };
+  }
 
-  const selectedContent = chunkKeys
-    .map(key => CHUNKS[key])
-    .filter(Boolean)
-    .join('\n\n');
+  // Try Vectorize RAG
+  const ragResult = await retrieveContext(userMessage, env, 4);
+  if (ragResult && ragResult.text) {
+    return {
+      content: ragResult.text,
+      chunkKeys: ragResult.sources,
+    };
+  }
 
-  return CORE_PROMPT + '\n\n' + selectedContent;
+  // Fallback to keyword matching
+  const chunkKeys = selectChunks(userMessage, 2);
+  const content = chunkKeys.map(key => CHUNKS[key]).filter(Boolean).join('\n\n');
+  return { content, chunkKeys };
 }
 
 // ─── Conversation management ───
@@ -793,6 +844,42 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
+    // Public: load conversation history from D1 (used by chat-bubble.js)
+    if (path === '/api/conversation' && request.method === 'GET') {
+      const sessionId = url.searchParams.get('sessionId');
+      if (!sessionId || !env.DB) {
+        return new Response(JSON.stringify({ messages: [] }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+      try {
+        const conv = await env.DB.prepare(
+          'SELECT id FROM conversations WHERE session_id = ? ORDER BY id DESC LIMIT 1'
+        ).bind(sessionId).first();
+        if (!conv) {
+          return new Response(JSON.stringify({ messages: [] }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+        const msgs = await env.DB.prepare(
+          'SELECT role, content, actions FROM messages WHERE conversation_id = ? ORDER BY id ASC'
+        ).bind(conv.id).all();
+        const messages = (msgs.results || []).map(m => ({
+          role: m.role,
+          content: m.content,
+          actions: m.actions ? JSON.parse(m.actions) : undefined,
+        }));
+        return new Response(JSON.stringify({ messages }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      } catch (e) {
+        console.error('Conversation load error:', e);
+        return new Response(JSON.stringify({ messages: [] }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+    }
+
     // Public: published FAQs (no auth, for site to fetch)
     if (path === '/api/faq' && request.method === 'GET') {
       if (!env.DB) return new Response('[]', { headers: { ...corsHeaders, 'Content-Type': 'application/json' } });
@@ -1001,10 +1088,9 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
     }
   }
 
-  // Build system prompt with relevant chunks only
-  const chunkKeys = isFirstTurn ? DEFAULT_CHUNKS : selectChunks(lastText, 2);
-  const dynamicContent = buildSystemPrompt(lastText, isFirstTurn)
-    .replace(CORE_PROMPT + '\n\n', '') + companyContext;
+  // Build system prompt with RAG-retrieved or keyword-selected content
+  const { content: ragContent, chunkKeys } = await buildDynamicContent(lastText, isFirstTurn, env);
+  const dynamicContent = ragContent + companyContext;
 
   // Use prompt caching + streaming for the stable core prompt
   const response = await fetch('https://api.anthropic.com/v1/messages', {
@@ -1116,19 +1202,7 @@ Primary interest: ${FOCUS_MAP[quiz.q4] || quiz.q4}`;
       };
       await sse(result);
 
-      // Store conversation in KV (legacy, still used by frontend)
-      if (env.CONVERSATIONS) {
-        env.CONVERSATIONS.put('conv:' + sid, JSON.stringify({
-          sessionId: sid,
-          email: email || null,
-          company: company ? { name: company.name, domain: company.domain, industries: company.industries } : null,
-          quiz, page,
-          messages: (messages || []).concat([{ role: 'assistant', content: result.text }]),
-          updatedAt: new Date().toISOString(),
-        }), { expirationTtl: 2592000 }).catch(e => console.error('KV write error:', e));
-      }
-
-      // Store in D1 analytics
+      // Store in D1 (single source of truth)
       if (env.DB) {
         (async () => {
           try {

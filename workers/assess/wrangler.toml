@@ -31,3 +31,12 @@ crons = ["0 6 * * *"]
 binding = "DB"
 database_name = "briu-analytics"
 database_id = "8f125fff-d3d5-404b-a9cc-a8a6c0a131d5"
+
+# Vectorize index for RAG content retrieval
+[[vectorize]]
+binding = "VECTORIZE"
+index_name = "briu-content"
+
+# Cloudflare AI for generating query embeddings at runtime
+[ai]
+binding = "AI"

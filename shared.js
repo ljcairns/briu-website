@@ -89,151 +89,21 @@
   else personalize();
 })();
 
-/* Contact Form Modal (branching quiz) */
-var qData = {};
+/* Contact — all contact flows through the chatbot now */
 
-// Focus picks: branched by AI level
-var focusPicks = {
-  starter: [
-    { val: 'email', label: 'Email & inbox management', desc: 'Triage, drafts, follow-ups' },
-    { val: 'reporting', label: 'Reports & dashboards', desc: 'Weekly summaries, data pulls' },
-    { val: 'admin', label: 'Admin & scheduling', desc: 'Calendar, tasks, reminders' },
-  ],
-  paid: [
-    { val: 'email', label: 'Email & communications', desc: 'Triage, drafts, routing' },
-    { val: 'sales', label: 'Sales & CRM', desc: 'Prospecting, pipeline, outreach' },
-    { val: 'reporting', label: 'Reporting & analytics', desc: 'Automated dashboards, alerts' },
-    { val: 'ops', label: 'Operations & workflows', desc: 'Multi-step processes, handoffs' },
-  ],
-  building: [
-    { val: 'orchestration', label: 'Multi-agent orchestration', desc: 'Coordinated systems, routing' },
-    { val: 'integration', label: 'Tool integrations', desc: 'Connect existing stack to agents' },
-    { val: 'security', label: 'Security & controls', desc: 'Approvals, audit, sandboxing' },
-    { val: 'scale', label: 'Scaling what we have', desc: 'More agents, better reliability' },
-  ]
-};
-
+// All contact flows through the chatbot — openContactForm redirects to chat
 function openContactForm(prefill) {
-  document.getElementById('contactModal').classList.add('active');
-  document.body.style.overflow = 'hidden';
-  if (prefill && prefill.ai_usage) {
-    qData.ai_usage = prefill.ai_usage;
-    document.getElementById('q-ai-usage').value = prefill.ai_usage;
-    if (prefill.automate) document.getElementById('q-automate').value = prefill.automate;
-    document.getElementById('q-automate-val').value = prefill.automate || '';
-    goToStep(4);
-    var dots = document.querySelectorAll('#contactModal .q-dot');
-    dots.forEach(function(d) { d.classList.add('filled'); });
-  } else if (window.Briu && window.Briu.user && window.Briu.user.answers) {
-    var u = window.Briu.user;
-    var aiMap = { none: 'starter', free: 'starter', paid: 'paid', building: 'building' };
-    qData.ai_level = aiMap[u.answers.q3] || 'starter';
-    qData.ai_usage = u.answers.q3 || '';
-    document.getElementById('q-ai-usage').value = qData.ai_usage;
-    if (u.answers.q2) {
-      qData.team_size = u.answers.q2;
-      document.getElementById('q-team-size').value = u.answers.q2;
-    }
-    buildFocusPicks();
-    goToStep(3);
-    var dots = document.querySelectorAll('#contactModal .q-dot');
-    for (var di = 0; di < 2; di++) if (dots[di]) dots[di].classList.add('filled');
-  } else {
-    goToStep(1);
+  var context = '';
+  if (prefill && prefill.automate) context = prefill.automate;
+  else if (prefill && prefill.ai_usage) context = 'I want to learn about agents for my business';
+  if (window.briuToggleChatPanel) {
+    window.briuToggleChatPanel({ prefill: context });
   }
 }
-function closeContactForm() { document.getElementById('contactModal').classList.remove('active'); document.body.style.overflow = ''; }
-
-function goToStep(n) {
-  document.querySelectorAll('#contactModal .q-step').forEach(function(el) { el.classList.remove('active'); });
-  var step = document.getElementById('q-step-' + n);
-  if (step) step.classList.add('active');
-  var dots = document.querySelectorAll('#contactModal .q-dot');
-  dots.forEach(function(d, i) { d.classList.toggle('filled', i < n); });
-  // Build recommendation on final step
-  if (n === 4) buildRecommendation();
-}
-
-function selectAI(val, e) {
-  qData.ai_usage = val;
-  document.getElementById('q-ai-usage').value = val;
-  // Determine AI level from the button's data attribute
-  var evt = e || window.event;
-  var btn = evt && evt.target ? evt.target.closest('.q-option') : null;
-  qData.ai_level = btn ? btn.getAttribute('data-ai-level') : 'starter';
-  goToStep(2);
-}
-
-function selectTeam(val) {
-  qData.team_size = val;
-  document.getElementById('q-team-size').value = val;
-  buildFocusPicks();
-  goToStep(3);
-}
+function closeContactForm() {}
+function selectAI() {}
+function selectTeam() {}
 window.selectTeam = selectTeam;
-
-function buildFocusPicks() {
-  var container = document.getElementById('q-focus-picks');
-  if (!container) return;
-  container.innerHTML = '';
-  var picks = focusPicks[qData.ai_level] || focusPicks.starter;
-  for (var i = 0; i < picks.length; i++) {
-    var p = picks[i];
-    var btn = document.createElement('button');
-    btn.className = 'q-option q-focus-opt';
-    btn.setAttribute('data-focus', p.val);
-    btn.innerHTML = '<div class="q-opt-label">' + p.label + '</div><div class="q-opt-desc">' + p.desc + '</div>';
-    btn.addEventListener('click', (function(val) {
-      return function() {
-        qData.focus = val;
-        document.getElementById('q-focus-val').value = val;
-        // Highlight selected
-        var opts = container.querySelectorAll('.q-focus-opt');
-        for (var j = 0; j < opts.length; j++) opts[j].classList.toggle('q-option-selected', opts[j] === this);
-      };
-    })(p.val));
-    container.appendChild(btn);
-  }
-}
-
-function buildRecommendation() {
-  var rec = document.getElementById('q-recommendation');
-  if (!rec) return;
-  var isLargeTeam = qData.team_size === 'medium' || qData.team_size === 'large';
-  var isAdvanced = qData.ai_level === 'building';
-  var tier, tierNote;
-  if (isLargeTeam) {
-    tier = 'Kickoff + Workshop — $7,500';
-    tierNote = 'Recommended for teams of 10+. Includes hands-on sessions with your team members.';
-  } else if (isAdvanced) {
-    tier = 'Kickoff — $5,000';
-    tierNote = 'Since you\'re already building, we\'ll focus on architecture review and scaling.';
-  } else {
-    tier = 'Kickoff — $5,000';
-    tierNote = 'We\'ll map your workflows and deploy your first agent in the session.';
-  }
-  rec.innerHTML = '<div style="padding:0.75rem 1rem;background:rgba(212,160,90,0.05);border-left:2px solid var(--gold);margin-bottom:0.5rem;">' +
-    '<div style="font-size:0.78rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--gold);margin-bottom:0.25rem;">Recommended</div>' +
-    '<div style="font-size:0.95rem;color:var(--text);font-weight:500;">' + tier + '</div>' +
-    '<div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.25rem;">' + tierNote + '</div>' +
-    '</div>';
-}
-
-document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeContactForm(); });
-
-var contactFormEl = document.getElementById('contactForm');
-if (contactFormEl) contactFormEl.addEventListener('submit', function(e) {
-  e.preventDefault(); var form = this;
-  document.getElementById('q-automate-val').value = document.getElementById('q-automate').value;
-  if (qData.focus) document.getElementById('q-focus-val').value = qData.focus;
-  var btn = form.querySelector('.modal-btn'); btn.textContent = 'Sending...'; btn.disabled = true;
-  fetch(form.action, { method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }, body: JSON.stringify(Object.fromEntries(new FormData(form))) })
-  .then(function(r) { return r.json(); }).then(function() {
-    document.querySelectorAll('#contactModal .q-step').forEach(function(el) { el.classList.remove('active'); });
-    document.querySelector('#contactModal .q-progress').style.display = 'none'; document.getElementById('formSuccess').style.display = 'block';
-    setTimeout(function() { closeContactForm(); document.querySelector('#contactModal .q-progress').style.display = ''; document.getElementById('formSuccess').style.display = ''; form.reset(); document.getElementById('q-automate').value = ''; btn.textContent = 'Send'; btn.disabled = false; qData = {}; }, 3000);
-  }).catch(function() { btn.textContent = 'Error — try again'; btn.disabled = false; });
-});
 
 /* Scroll Progress Bar — fixed below nav */
 (function() {

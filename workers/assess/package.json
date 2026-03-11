@@ -4,7 +4,9 @@
   "private": true,
   "scripts": {
     "dev": "wrangler dev",
-    "deploy": "wrangler deploy"
+    "deploy": "wrangler deploy",
+    "ingest": "node scripts/ingest.js",
+    "ingest:upload": "node scripts/embed-upload.js"
   },
   "devDependencies": {
     "wrangler": "^4.71.0"
