@@ -13,7 +13,7 @@
 <meta property="og:image:width" content="2000">
 <meta property="og:image:height" content="1200">
 <meta name="twitter:image" content="https://briu.ai/og-image.png">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Briu | The Window">
 <meta name="twitter:description" content="The next 18 months decide who leads and who catches up. A timeline of what changed, what it costs, and why the businesses deploying agents now are building advantages that compound daily.">
 <link rel="canonical" href="https://briu.ai/why-now/">
@@ -144,7 +144,8 @@
 .tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
 
 /* Star growth popup chart */
-.star-popup { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) scale(0.95); opacity: 0; pointer-events: none; width: 320px; background: var(--surface-2, #1a1a1e); border: 1px solid rgba(212,160,90,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.5); padding: 1rem 1rem 0.75rem; z-index: 20; transition: opacity 0.3s ease, transform 0.3s ease; }
+.star-popup { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) scale(0.95); opacity: 0; pointer-events: none; width: 320px; background: #151B24; border: 1px solid rgba(212,160,90,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.5); padding: 1rem 1rem 0.75rem; z-index: 20; transition: opacity 0.3s ease, transform 0.3s ease; }
+.star-popup canvas { background: transparent !important; }
 .star-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: rgba(212,160,90,0.2); }
 .tl-counter:hover .star-popup { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
 .star-popup-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.5rem; }
@@ -234,14 +235,14 @@
       <div class="tl-counter-detail">Mar 2023 &rarr; Mar 2026</div>
     </div>
     <div class="tl-counter reveal reveal-delay-1" id="openclawCounter" style="cursor:pointer;overflow:visible;">
-      <div class="tl-counter-num" data-dynamic="openclaw-stars">163K</div>
-      <div class="tl-counter-label">GitHub stars &middot; fastest-growing<br>open source project in history</div>
-      <div class="tl-counter-detail">60K in 72 hours. Hover for growth &rarr;</div>
+      <div class="tl-counter-num">3</div>
+      <div class="tl-counter-label">frontier model families<br>driving the agent era</div>
+      <div class="tl-counter-detail">GPT &rarr; Gemini &rarr; Claude. Hover for timeline &rarr;</div>
       <div class="star-popup" id="starPopup">
-        <div class="star-popup-title">OpenClaw Star Growth</div>
-        <canvas id="starGrowthChart" height="120"></canvas>
+        <div class="star-popup-title">The Model Progression</div>
+        <canvas id="starGrowthChart" height="140"></canvas>
         <div class="star-popup-context">
-          <strong>For context:</strong> Linux took 14 years to reach 100K stars. React took 8 years. OpenClaw did it in 3 months.
+          <strong>GPT-4</strong> proved LLMs could reason. <strong>Gemini 2.5 Pro</strong> made complex tasks reliable. <strong>Claude Opus/Sonnet 4.6</strong> enabled autonomous agents.
         </div>
       </div>
     </div>
@@ -328,6 +329,7 @@
 <script src="/shared.js?v=20260310b"></script>
 <script src="/ambient.js?v=20260310b"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
+<script src="/dynamic-stats.js?v=20260310b"></script>
 <script src="/interactive.js?v=20260310b"></script>
 <script src="/charts.js?v=20260310b"></script>
 <script>
@@ -336,18 +338,19 @@
 
   // ===== Timeline Data =====
   var TIMELINE = [
-    { date: '2024-03-01', category: 'industry', title: 'Claude 3 launches', desc: 'First models capable enough for sustained agent work. API pricing makes experimentation viable.' },
-    { date: '2024-06-01', category: 'industry', title: 'Claude 3.5 Sonnet', desc: 'The model that changed the math. Agent frameworks go from demos to daily drivers.' },
+    { date: '2023-03-14', category: 'industry', title: 'GPT-4 launches', desc: 'OpenAI proves LLMs can reason about complex tasks. $30/M input tokens. The starting gun for the AI era.' },
+    { date: '2024-05-13', category: 'industry', title: 'GPT-4o launches', desc: 'Multimodal, faster, cheaper. $5/M tokens. AI moves from novelty to daily tool for millions.' },
+    { date: '2024-06-01', category: 'industry', title: 'Claude 3.5 Sonnet', desc: 'First model fast and capable enough for sustained agent work. Agent frameworks go from demos to daily drivers.' },
     { date: '2024-11-25', category: 'industry', title: 'Anthropic launches MCP', desc: 'Open standard for connecting AI to tools. The plumbing layer that makes agents practical.' },
+    { date: '2025-03-25', category: 'industry', title: 'Gemini 2.5 Pro', desc: 'Google crosses the threshold. Complex multi-step tasks become reliable. Agents can finally handle real work.' },
     { date: '2025-11-01', category: 'openclaw', title: 'Clawdbot launches', desc: 'Peter Steinberger publishes a weekend project. 9,000 GitHub stars in a week.' },
     { date: '2026-01-27', category: 'openclaw', title: 'OpenClaw goes viral', desc: '60,000 GitHub stars in 72 hours. Triple rebrand in 3 days. Fastest in open source history.' },
     { date: '2026-01-28', category: 'industry', title: 'Mac Mini shortage', desc: "M4 Mac Mini delivery times hit 6 weeks. Tom's Hardware: 'OpenClaw-fueled ordering frenzy.'" },
     { date: '2026-02-01', category: 'briu', title: 'We start building our agent', desc: 'Built the agent stack for ourselves first. Email, CRM, security, cost monitoring. $2\u20135/day.' },
     { date: '2026-02-15', category: 'openclaw', title: 'OpenAI acquires OpenClaw', desc: 'Steinberger joins OpenAI. Non-negotiable: stays open source. 145,000+ GitHub stars.' },
     { date: '2026-02-20', category: 'industry', title: 'Calacanis deploys agents firm-wide', desc: 'Every employee gets an agent. 95% of SDR work automated. Cost: $300/day per agent.' },
-    { date: '2026-02-22', category: 'industry', title: 'Cuban vs. Calacanis debate', desc: "Cuban: 'college interns that come in hungover.' Right about the snapshot. Wrong about the trajectory." },
+    { date: '2026-02-22', category: 'industry', title: 'Claude Opus & Sonnet 4.6', desc: 'Anthropic ships the models that make autonomous agents viable. 72% SWE-bench. Briu switches to Anthropic.' },
     { date: '2026-03-06', category: 'briu', title: 'Briu launches', desc: 'Brand goes live. Agent stack already running for a month. First client conversations within hours.' },
-    { date: '2026-03-09', category: 'openclaw', title: '163,000 stars, 5,700+ skills', desc: 'OpenClaw marketplace hits 5,700 community-built skills. 50+ integrations. The ecosystem is real.' },
     { date: '2026-09-01', category: 'cost', projected: true, title: 'Cost curve inflection', desc: 'Based on current trajectory: $300/day agents run for $30. $5/day agents run for $1.' }
   ];
 
@@ -386,24 +389,24 @@
         '<p>Every quarter, you get the same work done for less. The agent you deploy today gets cheaper to operate every month without you changing anything.</p>' +
         '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
           '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">API Cost per Million Input Tokens</div>' +
-          '<canvas id="tokenCostChart" height="280"></canvas>' +
-          '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Sources: OpenAI, Anthropic, DeepSeek published pricing. Projection based on observed quarterly decline rate.</div>' +
+          '<div style="position:relative;height:280px;"><canvas id="tokenCostChart"></canvas></div>' +
+          '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Sources: OpenAI, Google, Anthropic published pricing. Projection based on observed quarterly decline rate.</div>' +
         '</div>'
     },
     {
       after: '2026-02-22',
       id: 'performance-curve',
       html: '<h2>Performance Is Climbing Just as Fast</h2>' +
-        '<p>SWE-bench measures whether a model can actually solve real software engineering tasks\u2014pull requests from open-source repos. In early 2024, the best models solved <span class="wn-highlight">under 5%</span>. By late 2024, Claude 3.5 Sonnet hit <span class="wn-highlight">49%</span>. Current frontier models exceed <span class="wn-highlight">60%</span>.</p>' +
+        '<p>SWE-bench measures whether a model can actually solve real software engineering tasks\u2014pull requests from open-source repos. In early 2024, the best models solved <span class="wn-highlight">under 5%</span>. Gemini 2.5 Pro crossed <span class="wn-highlight">63%</span>. Claude Opus 4.6 now exceeds <span class="wn-highlight">72%</span>. In two years, models went from toy demos to reliable autonomous work.</p>' +
         '<p>This isn\u2019t incremental improvement. It\u2019s a capability step-change happening in real time. <span class="wn-highlight">The agents you deploy today are the worst they\u2019ll ever be. And they\u2019re already useful.</span></p>' +
         '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
           '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">Model Performance: SWE-bench Verified</div>' +
-          '<canvas id="perfChart" height="280"></canvas>' +
+          '<div style="position:relative;height:280px;"><canvas id="perfChart"></canvas></div>' +
           '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">SWE-bench Verified: percentage of real GitHub issues solved autonomously. Higher = more capable.</div>' +
         '</div>' +
         '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
           '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">The Crossover: Cost Down, Capability Up</div>' +
-          '<canvas id="crossoverChart" height="280"></canvas>' +
+          '<div style="position:relative;height:280px;"><canvas id="crossoverChart"></canvas></div>' +
           '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Cost per task declines as models get both cheaper and more capable. The best time to start was yesterday. The second-best time is now.</div>' +
         '</div>'
     },
@@ -684,22 +687,30 @@
     Chart.defaults.color = textMuted;
     Chart.defaults.borderColor = gridColor;
 
-    // --- Star Growth Popup Chart ---
+    // --- Model Capability Timeline Chart ---
     var starEl = document.getElementById('starGrowthChart');
     if (starEl) {
+      starEl.style.background = 'transparent';
       new Chart(starEl.getContext('2d'), {
-        type: 'line',
+        type: 'bar',
         data: {
-          labels: ['Nov 25', 'Dec 25', 'Jan 26', 'Jan 27', 'Jan 30', 'Feb 5', 'Feb 15', 'Mar 1', 'Mar 10'],
+          labels: ['GPT-4', 'GPT-4o', 'Gemini 1.5', 'Claude 3.5', 'Gemini 2.5 Pro', 'Opus 4.6'],
           datasets: [{
-            data: [9, 12, 15, 60, 95, 120, 145, 155, 163],
-            borderColor: gold,
-            backgroundColor: 'rgba(212,160,90,0.15)',
-            fill: true,
-            tension: 0.35,
-            pointRadius: 3,
-            pointBackgroundColor: gold,
-            borderWidth: 2
+            label: 'SWE-bench score',
+            data: [15, 33, 42, 49, 64, 72],
+            backgroundColor: [
+              'rgba(212,160,90,0.5)',
+              'rgba(212,160,90,0.6)',
+              'rgba(90,157,172,0.6)',
+              'rgba(224,123,95,0.6)',
+              'rgba(90,157,172,0.8)',
+              'rgba(224,123,95,0.9)'
+            ],
+            borderColor: [
+              gold, gold, river, coral, river, coral
+            ],
+            borderWidth: 1,
+            borderRadius: 3
           }]
         },
         options: {
@@ -712,11 +723,11 @@
               backgroundColor: 'rgba(18,18,20,0.95)',
               titleColor: '#fff',
               bodyColor: textMuted,
-              callbacks: { label: function(ctx) { return ctx.parsed.y + 'K stars'; } }
+              callbacks: { label: function(ctx) { return ctx.parsed.y + '% SWE-bench'; } }
             }
           },
           scales: {
-            y: { display: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: textMuted, font: { size: 9 }, callback: function(v) { return v + 'K'; } } },
+            y: { display: true, grid: { color: 'rgba(255,255,255,0.04)' }, max: 80, ticks: { color: textMuted, font: { size: 9 }, callback: function(v) { return v + '%'; } } },
             x: { display: true, grid: { display: false }, ticks: { color: textMuted, font: { size: 8 }, maxRotation: 45 } }
           }
         }
@@ -729,16 +740,16 @@
       new Chart(tokenEl.getContext('2d'), {
         type: 'line',
         data: {
-          labels: ['Mar 23', 'Nov 23', 'Mar 24', 'May 24', 'Jul 24', 'Oct 24', 'Jan 25', 'Mar 25', 'Mar 26', 'Sep 26\u2020'],
+          labels: ['Mar 23', 'Nov 23', 'Mar 24', 'May 24', 'Oct 24', 'Feb 25', 'Mar 26', 'Sep 26\u2020'],
           datasets: [{
-            label: 'Frontier model $/M input tokens',
-            data: [30, 10, 3, 5, 0.15, 3, 0.27, 1.25, 0.80, 0.20],
+            label: 'Best-in-class $/M input tokens',
+            data: [30, 10, 3, 5, 3, 1.25, 0.80, 0.20],
             borderColor: gold,
             backgroundColor: 'rgba(212,160,90,0.1)',
             fill: true,
             tension: 0.3,
             pointRadius: 5,
-            pointBackgroundColor: [gold, gold, river, gold, gold, river, forest, river, river, forest],
+            pointBackgroundColor: [gold, gold, river, gold, river, coral, coral, forest],
             pointBorderColor: 'transparent',
             pointHoverRadius: 8
           }]
@@ -756,7 +767,7 @@
               borderWidth: 1,
               callbacks: {
                 label: function(ctx) {
-                  var labels = ['GPT-4', 'GPT-4 Turbo', 'Claude 3 Sonnet', 'GPT-4o', 'GPT-4o mini', 'Claude 3.5 Sonnet', 'DeepSeek V3', 'Claude 3.5 Haiku', 'Frontier avg', 'Projected'];
+                  var labels = ['GPT-4 (OpenAI)', 'GPT-4 Turbo (OpenAI)', 'Claude 3 Sonnet (Anthropic)', 'GPT-4o (OpenAI)', 'Gemini 1.5 Pro (Google)', 'Gemini 2.5 Pro (Google)', 'Claude Sonnet 4.6 (Anthropic)', 'Projected'];
                   return labels[ctx.dataIndex] + ': $' + ctx.parsed.y.toFixed(2) + '/M tokens';
                 }
               }
@@ -781,12 +792,12 @@
       new Chart(perfEl.getContext('2d'), {
         type: 'bar',
         data: {
-          labels: ['GPT-4\nMar 24', 'Claude 3\nOpus', 'GPT-4o\nMay 24', 'Claude 3.5\nSonnet', 'o1-preview\nSep 24', 'DeepSeek\nV3', 'Claude\nSonnet 4', 'Frontier\nMar 26'],
+          labels: ['GPT-4\nMar 24', 'GPT-4o\nMay 24', 'Claude 3.5\nSonnet', 'o1-preview\nSep 24', 'Gemini\n2.5 Pro', 'Claude\nOpus 4.6'],
           datasets: [{
             label: 'SWE-bench Verified %',
-            data: [1.7, 4.7, 4.8, 49, 50.8, 42, 55.2, 65],
+            data: [1.7, 4.8, 49, 50.8, 63.8, 72],
             backgroundColor: function(ctx) {
-              var colors = [textMuted, river, textMuted, river, gold, forest, river, gold];
+              var colors = [gold, gold, coral, gold, river, coral];
               return colors[ctx.dataIndex] || textMuted;
             },
             borderRadius: 3,

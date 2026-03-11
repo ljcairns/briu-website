@@ -58,15 +58,15 @@
     '    <div class="q-step active" id="q-step-1">\n' +
     '      <h3>How does your business use AI today?</h3>\n' +
     '      <p>This helps us tailor the conversation to where you are.</p>\n' +
-    '      <button class="q-option" onclick="selectAI(\'Getting started — free tools\')" data-ai-level="starter">\n' +
+    '      <button class="q-option" onclick="selectAI(\'Getting started — free tools\', event)" data-ai-level="starter">\n' +
     '        <div class="q-opt-label">Getting started</div>\n' +
     '        <div class="q-opt-desc">Free tools like ChatGPT for ad-hoc tasks</div>\n' +
     '      </button>\n' +
-    '      <button class="q-option" onclick="selectAI(\'Paid AI accounts across the team\')" data-ai-level="paid">\n' +
+    '      <button class="q-option" onclick="selectAI(\'Paid AI accounts across the team\', event)" data-ai-level="paid">\n' +
     '        <div class="q-opt-label">Paid accounts</div>\n' +
     '        <div class="q-opt-desc">Team or enterprise AI accounts with one or more vendors</div>\n' +
     '      </button>\n' +
-    '      <button class="q-option" onclick="selectAI(\'Already building agents or automation\')" data-ai-level="building">\n' +
+    '      <button class="q-option" onclick="selectAI(\'Already building agents or automation\', event)" data-ai-level="building">\n' +
     '        <div class="q-opt-label">Building with AI</div>\n' +
     '        <div class="q-opt-desc">Building agents, automating workflows, or evaluating platforms</div>\n' +
     '      </button>\n' +

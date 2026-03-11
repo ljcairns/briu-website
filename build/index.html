@@ -13,7 +13,7 @@
 <meta property="og:image:width" content="2000">
 <meta property="og:image:height" content="1200">
 <meta name="twitter:image" content="https://briu.ai/og-image.png">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Briu | Build">
 <meta name="twitter:description" content="What it actually costs to build with agents. The operating log of a company built by agents from day one.">
 <link rel="canonical" href="https://briu.ai/build/">
@@ -53,7 +53,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 /* ===================== */
 /* HUD Bar               */
 /* ===================== */
-.hud-bar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.hud-bar { display: grid; grid-template-columns: repeat(8, 1fr); gap: 0; max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
 .hud-stat { text-align: center; padding: 1.25rem 0.5rem; position: relative; cursor: default; transition: background 0.3s ease; }
 .hud-stat:hover { background: rgba(255,255,255,0.02); }
 .hud-stat + .hud-stat::before { content: ''; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: rgba(255,255,255,0.04); }
@@ -113,7 +113,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .skill-category { margin-bottom: 2rem; }
 .skill-category-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 1rem; }
 .skill-cat-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
-.skill-cat-dot.cat-infrastructure { background: var(--teal); box-shadow: 0 0 8px rgba(90,157,172,0.3); }
+.skill-cat-dot.cat-infrastructure { background: var(--river); box-shadow: 0 0 8px rgba(90,157,172,0.3); }
 .skill-cat-dot.cat-operations { background: var(--gold); box-shadow: 0 0 8px rgba(212,160,90,0.3); }
 .skill-cat-dot.cat-security { background: var(--coral); box-shadow: 0 0 8px rgba(224,123,95,0.3); }
 .skill-cat-dot.cat-brand { background: var(--forest); box-shadow: 0 0 8px rgba(77,128,112,0.3); }
@@ -129,8 +129,8 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .skill-card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; }
 .skill-badge { display: flex; align-items: center; gap: 0.4rem; font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; }
 .skill-badge-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
-.skill-badge[data-cat="infrastructure"] .skill-badge-dot { background: var(--teal); }
-.skill-badge[data-cat="infrastructure"] { color: var(--teal); }
+.skill-badge[data-cat="infrastructure"] .skill-badge-dot { background: var(--river); }
+.skill-badge[data-cat="infrastructure"] { color: var(--river); }
 .skill-badge[data-cat="operations"] .skill-badge-dot { background: var(--gold); }
 .skill-badge[data-cat="operations"] { color: var(--gold); }
 .skill-badge[data-cat="security"] .skill-badge-dot { background: var(--coral); }
@@ -228,7 +228,7 @@ section { padding-bottom: 2rem; }
 .vtl-entry:hover .vtl-dot { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(212,160,90,0.15), 0 0 14px rgba(212,160,90,0.25); }
 /* Category-colored dots */
 .vtl-entry[data-category="agent"] .vtl-dot { background: var(--gold); }
-.vtl-entry[data-category="website"] .vtl-dot { background: var(--teal); }
+.vtl-entry[data-category="website"] .vtl-dot { background: var(--river); }
 .vtl-entry[data-category="business"] .vtl-dot { background: var(--coral); }
 .vtl-entry[data-category="brand"] .vtl-dot { background: var(--forest); }
 .vtl-entry[data-category="security"] .vtl-dot { background: var(--coral); }
@@ -1091,7 +1091,7 @@ function filterTimeline(cat, btn) {
   btn.classList.add('active');
   var entries = document.querySelectorAll('.vtl-entry');
   for (var j = 0; j < entries.length; j++) {
-    if (cat === 'all' || entries[j].getAttribute('data-category') === cat) {
+    if (cat === 'all' || entries[j].getAttribute('data-category') === cat || entries[j].classList.contains('vtl-now')) {
       entries[j].classList.remove('filtered-out');
     } else {
       entries[j].classList.add('filtered-out');

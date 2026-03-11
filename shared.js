@@ -154,11 +154,12 @@ function goToStep(n) {
   if (n === 4) buildRecommendation();
 }
 
-function selectAI(val) {
+function selectAI(val, e) {
   qData.ai_usage = val;
   document.getElementById('q-ai-usage').value = val;
   // Determine AI level from the button's data attribute
-  var btn = event.target.closest('.q-option');
+  var evt = e || window.event;
+  var btn = evt && evt.target ? evt.target.closest('.q-option') : null;
   qData.ai_level = btn ? btn.getAttribute('data-ai-level') : 'starter';
   goToStep(2);
 }

@@ -13,7 +13,7 @@
 <meta property="og:image:width" content="2000">
 <meta property="og:image:height" content="1200">
 <meta name="twitter:image" content="https://briu.ai/og-image.png">
-<meta name="twitter:card" content="summary">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Briu | Services">
 <meta name="twitter:description" content="AI agent deployment services. Kickoff, implementation, and retainer. Transparent pricing, no vendor lock-in, you own everything.">
 <link rel="canonical" href="https://briu.ai/services/">
@@ -417,17 +417,17 @@
     <div class="tier-finder-q" id="tfQ1">
       <p class="tf-question">How many people will be involved in the decision?</p>
       <div class="tf-options">
-        <button class="tf-opt" onclick="tfAnswer(1,'solo')">Just me</button>
-        <button class="tf-opt" onclick="tfAnswer(1,'small')">2-3 people</button>
-        <button class="tf-opt" onclick="tfAnswer(1,'team')">4+ stakeholders</button>
+        <button class="tf-opt" onclick="tfAnswer(1,'solo',event)">Just me</button>
+        <button class="tf-opt" onclick="tfAnswer(1,'small',event)">2-3 people</button>
+        <button class="tf-opt" onclick="tfAnswer(1,'team',event)">4+ stakeholders</button>
       </div>
     </div>
     <div class="tier-finder-q" id="tfQ2" style="display:none">
       <p class="tf-question">How many workflows do you want to automate first?</p>
       <div class="tf-options">
-        <button class="tf-opt" onclick="tfAnswer(2,'one')">One specific thing</button>
-        <button class="tf-opt" onclick="tfAnswer(2,'few')">A few ideas</button>
-        <button class="tf-opt" onclick="tfAnswer(2,'many')">Full landscape review</button>
+        <button class="tf-opt" onclick="tfAnswer(2,'one',event)">One specific thing</button>
+        <button class="tf-opt" onclick="tfAnswer(2,'few',event)">A few ideas</button>
+        <button class="tf-opt" onclick="tfAnswer(2,'many',event)">Full landscape review</button>
       </div>
     </div>
     <div class="tier-finder-result" id="tfResult" style="display:none"></div>
@@ -708,6 +708,7 @@
 <script src="/shared.js?v=20260310b"></script>
 <script src="/ambient.js?v=20260310b"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
+<script src="/dynamic-stats.js?v=20260310b"></script>
 <script src="/charts.js?v=20260310b"></script>
 <script>
 /* Expandable capability cards */
@@ -721,11 +722,12 @@ function toggleCapability(el) {
 
 /* Tier Finder Quiz */
 var tfAnswers = {};
-function tfAnswer(q, val) {
+function tfAnswer(q, val, e) {
   tfAnswers['q' + q] = val;
   var opts = document.querySelectorAll('#tfQ' + q + ' .tf-opt');
   for (var i = 0; i < opts.length; i++) opts[i].classList.remove('selected');
-  event.target.classList.add('selected');
+  var evt = e || window.event;
+  if (evt && evt.target) evt.target.classList.add('selected');
   if (q === 1) {
     document.getElementById('tfQ2').style.display = '';
     document.getElementById('tfQ2').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
