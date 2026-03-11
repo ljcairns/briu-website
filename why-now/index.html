@@ -45,8 +45,7 @@
 
 /* ===== Timeline ===== */
 .timeline-wrapper { position: relative; max-width: 1060px; margin: 0 auto; padding: 3rem 2rem 4rem; z-index: 1; }
-.timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.06); transform: translateX(-50%); }
-.timeline-line::before { content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.1); }
+.timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.06) 5%, rgba(255,255,255,0.06) 90%, transparent 100%); transform: translateX(-50%); }
 
 /* Timeline node */
 .tl-node { position: relative; display: flex; align-items: flex-start; margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
@@ -312,7 +311,7 @@
 
 <script src="/components.js?v=20260310b"></script>
 <script src="/shared.js?v=20260310b"></script>
-<script src="/ambient.js?v=20260310b"></script>
+<script src="/ambient.js?v=20260310c"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
 <script src="/dynamic-stats.js?v=20260310b"></script>
 <script src="/interactive.js?v=20260310b"></script>
@@ -634,6 +633,20 @@
     insertHereMarker();
   }
 
+  // ===== Clip timeline line to last node =====
+  var allNodes = container.querySelectorAll('.tl-node, .tl-here');
+  if (allNodes.length > 0) {
+    var lastNode = allNodes[allNodes.length - 1];
+    var line = document.getElementById('timelineLine');
+    if (line) {
+      var lineTop = container.offsetTop;
+      var endY = lastNode.offsetTop + lastNode.offsetHeight;
+      line.style.top = '0';
+      line.style.bottom = 'auto';
+      line.style.height = endY + 'px';
+    }
+  }
+
   // ===== Scroll-triggered fade-in for timeline nodes =====
   var tlNodes = document.querySelectorAll('.tl-node, .tl-content-section');
   var tlObs = new IntersectionObserver(function(entries) {
@@ -727,7 +740,7 @@
       new Chart(perfEl.getContext('2d'), {
         type: 'bar',
         data: {
-          labels: ['GPT-4\nMar 24', 'GPT-4o\nMay 24', 'Claude 3.5\nSonnet', 'o1-preview\nSep 24', 'Gemini\n2.5 Pro', 'Claude\nOpus 4.6'],
+          labels: ['GPT-4', 'GPT-4o', 'Claude 3.5 Sonnet', 'o1-preview', 'Gemini 2.5 Pro', 'Opus 4.6'],
           datasets: [{
             label: 'SWE-bench Verified %',
             data: [1.7, 4.8, 49, 50.8, 63.8, 72],
@@ -739,6 +752,21 @@
             barPercentage: 0.7
           }]
         },
+        plugins: [{
+          id: 'barLabels',
+          afterDraw: function(chart) {
+            var ctx2 = chart.ctx;
+            ctx2.save();
+            chart.data.datasets[0].data.forEach(function(val, i) {
+              var meta = chart.getDatasetMeta(0).data[i];
+              ctx2.fillStyle = '#e8dcc8';
+              ctx2.font = '600 11px DM Sans, sans-serif';
+              ctx2.textAlign = 'center';
+              ctx2.fillText(val + '%', meta.x, meta.y - 6);
+            });
+            ctx2.restore();
+          }
+        }],
         options: {
           responsive: true,
           maintainAspectRatio: false,
@@ -761,7 +789,7 @@
               grid: { color: gridColor },
               ticks: { color: textMuted, callback: function(v) { return v + '%'; } }
             },
-            x: { grid: { display: false }, ticks: { color: textMuted, font: { size: 9 }, maxRotation: 0 } }
+            x: { grid: { display: false }, ticks: { color: textMuted, font: { size: 10 }, maxRotation: 45, autoSkip: false } }
           }
         }
       });

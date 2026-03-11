@@ -1,6 +1,6 @@
 /**
- * Ambient Background — Gaudi-inspired flowing filaments
- * Subtle organic lines that drift, breathe, and react to scroll velocity.
+ * Ambient Background — Floating light particles
+ * Subtle glowing dots that drift, breathe, and react to scroll velocity.
  * Uses canvas for performance. Desktop only (skips on mobile/reduced-motion).
  */
 (function() {
@@ -102,46 +102,20 @@
 
     if (opacity < 0.003) return;
 
-    ctx.beginPath();
-    ctx.strokeStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + opacity.toFixed(4) + ')';
-    ctx.lineWidth = f.width;
-    ctx.lineCap = 'round';
-
-    // Draw organic curve as series of points
-    var steps = Math.floor(f.length / 3);
-    for (var i = 0; i <= steps; i++) {
-      var t = i / steps;
-      var age = f.life - (1 - t) * f.length * 0.3;
-      var px = f.x - f.vx * (1 - t) * f.length;
-      var py = f.y - f.vy * (1 - t) * f.length;
-      // Organic wave
-      var wave = Math.sin(f.phase + age * f.frequency + t * 4) * f.amplitude * t;
-      // Scroll influence: stretch the wave
-      wave *= 1 + scrollVelocity * 0.5;
-      px += wave * 0.7;
-      py += Math.cos(f.phase + age * f.frequency * 0.7 + t * 3) * f.amplitude * 0.3 * t;
-
-      if (i === 0) ctx.moveTo(px, py);
-      else ctx.lineTo(px, py);
-    }
-    ctx.stroke();
-
-    // Endpoint glow dot
-    if (lifeFade > 0.2 && twinkle > 0.4) {
-      var dotOpacity = Math.min(opacity * 2.5, 0.6);
-      if (dotOpacity > 0.01) {
-        var dx = f.x + Math.sin(f.phase + f.life * f.frequency) * f.amplitude * 0.7;
-        // Outer glow
-        ctx.beginPath();
-        ctx.arc(dx, f.y, 4, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + (dotOpacity * 0.3).toFixed(4) + ')';
-        ctx.fill();
-        // Core dot
-        ctx.beginPath();
-        ctx.arc(dx, f.y, 1.8, 0, Math.PI * 2);
-        ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + dotOpacity.toFixed(4) + ')';
-        ctx.fill();
-      }
+    // Floating dot only (no connecting lines)
+    var dotOpacity = Math.min(opacity * 2.5, 0.6);
+    if (dotOpacity > 0.01) {
+      var dx = f.x + Math.sin(f.phase + f.life * f.frequency) * f.amplitude * 0.7;
+      // Outer glow
+      ctx.beginPath();
+      ctx.arc(dx, f.y, 4, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + (dotOpacity * 0.3).toFixed(4) + ')';
+      ctx.fill();
+      // Core dot
+      ctx.beginPath();
+      ctx.arc(dx, f.y, 1.8, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(' + f.color.r + ',' + f.color.g + ',' + f.color.b + ',' + dotOpacity.toFixed(4) + ')';
+      ctx.fill();
     }
   }
 

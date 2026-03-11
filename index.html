@@ -72,21 +72,26 @@ nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; }
 .moment-col-new .moment-list li { color: var(--text); }
 
 /* Iceberg / build-yourself */
-.iceberg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; align-items: start; }
-.iceberg-visible { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1.5rem; text-align: center; }
-.iceberg-visible h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.75rem; }
-.iceberg-visible p { font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
-.iceberg-hidden { display: flex; flex-direction: column; gap: 0; }
-.iceberg-layer { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.85rem; color: var(--text-muted); }
+.iceberg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2.5rem; align-items: stretch; }
+.iceberg-visible { padding: 2rem; text-align: center; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(255,255,255,0.06); border-right: none; }
+.iceberg-visible h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 400; }
+.iceberg-visible p { font-size: 0.92rem; color: var(--text-muted); margin: 0; line-height: 1.6; opacity: 0.7; }
+.iceberg-hidden { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(212,160,90,0.1); border-left: 2px solid var(--gold); counter-reset: layer; }
+.iceberg-layer { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.85rem; color: var(--text); transition: all 0.2s ease; }
 .iceberg-layer:last-child { border-bottom: none; }
-.iceberg-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.6; flex-shrink: 0; }
-.iceberg-bottom { margin-top: 1.5rem; padding: 1rem 1.5rem; border-left: 2px solid var(--gold); background: rgba(212,160,90,0.03); }
+.iceberg-layer:hover { background: rgba(212,160,90,0.04); padding-left: 1.25rem; }
+.iceberg-dot { width: 18px; height: 18px; border-radius: 50%; background: rgba(212,160,90,0.1); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: var(--gold); counter-increment: layer; }
+.iceberg-dot::after { content: counter(layer); }
+.iceberg-bottom { margin-top: 2rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(212,160,90,0.12); background: rgba(212,160,90,0.03); }
 .iceberg-bottom p { font-size: 0.95rem; color: var(--text); line-height: 1.65; margin: 0; }
+.iceberg-bottom strong { color: var(--gold); font-weight: 600; }
 
 @media (max-width: 640px) {
   .moment-grid { grid-template-columns: 1fr; }
   .moment-col-old { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
   .iceberg-grid { grid-template-columns: 1fr; }
+  .iceberg-visible { border-right: 1px solid rgba(255,255,255,0.06); border-bottom: none; }
+  .iceberg-hidden { border-left: 2px solid var(--gold); }
 }
 
 /* Wave dividers */
@@ -241,8 +246,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 /* Proof Grid */
 .proof-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; margin: 2.5rem 0; }
-.proof-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: all 0.3s ease; }
-.proof-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
+.proof-card { background: transparent; border: 1px solid rgba(255,255,255,0.06); padding: 1.5rem; transition: all 0.3s ease; }
+.proof-card:hover { border-color: rgba(212,160,90,0.15); }
 .proof-card-icon { font-size: 1.4rem; margin-bottom: 0.75rem; }
 .proof-card h4 { font-family: var(--serif); font-size: 1rem; color: var(--text); font-weight: 400; margin-bottom: 0.4rem; }
 .proof-card p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0.75rem; }
@@ -669,12 +674,12 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <section>
   <p class="section-label reveal">The Gap</p>
   <h2 class="reveal">"Why can't I just use Claude?"</h2>
-  <p class="reveal">You can. For conversation, brainstorming, and writing, you should. But going from "AI can help me" to "AI is running my operations" requires building a system. Here's everything between a chat window and a deployed agent:</p>
+  <p class="reveal">You can. For conversation, brainstorming, and writing, you should. But going from "AI can help me" to "AI is running my operations" requires a system. Here's what sits between a chat window and a deployed agent:</p>
 
   <div class="iceberg-grid reveal">
     <div class="iceberg-visible">
-      <h3>What you see</h3>
-      <p>A smart AI that answers questions, writes content, and helps you think. Feels like it could do anything.</p>
+      <h3>What a chat window gives you</h3>
+      <p>A smart AI that answers questions, writes content, and helps you think. Impressive, but it can't touch your email, update your CRM, or run while you sleep.</p>
     </div>
     <div class="iceberg-hidden">
       <div class="iceberg-layer"><span class="iceberg-dot"></span> Infrastructure setup &amp; hosting</div>
@@ -690,7 +695,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </div>
 
   <div class="iceberg-bottom reveal">
-    <p>You could build this yourself. It takes 6&ndash;12 weeks of senior engineering time. Or we deploy your first agent in one session and teach your team to run it.</p>
+    <p><strong>The good news:</strong> tools like Claude Code, Codex, and OpenClaw now make it possible to build all nine layers in days, not months. And every piece runs on your infrastructure, your data stays yours, and you own the system outright.</p>
   </div>
 </section>
 
@@ -1073,7 +1078,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <script src="/components.js?v=20260310b"></script>
 <script src="/shared.js?v=20260310b"></script>
-<script src="/ambient.js?v=20260310b"></script>
+<script src="/ambient.js?v=20260310c"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
 <script src="/interactive.js?v=20260310b"></script>
 <script src="/dynamic-stats.js?v=20260310b"></script>

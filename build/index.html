@@ -292,17 +292,17 @@ section { padding-bottom: 2rem; }
 .cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
 /* Story cards */
-.story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
-.story-card { background: linear-gradient(135deg, var(--surface), rgba(212,160,90,0.03)); border: 1px solid rgba(212,160,90,0.1); padding: 2rem 1.75rem; display: flex; flex-direction: column; transition: all 0.35s ease; position: relative; }
-.story-card:hover { border-color: rgba(212,160,90,0.25); background: linear-gradient(135deg, var(--surface-2), rgba(212,160,90,0.06)); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,160,90,0.08); }
-.story-card-tag { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
-.story-card-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
-.story-card h3 { font-family: var(--serif); font-size: 1.25rem; line-height: 1.3; margin-bottom: 0.5rem; color: var(--text); transition: color 0.2s; }
-.story-card:hover h3 { color: var(--gold-light); }
-.story-card .story-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; flex: 1; }
-.story-card .story-metric { font-family: var(--serif); font-size: 1rem; color: var(--gold); margin-bottom: 1rem; }
-.story-card .story-link { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; color: var(--gold); margin-top: auto; transition: color 0.2s; }
-.story-card .story-link:hover { color: var(--gold-light); }
+.story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { text-decoration: none; color: inherit; }
+.story-card { background: transparent; border: 1px solid rgba(255,255,255,0.06); padding: 1.25rem 1.25rem 1rem; display: flex; flex-direction: column; transition: all 0.35s ease; position: relative; }
+.story-card:hover { border-color: rgba(212,160,90,0.2); background: rgba(255,255,255,0.02); }
+.story-card-tag { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.story-card h3 { font-family: var(--serif); font-size: 1.05rem; line-height: 1.3; margin-bottom: 0.4rem; color: var(--text); transition: color 0.2s; }
+.story-card:hover h3 { color: var(--gold); }
+.story-card .story-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; margin-bottom: 0.75rem; flex: 1; }
+.story-card .story-metric { font-size: 0.78rem; color: var(--gold); margin-bottom: 0.75rem; font-weight: 600; letter-spacing: 0.01em; }
+.story-card .story-link { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; color: var(--text-muted); margin-top: auto; transition: color 0.2s; }
+.story-card:hover .story-link { color: var(--gold); }
 .story-card .story-link::after { content: ' \2192'; }
 @media (max-width: 768px) { .story-grid { grid-template-columns: 1fr; } }
 
@@ -548,10 +548,10 @@ section { padding-bottom: 2rem; }
 </section>
 
 <!-- 3. Stories -->
-<section>
-  <p class="section-label reveal">Stories</p>
-  <h2 class="reveal">What working with agents actually looks like.</h2>
-  <p class="reveal" style="color:var(--text-muted);max-width:600px;margin-bottom:2rem;">Full session narratives. What got built, what it cost, and what the experience was like.</p>
+<section style="padding-bottom:1rem;">
+  <p class="section-label reveal" style="margin-bottom:0.75rem;">Stories</p>
+  <h2 class="reveal" style="font-size:clamp(1.3rem,2.5vw,1.75rem);margin-bottom:0.5rem;">What working with agents actually looks like.</h2>
+  <p class="reveal" style="color:var(--text-muted);max-width:600px;margin-bottom:1.5rem;font-size:0.9rem;">Full session narratives. What got built, what it cost, and what the experience was like.</p>
 
   <div class="story-grid">
     <a href="/build/what-a-real-session-actually-costs/" class="story-card reveal-scale">
@@ -1005,7 +1005,7 @@ section { padding-bottom: 2rem; }
 
 <script src="/components.js?v=20260310b"></script>
 <script src="/shared.js?v=20260310b"></script>
-<script src="/ambient.js?v=20260310b"></script>
+<script src="/ambient.js?v=20260310c"></script>
 <script src="/chat-bubble.js?v=20260310b"></script>
 <script src="/charts.js?v=20260310b"></script>
 <script>
