@@ -221,7 +221,8 @@ function buildRecommendation() {
 
 document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeContactForm(); });
 
-document.getElementById('contactForm').addEventListener('submit', function(e) {
+var contactFormEl = document.getElementById('contactForm');
+if (contactFormEl) contactFormEl.addEventListener('submit', function(e) {
   e.preventDefault(); var form = this;
   document.getElementById('q-automate-val').value = document.getElementById('q-automate').value;
   if (qData.focus) document.getElementById('q-focus-val').value = qData.focus;
