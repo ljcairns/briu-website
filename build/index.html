@@ -56,7 +56,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .hud-bar { display: grid; grid-template-columns: repeat(8, 1fr); gap: 0; max-width: 1060px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
 .hud-stat { text-align: center; padding: 1.25rem 0.5rem; position: relative; cursor: default; transition: background 0.3s ease; }
 .hud-stat:hover { background: rgba(255,255,255,0.02); }
-.hud-stat + .hud-stat::before { content: ''; position: absolute; left: 0; top: 25%; height: 50%; width: 1px; background: rgba(255,255,255,0.04); }
+.hud-stat + .hud-stat { border-left: 1px solid rgba(255,255,255,0.04); }
 .hud-value { font-family: var(--serif); font-size: 1.5rem; color: var(--text); line-height: 1.2; margin-bottom: 0.3rem; font-variant-numeric: tabular-nums; animation: statPulse 4s ease-in-out infinite; animation-delay: var(--pulse-delay, 0s); }
 .hud-label { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); }
 /* HUD tooltips */
@@ -65,12 +65,12 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .hud-stat[data-tooltip]:hover::before { content: ''; position: absolute; bottom: calc(100% + 2px); left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: rgba(212,160,90,0.15); z-index: 10; }
 @media (max-width: 768px) {
   .hud-bar { grid-template-columns: repeat(4, 1fr); gap: 0; }
-  .hud-stat:nth-child(5)::before { display: none; }
+  .hud-stat:nth-child(5) { border-left: none; }
   .hud-value { font-size: 1.25rem; }
 }
 @media (max-width: 480px) {
   .hud-bar { grid-template-columns: repeat(2, 1fr); padding: 0 1.25rem; }
-  .hud-stat:nth-child(odd)::before { display: none; }
+  .hud-stat:nth-child(odd) { border-left: none; }
 }
 
 /* ======================== */

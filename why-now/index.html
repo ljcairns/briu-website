@@ -50,8 +50,8 @@
 /* Timeline node */
 .tl-node { position: relative; display: flex; align-items: flex-start; margin-bottom: 2.5rem; opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
 .tl-node.tl-visible { opacity: 1; transform: translateY(0); }
-.tl-node.tl-projected { opacity: 0.5; }
-.tl-node.tl-projected.tl-visible { opacity: 0.5; }
+.tl-node.tl-projected { opacity: 0.65; }
+.tl-node.tl-projected.tl-visible { opacity: 0.65; }
 
 /* Left/right alternation */
 .tl-node .tl-content { width: 44%; }
@@ -96,6 +96,18 @@
 .tl-content-section h2 { font-family: var(--serif); font-size: clamp(1.5rem, 2.8vw, 2rem); line-height: 1.25; color: var(--text); margin-bottom: 1.25rem; }
 .tl-content-section p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; margin-bottom: 1.25rem; }
 .tl-content-section .wn-highlight { color: var(--text); }
+
+/* "You are here" expanded section */
+.tl-here-section { position: relative; max-width: 860px; margin: 2.5rem auto 3rem; padding: 2rem; z-index: 2; border: 1px solid rgba(212,160,90,0.15); background: rgba(212,160,90,0.02); }
+.tl-here-section h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--text); margin-bottom: 0.5rem; }
+.tl-here-section > p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; margin-bottom: 1.5rem; }
+.tl-chains { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.tl-chain { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.15rem; border-top: 2px solid var(--gold); transition: border-color 0.3s; }
+.tl-chain:hover { border-color: rgba(212,160,90,0.2); border-top-color: var(--gold); }
+.tl-chain h4 { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+.tl-chain p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.55; margin: 0 0 0.5rem; }
+.tl-chain .tl-chain-result { font-size: 0.72rem; font-weight: 600; color: var(--forest); text-transform: uppercase; letter-spacing: 0.08em; }
+@media (max-width: 768px) { .tl-chains { grid-template-columns: 1fr; } .tl-here-section { margin: 2rem 1rem; } }
 
 /* Section divider */
 .tl-section-break { text-align: center; padding: 2rem 0; position: relative; }
@@ -574,6 +586,7 @@
     var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
     var dateStr = monthNames[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
 
+    // Timeline node
     var side = isLeft ? 'tl-left' : 'tl-right';
     var here = document.createElement('div');
     here.className = 'tl-node ' + side + ' tl-here-node';
@@ -588,10 +601,35 @@
         '<div class="tl-date">' + dateStr + '</div>' +
         '<div class="tl-relative cat-openclaw">Today</div>' +
         '<div class="tl-title">The window is open</div>' +
-        '<div class="tl-desc">Everything above has already happened. Everything below is coming. The businesses deploying agents now are building advantages that compound daily.</div>' +
+        '<div class="tl-desc">Everything above has already happened. Everything below is coming.</div>' +
       '</div>';
     container.appendChild(here);
     isLeft = !isLeft;
+
+    // Expanded section: what businesses can build right now
+    var section = document.createElement('div');
+    section.className = 'tl-here-section reveal';
+    section.innerHTML =
+      '<h3>What businesses are building right now</h3>' +
+      '<p>These aren\u2019t demos. These are agent chains running in production today, each one doing work that used to require a person.</p>' +
+      '<div class="tl-chains">' +
+        '<div class="tl-chain">' +
+          '<h4>Email \u2192 CRM \u2192 Briefing</h4>' +
+          '<p>Agent reads inbox overnight, updates CRM with new contacts and deal status, generates a morning briefing. Team wakes up to work already triaged.</p>' +
+          '<div class="tl-chain-result">3 hours/day saved per person</div>' +
+        '</div>' +
+        '<div class="tl-chain">' +
+          '<h4>Research \u2192 Outreach \u2192 Follow-up</h4>' +
+          '<p>Agent identifies prospects, researches them, drafts personalized outreach, schedules follow-ups. Runs overnight, results by morning.</p>' +
+          '<div class="tl-chain-result">95% of SDR work automated</div>' +
+        '</div>' +
+        '<div class="tl-chain">' +
+          '<h4>Monitor \u2192 Alert \u2192 Report</h4>' +
+          '<p>Agent watches costs, competitors, and anomalies 24/7. Surfaces what matters, generates weekly reports, flags anything unusual immediately.</p>' +
+          '<div class="tl-chain-result">$2\u20135/day for always-on ops</div>' +
+        '</div>' +
+      '</div>';
+    container.appendChild(section);
   }
 
   TIMELINE.forEach(function(evt, idx) {
