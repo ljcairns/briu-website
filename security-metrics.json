@@ -1,12 +1,17 @@
 {
-  "defenseLayers": 6,
-  "defenseLayerLabels": "Network, permissions, approvals, sandbox, monitoring, per-turn context",
-  "knownSanitizerBypassesClosed": 26,
-  "knownSanitizerBypassesTotal": 26,
+  "defenseLayers": 8,
+  "defenseLayerLabels": "Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing",
+  "knownSanitizerBypassesClosed": 210,
+  "knownSanitizerBypassesTotal": 210,
   "openKnownSanitizerBypasses": 0,
   "attackCategoriesTested": 15,
   "attackCategoriesPassing": 15,
-  "lastRedTeamDate": "2026-03-09",
-  "sanitizerVersion": "v4",
-  "note": "Scoped to sanitizer red-team taxonomy only. Not a claim about total system security."
+  "redTeamRounds": 6,
+  "criticalFindings": 5,
+  "criticalFindingsPatched": 5,
+  "architecturalAudits": 4,
+  "totalFindings": 30,
+  "lastRedTeamDate": "2026-03-11",
+  "sanitizerVersion": "v9",
+  "note": "Full-stack red-team: Opus 4.6 (5 payload rounds) + Codex (payloads + 4 architectural audits). Sanitizer, plugin contracts, trust boundaries, cron injection, file permissions."
 }

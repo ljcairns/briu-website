@@ -844,7 +844,7 @@ Briu.charts.briuOrg = function(containerId) {
       '<span>Audit layer: Gemini &amp; GPT independently verify every agent action</span>' +
     '</div>' +
 
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: <span data-dynamic="avg-daily-cost">$14.68</span>/day.</div></div>';
+    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: <span data-dynamic="avg-daily-cost">$18.97</span>/day.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');

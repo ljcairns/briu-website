@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | How We Red-Teamed Our Own Agent</title>
+<meta name="description" content="We pointed Opus 4.6 and Codex at our own agent security stack. 6 rounds, 210+ payloads, 4 architectural audits. The biggest finding wasn't in the sanitizer.">
+<meta property="og:title" content="Briu | How We Red-Teamed Our Own Agent">
+<meta property="og:description" content="We pointed Opus 4.6 and Codex at our own agent security stack. 6 rounds, 210+ payloads, 4 architectural audits. The biggest finding wasn't in the sanitizer.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://briu.ai/build/how-we-red-teamed-our-own-agent/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | How We Red-Teamed Our Own Agent">
+<meta name="twitter:description" content="We pointed Opus 4.6 and Codex at our own agent security stack. 6 rounds, 210+ payloads, 4 architectural audits. The biggest finding wasn't in the sanitizer.">
+<link rel="canonical" href="https://briu.ai/build/how-we-red-teamed-our-own-agent/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260310b">
+<link rel="stylesheet" href="/articles.css?v=20260310b">
+<style>
+/* Stats strip */
+.stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+.stat-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; text-align: center; transition: border-color 0.3s; }
+.stat-card:hover { border-color: rgba(212,160,90,0.2); }
+.stat-card .val { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
+.stat-card .val.green { color: var(--forest); }
+.stat-card .val.coral { color: var(--coral); }
+.stat-card .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Rounds progression */
+.rounds-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0; margin: 2rem 0 2.5rem; }
+.round-step { padding: 1.25rem 0.75rem; text-align: center; position: relative; border: 1px solid rgba(255,255,255,0.04); }
+.round-step::after { content: '\2192'; position: absolute; right: -0.6rem; top: 50%; transform: translateY(-50%); color: rgba(255,255,255,0.12); font-size: 0.9rem; z-index: 1; }
+.round-step:last-child::after { display: none; }
+.round-step .round-label { font-size: 0.65rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.4rem; }
+.round-step .round-attacker { font-size: 0.62rem; color: var(--text-muted); margin-bottom: 0.5rem; opacity: 0.7; }
+.round-step .round-rate { font-family: var(--serif); font-size: 1.4rem; line-height: 1; margin-bottom: 0.2rem; }
+.round-step .round-note { font-size: 0.65rem; color: var(--text-muted); }
+.round-step.step-bad { background: rgba(224,123,95,0.06); }
+.round-step.step-bad .round-rate { color: var(--coral); }
+.round-step.step-mid { background: rgba(212,160,90,0.06); }
+.round-step.step-mid .round-rate { color: var(--gold); }
+.round-step.step-good { background: rgba(106,174,156,0.06); }
+.round-step.step-good .round-rate { color: var(--forest); }
+.round-step.step-great { background: rgba(106,174,156,0.1); border-color: rgba(106,174,156,0.15); }
+.round-step.step-great .round-rate { color: var(--forest); }
+
+/* Finding cards */
+.finding-grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; margin: 2rem 0 2.5rem; }
+.finding-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; transition: border-color 0.3s; }
+.finding-card:hover { border-color: rgba(212,160,90,0.2); }
+.finding-card.severity-critical { border-top: 2px solid var(--coral); }
+.finding-card.severity-high { border-top: 2px solid var(--gold); }
+.finding-sev { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 0.4rem; }
+.finding-sev.critical { color: var(--coral); }
+.finding-sev.high { color: var(--gold); }
+.finding-card h4 { font-family: var(--serif); font-size: 1.05rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 400; }
+.finding-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.65; margin: 0 0 0.5rem; }
+.finding-status { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); }
+
+/* Layers grid */
+.layers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 0.75rem; margin: 2rem 0 2.5rem; }
+.layer-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1rem; transition: border-color 0.3s; }
+.layer-card:hover { border-color: rgba(212,160,90,0.15); }
+.layer-num { font-family: var(--serif); font-size: 1.4rem; color: rgba(212,160,90,0.25); line-height: 1; margin-bottom: 0.2rem; }
+.layer-card h4 { font-size: 0.85rem; font-weight: 600; color: var(--text); margin-bottom: 0.3rem; }
+.layer-card p { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; margin: 0; }
+
+/* Insight box */
+.insight-box { background: rgba(90,157,172,0.06); border: 1px solid rgba(90,157,172,0.15); padding: 1.5rem; margin: 2rem 0; }
+.insight-box p { margin: 0; font-size: 0.95rem; line-height: 1.7; }
+.insight-box strong { color: var(--text); }
+
+/* Audit scope */
+.audit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
+.audit-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; }
+.audit-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+.audit-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+@media (max-width: 900px) {
+  .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  .rounds-grid { grid-template-columns: repeat(3, 1fr); }
+  .audit-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 640px) {
+  .stats-strip { grid-template-columns: 1fr 1fr; }
+  .rounds-grid { grid-template-columns: repeat(2, 1fr); }
+  .rounds-grid .round-step:nth-child(3)::after,
+  .rounds-grid .round-step:last-child::after { display: none; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How We Red-Teamed Our Own Agent",
+  "description": "We pointed Opus 4.6 and Codex at our own agent security stack. 6 rounds, 210+ payloads, 4 architectural audits. The biggest finding wasn't in the sanitizer.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-11",
+  "dateModified": "2026-03-11",
+  "url": "https://briu.ai/build/how-we-red-teamed-our-own-agent/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/how-we-red-teamed-our-own-agent/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "How We Red-Teamed Our Own Agent", "item": "https://briu.ai/build/how-we-red-teamed-our-own-agent/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>How We Red-Teamed Our Own Agent</h1>
+  <p>We pointed Opus 4.6 and Codex at our own security stack. 6 rounds, 210+ attack payloads, 4 architectural audits. The biggest finding wasn't in the sanitizer&mdash;it was three plugins returning a field the runtime silently ignored.</p>
+</section>
+
+<article>
+
+  <!-- Hero stats -->
+  <div class="stats-strip">
+    <div class="stat-card">
+      <div class="val">210+</div>
+      <div class="lbl">Attack payloads</div>
+    </div>
+    <div class="stat-card">
+      <div class="val">6</div>
+      <div class="lbl">Red-team rounds</div>
+    </div>
+    <div class="stat-card">
+      <div class="val coral">5</div>
+      <div class="lbl">Critical findings</div>
+    </div>
+    <div class="stat-card">
+      <div class="val green">30+</div>
+      <div class="lbl">Findings addressed</div>
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- Opening narrative         -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">It started with a sanitizer</h2>
+  <p>We wrote an input sanitizer to catch prompt injection in external content&mdash;emails, CRM fields, calendar entries, anything that flows into the agent from outside. 140+ regex patterns, 20+ language families, 7 detection layers. It caught most things.</p>
+  <p>So we did what you should do with any security control: we tried to break it.</p>
+  <p>The first round used Opus 4.6 as the attacker. We gave it the sanitizer source code and told it to craft payloads that would bypass every detection layer. 30 payloads. 90% catch rate after patching. Good start.</p>
+  <p>Then we ran it again. And again. Five rounds with Opus, each one targeting whatever the previous round missed. The sanitizer improved each time. But the payloads that kept getting through taught us something more important than any individual fix:</p>
+
+  <div class="insight-box">
+    <p><strong>Pattern matching is a necessary layer, not a sufficient one.</strong> No regex engine will catch a prompt injection written as a metaphor, encoded in morse code, or split across three separate tool results. You need structural defenses that don't depend on recognizing the attack.</p>
+  </div>
+
+  <!-- ======================== -->
+  <!-- The rounds                -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Six rounds of AI vs. AI</h2>
+  <p>Each round, the attacker model got the full sanitizer source code, the previous test results, and a mandate to find bypasses. Each round, we patched what it found and re-tested everything.</p>
+
+  <div class="rounds-grid reveal">
+    <div class="round-step step-bad">
+      <div class="round-label">v5</div>
+      <div class="round-attacker">Opus 4.6</div>
+      <div class="round-rate">90%</div>
+      <div class="round-note">30 payloads</div>
+    </div>
+    <div class="round-step step-mid">
+      <div class="round-label">v6</div>
+      <div class="round-attacker">Opus 4.6</div>
+      <div class="round-rate">83%</div>
+      <div class="round-note">30 payloads</div>
+    </div>
+    <div class="round-step step-mid">
+      <div class="round-label">v7</div>
+      <div class="round-attacker">Opus 4.6</div>
+      <div class="round-rate">50%*</div>
+      <div class="round-note">26 payloads</div>
+    </div>
+    <div class="round-step step-mid">
+      <div class="round-label">v8</div>
+      <div class="round-attacker">Opus 4.6</div>
+      <div class="round-rate">61%*</div>
+      <div class="round-note">18 payloads</div>
+    </div>
+    <div class="round-step step-great">
+      <div class="round-label">v9</div>
+      <div class="round-attacker">Codex</div>
+      <div class="round-rate">100%</div>
+      <div class="round-note">41 payloads</div>
+    </div>
+    <div class="round-step step-great">
+      <div class="round-label">v9+</div>
+      <div class="round-attacker">Codex Arch</div>
+      <div class="round-rate">100%</div>
+      <div class="round-note">4 audits</div>
+    </div>
+  </div>
+
+  <p style="font-size:0.85rem;color:var(--text-muted);">*v7/v8 remaining bypasses are in inherently undetectable categories&mdash;pure metaphor, novel encoding, sub-threshold payloads. These are defended by structural framing rather than pattern matching.</p>
+
+  <p>The detection rate column is only part of the story. By v7 and v8, the payloads that got through were increasingly exotic: instructions encoded as morse code, attacks hidden in word-initial steganography, injection spread across multiple tool results that were clean individually. None of these are catchable with regexes. That's not a failure of the sanitizer&mdash;it's the boundary of what pattern matching can do.</p>
+  <p>Which is why the sanitizer is only one of eight defense layers.</p>
+
+  <!-- ======================== -->
+  <!-- Eight layers              -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Defense in depth: 8 layers</h2>
+  <p>Every layer assumes the others have failed. That's the design principle. If an attacker gets past the sanitizer, structural framing catches it. If they defeat the framing, canary tokens detect the exfiltration. If they evade the canaries, exec guardrails block the command. And so on.</p>
+
+  <div class="layers-grid reveal">
+    <div class="layer-card">
+      <div class="layer-num">1</div>
+      <h4>Input Sanitizer</h4>
+      <p>140+ patterns, 7 detection stages, 20+ languages. Catches known attack patterns before the model sees them.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">2</div>
+      <h4>Auto-Sanitizer Hook</h4>
+      <p>Plugin-level enforcement. Every tool result over 50 chars is scanned automatically. The agent cannot opt out.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">3</div>
+      <h4>Canary Tokens</h4>
+      <p>Daily-rotating fake credentials. If an injection extracts them, the leak is detected and blocked instantly.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">4</div>
+      <h4>Write Protection</h4>
+      <p>Critical files (CLAUDE.md, exec-approvals, plugins) locked from all non-operator agents. Blocks direct and indirect writes.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">5</div>
+      <h4>Exec Guardrails</h4>
+      <p>Blocks inline code execution, network exfiltration, and file exfiltration for non-main agents.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">6</div>
+      <h4>Kill Switch</h4>
+      <p>Automated lockdown on critical CVEs. All non-main agents stopped until the vulnerability is patched.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">7</div>
+      <h4>Sandbox Isolation</h4>
+      <p>External content processed through a sandboxed agent (read-only, Haiku) with structured JSON output and rate limits.</p>
+    </div>
+    <div class="layer-card">
+      <div class="layer-num">8</div>
+      <h4>Structural Framing</h4>
+      <p>All external content wrapped in XML tags that signal "data, not instructions." Works even when regex fails.</p>
+    </div>
+  </div>
+
+  <p>That's the architecture. But testing it with payloads only exercises layer 1. The real question was: what happens when the attacker targets the architecture itself?</p>
+
+  <!-- ======================== -->
+  <!-- The pivot to Codex        -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Codex found what Opus missed</h2>
+  <p>After five rounds of payload testing, we changed the approach. Instead of generating more attack strings, we gave Codex the full source code of every plugin, the hook system, the cron jobs, the state database, the exec-approvals config&mdash;and told it to find architectural vulnerabilities.</p>
+  <p>It ran four systematic audits:</p>
+
+  <div class="audit-grid reveal">
+    <div class="audit-card">
+      <h4>Plugin interaction audit</h4>
+      <p>Reviewed all 5 plugins. Hook execution order, cross-plugin data flow, return field contracts with the runtime.</p>
+    </div>
+    <div class="audit-card">
+      <h4>Cron prompt injection audit</h4>
+      <p>Traced data flow from external sources (email subjects, calendar titles, comments) through cron jobs to model context.</p>
+    </div>
+    <div class="audit-card">
+      <h4>State-db trust boundary audit</h4>
+      <p>Mapped which agents could write to which state tables, and what the main agent consumed as trusted instructions.</p>
+    </div>
+    <div class="audit-card">
+      <h4>File permission &amp; CLI audit</h4>
+      <p>Unix permissions on all operational files, symlink target validation, argument injection in 9 CLI wrapper scripts.</p>
+    </div>
+  </div>
+
+  <p>The results were sobering. Not because the sanitizer was weak&mdash;it passed all 41 of Codex's payloads. Because the architecture had assumptions that weren't true.</p>
+
+  <!-- ======================== -->
+  <!-- The critical findings     -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Five critical findings</h2>
+  <p>These are the ones that mattered. Not theoretical&mdash;each one was a real attack path that would have worked in production.</p>
+
+  <div class="finding-grid reveal">
+
+    <div class="finding-card severity-critical">
+      <div class="finding-sev critical">Critical &mdash; The silent drop</div>
+      <h4>Three security plugins were returning a field the runtime silently ignored</h4>
+      <p>All three security plugins&mdash;canary tokens, cost alerts, shell rules&mdash;were returning <code>systemReminder</code> from <code>before_prompt_build</code>. But the runtime only consumes <code>systemPrompt</code>, <code>prependContext</code>, <code>appendSystemContext</code>. The plugins were running. They were generating output. The runtime was throwing it away. Every security injection that was supposed to reach the model&mdash;canary tokens, cost alerts, task state&mdash;was being silently dropped.</p>
+      <p>The agent was operating without these defenses in its system prompt. No error. No warning. Just&hellip; nothing.</p>
+      <div class="finding-status">Fixed &mdash; switched to appendSystemContext</div>
+    </div>
+
+    <div class="finding-card severity-critical">
+      <div class="finding-sev critical">Critical &mdash; Cross-layer bypass</div>
+      <h4>Injecting a fake tag caused the auto-sanitizer to skip all scanning</h4>
+      <p>The auto-sanitizer hook checked whether content was already wrapped in <code>&lt;untrusted-content&gt;</code> tags before scanning. An attacker could inject that substring into a payload, and the hook would skip it entirely&mdash;believing the content was already sanitized. One string bypasses the entire scanning pipeline.</p>
+      <div class="finding-status">Fixed &mdash; validated structural framing detection</div>
+    </div>
+
+    <div class="finding-card severity-critical">
+      <div class="finding-sev critical">Critical &mdash; Plugin execution order</div>
+      <h4>Content was being truncated before it was scanned for injection</h4>
+      <p>The security-monitor's auto-sanitizer ran at priority 5. The context-optimizer ran at priority 10. Higher priority executes first. So content was being truncated or quarantined by the optimizer before the security scanner ever saw it. Injections in the truncated portion would never be detected.</p>
+      <div class="finding-status">Fixed &mdash; security-monitor raised to priority 100</div>
+    </div>
+
+    <div class="finding-card severity-critical">
+      <div class="finding-sev critical">Critical &mdash; State-db trust boundary</div>
+      <h4>Any agent could write to state the main agent trusts as instructions</h4>
+      <p>Non-main agents (cron jobs, sandbox) had full write access to the state database: watch_events, threads, kv store. The main agent consumed these as trusted operational data. A compromised cron job could write injection payloads into state-db fields that the main agent would later follow.</p>
+      <div class="finding-status">Fixed &mdash; read-only wrapper for non-main agents</div>
+    </div>
+
+    <div class="finding-card severity-critical">
+      <div class="finding-sev critical">Critical &mdash; Unframed external data in cron</div>
+      <h4>Morning briefing ingested email subjects without structural framing</h4>
+      <p>Cron jobs that ran the morning briefing and heartbeat checks ingested email subjects, calendar titles, and comments as plain text&mdash;no <code>&lt;untrusted-content&gt;</code> wrapping. An attacker who could control an email subject line had a direct injection path into the model context.</p>
+      <div class="finding-status">Fixed &mdash; all external fields wrapped in data pipeline</div>
+    </div>
+
+  </div>
+
+  <!-- ======================== -->
+  <!-- The lesson                -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">The lesson: compaction is an attack surface</h2>
+  <p>One finding stood apart from the rest, because it's a fundamental problem with how LLM sessions work, not something specific to our stack.</p>
+  <p>When a session gets long, the runtime compacts it: it summarizes old messages to free up context window. During compaction, <code>&lt;untrusted-content&gt;</code> tags get stripped. Injection payloads that were safely framed become unframed text in the compaction summary.</p>
+
+  <div class="insight-box">
+    <p><strong>Compaction turns safely-framed content into unframed text.</strong> An attacker who can get a payload into the session and wait for compaction to happen gets a free de-framing pass. The payload enters wrapped. It exits naked.</p>
+  </div>
+
+  <p>This is not something a regex can fix. It's a property of the compaction pipeline itself. The mitigations are layered: re-sanitize summaries after compaction, track "contains untrusted content" metadata through the pipeline, and add explicit rules to the model's system prompt about compacted content. We've implemented all three.</p>
+
+  <!-- ======================== -->
+  <!-- What pattern matching     -->
+  <!-- can't catch               -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">What pattern matching will never catch</h2>
+  <p>After 210+ payloads across 6 rounds, the remaining bypasses clustered into four categories that no regex engine can address:</p>
+
+  <ul>
+    <li><strong>Pure semantic metaphor</strong> &mdash; instructions using completely novel vocabulary with no injection keywords. "Consider the garden" is not detectable as an instruction override.</li>
+    <li><strong>Novel encoding</strong> &mdash; ROT13, morse code, NATO phonetic, word-initial steganography. The sanitizer can add decoders, but there will always be another encoding scheme.</li>
+    <li><strong>Sub-threshold payloads</strong> &mdash; under 50 characters. Too short for effective attacks, but also too short to scan reliably.</li>
+    <li><strong>Composition attacks</strong> &mdash; content that's clean individually but dangerous when combined across tool results. Each piece passes inspection. The combination is an instruction.</li>
+  </ul>
+
+  <p>This is why defense-in-depth matters. Structural framing catches what the sanitizer can't. Canary tokens catch what the framing misses. Exec guardrails stop the action even if the model is compromised. You don't need every layer to be perfect. You need the combination to be reliable.</p>
+
+  <!-- ======================== -->
+  <!-- Beyond payloads           -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Beyond payloads: the architectural audit</h2>
+  <p>The four architectural audits found 30+ additional issues beyond the payload testing. Some highlights:</p>
+
+  <ul>
+    <li><strong>Symlink bypass of write protection</strong> &mdash; writing to <code>/tmp/symlink &rarr; CLAUDE.md</code> passed the path check. Fixed with <code>path.resolve()</code> before comparison.</li>
+    <li><strong>Script file execution gap</strong> &mdash; exec guardrails blocked <code>bash -c "payload"</code> but allowed <code>bash /tmp/payload.sh</code>. Any non-main agent could write a script and execute it.</li>
+    <li><strong>Missing exec verbs</strong> &mdash; <code>dd</code>, <code>rsync</code>, <code>ln</code>, <code>truncate</code> could modify protected files. 6 verbs added to the blocklist.</li>
+    <li><strong>Canary detection encoding gap</strong> &mdash; base64 or URL-encoded canary values evaded exact substring matching. Added decoding before comparison.</li>
+    <li><strong>9 CLI wrapper scripts</strong> vulnerable to argument injection, SQL injection, or path traversal. All patched.</li>
+  </ul>
+
+  <p>None of these would have been found by running more attack payloads against the sanitizer. They required reading the source code, understanding the architecture, and thinking about trust boundaries.</p>
+
+  <!-- ======================== -->
+  <!-- The approach               -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">How to red-team your own agent</h2>
+  <p>If you're running AI agents in production, here's the approach that actually works:</p>
+
+  <ol>
+    <li><strong>Start with payload testing.</strong> Give an attacker model your defense code and let it generate bypasses. Run multiple rounds. Patch and re-test everything each time.</li>
+    <li><strong>Stop when the bypasses get exotic.</strong> When the remaining bypasses are morse code and steganography, your pattern matching is solid. More regex won't help.</li>
+    <li><strong>Switch to architectural audits.</strong> Give the attacker model full source access. Plugin interactions, hook execution order, trust boundaries between agents, data flow through external sources.</li>
+    <li><strong>Test your assumptions, not your code.</strong> The silent drop finding wasn't a code bug. The plugin was running, the code was correct, the return value was right. The assumption that the runtime consumed that field was wrong.</li>
+    <li><strong>Check what happens at boundaries.</strong> Compaction boundaries, session boundaries, agent-to-agent handoffs, cron-to-main transitions. Every boundary is a place where security context can be lost.</li>
+  </ol>
+
+  <div class="insight-box">
+    <p><strong>AI is good at finding AI vulnerabilities.</strong> Not because it's smarter than a human pentester, but because it will systematically trace every data flow, check every return type, and read every line of every plugin without getting bored or making assumptions.</p>
+  </div>
+
+  <!-- ======================== -->
+  <!-- The point                 -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">The point</h2>
+  <p>We shipped 30+ security fixes in a week. Five were critical. The biggest one&mdash;three plugins silently dropping their security context&mdash;had been running unnoticed in production. No user would have reported it. No error log would have flagged it. It took a model reading every plugin's return values and cross-referencing them against the runtime's consumption contract to find it.</p>
+  <p>That's not a story about AI being dangerous. It's a story about AI being useful for exactly the kind of tedious, exhaustive verification that humans are bad at.</p>
+  <p>If you're building agents that handle real business data, you should be doing this. Not once. Continuously. The attack surface changes every time you add a plugin, modify a hook, or update a dependency. The defenses need to keep up.</p>
+  <p><strong>Defense in depth isn't a feature. It's a practice.</strong></p>
+
+  <p style="margin-top:3rem;font-size:0.88rem;color:var(--text-muted);font-style:italic;">6 rounds. 210+ payloads. 4 architectural audits. 30+ findings. 5 critical. All patched.</p>
+
+  <div style="max-width:780px;margin:4rem auto;padding:0 2rem;">
+    <a href="/build/" style="font-size:0.85rem;color:var(--gold);text-decoration:none;">&larr; Back to Build</a>
+  </div>
+</article>
+</main>
+
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260310b"></script>
+<script src="/shared.js?v=20260310b"></script>
+<script src="/ambient.js?v=20260310c"></script>
+<script src="/chat-bubble.js?v=20260310b"></script>
+<script src="/dynamic-stats.js?v=20260310b"></script>
+</body>
+</html>

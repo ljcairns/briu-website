@@ -71,27 +71,32 @@ nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; }
 .moment-col-new .moment-list li::before { background: var(--forest); }
 .moment-col-new .moment-list li { color: var(--text); }
 
-/* Iceberg / build-yourself */
-.iceberg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2.5rem; align-items: stretch; }
-.iceberg-visible { padding: 2rem; text-align: center; display: flex; flex-direction: column; justify-content: center; border: 1px solid rgba(255,255,255,0.06); border-right: none; }
-.iceberg-visible h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 400; }
-.iceberg-visible p { font-size: 0.92rem; color: var(--text-muted); margin: 0; line-height: 1.6; opacity: 0.7; }
-.iceberg-hidden { display: flex; flex-direction: column; gap: 0; border: 1px solid rgba(212,160,90,0.1); border-left: 2px solid var(--gold); counter-reset: layer; }
-.iceberg-layer { display: flex; align-items: center; gap: 0.75rem; padding: 0.65rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.85rem; color: var(--text); transition: all 0.2s ease; }
-.iceberg-layer:last-child { border-bottom: none; }
-.iceberg-layer:hover { background: rgba(212,160,90,0.04); padding-left: 1.25rem; }
-.iceberg-dot { width: 18px; height: 18px; border-radius: 50%; background: rgba(212,160,90,0.1); flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 0.6rem; font-weight: 700; color: var(--gold); counter-increment: layer; }
-.iceberg-dot::after { content: counter(layer); }
-.iceberg-bottom { margin-top: 2rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(212,160,90,0.12); background: rgba(212,160,90,0.03); }
-.iceberg-bottom p { font-size: 0.95rem; color: var(--text); line-height: 1.65; margin: 0; }
-.iceberg-bottom strong { color: var(--gold); font-weight: 600; }
+/* Gap comparison */
+.gap-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2.5rem; align-items: stretch; }
+.gap-col { display: flex; flex-direction: column; }
+.gap-col-header { padding: 1.25rem 1.5rem; font-family: var(--serif); font-size: 1.05rem; font-weight: 400; border-bottom: 2px solid rgba(255,255,255,0.06); }
+.gap-col-chat .gap-col-header { color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); border-right: none; border-bottom-color: rgba(255,255,255,0.08); }
+.gap-col-agent .gap-col-header { color: var(--gold); border: 1px solid rgba(212,160,90,0.15); border-left: none; border-bottom-color: rgba(212,160,90,0.25); background: rgba(212,160,90,0.03); }
+.gap-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.7rem 1.5rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 0.88rem; line-height: 1.5; transition: background 0.2s; }
+.gap-col-chat .gap-row { color: var(--text-muted); border-left: 1px solid rgba(255,255,255,0.06); border-right: none; }
+.gap-col-agent .gap-row { color: var(--text); border-right: 1px solid rgba(212,160,90,0.08); border-left: none; }
+.gap-col-agent .gap-row:hover { background: rgba(212,160,90,0.03); }
+.gap-icon { flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; }
+.gap-col-chat .gap-icon { background: rgba(255,255,255,0.15); }
+.gap-col-agent .gap-icon { background: var(--gold); }
+.gap-col-chat .gap-row:last-child, .gap-col-agent .gap-row:last-child { border-bottom: none; }
+.gap-bottom { margin-top: 2rem; padding: 1.25rem 1.5rem; border: 1px solid rgba(212,160,90,0.12); background: rgba(212,160,90,0.03); }
+.gap-bottom p { font-size: 0.95rem; color: var(--text); line-height: 1.65; margin: 0; }
+.gap-bottom strong { color: var(--gold); font-weight: 600; }
 
 @media (max-width: 640px) {
   .moment-grid { grid-template-columns: 1fr; }
   .moment-col-old { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
-  .iceberg-grid { grid-template-columns: 1fr; }
-  .iceberg-visible { border-right: 1px solid rgba(255,255,255,0.06); border-bottom: none; }
-  .iceberg-hidden { border-left: 2px solid var(--gold); }
+  .gap-compare { grid-template-columns: 1fr; }
+  .gap-col-chat .gap-col-header { border-right: 1px solid rgba(255,255,255,0.06); }
+  .gap-col-agent .gap-col-header { border-left: 1px solid rgba(212,160,90,0.15); }
+  .gap-col-chat .gap-row { border-right: 1px solid rgba(255,255,255,0.06); }
+  .gap-col-agent .gap-row { border-left: 1px solid rgba(212,160,90,0.08); }
 }
 
 /* Wave dividers */
@@ -676,26 +681,33 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <h2 class="reveal">"Why can't I just use Claude?"</h2>
   <p class="reveal">You can. For conversation, brainstorming, and writing, you should. But going from "AI can help me" to "AI is running my operations" requires a system. Here's what sits between a chat window and a deployed agent:</p>
 
-  <div class="iceberg-grid reveal">
-    <div class="iceberg-visible">
-      <h3>What a chat window gives you</h3>
-      <p>A smart AI that answers questions, writes content, and helps you think. Impressive, but it can't touch your email, update your CRM, or run while you sleep.</p>
+  <div class="gap-compare reveal">
+    <div class="gap-col gap-col-chat">
+      <div class="gap-col-header">Chat window</div>
+      <div class="gap-row"><span class="gap-icon"></span> Answers when you ask</div>
+      <div class="gap-row"><span class="gap-icon"></span> One conversation at a time</div>
+      <div class="gap-row"><span class="gap-icon"></span> Writes content and drafts</div>
+      <div class="gap-row"><span class="gap-icon"></span> Brainstorms and analyzes</div>
+      <div class="gap-row"><span class="gap-icon"></span> Generic, same for everyone</div>
+      <div class="gap-row"><span class="gap-icon"></span> Your data on their servers</div>
+      <div class="gap-row"><span class="gap-icon"></span> No setup required</div>
+      <div class="gap-row"><span class="gap-icon"></span> Stops when you close the tab</div>
     </div>
-    <div class="iceberg-hidden">
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Infrastructure setup &amp; hosting</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Security architecture (6 defense layers)</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Tool integrations (Gmail, HubSpot, Slack, etc.)</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Approval gates &amp; human-in-the-loop</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Budget controls &amp; cost monitoring</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Skill development &amp; testing</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Multi-agent orchestration</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Error handling &amp; recovery</div>
-      <div class="iceberg-layer"><span class="iceberg-dot"></span> Ongoing model upgrades &amp; optimization</div>
+    <div class="gap-col gap-col-agent">
+      <div class="gap-col-header">Deployed agent</div>
+      <div class="gap-row"><span class="gap-icon"></span> Runs while you sleep</div>
+      <div class="gap-row"><span class="gap-icon"></span> Parallel agents, orchestrated</div>
+      <div class="gap-row"><span class="gap-icon"></span> Sends emails, updates your CRM</div>
+      <div class="gap-row"><span class="gap-icon"></span> Executes across live systems</div>
+      <div class="gap-row"><span class="gap-icon"></span> Custom skills for your business</div>
+      <div class="gap-row"><span class="gap-icon"></span> Your infrastructure, your data</div>
+      <div class="gap-row"><span class="gap-icon"></span> Security, budgets, approval gates</div>
+      <div class="gap-row"><span class="gap-icon"></span> Picks up where it left off</div>
     </div>
   </div>
 
-  <div class="iceberg-bottom reveal">
-    <p><strong>The good news:</strong> tools like Claude Code, Codex, and OpenClaw now make it possible to build all nine layers in days, not months. And every piece runs on your infrastructure, your data stays yours, and you own the system outright.</p>
+  <div class="gap-bottom reveal">
+    <p><strong>The good news:</strong> tools like Claude Code, Codex, and OpenClaw now make it possible to build this in days, not months. Every piece runs on your infrastructure, your data stays yours, and you own the system outright.</p>
   </div>
 </section>
 
@@ -966,7 +978,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       <div class="proof-summary-label">Project commits</div>
     </div>
     <div class="proof-summary-stat">
-      <div class="proof-summary-num" data-dynamic="avg-daily-cost">$14.68</div>
+      <div class="proof-summary-num" data-dynamic="avg-daily-cost">$18.97</div>
       <div class="proof-summary-label">Daily baseline cost</div>
     </div>
   </div>

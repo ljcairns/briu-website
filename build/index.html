@@ -367,23 +367,23 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-label">Lines of Code</div>
   </div>
   <div class="hud-stat" data-tooltip="Total commits across website + agent repos, pulled from GitHub every 6 hours" style="--pulse-delay: 1s;">
-    <div class="hud-value" data-dynamic="commits" data-count="636" id="hud-commits">636</div>
+    <div class="hud-value" data-dynamic="commits" data-count="679" id="hud-commits">679</div>
     <div class="hud-label">Project Commits</div>
   </div>
   <div class="hud-stat" data-tooltip="Live skills across the agent stack" style="--pulse-delay: 1.5s;">
     <div class="hud-value" data-dynamic="agent-skills" id="hud-skills">9</div>
     <div class="hud-label">Agent Skills</div>
   </div>
-  <div class="hud-stat" data-tooltip="Network, permissions, approvals, sandbox, monitoring, per-turn context — one layer of a broader zero-trust stack" style="--pulse-delay: 2s;">
-    <div class="hud-value" data-dynamic="sec-defense-layers">6</div>
+  <div class="hud-stat" data-tooltip="Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing" style="--pulse-delay: 2s;">
+    <div class="hud-value" data-dynamic="sec-defense-layers">8</div>
     <div class="hud-label">Defense Layers</div>
   </div>
-  <div class="hud-stat" data-tooltip="Known sanitizer bypasses within our current red-team taxonomy · 15 attack categories · Last tested 2026-03-09" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
+  <div class="hud-stat" data-tooltip="6 rounds of AI vs AI testing · 210+ payloads · 4 architectural audits · 30+ findings addressed" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
     <div class="hud-value" data-dynamic="sec-open-bypasses">0</div>
-    <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(sanitizer taxonomy)</span></div>
+    <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full red-team scope)</span></div>
   </div>
   <div class="hud-stat" data-tooltip="Average daily baseline cost across all agents" style="--pulse-delay: 2.5s;">
-    <div class="hud-value" data-dynamic="avg-daily-cost" id="hud-cost">$14.68</div>
+    <div class="hud-value" data-dynamic="avg-daily-cost" id="hud-cost">$18.97</div>
     <div class="hud-label">Daily Baseline Cost<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(Briu internal stack)</span></div>
   </div>
   <div class="hud-stat" data-tooltip="Agent uptime since deployment" style="--pulse-delay: 3s;">
@@ -524,12 +524,12 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       </div>
     </div>
 
-    <div class="vtl-entry" data-category="security" data-date="2026-03-09">
+    <div class="vtl-entry" data-category="security" data-date="2026-03-11">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
-        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Security audit complete</div>
-        <div class="vtl-desc">Red team testing: 26 payloads, 15 attack categories, 0 bypasses.</div>
+        <div class="vtl-date">Mar 11<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Full security red-team complete</div>
+        <div class="vtl-desc">6 rounds, 210+ payloads, 4 architectural audits, 5 critical findings patched. <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold)">Read &rarr;</a></div>
       </div>
     </div>
 
@@ -568,11 +568,11 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       <div class="story-metric">$376 total · 3 days to production</div>
       <span class="story-link">Read the story</span>
     </a>
-    <a href="/build/the-real-numbers/" class="story-card reveal-scale reveal-delay-2">
-      <div class="story-card-tag">Cost transparency</div>
-      <h3>The Real Numbers</h3>
-      <div class="story-desc">Every API call, every cost decision. What it actually costs to run an agent company, live and unedited.</div>
-      <div class="story-metric">$2–5/day light · $14.68/day avg</div>
+    <a href="/build/how-we-red-teamed-our-own-agent/" class="story-card reveal-scale reveal-delay-2">
+      <div class="story-card-tag">Security</div>
+      <h3>How We Red-Teamed Our Own Agent</h3>
+      <div class="story-desc">Opus 4.6 and Codex vs. our own security stack. The biggest finding wasn't in the sanitizer.</div>
+      <div class="story-metric">210+ payloads · 5 critical findings · all patched</div>
       <span class="story-link">Read the story</span>
     </a>
   </div>
@@ -592,17 +592,19 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="sec-arch-card">
       <div class="sec-arch-card-label">Architecture</div>
       <div class="sec-arch-primary">
-        <span class="sec-arch-num" data-dynamic="sec-defense-layers">6</span>
+        <span class="sec-arch-num" data-dynamic="sec-defense-layers">8</span>
         <span class="sec-arch-unit">Defense Layers</span>
       </div>
       <p class="sec-arch-sub">Each assumes the others failed.</p>
       <ol class="sec-layer-list">
-        <li><strong>Network isolation</strong> — hardened VPS, no inbound services</li>
-        <li><strong>Permission isolation</strong> — deny-by-default allowlist</li>
-        <li><strong>Human approval gates</strong> — sign-off before external actions</li>
-        <li><strong>Exec sandbox</strong> — restricted shell, dangerous patterns blocked</li>
-        <li><strong>Per-turn security context</strong> — injected policy + runtime risk checks</li>
-        <li><strong>Monitoring + kill switch</strong> — cost ceilings, anomaly alerts, auto-lockdown</li>
+        <li><strong>Input sanitizer</strong> &mdash; 140+ patterns, 7 detection stages, 20+ languages</li>
+        <li><strong>Auto-sanitizer hook</strong> &mdash; enforced scanning on every tool result</li>
+        <li><strong>Canary tokens</strong> &mdash; daily-rotating fake credentials as tripwires</li>
+        <li><strong>Write protection</strong> &mdash; critical files locked from non-operator agents</li>
+        <li><strong>Exec guardrails</strong> &mdash; blocks code execution &amp; network exfiltration</li>
+        <li><strong>Kill switch</strong> &mdash; automated lockdown on critical CVEs</li>
+        <li><strong>Sandbox isolation</strong> &mdash; external content via sandboxed agent</li>
+        <li><strong>Structural framing</strong> &mdash; all external data tagged as untrusted</li>
       </ol>
       <a href="/build/six-layers-deep/" class="sec-arch-link">Full architecture &rarr;</a>
     </div>
@@ -614,19 +616,23 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         <span class="sec-arch-num" data-dynamic="sec-open-bypasses">0</span>
         <span class="sec-arch-unit">Open Known Bypasses</span>
       </div>
-      <p class="sec-arch-sub">Sanitizer layer &middot; red-team taxonomy only</p>
+      <p class="sec-arch-sub">6 rounds &middot; AI vs AI &middot; full architecture</p>
       <div class="sec-test-stats">
         <div class="sec-test-row">
-          <span class="sec-test-val"><span data-dynamic="sec-bypasses-closed">26</span>/<span data-dynamic="sec-bypasses-total">26</span></span>
-          <span class="sec-test-desc">known payloads caught</span>
+          <span class="sec-test-val"><span data-dynamic="sec-bypasses-closed">210</span>+</span>
+          <span class="sec-test-desc">attack payloads tested</span>
         </div>
         <div class="sec-test-row">
-          <span class="sec-test-val"><span data-dynamic="sec-attack-categories">15</span></span>
-          <span class="sec-test-desc">attack categories &middot; 3 automated rounds</span>
+          <span class="sec-test-val">5</span>
+          <span class="sec-test-desc">critical findings &middot; all patched</span>
+        </div>
+        <div class="sec-test-row">
+          <span class="sec-test-val">4</span>
+          <span class="sec-test-desc">architectural audits (plugins, cron, state-db, file perms)</span>
         </div>
       </div>
-      <p class="sec-scope-note">Scope: sanitizer stress-tested in isolation against our current red-team taxonomy. Other layers were excluded deliberately &mdash; that is how layer isolation testing works.</p>
-      <a href="/build/we-tried-to-break-our-own-sanitizer/" class="sec-arch-link">Read the red-team results &rarr;</a>
+      <p class="sec-scope-note">Full-stack testing: Opus 4.6 (5 payload rounds) + Codex (payloads + architectural audits). Sanitizer, plugin contracts, trust boundaries, cron injection, file permissions.</p>
+      <a href="/build/how-we-red-teamed-our-own-agent/" class="sec-arch-link">Read the full red-team results &rarr;</a>
     </div>
 
     <!-- Card 3: Operating Posture -->
@@ -715,9 +721,9 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
           <div class="skill-status status-live">Live</div>
         </div>
-        <h3>Zero-Trust Architecture</h3>
-        <div class="skill-desc">Six layers, each assumes the others failed</div>
-        <div class="skill-metric">6 defense layers</div>
+        <h3>Defense-in-Depth Architecture</h3>
+        <div class="skill-desc">Eight layers, each assumes the others failed</div>
+        <div class="skill-metric"><span data-dynamic="sec-defense-layers">8</span> defense layers</div>
         <div class="skill-links">
           <a href="/build/six-layers-deep/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
@@ -729,10 +735,10 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Red Team Testing</h3>
-        <div class="skill-desc"><span data-dynamic="sec-attack-categories">15</span> attack categories · 3 automated rounds · bypass rate to zero</div>
+        <div class="skill-desc">6 rounds · AI vs AI · 210+ payloads · 4 architectural audits · 5 critical findings patched</div>
         <div class="skill-metric"><span data-dynamic="sec-open-bypasses">0</span> open known bypasses</div>
         <div class="skill-links">
-          <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
+          <a href="/build/how-we-red-teamed-our-own-agent/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
         </div>
       </div>
@@ -741,11 +747,11 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
           <div class="skill-status status-live">Live</div>
         </div>
-        <h3>Sanitizer v4</h3>
-        <div class="skill-desc">Input sanitizer hardened via automated red-team · <span data-dynamic="sec-bypasses-closed">26</span>/<span data-dynamic="sec-bypasses-total">26</span> known payloads caught</div>
-        <div class="skill-metric">90+ detection patterns, 13 languages</div>
+        <h3>Sanitizer v9</h3>
+        <div class="skill-desc">Input sanitizer hardened across 6 red-team rounds · <span data-dynamic="sec-bypasses-closed">210</span>+ payloads caught</div>
+        <div class="skill-metric">140+ detection patterns, 20+ languages</div>
         <div class="skill-links">
-          <a href="/build/we-tried-to-break-our-own-sanitizer/" class="skill-read">Read</a>
+          <a href="/build/how-we-red-teamed-our-own-agent/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
         </div>
       </div>
@@ -967,8 +973,8 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     </div>
     <div class="spectrum-tier spectrum-baseline reveal-scale reveal-delay-1">
       <div class="spectrum-marker" style="color: var(--forest); display: flex; align-items: center; gap: 0.5rem;">Briu Average <span class="spectrum-you-badge" style="position: static; margin: 0;">Briu internal</span></div>
-      <div class="spectrum-value">~$640<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + $14.68/day avg API</div>
+      <div class="spectrum-value">~<span data-dynamic="monthly-total-cost">$769</span><span>/mo</span></div>
+      <div class="spectrum-breakdown">$200/mo platform + <span data-dynamic="avg-daily-cost">$18.97</span>/day avg API</div>
       <div class="spectrum-desc">Active ops, prospecting, multi-session work, and ongoing build overhead. What it costs to run the system and keep building it at the same time.</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-2">

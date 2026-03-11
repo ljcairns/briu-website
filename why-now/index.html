@@ -108,11 +108,13 @@
 .cost-table td:first-child { color: var(--text); font-weight: 500; }
 .cost-table tr:last-child td { border-bottom: none; }
 
-/* Advantages list */
-.advantages { list-style: none; padding: 0; margin: 1.5rem 0; }
-.advantages li { display: flex; gap: 0.75rem; margin-bottom: 1rem; font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
-.advantages li strong { color: var(--text); }
-.advantages li::before { content: ''; flex-shrink: 0; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-top: 0.55rem; }
+/* Advantages cards */
+.advantages { list-style: none; padding: 0; margin: 1.5rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.advantages li { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; border-top: 2px solid var(--gold); transition: border-color 0.3s; }
+.advantages li:hover { border-color: rgba(212,160,90,0.2); border-top-color: var(--gold); }
+.advantages li strong { color: var(--text); display: block; font-size: 0.92rem; margin-bottom: 0.5rem; }
+.advantages li .adv-desc { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+@media (max-width: 640px) { .advantages { grid-template-columns: 1fr; } }
 
 /* Live counters */
 .tl-counters { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 0; }
@@ -459,7 +461,7 @@
       after: '2026-03-09',
       id: 'no-300',
       html: '<h2>You Don\u2019t Need $300 a Day</h2>' +
-        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day for personal-assistant style usage, on top of a $200/mo platform subscription. Running the full Briu internal stack, which includes active prospecting, reporting, and multi-session ops, averages <span data-dynamic="avg-daily-cost">$14.68</span>/day. The architecture keeps costs proportional to the work being done. <a href="/build/" style="color:var(--gold);">See the full build log \u2192</a></p>' +
+        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day for personal-assistant style usage, on top of a $200/mo platform subscription. Running the full Briu internal stack, which includes active prospecting, reporting, and multi-session ops, averages <span data-dynamic="avg-daily-cost">$18.97</span>/day. The architecture keeps costs proportional to the work being done. <a href="/build/" style="color:var(--gold);">See the full build log \u2192</a></p>' +
         '<p>Not because we cut corners. Because we built the architecture to be efficient. A personal agent coordinates task-specific agents. Each one has a defined job, budget, and scope. They run when there\u2019s work to do and stop when it\u2019s done.</p>'
     },
     {
@@ -499,11 +501,11 @@
         '<p>AI adoption in 2026 isn\u2019t coming from CEO transformation initiatives. It\u2019s coming from individual employees who figure it out themselves, bringing consumerized AI tools from the bottom up.</p>' +
         '<p>Somewhere right now, a business that competes with yours has an employee building an agent that handles their inbox. Automating their CRM updates. Running prospect research overnight. Getting better at it every week.</p>' +
         '<p class="wn-highlight">The businesses that start now get three advantages:</p>' +
-        '<ol class="advantages">' +
-          '<li><strong>Knowledge accumulation</strong> \u2014 every day the agent runs, it learns your business</li>' +
-          '<li><strong>Team capability</strong> \u2014 your people learn to operate agents before your competitors\u2019 people do</li>' +
-          '<li><strong>Cost trajectory</strong> \u2014 you lock in the architecture now, costs drop every quarter, your ROI accelerates</li>' +
-        '</ol>' +
+        '<div class="advantages">' +
+          '<div><strong>Knowledge accumulation</strong><span class="adv-desc">Every day the agent runs, it learns your business</span></div>' +
+          '<div><strong>Team capability</strong><span class="adv-desc">Your people learn to operate agents before your competitors\u2019 people do</span></div>' +
+          '<div><strong>Cost trajectory</strong><span class="adv-desc">Lock in the architecture now, costs drop every quarter, ROI accelerates</span></div>' +
+        '</div>' +
         '<p>The framework is open source. One developer built it using an AI coding agent. You build what your business needs, you own it, and you start getting value this week.</p>'
     }
   ];
@@ -568,21 +570,28 @@
   function insertHereMarker() {
     if (hereInserted) return;
     hereInserted = true;
+    var today = new Date();
+    var monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    var dateStr = monthNames[today.getMonth()] + ' ' + today.getDate() + ', ' + today.getFullYear();
+
+    var side = isLeft ? 'tl-left' : 'tl-right';
     var here = document.createElement('div');
-    here.className = 'tl-here';
+    here.className = 'tl-node ' + side + ' tl-here-node';
     here.id = 'tlHere';
-    here.style.position = 'relative';
-    here.style.display = 'flex';
-    here.style.alignItems = 'center';
-    here.style.justifyContent = 'center';
-    here.style.margin = '2rem 0';
-    here.innerHTML = '<div style="position:relative;display:flex;align-items:center;justify-content:center;width:100%;">' +
-      '<div style="position:absolute;left:50%;transform:translateX(-50%);" class="tl-here">' +
-        '<div class="tl-here-dot"></div>' +
-        '<div class="tl-here-label">You are here</div>' +
-      '</div>' +
-    '</div>';
+    here.style.opacity = '1';
+    here.style.transform = 'none';
+    here.innerHTML =
+      '<div class="tl-dot" style="background:var(--gold);box-shadow:0 0 16px rgba(212,160,90,0.4);width:18px;height:18px;animation:tlPulse 2s ease-in-out infinite;"></div>' +
+      '<div class="tl-connector"></div>' +
+      '<div style="position:absolute;left:50%;transform:translateX(-50%);top:-1.6rem;"><div class="tl-here-label">You are here</div></div>' +
+      '<div class="tl-content">' +
+        '<div class="tl-date">' + dateStr + '</div>' +
+        '<div class="tl-relative cat-openclaw">Today</div>' +
+        '<div class="tl-title">The window is open</div>' +
+        '<div class="tl-desc">Everything above has already happened. Everything below is coming. The businesses deploying agents now are building advantages that compound daily.</div>' +
+      '</div>';
     container.appendChild(here);
+    isLeft = !isLeft;
   }
 
   TIMELINE.forEach(function(evt, idx) {

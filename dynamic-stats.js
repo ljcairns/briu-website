@@ -13,22 +13,22 @@
   // These are used to initialize all data-dynamic elements on page load
   // before stats.json arrives. Update here when numbers change.
   var FALLBACKS = {
-    commits:           641,   // totalCommits (website + agent repos)
-    websiteCommits:    371,   // website repo only (ljcairns/briu-website)
-    agentCommits:      270,   // private agent config repo
-    linesOfCode:       '16.0K', // total (website + agent)
-    avgDailyCost:      '$14.68', // Briu internal baseline (full stack, active ops)
-    peakDailyCost:     '$42.58',
+    commits:           679,   // totalCommits (website + agent repos)
+    websiteCommits:    406,   // website repo only (ljcairns/briu-website)
+    agentCommits:      273,   // private agent config repo
+    linesOfCode:       '17.7K', // total (website + agent)
+    avgDailyCost:      '$18.97', // Briu internal baseline (full stack, active ops)
+    peakDailyCost:     '$138.84',
     lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
-    totalApiSpend:     '$411.16',
+    totalApiSpend:     '$550.00',
     agentSkills:       9,     // live skills in production
     chartCount:        64,
     articleCount:      10,
     // Security — scoped to sanitizer red-team taxonomy
-    secDefenseLayers:            6,
+    secDefenseLayers:            8,
     secOpenBypasses:             0,
-    secBypassesClosed:           26,
-    secBypassesTotal:            26,
+    secBypassesClosed:           210,
+    secBypassesTotal:            210,
     secAttackCategories:         15,
     secAttackCategoriesPassing:  15
   };
@@ -54,14 +54,17 @@
     }
   }
 
-  // Apply fallback values immediately so no element shows a stale hardcode
-  // while waiting for the stats.json / security-metrics.json fetch
+  function computeMonthlyTotal(dailyCost) {
+    return '$' + Math.round(200 + dailyCost * 30).toLocaleString();
+  }
+
   function initFallbacks() {
     updateEls('commits',              FALLBACKS.commits.toLocaleString());
     updateEls('website-commits',      FALLBACKS.websiteCommits.toLocaleString());
     updateEls('agent-commits',        FALLBACKS.agentCommits.toLocaleString());
     updateEls('lines-of-code',        FALLBACKS.linesOfCode);
     updateEls('avg-daily-cost',       FALLBACKS.avgDailyCost);
+    updateEls('monthly-total-cost',   computeMonthlyTotal(parseFloat(FALLBACKS.avgDailyCost.replace('$',''))));
     updateEls('peak-daily-cost',      FALLBACKS.peakDailyCost);
     updateEls('total-api-spend',      FALLBACKS.totalApiSpend);
     updateEls('agent-skills',         FALLBACKS.agentSkills);
@@ -144,7 +147,10 @@
     if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
     if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());
     if (data.pageCount) updateEls('page-count', data.pageCount.toLocaleString());
-    if (data.avgDailyCost) updateEls('avg-daily-cost', '$' + data.avgDailyCost.toFixed(2));
+    if (data.avgDailyCost) {
+      updateEls('avg-daily-cost', '$' + data.avgDailyCost.toFixed(2));
+      updateEls('monthly-total-cost', computeMonthlyTotal(data.avgDailyCost));
+    }
     if (data.peakDailyCost) updateEls('peak-daily-cost', '$' + data.peakDailyCost.toFixed(2));
     if (data.totalApiSpend) updateEls('total-api-spend', '$' + data.totalApiSpend.toFixed(2));
   }
