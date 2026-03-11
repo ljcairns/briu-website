@@ -323,11 +323,8 @@
 
   // ===== Timeline Data =====
   var TIMELINE = [
-    { date: '2023-03-14', category: 'industry', title: 'GPT-4 launches', desc: 'OpenAI proves LLMs can reason about complex tasks. $30/M input tokens. The starting gun for the AI era.' },
-    { date: '2024-05-13', category: 'industry', title: 'GPT-4o launches', desc: 'Multimodal, faster, cheaper. $5/M tokens. AI moves from novelty to daily tool for millions.' },
-    { date: '2024-06-01', category: 'industry', title: 'Claude 3.5 Sonnet', desc: 'First model fast and capable enough for sustained agent work. Agent frameworks go from demos to daily drivers.' },
-    { date: '2024-11-25', category: 'industry', title: 'Anthropic launches MCP', desc: 'Open standard for connecting AI to tools. The plumbing layer that makes agents practical.' },
-    { date: '2025-03-25', category: 'industry', title: 'Gemini 2.5 Pro', desc: 'Google crosses the threshold. Complex multi-step tasks become reliable. Agents can finally handle real work.' },
+    { date: '2023-03-14', category: 'industry', title: 'GPT-4 launches', desc: 'OpenAI proves LLMs can reason. The starting gun. Within 18 months, GPT-4o, Claude 3.5, and Gemini follow. Costs drop 100\u00d7.' },
+    { date: '2025-03-25', category: 'industry', title: 'Models cross the threshold', desc: 'Gemini 2.5 Pro makes complex tasks reliable. Claude, GPT, and Gemini now all capable enough for autonomous agent work.' },
     { date: '2025-11-01', category: 'openclaw', title: 'Clawdbot launches', desc: 'Peter Steinberger publishes a weekend project. 9,000 GitHub stars in a week.' },
     { date: '2026-01-27', category: 'openclaw', title: 'OpenClaw goes viral', desc: '60,000 GitHub stars in 72 hours. Triple rebrand in 3 days. Fastest in open source history.' },
     { date: '2026-01-28', category: 'industry', title: 'Mac Mini shortage', desc: "M4 Mac Mini delivery times hit 6 weeks. Tom's Hardware: 'OpenClaw-fueled ordering frenzy.'" },
@@ -841,6 +838,16 @@
         }
       });
     }
+    // Force resize all charts after sections become visible
+    setTimeout(function() {
+      ['tokenCostChart', 'perfChart', 'crossoverChart'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          var chart = Chart.getChart(el);
+          if (chart) chart.resize();
+        }
+      });
+    }, 1000);
   }
   initChartJs();
 
