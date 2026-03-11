@@ -291,6 +291,34 @@ section { padding-bottom: 2rem; }
 .cta-btn { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(212,160,90,0.35); transition: all 0.3s ease; }
 .cta-btn:hover { background: var(--gold); color: var(--bg); border-color: var(--gold); }
 
+/* Story cards */
+.story-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+.story-card { background: linear-gradient(135deg, var(--surface), rgba(212,160,90,0.03)); border: 1px solid rgba(212,160,90,0.1); padding: 2rem 1.75rem; display: flex; flex-direction: column; transition: all 0.35s ease; position: relative; }
+.story-card:hover { border-color: rgba(212,160,90,0.25); background: linear-gradient(135deg, var(--surface-2), rgba(212,160,90,0.06)); transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.3), 0 0 0 1px rgba(212,160,90,0.08); }
+.story-card-tag { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem; }
+.story-card-tag::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+.story-card h3 { font-family: var(--serif); font-size: 1.25rem; line-height: 1.3; margin-bottom: 0.5rem; color: var(--text); transition: color 0.2s; }
+.story-card:hover h3 { color: var(--gold-light); }
+.story-card .story-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; flex: 1; }
+.story-card .story-metric { font-family: var(--serif); font-size: 1rem; color: var(--gold); margin-bottom: 1rem; }
+.story-card .story-link { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; text-decoration: none; color: var(--gold); margin-top: auto; transition: color 0.2s; }
+.story-card .story-link:hover { color: var(--gold-light); }
+.story-card .story-link::after { content: ' \2192'; }
+@media (max-width: 768px) { .story-grid { grid-template-columns: 1fr; } }
+
+/* CTA bridge */
+.cta-bridge { max-width: 1060px; margin: 0 auto; padding: 4rem 2rem 2rem; text-align: center; }
+.cta-bridge h2 { font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 2rem); margin-bottom: 1rem; }
+.cta-bridge p { color: var(--text-muted); font-size: 0.95rem; max-width: 600px; margin: 0 auto 2rem; line-height: 1.7; }
+.cta-bridge-links { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.cta-bridge-links .cta-btn { }
+.cta-bridge-links .cta-btn-secondary { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text-muted); text-decoration: none; padding: 0.75rem 1.5rem; border: 1px solid rgba(255,255,255,0.08); transition: all 0.3s ease; }
+.cta-bridge-links .cta-btn-secondary:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+/* Section divider */
+.section-divider { max-width: 1060px; margin: 0 auto; padding: 0 2rem; }
+.section-divider hr { border: none; border-top: 1px solid rgba(255,255,255,0.04); margin: 3rem 0 1rem; }
+
 @media (max-width: 640px) {
   .vtl { padding-left: 1.25rem; padding-right: 1.25rem; }
   .vtl-entry { flex: 0 0 180px; }
@@ -402,6 +430,156 @@ section { padding-bottom: 2rem; }
   <p class="vitals-summary">Build cost: <strong>~$406</strong>. Total to launch: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
 </div>
 
+<!-- 2. Timeline (Dashboard layer) -->
+<section style="overflow:hidden">
+  <p class="section-label reveal">Timeline</p>
+  <div class="vtl-filters">
+    <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
+    <button class="vtl-filter" onclick="filterTimeline('agent',this)">Agent</button>
+    <button class="vtl-filter" onclick="filterTimeline('brand',this)">Brand</button>
+    <button class="vtl-filter" onclick="filterTimeline('website',this)">Website</button>
+    <button class="vtl-filter" onclick="filterTimeline('business',this)">Business</button>
+    <button class="vtl-filter" onclick="filterTimeline('security',this)">Security</button>
+  </div>
+  <div class="vtl">
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-10">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 10<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Day zero</div>
+        <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-12">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 12<span class="vtl-relative"></span></div>
+        <div class="vtl-title">First production day</div>
+        <div class="vtl-desc">Gmail, CRM, browser automation, security layer. Full stack in one session.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-25">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 25<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Cost optimization</div>
+        <div class="vtl-desc">Context management overhauled. Operating costs drop 90%.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-02-28">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Feb 28<span class="vtl-relative"></span></div>
+        <div class="vtl-title">First sales pipeline</div>
+        <div class="vtl-desc">Prospecting to outreach, automated. Thread isolation deployed.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry major" data-category="business" data-date="2026-03-01">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 1<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Briu launched</div>
+        <div class="vtl-desc">Brand, domain, trademark filed. One session.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="website" data-date="2026-03-06">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 6<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Website live</div>
+        <div class="vtl-desc">Full site with interactive economics, services, and contact flow.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="business" data-date="2026-03-07">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 7<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Services launched</div>
+        <div class="vtl-desc">Kickoff, Workshop, and Implementation tiers live.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="website" data-date="2026-03-08">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 8<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Analytics dashboard</div>
+        <div class="vtl-desc">22 interactive charts built from real operating data. Live across all pages.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-03-09">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Automated customer loop</div>
+        <div class="vtl-desc">Customer feedback to config update to confirmation email. Zero manual steps.</div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="security" data-date="2026-03-09">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Security audit complete</div>
+        <div class="vtl-desc">Red team testing: 26 payloads, 15 attack categories, 0 bypasses.</div>
+      </div>
+    </div>
+
+    <!-- "You are here" marker — dynamically positioned -->
+    <div class="vtl-entry vtl-now" data-category="all" id="vtl-today">
+      <div class="vtl-now-label">You are here</div>
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date" id="vtl-today-date">Today</div>
+        <div class="vtl-title">Building continues</div>
+        <div class="vtl-desc">The system is running. New skills shipping weekly.</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- 3. Stories -->
+<section>
+  <p class="section-label reveal">Stories</p>
+  <h2 class="reveal">What working with agents actually looks like.</h2>
+  <p class="reveal" style="color:var(--text-muted);max-width:600px;margin-bottom:2rem;">Full session narratives. What got built, what it cost, and what the experience was like.</p>
+
+  <div class="story-grid">
+    <a href="/build/what-a-real-session-actually-costs/" class="story-card reveal-scale">
+      <div class="story-card-tag">Session narrative</div>
+      <h3>The 2 AM Session</h3>
+      <div class="story-desc">Woke up at 1 AM, shipped six systems by 10 AM. From a phone, in bed, approving work as it came in.</div>
+      <div class="story-metric">$64.30 · 9 hours · 6 systems shipped</div>
+      <span class="story-link">Read the story</span>
+    </a>
+    <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="story-card reveal-scale reveal-delay-1">
+      <div class="story-card-tag">Origin story</div>
+      <h3>How We Built Briu</h3>
+      <div class="story-desc">From zero to production agent in 3 days. The full build log of a company created by its own product.</div>
+      <div class="story-metric">$376 total · 3 days to production</div>
+      <span class="story-link">Read the story</span>
+    </a>
+    <a href="/build/the-real-numbers/" class="story-card reveal-scale reveal-delay-2">
+      <div class="story-card-tag">Cost transparency</div>
+      <h3>The Real Numbers</h3>
+      <div class="story-desc">Every API call, every cost decision. What it actually costs to run an agent company, live and unedited.</div>
+      <div class="story-metric">$2–5/day light · $14.68/day avg</div>
+      <span class="story-link">Read the story</span>
+    </a>
+  </div>
+</section>
+
+<div class="section-divider"><hr></div>
+
 <!-- Security Architecture Section -->
 <section class="security-arch-section">
   <p class="section-label reveal">Security Architecture</p>
@@ -419,12 +597,12 @@ section { padding-bottom: 2rem; }
       </div>
       <p class="sec-arch-sub">Each assumes the others failed.</p>
       <ol class="sec-layer-list">
-        <li><strong>Network isolation</strong><br>VPS hardening, firewall, no inbound services exposed</li>
-        <li><strong>Permission isolation</strong><br>Deny-by-default allowlist — every tool explicitly permitted before use</li>
-        <li><strong>Human approval gates</strong><br>External actions require explicit human sign-off before they run</li>
-        <li><strong>Exec sandbox</strong><br>Restricted shell environment, dangerous patterns blocked at hook level</li>
-        <li><strong>Per-turn security context</strong><br>Execution conditioned on injected security policy and runtime risk checks</li>
-        <li><strong>Monitoring + kill switch</strong><br>Cost ceilings, anomaly alerts, automatic lockdown on threshold breach</li>
+        <li><strong>Network isolation</strong> — hardened VPS, no inbound services</li>
+        <li><strong>Permission isolation</strong> — deny-by-default allowlist</li>
+        <li><strong>Human approval gates</strong> — sign-off before external actions</li>
+        <li><strong>Exec sandbox</strong> — restricted shell, dangerous patterns blocked</li>
+        <li><strong>Per-turn security context</strong> — injected policy + runtime risk checks</li>
+        <li><strong>Monitoring + kill switch</strong> — cost ceilings, anomaly alerts, auto-lockdown</li>
       </ol>
       <a href="/build/six-layers-deep/" class="sec-arch-link">Full architecture &rarr;</a>
     </div>
@@ -470,57 +648,11 @@ section { padding-bottom: 2rem; }
   </div>
 </section>
 
-<!-- 3. Skill Tree -->
+<!-- 4. How It's Built -->
 <section>
-  <p class="section-label reveal">Skill Tree</p>
-
-  <!-- Infrastructure -->
-  <div class="skill-category">
-    <div class="skill-category-header">
-      <div class="skill-cat-dot cat-infrastructure"></div>
-      <div class="skill-cat-label">Infrastructure</div>
-    </div>
-    <div class="skill-grid">
-      <div class="skill-card">
-        <div class="skill-card-top">
-          <div class="skill-badge" data-cat="infrastructure"><span class="skill-badge-dot"></span> Infrastructure</div>
-          <div class="skill-status status-live">Live</div>
-        </div>
-        <h3>Full Agent Stack</h3>
-        <div class="skill-desc">From zero to production agent in 3 days</div>
-        <div class="skill-metric">$376 total cost</div>
-        <div class="skill-links">
-          <a href="/build/how-we-built-briu-using-our-own-agent-stack/" class="skill-read">Read</a>
-          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-card-top">
-          <div class="skill-badge" data-cat="infrastructure"><span class="skill-badge-dot"></span> Infrastructure</div>
-          <div class="skill-status status-live">Live</div>
-        </div>
-        <h3>The Real Numbers</h3>
-        <div class="skill-desc">Every API call, every cost decision, live</div>
-        <div class="skill-metric">$2&ndash;5/day light &middot; $14.68/day avg</div>
-        <div class="skill-links">
-          <a href="/build/the-real-numbers/" class="skill-read">Read</a>
-          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
-        </div>
-      </div>
-      <div class="skill-card">
-        <div class="skill-card-top">
-          <div class="skill-badge" data-cat="infrastructure"><span class="skill-badge-dot"></span> Infrastructure</div>
-          <div class="skill-status status-live">Live</div>
-        </div>
-        <h3>$107 to $64: Session Cost Correction</h3>
-        <div class="skill-desc">Measurement bug uncovered, context logistics layer designed and shipped</div>
-        <div class="skill-metric">$64.30 actual cost, 89% cache share</div>
-        <div class="skill-links">
-          <a href="/build/what-a-real-session-actually-costs/" class="skill-read">Read</a>
-        </div>
-      </div>
-    </div>
-  </div>
+  <p class="section-label reveal">How It's Built</p>
+  <h2 class="reveal">The systems under the hood.</h2>
+  <p class="reveal" style="color:var(--text-muted);max-width:600px;margin-bottom:2rem;">Every skill the agent runs, how it works, and what it costs. Each one is something we deploy for clients.</p>
 
   <!-- Operations -->
   <div class="skill-category">
@@ -680,124 +812,10 @@ section { padding-bottom: 2rem; }
   </div>
 </section>
 
-<!-- 4. Timeline -->
-<section style="overflow:hidden">
-  <p class="section-label reveal">Timeline</p>
-  <div class="vtl-filters">
-    <button class="vtl-filter active" onclick="filterTimeline('all',this)">All</button>
-    <button class="vtl-filter" onclick="filterTimeline('agent',this)">Agent</button>
-    <button class="vtl-filter" onclick="filterTimeline('brand',this)">Brand</button>
-    <button class="vtl-filter" onclick="filterTimeline('website',this)">Website</button>
-    <button class="vtl-filter" onclick="filterTimeline('business',this)">Business</button>
-    <button class="vtl-filter" onclick="filterTimeline('security',this)">Security</button>
-  </div>
-  <div class="vtl">
 
-    <div class="vtl-entry" data-category="agent" data-date="2026-02-10">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 10<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Day zero</div>
-        <div class="vtl-desc">OpenClaw installed. Claude Max subscription started.</div>
-      </div>
-    </div>
+<div class="section-divider"><hr></div>
 
-    <div class="vtl-entry" data-category="agent" data-date="2026-02-12">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 12<span class="vtl-relative"></span></div>
-        <div class="vtl-title">36 commits</div>
-        <div class="vtl-desc">Gmail, HubSpot, Apollo, browser automation, security. Production in one day.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent" data-date="2026-02-25">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 25<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Costs drop 90%</div>
-        <div class="vtl-desc">195K token session discovered. Cache + context pruning deployed.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent" data-date="2026-02-28">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Feb 28<span class="vtl-relative"></span></div>
-        <div class="vtl-title">First sales run</div>
-        <div class="vtl-desc">Apollo to outreach pipeline. Thread isolation. 22 commits.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry major" data-category="business" data-date="2026-03-01">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 1<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Briu launched</div>
-        <div class="vtl-desc">Brand, domain, trademark. One session.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="website" data-date="2026-03-06">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 6<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Site goes live</div>
-        <div class="vtl-desc">Homepage, economics charts, interactive contact form.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="business" data-date="2026-03-07">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 7<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Services launched</div>
-        <div class="vtl-desc">Founder and Team kickoff tiers. Quote library from 3 podcasts.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="website" data-date="2026-03-08">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 8<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Chart library shipped</div>
-        <div class="vtl-desc">22 interactive data visualizations built from podcast transcript data. Deployed across all pages.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="agent" data-date="2026-03-09">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Comment-to-fix loop</div>
-        <div class="vtl-desc">Automated customer feedback cycle: notification to config update to client email. Context reload eliminated.</div>
-      </div>
-    </div>
-
-    <div class="vtl-entry" data-category="security" data-date="2026-03-09">
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date">Mar 9<span class="vtl-relative"></span></div>
-        <div class="vtl-title">Security hardening</div>
-        <div class="vtl-desc">Sanitizer v4 shipped. 28 novel attack vectors blocked. 90+ detection patterns across 13 languages.</div>
-      </div>
-    </div>
-
-    <!-- "You are here" marker — dynamically positioned -->
-    <div class="vtl-entry vtl-now" data-category="all" id="vtl-today">
-      <div class="vtl-now-label">You are here</div>
-      <div class="vtl-dot"></div>
-      <div class="vtl-card">
-        <div class="vtl-date" id="vtl-today-date">Today</div>
-        <div class="vtl-title">Building continues</div>
-        <div class="vtl-desc">The system is running. New skills shipping weekly.</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- 5. ROI Comparison -->
+<!-- 5. The Economics -->
 <div class="stats-group">
   <div class="stats-group-label">Agent ROI</div>
   <div class="roi-compare">
@@ -948,8 +966,7 @@ section { padding-bottom: 2rem; }
       <div class="spectrum-desc">Personal-assistant style. Daily briefings, email triage, CRM updates, scheduled tasks. Agents run when there&rsquo;s work and stop when it&rsquo;s done.</div>
     </div>
     <div class="spectrum-tier spectrum-baseline reveal-scale reveal-delay-1">
-      <span class="spectrum-you-badge">Briu internal</span>
-      <div class="spectrum-marker" style="color: var(--forest);">Briu Average</div>
+      <div class="spectrum-marker" style="color: var(--forest); display: flex; align-items: center; gap: 0.5rem;">Briu Average <span class="spectrum-you-badge" style="position: static; margin: 0;">Briu internal</span></div>
       <div class="spectrum-value">~$640<span>/mo</span></div>
       <div class="spectrum-breakdown">$200/mo platform + $14.68/day avg API</div>
       <div class="spectrum-desc">Active ops, prospecting, multi-session work, and ongoing build overhead. What it costs to run the system and keep building it at the same time.</div>
@@ -971,10 +988,14 @@ section { padding-bottom: 2rem; }
   </div>
 </div>
 
-<!-- 7. CTA -->
-<div class="build-cta">
-  <p>If you read this and thought "I could do this," you're right. The question isn't whether you could build it. It's whether 6–12 weeks of infrastructure, iteration, and governance overhead is worth more than $5K to skip.</p>
-  <a href="#" onclick="openContactForm();return false" class="cta-btn">Start a Conversation</a>
+<!-- CTA Bridge -->
+<div class="cta-bridge">
+  <h2>You've seen how we build. Here's how we build for you.</h2>
+  <p>Everything on this page runs on the same stack we deploy for clients. The question isn't whether you could build it yourself. It's whether the 6–12 weeks of infrastructure work is worth more than a session to skip.</p>
+  <div class="cta-bridge-links">
+    <a href="#" onclick="openContactForm();return false" class="cta-btn">Start a Conversation</a>
+    <a href="/services/" class="cta-btn-secondary">View Services &amp; Pricing</a>
+  </div>
 </div>
 </main>
 

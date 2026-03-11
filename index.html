@@ -53,6 +53,40 @@ nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; }
 .hero-cta-secondary:hover::after { transform: translateY(3px); }
 
 
+/* Moment comparison */
+.moment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; margin-top: 2.5rem; border: 1px solid rgba(255,255,255,0.06); }
+.moment-col { padding: 2rem; }
+.moment-col-old { background: rgba(224,123,95,0.03); border-right: 1px solid rgba(255,255,255,0.06); }
+.moment-col-new { background: rgba(106,174,156,0.03); }
+.moment-col-tag { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; margin-bottom: 1.25rem; }
+.moment-col-old .moment-col-tag { color: var(--coral); }
+.moment-col-new .moment-col-tag { color: var(--forest); }
+.moment-col h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 1rem; line-height: 1.3; }
+.moment-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.65rem; }
+.moment-list li { font-size: 0.88rem; color: var(--text-muted); line-height: 1.5; padding-left: 1.1rem; position: relative; }
+.moment-list li::before { content: ''; position: absolute; left: 0; top: 0.5em; width: 5px; height: 5px; border-radius: 50%; }
+.moment-col-old .moment-list li::before { background: var(--coral); opacity: 0.5; }
+.moment-col-new .moment-list li::before { background: var(--forest); }
+.moment-col-new .moment-list li { color: var(--text); }
+
+/* Iceberg / build-yourself */
+.iceberg-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2rem; align-items: start; }
+.iceberg-visible { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1.5rem; text-align: center; }
+.iceberg-visible h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.75rem; }
+.iceberg-visible p { font-size: 0.9rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
+.iceberg-hidden { display: flex; flex-direction: column; gap: 0; }
+.iceberg-layer { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.85rem; color: var(--text-muted); }
+.iceberg-layer:last-child { border-bottom: none; }
+.iceberg-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); opacity: 0.6; flex-shrink: 0; }
+.iceberg-bottom { margin-top: 1.5rem; padding: 1rem 1.5rem; border-left: 2px solid var(--gold); background: rgba(212,160,90,0.03); }
+.iceberg-bottom p { font-size: 0.95rem; color: var(--text); line-height: 1.65; margin: 0; }
+
+@media (max-width: 640px) {
+  .moment-grid { grid-template-columns: 1fr; }
+  .moment-col-old { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .iceberg-grid { grid-template-columns: 1fr; }
+}
+
 /* Wave dividers */
 .wave-divider { width: 100%; overflow: hidden; line-height: 0; position: relative; }
 .wave-divider svg { display: block; width: 100%; height: 60px; }
@@ -512,6 +546,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     },
     {
       "@type": "Question",
+      "name": "Can't I just use Claude or ChatGPT directly?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "You can and you should — for conversation, brainstorming, and writing. But a business agent is a different category. It runs autonomously on your infrastructure, connects to your tools, takes actions with your approval, and operates 24/7. Going from 'AI can help me write' to 'AI is running my email, CRM, and reporting' requires architecture, security, integrations, and monitoring. That's what we build."
+      }
+    },
+    {
+      "@type": "Question",
       "name": "How fast can we start?",
       "acceptedAnswer": {
         "@type": "Answer",
@@ -552,7 +594,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Agent-First Operations</p>
   <h1>AI agents deployed for your business. <em>Most run for $2–5/day.</em></h1>
-  <p class="hero-subtitle">We build custom agents on your infrastructure, teach your team to run them, and stay as long as you want us. Transparent costs, no lock-in. Most AI waits. This runs.</p>
+  <p class="hero-subtitle">Not a chatbot. Autonomous systems that connect to your tools, take action, and run 24/7 on your infrastructure. We build them, teach your team to run them, and stay as long as you want us.</p>
 
   <div class="hero-pillars">
     <span class="hero-pillar">Approval gates on every action</span>
@@ -575,10 +617,93 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </svg>
 </div>
 
+<!-- THE SHIFT -->
+<section>
+  <p class="section-label reveal">The Shift</p>
+  <h2 class="reveal">This isn't ChatGPT. This is the next step.</h2>
+  <p class="reveal">ChatGPT taught people AI could answer questions. Agents do something different: they connect to your tools and do actual work, autonomously, 24/7.</p>
+
+  <div class="moment-grid reveal">
+    <div class="moment-col moment-col-old">
+      <div class="moment-col-tag">The ChatGPT Moment &middot; 2022&ndash;2024</div>
+      <h3>You type. It responds.</h3>
+      <ul class="moment-list">
+        <li>Conversations in a browser tab</li>
+        <li>Forgets everything when you close it</li>
+        <li>Writes text, answers questions</li>
+        <li>One tool: a text box</li>
+        <li>You do the work, AI assists</li>
+        <li>Can't send an email or update your CRM</li>
+      </ul>
+    </div>
+    <div class="moment-col moment-col-new">
+      <div class="moment-col-tag">The Agent Moment &middot; 2025&ndash;now</div>
+      <h3>It runs. You direct.</h3>
+      <ul class="moment-list">
+        <li>Runs autonomously on your infrastructure, 24/7</li>
+        <li>Accumulates knowledge about your business every day</li>
+        <li>Sends emails, updates CRM, researches prospects, generates reports</li>
+        <li>Connects to Gmail, HubSpot, Slack, and 100+ tools</li>
+        <li>AI does the operational work, you provide judgment</li>
+        <li>Approval gates on every external action</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="why-now-links reveal">
+    <a href="/why-now/" class="hero-cta-secondary">Read the full timeline &rarr;</a>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg aria-hidden="true" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+    <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
+  </svg>
+</div>
+
+<!-- WHY NOT JUST USE CLAUDE -->
+<section>
+  <p class="section-label reveal">The Gap</p>
+  <h2 class="reveal">"Why can't I just use Claude?"</h2>
+  <p class="reveal">You can. For conversation, brainstorming, and writing, you should. But going from "AI can help me" to "AI is running my operations" requires building a system. Here's everything between a chat window and a deployed agent:</p>
+
+  <div class="iceberg-grid reveal">
+    <div class="iceberg-visible">
+      <h3>What you see</h3>
+      <p>A smart AI that answers questions, writes content, and helps you think. Feels like it could do anything.</p>
+    </div>
+    <div class="iceberg-hidden">
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Infrastructure setup &amp; hosting</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Security architecture (6 defense layers)</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Tool integrations (Gmail, HubSpot, Slack, etc.)</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Approval gates &amp; human-in-the-loop</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Budget controls &amp; cost monitoring</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Skill development &amp; testing</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Multi-agent orchestration</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Error handling &amp; recovery</div>
+      <div class="iceberg-layer"><span class="iceberg-dot"></span> Ongoing model upgrades &amp; optimization</div>
+    </div>
+  </div>
+
+  <div class="iceberg-bottom reveal">
+    <p>You could build this yourself. It takes 6&ndash;12 weeks of senior engineering time. Or we deploy your first agent in one session and teach your team to run it.</p>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider">
+  <svg aria-hidden="true" viewBox="0 0 1440 60" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0,30 C240,55 480,5 720,30 C960,55 1200,5 1440,30 L1440,60 L0,60 Z" fill="rgba(212,160,90,0.03)"/>
+    <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
+  </svg>
+</div>
+
 <!-- WHAT WE DO -->
 <section>
   <p class="section-label reveal">What We Do</p>
-  <h2 class="reveal">We build agents that handle your email, CRM, and daily ops, running on your infrastructure, not ours.</h2>
+  <h2 class="reveal">Here's what a deployed agent actually does for a business.</h2>
 
   <div class="proof-grid reveal">
     <div class="proof-card">
@@ -898,6 +1023,15 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
       </div>
       <div class="faq-a" role="region">
         <p>No. We automate the repetitive work so your team focuses on what requires judgment. The goal is leverage, not headcount reduction.</p>
+      </div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q" role="button" aria-expanded="false" tabindex="0" onclick="this.parentElement.classList.toggle('open');this.setAttribute('aria-expanded',this.getAttribute('aria-expanded')==='true'?'false':'true')">
+        <h3>Can't I just use Claude or ChatGPT directly?</h3>
+        <span class="faq-toggle">+</span>
+      </div>
+      <div class="faq-a" role="region">
+        <p>You can and you should&mdash;for conversation, brainstorming, and writing. But a business agent is a different category. It runs autonomously on your infrastructure, connects to your tools, takes actions with your approval, and operates 24/7. Going from "AI can help me write" to "AI is running my email, CRM, and reporting" requires architecture, security, integrations, and monitoring. That's what we build.</p>
       </div>
     </div>
     <div class="faq-item">

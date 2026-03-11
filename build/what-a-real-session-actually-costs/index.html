@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Briu | What $64 of Agent Work Actually Looks Like</title>
-<meta name="description" content="Site redesign, security architecture, execution safety layer, and a cost monitoring pipeline. One session. $64.30. Here's what we shipped and what it would have cost with humans.">
-<meta property="og:title" content="Briu | What $64 of Agent Work Actually Looks Like">
-<meta property="og:description" content="Site redesign, security architecture, execution safety layer, and a cost monitoring pipeline. One session. $64.30. Here's what we shipped and what it would have cost with humans.">
+<title>Briu | The 2 AM Session</title>
+<meta name="description" content="I woke up at 1 AM, opened Discord on my phone, and shipped six systems by 10 AM. $64.30. Here's what that looks like.">
+<meta property="og:title" content="Briu | The 2 AM Session">
+<meta property="og:description" content="I woke up at 1 AM, opened Discord on my phone, and shipped six systems by 10 AM. $64.30. Here's what that looks like.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://briu.ai/build/what-a-real-session-actually-costs/">
 <meta property="og:image" content="https://briu.ai/og-image.png">
@@ -14,8 +14,8 @@
 <meta property="og:image:height" content="1200">
 <meta name="twitter:image" content="https://briu.ai/og-image.png">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Briu | What $64 of Agent Work Actually Looks Like">
-<meta name="twitter:description" content="Site redesign, security architecture, execution safety layer, and a cost monitoring pipeline. One session. $64.30. Here's what we shipped and what it would have cost with humans.">
+<meta name="twitter:title" content="Briu | The 2 AM Session">
+<meta name="twitter:description" content="I woke up at 1 AM, opened Discord on my phone, and shipped six systems by 10 AM. $64.30. Here's what that looks like.">
 <link rel="canonical" href="https://briu.ai/build/what-a-real-session-actually-costs/">
 <link rel="icon" type="image/png" href="/favicon.png">
 <link rel="apple-touch-icon" href="/favicon.png">
@@ -27,7 +27,7 @@
 <link rel="stylesheet" href="/articles.css?v=20260310b">
 <style>
 /* Stat strip */
-.stats-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
+.stats-strip { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin: 2rem 0 3rem; }
 .stat-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; text-align: center; transition: border-color 0.3s; }
 .stat-card:hover { border-color: rgba(212,160,90,0.2); }
 .stat-card .val { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
@@ -41,6 +41,9 @@
 .shipped-card:hover { border-color: rgba(212,160,90,0.2); }
 .shipped-card h4 { font-size: 0.88rem; font-weight: 600; margin-bottom: 0.4rem; }
 .shipped-card p { margin: 0; font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+.shipped-card .status { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-top: 0.5rem; }
+.shipped-card .status.live { color: var(--forest); }
+.shipped-card .status.designed { color: var(--text-muted); }
 
 /* Tab navigation */
 .tab-nav { display: flex; gap: 0.35rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
@@ -93,6 +96,10 @@
 .tl-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
 .tl-cost { font-size: 0.78rem; color: var(--forest); margin-top: 0.25rem; }
 
+/* Gate schema */
+.gate-schema { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-family: 'DM Sans', monospace; font-size: 0.82rem; line-height: 1.8; color: var(--text-muted); }
+.gate-schema strong { color: var(--text); }
+
 @media (max-width: 900px) {
   .stats-strip { grid-template-columns: repeat(2, 1fr); }
   .donut-wrap { flex-direction: column; }
@@ -101,6 +108,7 @@
 }
 @media (max-width: 640px) {
   .stats-strip { grid-template-columns: 1fr 1fr; }
+  .stats-strip .stat-card:nth-child(5) { grid-column: span 2; }
   .ctx-multiplier { height: 120px; }
   .ctx-bar { max-width: 70px; }
 }
@@ -109,8 +117,8 @@
 {
   "@context": "https://schema.org",
   "@type": "Article",
-  "headline": "What $64 of Agent Work Actually Looks Like",
-  "description": "Site redesign, security architecture, execution safety layer, and a cost monitoring pipeline. One session. $64.30. Here's what we shipped and what it would have cost with humans.",
+  "headline": "The 2 AM Session",
+  "description": "I woke up at 1 AM, opened Discord on my phone, and shipped six systems by 10 AM. $64.30. Here's what that looks like.",
   "author": {"@type": "Person", "name": "Lucas Cairns"},
   "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
   "datePublished": "2026-03-10",
@@ -127,7 +135,7 @@
   "itemListElement": [
     {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
     {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
-    {"@type": "ListItem", "position": 3, "name": "What $64 of Agent Work Actually Looks Like", "item": "https://briu.ai/build/what-a-real-session-actually-costs/"}
+    {"@type": "ListItem", "position": 3, "name": "The 2 AM Session", "item": "https://briu.ai/build/what-a-real-session-actually-costs/"}
   ]
 }
 </script>
@@ -143,8 +151,8 @@
 <main id="main">
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
-  <h1>What $64 of Agent Work Actually Looks Like</h1>
-  <p>Site redesign, security architecture, an execution safety agent, and a cost monitoring pipeline. One session. $64.30. Along the way, we fixed a measurement bug and built a framework for understanding what AI sessions really cost.</p>
+  <h1>The 2 AM Session</h1>
+  <p>I woke up on the couch around 1 AM and couldn't fall back asleep. Opened Discord on my phone. By 10 AM I'd shipped six systems. From bed.</p>
 </section>
 
 <article>
@@ -152,63 +160,151 @@
   <!-- Hero stats -->
   <div class="stats-strip">
     <div class="stat-card">
+      <div class="val muted">~9 hours</div>
+      <div class="lbl">1 AM &ndash; 10 AM</div>
+    </div>
+    <div class="stat-card">
+      <div class="val muted">Phone only</div>
+      <div class="lbl">Discord the entire time</div>
+    </div>
+    <div class="stat-card">
       <div class="val green">$64.30</div>
-      <div class="lbl">Actual Session Cost</div>
+      <div class="lbl">Session cost</div>
     </div>
     <div class="stat-card">
       <div class="val">~$4,800</div>
-      <div class="lbl">Human Equivalent</div>
+      <div class="lbl">Human equivalent</div>
     </div>
     <div class="stat-card">
-      <div class="val">75x</div>
-      <div class="lbl">Cost Ratio</div>
-    </div>
-    <div class="stat-card">
-      <div class="val muted">1 session</div>
-      <div class="lbl">~9 hours overnight</div>
+      <div class="val">6</div>
+      <div class="lbl">Systems shipped</div>
     </div>
   </div>
 
   <!-- ======================== -->
-  <!-- What we shipped          -->
+  <!-- Opening narrative         -->
   <!-- ======================== -->
 
-  <p class="section-label reveal">What we shipped</p>
-  <p>This was not a single-purpose session. It started as a site review and kept going. By morning, we had shipped production work across four distinct domains, any one of which would have been a standalone engagement with a human team.</p>
+  <h2 class="reveal">It started as a site review</h2>
+  <p>Most nights when that happens, I grab my phone and scroll through nothing for an hour. This time I opened Discord and started poking at the website. Not a planned session. Just, the site was on my mind and I had a phone and nothing better to do.</p>
+  <p>Within ten minutes I'd found four problems:</p>
+  <ul>
+    <li>Commit counter hardcoded at 625. Actual number: 641.</li>
+    <li>Skills count said 12. Live config had 9.</li>
+    <li>Daily cost figure said "$2&ndash;5/day." Recent average was $14.68.</li>
+    <li>Security section implied broad coverage without committing to any specific claim.</li>
+  </ul>
+  <p>None of these are catastrophic. They're the kind of thing that accumulates when you're moving fast. But for a site that's supposed to demonstrate trustworthy systems, stale numbers are the wrong kind of wrong.</p>
+  <p>So I told Claw to fix the data layer. Stats centralized through a single <code>FALLBACKS</code> object. Commit counts pulling from live <code>stats.json</code>. Security section rebuilt into three specific, measurable buckets: architecture properties, adversarial test results (26 payloads, 15 categories, 0 bypasses), and operating posture.</p>
+  <p>That took about an hour. I was still in bed.</p>
+
+  <!-- ======================== -->
+  <!-- Working from phone        -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Working from your phone at 2 AM</h2>
+  <p>Here's the part that's hard to explain without experiencing it: this is genuinely engaging.</p>
+  <p>You send a message. You get a structured response with what changed and what it needs approval for. You read it, approve it or redirect it, and send the next thing. The back-and-forth has a rhythm to it. You're not babysitting. You're collaborating. And unlike doomscrolling, you're actually getting something done during hours you'd otherwise just be tossing and turning.</p>
+  <p>The trust model is what makes this work. Claw can read files, run diagnostics, draft changes. But anything that crosses a boundary&mdash;pushing code, sending an email, modifying a live service&mdash;requires explicit approval. From my phone, that's a Discord button. I see what it wants to do, I approve it, it does it, it shows me the result.</p>
+
+  <div class="insight-box">
+    <p><strong>That approval flow is the entire product, really.</strong> Without it, you can't work from your phone because you can't trust what's happening. With it, you can lie in bed and ship real infrastructure.</p>
+  </div>
+
+  <!-- ======================== -->
+  <!-- The pivot                 -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">The session pivoted organically</h2>
+  <p>The site review surfaced stale cost numbers. That raised an obvious question: why don't we have a reliable cost pipeline?</p>
+  <p>Turns out we had four separate cost computations, three different timezone boundaries, and a watchdog script with four bugs. The briefing showed "$21.32 yesterday." The dashboard showed "$6.51 yesterday" for the same day. Neither was wrong&mdash;they were just reading different sources with different day boundaries.</p>
+  <p>So what started as "fix the numbers on the website" became "build a real cost monitoring system."</p>
+  <p>This is the thing about working with an agent from your phone. A casual review turns into a real implementation session, and the transition is seamless because you're already in the conversation. You don't need to context-switch to a laptop, open an IDE, set up a branch. You just keep talking.</p>
+
+  <!-- ======================== -->
+  <!-- What shipped              -->
+  <!-- ======================== -->
+
+  <p class="section-label reveal">What shipped</p>
+  <p>Being specific about what's live versus what's designed:</p>
 
   <div class="shipped-grid">
     <div class="shipped-card">
       <h4>Site Redesign &amp; Data Layer</h4>
-      <p>Stats centralization, dynamic commit/skill/cost labels, CTA taxonomy, security three-bucket section, Build page copy tightening. Hardcoded numbers replaced with live data sources.</p>
-    </div>
-    <div class="shipped-card">
-      <h4>Security Architecture Rewrite</h4>
-      <p>Vague "robust security" replaced with a three-bucket model: architecture properties, adversarial test results (26 payloads, 15 categories), and operating posture with specific controls.</p>
+      <p>Stats centralization, dynamic commit/skill/cost labels, CTA taxonomy, security three-bucket section. Hardcoded numbers replaced with live data sources.</p>
+      <div class="status live">Live</div>
     </div>
     <div class="shipped-card">
       <h4>Gate: Execution Safety Agent</h4>
-      <p>A separate agent that receives JSON plans, validates against scope declarations, executes approved commands, and returns structured evidence. Tier 0 validated. Claw reasons, Gate executes.</p>
+      <p>A separate agent with its own system prompt and allowlist. Receives plans, validates against scope declarations, executes approved commands, returns structured evidence. Tier 0 validated.</p>
+      <div class="status live">Live &middot; Tier 0</div>
     </div>
     <div class="shipped-card">
-      <h4>Cost Monitoring Pipeline</h4>
-      <p>Watchdog bugs fixed, canonical cost module built, spike detector written, compaction threshold corrected, double-count bug discovered and fixed. Three separate pipelines unified into one.</p>
+      <h4>Cost Watchdog (fixed)</h4>
+      <p>State moved from <code>/tmp/</code> to persistent storage. Threshold batching fixed. API fallback implemented. Diagnostic logging added.</p>
+      <div class="status live">Live</div>
     </div>
     <div class="shipped-card">
-      <h4>Context Logistics Layer</h4>
+      <h4>Canonical Cost Pipeline</h4>
+      <p>One source of truth for all cost consumers. Real-time estimate from session data, accurate billing from API, freshness labels so you always know how current the number is.</p>
+      <div class="status live">Live</div>
+    </div>
+    <div class="shipped-card">
+      <h4>Spike Detector</h4>
+      <p>Four deterministic rules for catching unusual spending patterns. Cooldown logic so you don't get alert spam.</p>
+      <div class="status live">Live</div>
+    </div>
+    <div class="shipped-card">
+      <h4>Context Logistics Layer v1</h4>
       <p>Budget class system (5 tiers), mandatory subagent routing rules, handoff artifact protocol. The framework that keeps future sessions cheap by design.</p>
-    </div>
-    <div class="shipped-card">
-      <h4>Cost Visibility Plugin v7</h4>
-      <p>Placeholder contract so the model never authors cost figures. Pre-render in system prompt, adaptive model routing, spike alert injection.</p>
+      <div class="status live">Live</div>
     </div>
   </div>
+
+  <p style="font-size:0.88rem;color:var(--text-muted)"><strong style="color:var(--text)">Designed, not yet built:</strong> Gate Tier 1 (scope-gated approval for local writes), a gateway hook for Discord delivery (<code>before_reply_deliver</code>), dashboard unification.</p>
+
+  <!-- ======================== -->
+  <!-- Gate                      -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">Gate: the execution safety agent</h2>
+  <p>Somewhere around 3 AM, we built Gate.</p>
+  <p>Gate is a separate agent. Not a skill, not a plugin. A persistent subprocess with its own system prompt and its own allowlist. It has one job: receive a plan from the main agent, validate it, execute the approved commands, and report structured results.</p>
+  <p>The principle is simple. <strong>Claw reasons. Gate executes.</strong> They are not the same agent.</p>
+
+  <div class="gate-schema">
+    <strong>STATUS:</strong>&nbsp;&nbsp;&nbsp;success | partial | failed | unverified<br>
+    <strong>INTENDED:</strong>&nbsp;what Claw asked for<br>
+    <strong>EXECUTED:</strong>&nbsp;what actually ran<br>
+    <strong>VERIFIED:</strong>&nbsp;what the output confirmed<br>
+    <strong>EVIDENCE:</strong>&nbsp;literal output proving the claim
+  </div>
+
+  <p>"It worked" is not an engineering claim. "I ran <code>git log -3</code> and the top commit is <code>8be3856</code>" is an engineering claim.</p>
+  <p>Commands are tiered. Tier 0 (read-only) auto-executes. Tier 1 (local writes) requires one scope grant per session. Tier 2 (pushes, deploys, external calls) always requires fresh approval. Tier 3 doesn't exist. Gate refuses.</p>
+
+  <!-- ======================== -->
+  <!-- The insight               -->
+  <!-- ======================== -->
+
+  <h2 class="reveal">The insight worth keeping</h2>
+  <p>The most useful thing we learned from the cost analysis:</p>
+
+  <div class="insight-box">
+    <p><strong>You're not paying for the model to think. You're paying for it to remember.</strong></p>
+    <p style="margin-top:0.75rem">Cache operations (writing and reading the session context) were 89% of total spend. Actual reasoning and output generation: 10%.</p>
+  </div>
+
+  <p>At 180,000 tokens of context, every turn costs ~$0.68 in cache writes before any output. At 20,000 tokens, that same turn costs ~$0.08. Same operation, 8x cost difference, entirely from context size.</p>
+  <p>The most expensive hour ($19, from 5&ndash;6 AM) wasn't expensive because of what we were doing. It was expensive because the session had grown to 180K tokens before we started reading large files. Every file read re-warmed the full context.</p>
+  <p>The fix: delegate large-file analysis to subagents that run in their own 20K context. A 14-file source analysis that cost ~$9.52 in the main session would cost ~$0.50 via subagent. The savings come from context isolation, not from using a cheaper model.</p>
 
   <!-- ======================== -->
   <!-- Interactive charts        -->
   <!-- ======================== -->
 
   <h2 class="reveal">The economics</h2>
-  <p>Four views of the same session: what it cost, where the money went, how context size drives cost, and the hour-by-hour timeline.</p>
+  <p>Five views of the same session: what it cost vs. humans, where the money went, the hour-by-hour timeline, how context size drives cost, and the measurement bug correction.</p>
 
   <div class="tab-nav">
     <button class="tab-btn active" data-tab="comparison">vs. Human Cost</button>
@@ -235,7 +331,7 @@
   <!-- Hourly Spend (area chart) -->
   <div class="tab-panel" id="panel-hourly">
     <div class="chart-box">
-      <p class="chart-note">Cumulative spend through the session. The steepest climb is 5&ndash;6 AM when 14 source files were read at 180K context. That single hour cost ~$19 &mdash; 30% of the total session.</p>
+      <p class="chart-note">Cumulative spend through the session. The steepest climb is 5&ndash;6 AM when 14 source files were read at 180K context. That single hour cost ~$19&mdash;30% of the total session.</p>
       <div style="height:320px;position:relative">
         <canvas id="chart-hourly"></canvas>
       </div>
@@ -281,9 +377,6 @@
           </div>
         </div>
       </div>
-      <div class="insight-box" style="margin-top:1.5rem">
-        <p><strong>The insight:</strong> Cache writes (loading context into the model's working memory) are the dominant cost. The actual reasoning and output generation &mdash; the part that writes code, designs architecture, fixes bugs &mdash; is only 10% of the bill.</p>
-      </div>
     </div>
   </div>
 
@@ -319,7 +412,7 @@
       </div>
       <p style="text-align:center;font-size:0.82rem;color:var(--text-muted);margin-bottom:2rem"><strong style="color:var(--text)">8x cost difference</strong> for identical operations</p>
 
-      <p class="chart-note">The most expensive hour vs. what it would have cost with subagent delegation:</p>
+      <p class="chart-note">Main session vs. subagent delegation:</p>
       <div style="height:200px;position:relative">
         <canvas id="chart-subagent"></canvas>
       </div>
@@ -332,12 +425,12 @@
   <!-- Session Timeline -->
   <div class="tab-panel" id="panel-timeline">
     <div class="chart-box">
-      <p class="chart-note">What happened hour by hour. One session, four major work streams.</p>
+      <p class="chart-note">What happened hour by hour. One session, four major work streams, all from a phone.</p>
       <div class="session-tl">
         <div class="tl-entry">
           <div class="tl-time">~1:00 AM</div>
           <div class="tl-title">Site review begins</div>
-          <div class="tl-desc">Started as a visual pass on briu.ai. Quickly became a data integrity audit. Hardcoded stats, stale claims, unverifiable security section.</div>
+          <div class="tl-desc">Opened briu.ai on my phone. Quickly became a data integrity audit. Hardcoded stats, stale claims, unverifiable security section.</div>
           <div class="tl-cost">~$4 estimated</div>
         </div>
         <div class="tl-entry">
@@ -361,7 +454,7 @@
         <div class="tl-entry">
           <div class="tl-time">5:00&ndash;6:00 AM</div>
           <div class="tl-title">Source analysis spike</div>
-          <div class="tl-desc">Reading 14 source files from the OpenClaw bundle to trace the Discord delivery path. Context at 180K. Most expensive hour of the session.</div>
+          <div class="tl-desc">Reading 14 source files at 180K context. Most expensive hour of the session. The lesson that led to the Context Logistics Layer.</div>
           <div class="tl-cost" style="color:var(--coral)">~$19 estimated &mdash; the lesson</div>
         </div>
         <div class="tl-entry">
@@ -391,9 +484,7 @@
   <!-- ======================== -->
 
   <h2 class="reveal">The measurement bug</h2>
-  <p>Halfway through the session, our cost watchdog reported $107.01. We nearly started optimizing around that number. Instead, we audited the tool.</p>
-  <p>The bug: OpenClaw's compaction process creates a derived session file containing all previous messages. Our cost aggregation was scanning all JSONL files and summing by date without deduplicating by message ID. After compaction, every message got counted twice.</p>
-  <p>The fix was a few lines: deduplicate by message <code>id</code> across session files, process primary sessions before derived ones.</p>
+  <p>The cost tracker initially reported $107 for the session. I figured it was a double-count before anyone even dug into it, because we'd been at ~$52 right before. Turned out the cost aggregator was counting compacted session snapshots as separate sessions. Message-ID deduplication fixed it. Actual cost: $64.30.</p>
 
   <div class="stats-strip" style="grid-template-columns: repeat(3, 1fr);">
     <div class="stat-card">
@@ -415,83 +506,25 @@
   </div>
 
   <!-- ======================== -->
-  <!-- Understanding cost        -->
+  <!-- Discord threads           -->
   <!-- ======================== -->
 
-  <h2 class="reveal">Understanding the cost structure</h2>
-  <p>Cache operations are 89% of the total spend. The output &mdash; the actual model reasoning and writing &mdash; is 10%. This is the fundamental insight about AI session economics: <strong>you are paying for memory, not thinking.</strong></p>
-
-  <p>The Anthropic pricing for Claude Sonnet 4.6:</p>
-  <ul>
-    <li>Cache write: $3.75 per million tokens</li>
-    <li>Cache read: $0.30 per million tokens</li>
-    <li>Output: $15.00 per million tokens</li>
-  </ul>
-  <p>At 180,000 tokens of context, every turn that causes a cache write costs approximately <strong>$0.68 just to touch the cache</strong> before a single output token is billed. At 20,000 tokens, that same turn costs $0.08. The 8x difference comes entirely from context size.</p>
-  <p>The 05:00&ndash;06:00 PT hour was the most expensive single hour. Reading 14 large source files in sequence, each invalidating the cache, each re-warming at 180K tokens. The hour totaled ~$19, but the cause was not "source analysis is expensive." The cause was: <strong>the session had already grown to 180K tokens before the source analysis started.</strong></p>
-
-  <h3>The correct pattern</h3>
-  <pre><code>sessions_spawn(
-    agentId="haiku",
-    task="Read /path/to/large/file and return: [specific question]",
-    runTimeoutSeconds=60
-)</code></pre>
-  <p>A full source analysis that costs $4.00 in the main session at 180K costs approximately $0.20 via subagent delegation. The savings are from context isolation, not from the model being cheaper per token.</p>
+  <h2 class="reveal">Discord threads as session boundaries</h2>
+  <p>One thing I figured out during this session: Discord's built-in threads feature is the right way to manage agent sessions.</p>
+  <p>I'd been running everything in the main channel, which meant the agent was carrying accumulated context (and cost) from every prior message. Each new topic added to the pile. Starting a new thread gives the agent a clean context, which means lower per-turn cost and better focus.</p>
+  <p>This isn't something we've enforced in tooling yet. It's an operational practice. But it maps cleanly to the context cost insight: <strong>thread boundary = session boundary = context reset.</strong></p>
 
   <!-- ======================== -->
-  <!-- Cost optimization         -->
+  <!-- The point                 -->
   <!-- ======================== -->
 
-  <h2 class="reveal">The cost optimization framework</h2>
-  <p>If uncontrolled context growth is the cost multiplier, build controls. The result was the Context Logistics Layer.</p>
-  <p><strong>The core contract:</strong> the main session coordinates. It does not do leaf work. Any task requiring more than 2-3 tool calls should be scoped, budgeted, and delegated to a subagent.</p>
+  <h2 class="reveal">The point</h2>
+  <p>I woke up at 2 AM with nothing to do. By 10 AM I'd shipped a site redesign, an execution safety agent, a cost monitoring pipeline, and a context management framework. From my phone. In bed.</p>
+  <p>The reason that's possible is not because the agent is smart. It's because there's a trust model that works. I can see what it wants to do, approve it, and verify the result&mdash;all from a Discord thread on my phone. The approval flow is the product.</p>
+  <p>Building a system you can trust is not primarily a question of capability. It is a question of evidentiary discipline. Gate returns evidence schemas, not "success." The cost pipeline returns freshness labels, not blind numbers. The model doesn't author operational facts. The system provides them.</p>
+  <p><strong>That discipline is not optional for a system running autonomously. It is the system.</strong></p>
 
-  <table class="cost-table">
-    <thead><tr><th>Class</th><th>Token Budget</th><th>Use Case</th></tr></thead>
-    <tbody>
-      <tr><td>Quick</td><td>5K</td><td>Single-tool, single-file, trivial operations</td></tr>
-      <tr><td>Bounded</td><td>10-15K</td><td>File edits, targeted code changes</td></tr>
-      <tr><td>Research</td><td>20-25K</td><td>Web search, multi-source reading</td></tr>
-      <tr><td>Analysis</td><td>25-30K</td><td>Source inspection, debugging, audit</td></tr>
-      <tr><td>Orchestration</td><td>10-15K</td><td>Subagent coordination, handoff</td></tr>
-    </tbody>
-  </table>
-
-  <p>The architectural takeaway:</p>
-  <pre><code>Main session = coordination
-Leaf work = subagents
-Context does not accumulate across work items</code></pre>
-
-  <!-- ======================== -->
-  <!-- Operational lessons       -->
-  <!-- ======================== -->
-
-  <h2 class="reveal">Operational lessons</h2>
-  <p><strong>1. Context size is the cost multiplier.</strong> The 8x difference between a 20K and 180K session is entirely from context growth. Keep sessions short.</p>
-  <p><strong>2. Compact earlier than you think.</strong> A misconfigured threshold let this session run to 180K when it should have flushed at 80K.</p>
-  <p><strong>3. Transcript mutation is not delivery mutation.</strong> Discord delivery and JSONL storage operate on different objects.</p>
-  <p><strong>4. Read static files once.</strong> Re-reading invalidates the cache and costs a full re-warm.</p>
-  <p><strong>5. Batch gateway restarts.</strong> Each restart costs one full cache re-warm on the next turn.</p>
-  <p><strong>6. The model should not author operational metadata.</strong> Cost figures should come from the system, not the model.</p>
-  <p><strong>7. Four cost surfaces = zero cost visibility.</strong> Everything should read the same canonical state.</p>
-  <p><strong>8. Audit the tool before trusting the number.</strong></p>
-
-  <!-- ======================== -->
-  <!-- Thesis                    -->
-  <!-- ======================== -->
-
-  <h2 class="reveal">The thesis</h2>
-  <p>Building a system you can trust is not primarily a question of capability. It is a question of evidentiary discipline.</p>
-  <p>Gate's result schema is the difference between a system that tells you it worked and one that shows you it worked. The cost block placeholder is a commitment that the system will not invent operational facts. The security three-bucket model says what you measured, not what you imply.</p>
-  <p>Trust is a conclusion, not a premise. That is the actual product we are building.</p>
-
-  <h2 class="reveal">Technical debt</h2>
-  <ul>
-    <li><strong>Discord cost injection is model-compliance-dependent</strong> until <code>before_reply_deliver</code> hook exists.</li>
-    <li><strong>The Anthropic usage_report API has ~24-hour lag.</strong> "Today's cost" is always an estimate until tomorrow.</li>
-    <li><strong>Gate Tier 1 is not yet implemented.</strong> Read-only (Tier 0) is validated.</li>
-    <li><strong>QA fixes to briu.ai are not committed.</strong> Changes staged but not pushed.</li>
-  </ul>
+  <p style="margin-top:3rem;font-size:0.88rem;color:var(--text-muted);font-style:italic;">Session cost: $64.30. All of it from a phone.</p>
 
   <div style="max-width:780px;margin:4rem auto;padding:0 2rem;">
     <a href="/build/" style="font-size:0.85rem;color:var(--gold);text-decoration:none;">&larr; Back to Build</a>
@@ -787,10 +820,8 @@ function initCharts() {
     setTimeout(initCharts, 100);
     return;
   }
-  // Render first visible tab
   renderTabChart('comparison');
 
-  // Observe for scroll-triggered animations
   var observer = new IntersectionObserver(function(entries) {
     entries.forEach(function(entry) {
       if (entry.isIntersecting) {

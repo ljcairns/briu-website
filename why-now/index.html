@@ -143,6 +143,15 @@
 .tl-counter-detail { font-size: 0.68rem; color: var(--text-muted); opacity: 0; max-height: 0; overflow: hidden; transition: all 0.3s ease; position: relative; }
 .tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
 
+/* Star growth popup chart */
+.star-popup { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) scale(0.95); opacity: 0; pointer-events: none; width: 320px; background: var(--surface-2, #1a1a1e); border: 1px solid rgba(212,160,90,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.5); padding: 1rem 1rem 0.75rem; z-index: 20; transition: opacity 0.3s ease, transform 0.3s ease; }
+.star-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: rgba(212,160,90,0.2); }
+.tl-counter:hover .star-popup { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
+.star-popup-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.5rem; }
+.star-popup-context { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.5rem; }
+.star-popup-context strong { color: var(--text); }
+@media (max-width: 768px) { .star-popup { width: 260px; left: 0; transform: translateX(-20%) scale(0.95); } .tl-counter:hover .star-popup { transform: translateX(-20%) scale(1); } }
+
 /* Water divider */
 .water-divider { width: 100%; max-width: 1060px; margin: 0 auto; padding: 2rem 0; text-align: center; overflow: hidden; }
 .water-divider svg { width: 100%; height: auto; opacity: 0.6; }
@@ -220,24 +229,36 @@
 <div class="timeline-wrapper" style="padding-bottom:0;">
   <div class="tl-counters" id="tlCounters">
     <div class="tl-counter reveal">
-      <div class="tl-counter-num">3 days</div>
-      <div class="tl-counter-label">to production agent</div>
-      <div class="tl-counter-detail">From zero to live</div>
+      <div class="tl-counter-num">100&times;</div>
+      <div class="tl-counter-label">cheaper per token since GPT-4</div>
+      <div class="tl-counter-detail">Mar 2023 &rarr; Mar 2026</div>
     </div>
-    <div class="tl-counter reveal reveal-delay-1">
-      <div class="tl-counter-num">$376</div>
-      <div class="tl-counter-label">API cost to build</div>
-      <div class="tl-counter-detail">First production agent</div>
+    <div class="tl-counter reveal reveal-delay-1" id="openclawCounter" style="cursor:pointer;overflow:visible;">
+      <div class="tl-counter-num" data-dynamic="openclaw-stars">163K</div>
+      <div class="tl-counter-label">GitHub stars &middot; fastest-growing<br>open source project in history</div>
+      <div class="tl-counter-detail">60K in 72 hours. Hover for growth &rarr;</div>
+      <div class="star-popup" id="starPopup">
+        <div class="star-popup-title">OpenClaw Star Growth</div>
+        <canvas id="starGrowthChart" height="120"></canvas>
+        <div class="star-popup-context">
+          <strong>For context:</strong> Linux took 14 years to reach 100K stars. React took 8 years. OpenClaw did it in 3 months.
+        </div>
+      </div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
-      <div class="tl-counter-num">$2&ndash;5/day</div>
-      <div class="tl-counter-label">light-use baseline</div>
-      <div class="tl-counter-detail">Personal-assistant style</div>
+      <div class="tl-counter-num">10&times;</div>
+      <div class="tl-counter-label">model performance gain (2 yrs)</div>
+      <div class="tl-counter-detail">HumanEval, MMLU, SWE-bench</div>
     </div>
     <div class="tl-counter reveal reveal-delay-3">
-      <div class="tl-counter-num">1</div>
-      <div class="tl-counter-label">founder + agents</div>
-      <div class="tl-counter-detail">OpenClaw + Claude Code + Claude Max</div>
+      <div class="tl-counter-num">18 mo</div>
+      <div class="tl-counter-label">before the window narrows</div>
+      <div class="tl-counter-detail">Early-mover advantage compounds daily</div>
+    </div>
+    <div class="tl-counter reveal reveal-delay-3">
+      <div class="tl-counter-num">$2&ndash;5</div>
+      <div class="tl-counter-label">per day, light-use agent</div>
+      <div class="tl-counter-detail"><a href="/build/" style="color:var(--gold);font-size:0.72rem;">See our build costs &rarr;</a></div>
     </div>
   </div>
   <div class="tl-legend" style="margin-top:2rem;">
@@ -358,7 +379,36 @@
         '<div id="wn-salary-chart" style="margin-top:2rem;"></div>'
     },
     {
-      after: '2026-03-01',
+      after: '2026-02-22',
+      id: 'token-economics',
+      html: '<h2>The Token Economics Are Moving Fast</h2>' +
+        '<p>When GPT-4 launched in March 2023, input tokens cost <span class="wn-highlight">$30 per million</span>. Today, frontier-quality models run at <span class="wn-highlight">$0.80\u20133.00 per million</span>. That\u2019s a 10\u2013100\u00d7 price drop in under three years. And it\u2019s accelerating.</p>' +
+        '<p>Every quarter, you get the same work done for less. The agent you deploy today gets cheaper to operate every month without you changing anything.</p>' +
+        '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
+          '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">API Cost per Million Input Tokens</div>' +
+          '<canvas id="tokenCostChart" height="280"></canvas>' +
+          '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Sources: OpenAI, Anthropic, DeepSeek published pricing. Projection based on observed quarterly decline rate.</div>' +
+        '</div>'
+    },
+    {
+      after: '2026-02-22',
+      id: 'performance-curve',
+      html: '<h2>Performance Is Climbing Just as Fast</h2>' +
+        '<p>SWE-bench measures whether a model can actually solve real software engineering tasks\u2014pull requests from open-source repos. In early 2024, the best models solved <span class="wn-highlight">under 5%</span>. By late 2024, Claude 3.5 Sonnet hit <span class="wn-highlight">49%</span>. Current frontier models exceed <span class="wn-highlight">60%</span>.</p>' +
+        '<p>This isn\u2019t incremental improvement. It\u2019s a capability step-change happening in real time. <span class="wn-highlight">The agents you deploy today are the worst they\u2019ll ever be. And they\u2019re already useful.</span></p>' +
+        '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
+          '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">Model Performance: SWE-bench Verified</div>' +
+          '<canvas id="perfChart" height="280"></canvas>' +
+          '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">SWE-bench Verified: percentage of real GitHub issues solved autonomously. Higher = more capable.</div>' +
+        '</div>' +
+        '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:2rem 0;">' +
+          '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">The Crossover: Cost Down, Capability Up</div>' +
+          '<canvas id="crossoverChart" height="280"></canvas>' +
+          '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Cost per task declines as models get both cheaper and more capable. The best time to start was yesterday. The second-best time is now.</div>' +
+        '</div>'
+    },
+    {
+      after: '2026-03-06',
       id: 'permanent',
       html: '<h2>Every Dollar Builds Something Permanent</h2>' +
         '<p>The agent isn\u2019t doing today\u2019s work and forgetting it. Every email it triages teaches it your communication patterns. Every CRM update teaches it your deal flow. Every prospecting run teaches it your ideal customer.</p>' +
@@ -367,7 +417,7 @@
         '<div id="wn-compound-chart" style="margin-top:2rem;"></div>'
     },
     {
-      after: '2026-03-01',
+      after: '2026-03-06',
       id: 'real-numbers',
       html: '<h2>The Real Numbers</h2>' +
         '<p>$300/day is the most you\u2019ll ever pay for this level of capability. The models get cheaper every quarter. The agent that performs like an intern today performs like a senior employee at a fraction of the cost within 18 months.</p>' +
@@ -425,8 +475,38 @@
       after: '2026-03-09',
       id: 'no-300',
       html: '<h2>You Don\u2019t Need $300 a Day</h2>' +
-        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day for personal-assistant style usage, on top of a $200/mo platform subscription. Running the full Briu internal stack, which includes active prospecting, reporting, and multi-session ops, averages $14.68/day. The architecture keeps costs proportional to the work being done.</p>' +
+        '<p>We run a fully capable agent managing two email accounts, a CRM, sales prospecting, automated reporting, calendar, and cost monitoring. API cost: $2\u20135/day for personal-assistant style usage, on top of a $200/mo platform subscription. Running the full Briu internal stack, which includes active prospecting, reporting, and multi-session ops, averages <span data-dynamic="avg-daily-cost">$14.68</span>/day. The architecture keeps costs proportional to the work being done. <a href="/build/" style="color:var(--gold);">See the full build log \u2192</a></p>' +
         '<p>Not because we cut corners. Because we built the architecture to be efficient. A personal agent coordinates task-specific agents. Each one has a defined job, budget, and scope. They run when there\u2019s work to do and stop when it\u2019s done.</p>'
+    },
+    {
+      after: '2026-03-09',
+      id: 'chatgpt-to-agents',
+      html: '<h2>From ChatGPT Moment to Agent Moment</h2>' +
+        '<p>The ChatGPT moment in late 2022 taught people that AI could answer questions. The agent moment in 2026 is teaching them that AI can <span class="wn-highlight">do work</span>.</p>' +
+        '<p>This is a different category. A chatbot waits for you to type. An agent wakes up at 7 AM, reads your email, prepares a briefing, updates your CRM, researches three prospects, and has a summary ready before you finish your coffee. Then it asks what else you need.</p>' +
+        '<p>Calacanis put it plainly after deploying agents across his 20-person firm: <span class="wn-highlight">\u201COut of 50 hours a producer does a week, this does 40 of them. And of what an SDR does, this does 95%.\u201D</span> <span style="font-size:0.82rem;color:var(--text-muted);">(All-In E259)</span></p>' +
+        '<p>The agent didn\u2019t just use existing tools\u2014it built its own. When asked to manage podcast guests, it vibe-coded a CRM for itself. When it needed scheduling information, it proactively guessed email addresses, sent them, and started coordinating calendars without being told to.</p>' +
+        '<p class="wn-highlight">This is the shift. From AI as a tool you use, to AI as a colleague that operates alongside you.</p>'
+    },
+    {
+      after: '2026-03-09',
+      id: 'local-future',
+      html: '<h2>The Local Inference Horizon</h2>' +
+        '<p>Right now, most agent work runs through cloud APIs. You send tokens to Anthropic or OpenAI, they come back processed. That\u2019s the cost everyone worries about.</p>' +
+        '<p>But open-source models are crossing the capability threshold. Kimi K2.5 runs locally and handles 95% of routine agent tasks\u2014email triage, CRM updates, scheduling, basic research. Only the remaining 5%\u2014complex reasoning, novel analysis\u2014needs a frontier API call.</p>' +
+        '<p>Chamath\u2019s math from All-In: <span class="wn-highlight">\u201CYou\u2019ll save 90%. Your $1,000/day becomes $10/day.\u201D</span> Calacanis followed through and cancelled his $25,000/month OpenAI account entirely. <span style="font-size:0.82rem;color:var(--text-muted);">(All-In E259)</span></p>' +
+        '<p>The hardware is commodity. A Mac Studio with max memory runs inference indefinitely at marginal electricity cost. Friedberg estimates <span class="wn-highlight">70\u2013100\u00d7 compute reduction</span> is possible as models optimize. Within 18 months, serious agent workloads will run on self-hosted hardware at a fraction of current cloud costs.</p>' +
+        '<p class="wn-highlight">The architecture you build now\u2014the skills, the integrations, the workflows\u2014runs on whatever infrastructure gets cheapest. You\u2019re not locked into any provider. You\u2019re locked into your own competitive advantage.</p>'
+    },
+    {
+      after: '2026-03-09',
+      id: 'team-empowerment',
+      html: '<h2>Your Team Does 100\u00d7 the Work. And Enjoys It More.</h2>' +
+        '<p>This isn\u2019t about replacing people. It\u2019s about what happens when every person on your team has a tireless operational partner that handles the work they don\u2019t want to do.</p>' +
+        '<p>The data entry, the CRM updates, the meeting prep, the prospect research, the report formatting, the follow-up emails\u2014all of it handled. Your people wake up and <span class="wn-highlight">start their day at the part that requires their brain, their taste, their judgment</span>.</p>' +
+        '<p>Calacanis\u2019s assistant\u2019s workload dropped 30%. But she didn\u2019t do 30% less. She moved to higher-judgment work that she\u2019d never had time for. The agents took the repetitive tasks. The humans moved up.</p>' +
+        '<p>And the capability compounds. Chamath: <span class="wn-highlight">\u201CEvery time you add it to something, it gets smarter. Every week, 5 to 10% of the work being done is being moved over. That number is cumulative and permanent.\u201D</span> <span style="font-size:0.82rem;color:var(--text-muted);">(All-In E259)</span></p>' +
+        '<p>Your best people stop spending time on production and start spending time on direction. That\u2019s not automation. That\u2019s leverage.</p>'
     },
     {
       after: '2026-09-01',
@@ -588,11 +668,232 @@
   }
   updateCounters();
 
-  // ===== Init charts =====
+  // ===== Init SVG charts =====
   if (Briu && Briu.charts) {
     if (document.getElementById('wn-salary-chart')) Briu.charts.salaryCrossover('wn-salary-chart');
     if (document.getElementById('wn-compound-chart')) Briu.charts.compoundLoop('wn-compound-chart');
   }
+
+  // ===== Init Chart.js charts =====
+  function initChartJs() {
+    if (typeof Chart === 'undefined') { setTimeout(initChartJs, 200); return; }
+
+    var gold = '#D4A05A', river = '#5A9DAC', forest = '#6AAE9C', coral = '#E07B5F', teal = '#5A9DAC';
+    var gridColor = 'rgba(255,255,255,0.06)';
+    var textMuted = 'rgba(255,255,255,0.5)';
+    Chart.defaults.color = textMuted;
+    Chart.defaults.borderColor = gridColor;
+
+    // --- Star Growth Popup Chart ---
+    var starEl = document.getElementById('starGrowthChart');
+    if (starEl) {
+      new Chart(starEl.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Nov 25', 'Dec 25', 'Jan 26', 'Jan 27', 'Jan 30', 'Feb 5', 'Feb 15', 'Mar 1', 'Mar 10'],
+          datasets: [{
+            data: [9, 12, 15, 60, 95, 120, 145, 155, 163],
+            borderColor: gold,
+            backgroundColor: 'rgba(212,160,90,0.15)',
+            fill: true,
+            tension: 0.35,
+            pointRadius: 3,
+            pointBackgroundColor: gold,
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: { duration: 0 },
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(18,18,20,0.95)',
+              titleColor: '#fff',
+              bodyColor: textMuted,
+              callbacks: { label: function(ctx) { return ctx.parsed.y + 'K stars'; } }
+            }
+          },
+          scales: {
+            y: { display: true, grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: textMuted, font: { size: 9 }, callback: function(v) { return v + 'K'; } } },
+            x: { display: true, grid: { display: false }, ticks: { color: textMuted, font: { size: 8 }, maxRotation: 45 } }
+          }
+        }
+      });
+    }
+
+    // --- Token Cost Chart ---
+    var tokenEl = document.getElementById('tokenCostChart');
+    if (tokenEl) {
+      new Chart(tokenEl.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Mar 23', 'Nov 23', 'Mar 24', 'May 24', 'Jul 24', 'Oct 24', 'Jan 25', 'Mar 25', 'Mar 26', 'Sep 26\u2020'],
+          datasets: [{
+            label: 'Frontier model $/M input tokens',
+            data: [30, 10, 3, 5, 0.15, 3, 0.27, 1.25, 0.80, 0.20],
+            borderColor: gold,
+            backgroundColor: 'rgba(212,160,90,0.1)',
+            fill: true,
+            tension: 0.3,
+            pointRadius: 5,
+            pointBackgroundColor: [gold, gold, river, gold, gold, river, forest, river, river, forest],
+            pointBorderColor: 'transparent',
+            pointHoverRadius: 8
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(18,18,20,0.95)',
+              titleColor: '#fff',
+              bodyColor: textMuted,
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1,
+              callbacks: {
+                label: function(ctx) {
+                  var labels = ['GPT-4', 'GPT-4 Turbo', 'Claude 3 Sonnet', 'GPT-4o', 'GPT-4o mini', 'Claude 3.5 Sonnet', 'DeepSeek V3', 'Claude 3.5 Haiku', 'Frontier avg', 'Projected'];
+                  return labels[ctx.dataIndex] + ': $' + ctx.parsed.y.toFixed(2) + '/M tokens';
+                }
+              }
+            }
+          },
+          scales: {
+            y: {
+              type: 'logarithmic',
+              title: { display: true, text: '$/M tokens (log scale)', color: textMuted, font: { size: 11 } },
+              grid: { color: gridColor },
+              ticks: { color: textMuted, callback: function(v) { return '$' + v; } }
+            },
+            x: { grid: { color: gridColor }, ticks: { color: textMuted, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+
+    // --- Performance Chart ---
+    var perfEl = document.getElementById('perfChart');
+    if (perfEl) {
+      new Chart(perfEl.getContext('2d'), {
+        type: 'bar',
+        data: {
+          labels: ['GPT-4\nMar 24', 'Claude 3\nOpus', 'GPT-4o\nMay 24', 'Claude 3.5\nSonnet', 'o1-preview\nSep 24', 'DeepSeek\nV3', 'Claude\nSonnet 4', 'Frontier\nMar 26'],
+          datasets: [{
+            label: 'SWE-bench Verified %',
+            data: [1.7, 4.7, 4.8, 49, 50.8, 42, 55.2, 65],
+            backgroundColor: function(ctx) {
+              var colors = [textMuted, river, textMuted, river, gold, forest, river, gold];
+              return colors[ctx.dataIndex] || textMuted;
+            },
+            borderRadius: 3,
+            barPercentage: 0.7
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            tooltip: {
+              backgroundColor: 'rgba(18,18,20,0.95)',
+              titleColor: '#fff',
+              bodyColor: textMuted,
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1,
+              callbacks: { label: function(ctx) { return ctx.parsed.y + '% of issues solved'; } }
+            }
+          },
+          scales: {
+            y: {
+              beginAtZero: true,
+              max: 80,
+              title: { display: true, text: '% solved', color: textMuted, font: { size: 11 } },
+              grid: { color: gridColor },
+              ticks: { color: textMuted, callback: function(v) { return v + '%'; } }
+            },
+            x: { grid: { display: false }, ticks: { color: textMuted, font: { size: 9 }, maxRotation: 0 } }
+          }
+        }
+      });
+    }
+
+    // --- Crossover Chart (dual axis: cost down + capability up) ---
+    var crossEl = document.getElementById('crossoverChart');
+    if (crossEl) {
+      new Chart(crossEl.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: ['Q1 24', 'Q2 24', 'Q3 24', 'Q4 24', 'Q1 25', 'Q2 25', 'Q3 25', 'Q4 25', 'Q1 26', 'Q3 26\u2020'],
+          datasets: [
+            {
+              label: 'Cost per task (indexed)',
+              data: [100, 60, 35, 20, 12, 8, 5, 3.5, 2, 0.8],
+              borderColor: coral,
+              backgroundColor: 'rgba(224,123,95,0.08)',
+              fill: true,
+              tension: 0.35,
+              pointRadius: 4,
+              pointBackgroundColor: coral,
+              yAxisID: 'y'
+            },
+            {
+              label: 'Capability (indexed)',
+              data: [5, 12, 30, 50, 55, 62, 68, 75, 82, 95],
+              borderColor: forest,
+              backgroundColor: 'rgba(106,174,156,0.08)',
+              fill: true,
+              tension: 0.35,
+              pointRadius: 4,
+              pointBackgroundColor: forest,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          plugins: {
+            legend: {
+              display: true,
+              labels: { color: textMuted, usePointStyle: true, pointStyle: 'circle', padding: 16, font: { size: 11 } }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(18,18,20,0.95)',
+              titleColor: '#fff',
+              bodyColor: textMuted,
+              borderColor: 'rgba(255,255,255,0.1)',
+              borderWidth: 1
+            }
+          },
+          scales: {
+            y: {
+              position: 'left',
+              title: { display: true, text: 'Cost per task (indexed, Q1 24 = 100)', color: coral, font: { size: 10 } },
+              grid: { color: gridColor },
+              ticks: { color: coral, font: { size: 10 } },
+              reverse: false,
+              min: 0
+            },
+            y1: {
+              position: 'right',
+              title: { display: true, text: 'Capability index', color: forest, font: { size: 10 } },
+              grid: { drawOnChartArea: false },
+              ticks: { color: forest, font: { size: 10 } },
+              min: 0,
+              max: 100
+            },
+            x: { grid: { color: gridColor }, ticks: { color: textMuted, font: { size: 10 } } }
+          }
+        }
+      });
+    }
+  }
+  initChartJs();
 
   // ===== Init calculator if present =====
   if (document.getElementById('calcHours') && window.updateCalc) {
