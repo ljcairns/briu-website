@@ -144,14 +144,6 @@
 .tl-counter:hover .tl-counter-detail { opacity: 0.7; max-height: 2rem; margin-top: 0.5rem; }
 
 /* Star growth popup chart */
-.star-popup { position: absolute; bottom: calc(100% + 12px); left: 50%; transform: translateX(-50%) scale(0.95); opacity: 0; pointer-events: none; width: 320px; background: #151B24; border: 1px solid rgba(212,160,90,0.2); box-shadow: 0 12px 40px rgba(0,0,0,0.5); padding: 1rem 1rem 0.75rem; z-index: 20; transition: opacity 0.3s ease, transform 0.3s ease; }
-.star-popup canvas { background: transparent !important; }
-.star-popup::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 6px solid transparent; border-top-color: rgba(212,160,90,0.2); }
-.tl-counter:hover .star-popup { opacity: 1; transform: translateX(-50%) scale(1); pointer-events: auto; }
-.star-popup-title { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.5rem; }
-.star-popup-context { font-size: 0.7rem; color: var(--text-muted); line-height: 1.5; margin-top: 0.5rem; }
-.star-popup-context strong { color: var(--text); }
-@media (max-width: 768px) { .star-popup { width: 260px; left: 0; transform: translateX(-20%) scale(0.95); } .tl-counter:hover .star-popup { transform: translateX(-20%) scale(1); } }
 
 /* Water divider */
 .water-divider { width: 100%; max-width: 1060px; margin: 0 auto; padding: 2rem 0; text-align: center; overflow: hidden; }
@@ -234,17 +226,10 @@
       <div class="tl-counter-label">cheaper per token since GPT-4</div>
       <div class="tl-counter-detail">Mar 2023 &rarr; Mar 2026</div>
     </div>
-    <div class="tl-counter reveal reveal-delay-1" id="openclawCounter" style="cursor:pointer;overflow:visible;">
+    <div class="tl-counter reveal reveal-delay-1">
       <div class="tl-counter-num">3</div>
       <div class="tl-counter-label">frontier model families<br>driving the agent era</div>
-      <div class="tl-counter-detail">GPT &rarr; Gemini &rarr; Claude. Hover for timeline &rarr;</div>
-      <div class="star-popup" id="starPopup">
-        <div class="star-popup-title">The Model Progression</div>
-        <canvas id="starGrowthChart" height="140"></canvas>
-        <div class="star-popup-context">
-          <strong>GPT-4</strong> proved LLMs could reason. <strong>Gemini 2.5 Pro</strong> made complex tasks reliable. <strong>Claude Opus/Sonnet 4.6</strong> enabled autonomous agents.
-        </div>
-      </div>
+      <div class="tl-counter-detail">GPT &rarr; Gemini &rarr; Claude</div>
     </div>
     <div class="tl-counter reveal reveal-delay-2">
       <div class="tl-counter-num">10&times;</div>
@@ -686,53 +671,6 @@
     var textMuted = 'rgba(255,255,255,0.5)';
     Chart.defaults.color = textMuted;
     Chart.defaults.borderColor = gridColor;
-
-    // --- Model Capability Timeline Chart ---
-    var starEl = document.getElementById('starGrowthChart');
-    if (starEl) {
-      starEl.style.background = 'transparent';
-      new Chart(starEl.getContext('2d'), {
-        type: 'bar',
-        data: {
-          labels: ['GPT-4', 'GPT-4o', 'Gemini 1.5', 'Claude 3.5', 'Gemini 2.5 Pro', 'Opus 4.6'],
-          datasets: [{
-            label: 'SWE-bench score',
-            data: [15, 33, 42, 49, 64, 72],
-            backgroundColor: [
-              'rgba(212,160,90,0.5)',
-              'rgba(212,160,90,0.6)',
-              'rgba(90,157,172,0.6)',
-              'rgba(224,123,95,0.6)',
-              'rgba(90,157,172,0.8)',
-              'rgba(224,123,95,0.9)'
-            ],
-            borderColor: [
-              gold, gold, river, coral, river, coral
-            ],
-            borderWidth: 1,
-            borderRadius: 3
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: { duration: 0 },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: 'rgba(18,18,20,0.95)',
-              titleColor: '#fff',
-              bodyColor: textMuted,
-              callbacks: { label: function(ctx) { return ctx.parsed.y + '% SWE-bench'; } }
-            }
-          },
-          scales: {
-            y: { display: true, grid: { color: 'rgba(255,255,255,0.04)' }, max: 80, ticks: { color: textMuted, font: { size: 9 }, callback: function(v) { return v + '%'; } } },
-            x: { display: true, grid: { display: false }, ticks: { color: textMuted, font: { size: 8 }, maxRotation: 45 } }
-          }
-        }
-      });
-    }
 
     // --- Token Cost Chart ---
     var tokenEl = document.getElementById('tokenCostChart');
