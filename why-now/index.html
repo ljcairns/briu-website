@@ -346,7 +346,7 @@
     { date: '2026-02-20', category: 'industry', title: 'Calacanis deploys agents firm-wide', desc: 'Every employee gets an agent. 95% of SDR work automated. Cost: $300/day per agent.' },
     { date: '2026-02-22', category: 'industry', title: 'Claude Opus & Sonnet 4.6', desc: 'Anthropic ships the models that make autonomous agents viable. 72% SWE-bench. Briu switches to Anthropic.' },
     { date: '2026-03-06', category: 'briu', title: 'Briu launches', desc: 'Brand goes live. Agent stack already running for a month. First client conversations within hours.' },
-    { date: '2026-09-01', category: 'cost', projected: true, title: 'Cost curve inflection', desc: 'Based on current trajectory: $300/day agents run for $30. $5/day agents run for $1.' }
+    { date: '2026-03-10', category: 'briu', title: 'Full security red-team', desc: '6 rounds, 210+ payloads, 4 architectural audits, 5 critical findings patched. 8 defense layers.' }
   ];
 
   // ===== Content sections to weave between timeline events =====
@@ -507,7 +507,7 @@
         '<p>Your best people stop spending time on production and start spending time on direction. That\u2019s not automation. That\u2019s leverage.</p>'
     },
     {
-      after: '2026-09-01',
+      after: '2026-03-10',
       id: 'if-you-wait',
       html: '<h2>What Happens If You Wait</h2>' +
         '<p>AI adoption in 2026 isn\u2019t coming from CEO transformation initiatives. It\u2019s coming from individual employees who figure it out themselves, bringing consumerized AI tools from the bottom up.</p>' +
@@ -608,7 +608,8 @@
 
     // Expanded section: what businesses can build right now
     var section = document.createElement('div');
-    section.className = 'tl-here-section reveal';
+    section.className = 'tl-here-section';
+    section.style.opacity = '1';
     section.innerHTML =
       '<h3>What businesses are building right now</h3>' +
       '<p>These aren\u2019t demos. These are agent chains running in production today, each one doing work that used to require a person.</p>' +
@@ -630,6 +631,22 @@
         '</div>' +
       '</div>';
     container.appendChild(section);
+
+    // Cost curve inflection chart
+    var costSection = document.createElement('div');
+    costSection.className = 'tl-content-section';
+    costSection.style.opacity = '1';
+    costSection.style.maxWidth = '860px';
+    costSection.innerHTML =
+      '<h2>The Cost Curve Inflection</h2>' +
+      '<p>API costs have dropped 100\u00d7 since GPT-4 launched. The inflection point\u2014where agents cost less than the humans doing the same work\u2014is happening now, not in the future.</p>' +
+      '<div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;margin:1.5rem 0;">' +
+        '<div style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:1rem;">Cost per Agent-Day vs. Human Equivalent</div>' +
+        '<div style="position:relative;height:320px;"><canvas id="costInflectionChart"></canvas></div>' +
+        '<div style="font-size:0.72rem;color:var(--text-muted);margin-top:0.75rem;">Gold dot = Briu today ($18.97/day avg). Projections based on observed quarterly cost decline rates. Human cost assumes $50/hr loaded rate.</div>' +
+      '</div>' +
+      '<p style="color:var(--text)"><strong>The businesses deploying now aren\u2019t early.</strong> They\u2019re locking in the architecture while the economics are already favorable. By the time costs drop another 10\u00d7, they\u2019ll have the workflows, the data, and the team capability. Everyone else will be starting from zero.</p>';
+    container.appendChild(costSection);
   }
 
   TIMELINE.forEach(function(evt, idx) {
@@ -913,9 +930,74 @@
         }
       });
     }
+    // Cost inflection chart (in "you are here" section)
+    var costInflEl = document.getElementById('costInflectionChart');
+    if (costInflEl && typeof Chart !== 'undefined') {
+      var months = ['Mar 23','Sep 23','Mar 24','Sep 24','Mar 25','Sep 25','Mar 26','Sep 26','Mar 27'];
+      var agentCost = [900, 450, 200, 90, 45, 25, 18.97, 8, 3];
+      var humanCost = [400, 400, 400, 400, 400, 400, 400, 400, 400];
+      var briuIdx = 6;
+      var pointBg = agentCost.map(function(_, i) { return i === briuIdx ? '#D4A05A' : 'rgba(106,174,156,0.6)'; });
+      var pointR = agentCost.map(function(_, i) { return i === briuIdx ? 8 : 3; });
+      var pointBorder = agentCost.map(function(_, i) { return i === briuIdx ? 2 : 0; });
+      new Chart(costInflEl.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels: months,
+          datasets: [
+            {
+              label: 'Agent cost/day',
+              data: agentCost,
+              borderColor: '#6AAE9C',
+              backgroundColor: 'rgba(106,174,156,0.08)',
+              fill: true,
+              tension: 0.4,
+              pointBackgroundColor: pointBg,
+              pointRadius: pointR,
+              pointBorderColor: '#0E1219',
+              pointBorderWidth: pointBorder
+            },
+            {
+              label: 'Human equivalent/day',
+              data: humanCost,
+              borderColor: 'rgba(224,123,95,0.5)',
+              borderDash: [6, 4],
+              pointRadius: 0,
+              fill: false
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.04)' }, ticks: { color: '#94909A', font: { size: 10 } } },
+            y: {
+              type: 'logarithmic',
+              grid: { color: 'rgba(255,255,255,0.04)' },
+              ticks: { color: '#94909A', font: { size: 10 }, callback: function(v) { return '$' + v; } },
+              min: 1,
+              max: 1000
+            }
+          },
+          plugins: {
+            legend: { display: true, position: 'top', labels: { boxWidth: 12, padding: 20, color: '#C4B9A8', font: { size: 11 } } },
+            tooltip: {
+              callbacks: {
+                label: function(ctx) { return ctx.dataset.label + ': $' + ctx.raw.toFixed(2) + '/day'; },
+                afterBody: function(ctx) { return ctx[0].dataIndex === briuIdx ? '\u2190 Briu today' : ''; }
+              }
+            },
+            annotation: costInflEl.parentElement ? undefined : undefined
+          }
+        }
+      });
+    }
+
     // Force resize all charts after sections become visible
     setTimeout(function() {
-      ['tokenCostChart', 'perfChart', 'crossoverChart'].forEach(function(id) {
+      ['tokenCostChart', 'perfChart', 'crossoverChart', 'costInflectionChart'].forEach(function(id) {
         var el = document.getElementById(id);
         if (el) {
           var chart = Chart.getChart(el);
