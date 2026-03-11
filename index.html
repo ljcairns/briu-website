@@ -48,9 +48,11 @@ nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; }
 .hero-cta-primary { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.75rem 2rem; border: 1px solid rgba(212,160,90,0.4); transition: all 0.35s ease; position: relative; }
 .hero-cta-primary:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); box-shadow: 0 0 30px rgba(212,160,90,0.1); }
 .hero-cta-secondary { font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.3s ease; display: flex; align-items: center; gap: 0.5rem; }
-.hero-cta-secondary::after { content: '\2193'; font-size: 1rem; transition: transform 0.3s ease; }
+.hero-cta-secondary::after { content: '\2192'; font-size: 1rem; transition: transform 0.3s ease; }
 .hero-cta-secondary:hover { color: var(--text); }
-.hero-cta-secondary:hover::after { transform: translateY(3px); }
+.hero-cta-secondary:hover::after { transform: translateX(3px); }
+.hero-cta-secondary[href^="#"]::after { content: '\2193'; }
+.hero-cta-secondary[href^="#"]:hover::after { transform: translateY(3px); }
 
 
 /* Moment comparison */
@@ -651,7 +653,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </div>
 
   <div class="why-now-links reveal">
-    <a href="/why-now/" class="hero-cta-secondary">Read the full timeline &rarr;</a>
+    <a href="/why-now/" class="hero-cta-secondary">Read the full timeline</a>
   </div>
 </section>
 
