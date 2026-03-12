@@ -423,11 +423,11 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       <div class="stat-label">Domain &amp; Misc</div>
     </div>
     <div class="stat-box reveal-scale reveal-delay-2">
-      <div class="stat-value">$200<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
-      <div class="stat-label">Platform (Claude Max)</div>
+      <div class="stat-value">$420<span style="font-size: 0.8rem; color: var(--text-muted)">/mo</span></div>
+      <div class="stat-label">Platform (Multi-model)</div>
     </div>
   </div>
-  <p class="vitals-summary">Build cost: <strong>~$406</strong>. Total to launch: <strong>~$1,391</strong>. Traditional equivalent: <span class="vitals-trad">$40&ndash;75K+</span>.</p>
+  <p class="vitals-summary">Build cost: <strong>~$406</strong>. Total to launch: <strong>~$1,611</strong>. Traditional equivalent: <span class="vitals-trad">$108&ndash;215K+</span>.</p>
 </div>
 
 <!-- 2. Timeline (Dashboard layer) -->
@@ -850,25 +850,27 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
   <div class="roi-compare">
     <div class="roi-col roi-agent reveal-scale">
       <div class="roi-header">With Agents</div>
-      <div class="roi-value">~$1,391</div>
+      <div class="roi-value">~$1,611</div>
       <div class="roi-items">
         <span>Production agent — $376</span>
         <span>Brand, logo &amp; domain — ~$105</span>
         <span>Trademark (2 classes) — $710</span>
-        <span>Platform — $200/mo</span>
+        <span>Platform — $420/mo</span>
       </div>
     </div>
     <div class="roi-vs reveal-scale reveal-delay-1">
-      <div class="roi-multiplier" data-count="30" data-suffix="x">30x</div>
+      <div class="roi-multiplier" data-count="67" data-suffix="x">67x</div>
       <div class="roi-multiplier-label">less</div>
     </div>
     <div class="roi-col roi-trad reveal-scale reveal-delay-2">
       <div class="roi-header">Traditional Route</div>
-      <div class="roi-value">$40&ndash;75K+</div>
+      <div class="roi-value">$108&ndash;215K+</div>
       <div class="roi-items">
         <span>Dev agency — $15-30K</span>
         <span>Branding agency — $15-25K</span>
         <span>Web dev shop — $8-20K</span>
+        <span>Security architecture — $50-100K</span>
+        <span>Multi-agent orchestration — $20-40K</span>
         <span>SaaS stack — $2K+/mo</span>
       </div>
     </div>
@@ -961,10 +963,32 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         </td>
       </tr>
       <tr>
+        <td>Security Architecture</td>
+        <td>
+          <span class="agent-cost">$0</span>
+          <span class="agent-time">Built in-house · 10 defense layers · 290+ payloads tested</span>
+        </td>
+        <td>
+          <span class="trad-cost">$50,000&ndash;100,000</span>
+          <span class="trad-time">Security consultancy · pen testing · compliance</span>
+        </td>
+      </tr>
+      <tr>
+        <td>Multi-Agent Orchestration</td>
+        <td>
+          <span class="agent-cost">$0</span>
+          <span class="agent-time">HMAC-signed manifests · dispatch daemon · built with agents</span>
+        </td>
+        <td>
+          <span class="trad-cost">$20,000&ndash;40,000</span>
+          <span class="trad-time">Custom platform engineering · DevOps · infrastructure</span>
+        </td>
+      </tr>
+      <tr>
         <td>Platform</td>
         <td>
-          <span class="agent-cost">$200/mo</span>
-          <span class="agent-time">Claude Max · shared across all three</span>
+          <span class="agent-cost">$420/mo</span>
+          <span class="agent-time">Claude Max $200 + ChatGPT Pro $200 + VPS $20</span>
         </td>
         <td>
           <span class="trad-cost">$2,000+/mo</span>
@@ -975,8 +999,8 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <tfoot>
       <tr>
         <td>Total (project costs)</td>
-        <td><span class="agent-cost">~$1,391</span></td>
-        <td><span class="trad-cost">$40,000&ndash;75,000+</span></td>
+        <td><span class="agent-cost">~$1,611</span></td>
+        <td><span class="trad-cost">$108,000&ndash;215,000+</span></td>
       </tr>
     </tfoot>
   </table>
@@ -997,7 +1021,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="spectrum-tier spectrum-baseline reveal-scale reveal-delay-1">
       <div class="spectrum-marker" style="color: var(--forest); display: flex; align-items: center; gap: 0.5rem;">Briu Average <span class="spectrum-you-badge" style="position: static; margin: 0;">Briu internal</span></div>
       <div class="spectrum-value">~$870&ndash;1,170<span>/mo</span></div>
-      <div class="spectrum-breakdown">Claude Max $200 + ChatGPT Pro $200 + VPS $10 + $15&ndash;25/day API</div>
+      <div class="spectrum-breakdown">Claude Max $200 + ChatGPT Pro $200 + VPS $20 + $15&ndash;25/day API</div>
       <div class="spectrum-desc">Multi-agent, multi-model stack. Subscriptions handle bulk execution at zero marginal cost; API handles orchestration and routing. Cost arbitrage between the two is the core architecture.</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-2">

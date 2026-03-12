@@ -820,31 +820,25 @@ Briu.charts.briuOrg = function(containerId) {
     '<div class="sb-arrow">&rarr;</div>' +
     '</div>' +
 
-    /* Center: Interfaces */
+    /* Center: VPS Orchestrator */
     '<div class="sb-col sb-col-interfaces">' +
-    '<div class="sb-col-label">Interfaces</div>' +
-    card({ name: 'Claw', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
-    card({ name: 'Claude Code', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub', metric: '<span data-dynamic="website-commits">371</span> website commits', env: 'Local machine' }) +
-    card({ name: 'Claude Web', accent: 'teal', status: 'active', role: 'Strategy', tools: 'Planning &middot; research', metric: 'Long-context ops', env: 'Browser' }) +
+    '<div class="sb-col-label">Orchestrator</div>' +
+    card({ name: 'Claw (VPS)', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw &middot; HMAC manifests', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
+    '<div class="sb-arrow" style="text-align:center;color:var(--gold);font-size:0.75rem;padding:4px 0;">HMAC-signed manifests &darr;</div>' +
+    card({ name: 'Dispatch Daemon', accent: 'forest', status: 'active', role: 'Task Router', tools: 'Mac &middot; cron &middot; queue', metric: 'Routes tasks to execution agents', env: 'Local machine' }) +
     '</div>' +
 
-    /* Right: Agents */
+    /* Right: Execution Agents */
     '<div class="sb-col sb-col-agents">' +
-    '<div class="sb-col-label">Specialist Agents</div>' +
-    card({ name: 'Email &amp; CRM', accent: 'forest', status: 'active', tools: 'Gmail &middot; HubSpot &middot; Apollo', metric: '100% of email/CRM &middot; 2 accounts' }) +
-    card({ name: 'Research', accent: 'teal', status: 'active', tools: 'Web &middot; LinkedIn &middot; Docs', metric: 'Overnight &middot; parallel &middot; continuous' }) +
-    card({ name: 'Daily Ops', accent: 'forest', status: 'active', tools: 'Reports &middot; Security &middot; Cron', metric: 'Morning briefing &middot; cost monitor' }) +
+    '<div class="sb-col-label">Execution Agents</div>' +
+    card({ name: 'Claude Code Max', accent: 'forest', status: 'active', role: 'Engineering', tools: 'Terminal &middot; GitHub &middot; full codebase', metric: '<span data-dynamic="website-commits">371</span> website commits', env: 'Local machine' }) +
+    card({ name: 'Codex Pro', accent: 'teal', status: 'active', role: 'Parallel Execution', tools: 'Sandboxed &middot; async &middot; batch', metric: 'Overnight &middot; parallel &middot; continuous', env: 'Cloud sandbox' }) +
+    card({ name: 'Daily Ops', accent: 'forest', status: 'active', tools: 'Email &middot; CRM &middot; Reports &middot; Cron', metric: 'Morning briefing &middot; cost monitor' }) +
     '</div>' +
 
     '</div>' + /* end sb-grid */
 
-    /* Audit footer */
-    '<div class="sb-audit">' +
-      '<span class="sb-audit-dot"></span>' +
-      '<span>Audit layer: Gemini &amp; GPT independently verify every agent action</span>' +
-    '</div>' +
-
-    '<div class="chart-source">Live architecture. 1 person, 3 AI interfaces, 3 specialist agents, 2 audit models. Running cost: <span data-dynamic="avg-daily-cost">$18.97</span>/day.</div></div>';
+    '<div class="chart-source">Live architecture. 1 person, VPS orchestrator, Mac dispatch daemon, 3 execution agents. Running cost: $29&ndash;39/day.</div></div>';
 
   container.innerHTML = html;
   container.classList.add('briu-chart');

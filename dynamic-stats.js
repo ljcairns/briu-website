@@ -17,7 +17,7 @@
     websiteCommits:    440,   // website repo only (ljcairns/briu-website)
     agentCommits:      300,   // private agent config repo
     linesOfCode:       '17.7K', // total (website + agent)
-    avgDailyCost:      '$18.97', // API-only baseline (subscriptions tracked separately)
+    avgDailyCost:      '$29\u201339', // full stack: API + Claude Max + ChatGPT Pro + VPS
     peakDailyCost:     '$138.84',
     lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
     totalApiSpend:     '$550.00',
