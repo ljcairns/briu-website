@@ -13,11 +13,11 @@
   // These are used to initialize all data-dynamic elements on page load
   // before stats.json arrives. Update here when numbers change.
   var FALLBACKS = {
-    commits:           679,   // totalCommits (website + agent repos)
-    websiteCommits:    406,   // website repo only (ljcairns/briu-website)
-    agentCommits:      273,   // private agent config repo
+    commits:           740,   // totalCommits (website + agent repos)
+    websiteCommits:    440,   // website repo only (ljcairns/briu-website)
+    agentCommits:      300,   // private agent config repo
     linesOfCode:       '17.7K', // total (website + agent)
-    avgDailyCost:      '$18.97', // Briu internal baseline (full stack, active ops)
+    avgDailyCost:      '$18.97', // API-only baseline (subscriptions tracked separately)
     peakDailyCost:     '$138.84',
     lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
     totalApiSpend:     '$550.00',
@@ -55,7 +55,8 @@
   }
 
   function computeMonthlyTotal(dailyCost) {
-    return '$' + Math.round(200 + dailyCost * 30).toLocaleString();
+    // Full stack: Claude Max $200 + ChatGPT Pro $200 + VPS $10 + API daily
+    return '$' + Math.round(410 + dailyCost * 30).toLocaleString();
   }
 
   function initFallbacks() {

@@ -348,7 +348,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>Building a company with agents. Every workflow, every cost, live.</h1>
-  <p>One person, multiple agents. Agent, brand, website, sales, operations. All built and run on the same stack we deploy for clients.</p>
+  <p>One person, multiple agents, multiple models. API for orchestration, subscriptions for execution. The same multi-agent stack we deploy for clients.</p>
 </section>
 
 <!-- 1. HUD Bar -->
@@ -367,14 +367,14 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-label">Lines of Code</div>
   </div>
   <div class="hud-stat" data-tooltip="Total commits across website + agent repos, pulled from GitHub every 6 hours" style="--pulse-delay: 1s;">
-    <div class="hud-value" data-dynamic="commits" data-count="679" id="hud-commits">679</div>
+    <div class="hud-value" data-dynamic="commits" data-count="740" id="hud-commits">740</div>
     <div class="hud-label">Project Commits</div>
   </div>
   <div class="hud-stat" data-tooltip="Live skills across the agent stack" style="--pulse-delay: 1.5s;">
     <div class="hud-value" data-dynamic="agent-skills" id="hud-skills">9</div>
     <div class="hud-label">Agent Skills</div>
   </div>
-  <div class="hud-stat" data-tooltip="Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing" style="--pulse-delay: 2s;">
+  <div class="hud-stat" data-tooltip="Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing, HMAC task signing, pipeline exec parsing" style="--pulse-delay: 2s;">
     <div class="hud-value" data-dynamic="sec-defense-layers">10</div>
     <div class="hud-label">Defense Layers</div>
   </div>
@@ -382,9 +382,9 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-value" data-dynamic="sec-open-bypasses">0</div>
     <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full red-team scope)</span></div>
   </div>
-  <div class="hud-stat" data-tooltip="Average daily baseline cost across all agents" style="--pulse-delay: 2.5s;">
-    <div class="hud-value" data-dynamic="avg-daily-cost" id="hud-cost">$18.97</div>
-    <div class="hud-label">Daily Baseline Cost<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(Briu internal stack)</span></div>
+  <div class="hud-stat" data-tooltip="Full stack: Anthropic API avg + Claude Max ($6.67/day) + ChatGPT Pro ($6.67/day) + VPS ($0.33/day)" style="--pulse-delay: 2.5s;">
+    <div class="hud-value" id="hud-cost">$29&ndash;39</div>
+    <div class="hud-label">Daily Baseline Cost<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full stack · multi-model)</span></div>
   </div>
   <div class="hud-stat" data-tooltip="Agent uptime since deployment" style="--pulse-delay: 3s;">
     <div class="hud-value">99.7%</div>
@@ -991,20 +991,20 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="spectrum-tier reveal-scale">
       <div class="spectrum-marker" style="color: var(--forest);">Light Usage</div>
       <div class="spectrum-value">~$260&ndash;350<span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + $2&ndash;5/day API</div>
-      <div class="spectrum-desc">Personal-assistant style. Daily briefings, email triage, CRM updates, scheduled tasks. Agents run when there&rsquo;s work and stop when it&rsquo;s done.</div>
+      <div class="spectrum-breakdown">Single subscription $200/mo + $2&ndash;5/day API</div>
+      <div class="spectrum-desc">Personal-assistant style. Daily briefings, email triage, CRM updates, scheduled tasks. One model, one subscription. Agents run when there&rsquo;s work and stop when it&rsquo;s done.</div>
     </div>
     <div class="spectrum-tier spectrum-baseline reveal-scale reveal-delay-1">
       <div class="spectrum-marker" style="color: var(--forest); display: flex; align-items: center; gap: 0.5rem;">Briu Average <span class="spectrum-you-badge" style="position: static; margin: 0;">Briu internal</span></div>
-      <div class="spectrum-value">~<span data-dynamic="monthly-total-cost">$769</span><span>/mo</span></div>
-      <div class="spectrum-breakdown">$200/mo platform + <span data-dynamic="avg-daily-cost">$18.97</span>/day avg API</div>
-      <div class="spectrum-desc">Active ops, prospecting, multi-session work, and ongoing build overhead. What it costs to run the system and keep building it at the same time.</div>
+      <div class="spectrum-value">~$870&ndash;1,170<span>/mo</span></div>
+      <div class="spectrum-breakdown">Claude Max $200 + ChatGPT Pro $200 + VPS $10 + $15&ndash;25/day API</div>
+      <div class="spectrum-desc">Multi-agent, multi-model stack. Subscriptions handle bulk execution at zero marginal cost; API handles orchestration and routing. Cost arbitrage between the two is the core architecture.</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-2">
       <div class="spectrum-marker" style="color: var(--gold);">Scaled Production</div>
       <div class="spectrum-value">$1-3K<span>/mo</span></div>
-      <div class="spectrum-breakdown">Platform + heavy API + dedicated compute</div>
-      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Token spend starts matching real employee output.</div>
+      <div class="spectrum-breakdown">Multiple subscriptions + heavy API + dedicated compute</div>
+      <div class="spectrum-desc">Always-on prospecting, multi-agent orchestration, heavy data analysis, self-guided research loops. Multi-model arbitrage at scale. Token spend starts matching real employee output.</div>
       <div class="spectrum-quote">"When do tokens outpace the salary of the employee? You're about to hit it." — Chamath, E261</div>
     </div>
     <div class="spectrum-tier reveal-scale reveal-delay-3">
