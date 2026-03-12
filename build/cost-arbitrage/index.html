@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="dark">
 <title>Briu | When More Agent Work Costs Less</title>
 <meta name="description" content="API-based agents bill per token. Subscription plans don't. How a VPS + Mac architecture cut our agent costs by 10x overnight.">
 <meta property="og:title" content="Briu | When More Agent Work Costs Less">
@@ -22,15 +23,17 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/shared.css?v=20260311b">
-<link rel="stylesheet" href="/articles.css?v=20260311b">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<link rel="stylesheet" href="/articles.css?v=20260312a">
 <style>
-.arch-diagram { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: center; margin: 2rem 0; padding: 2rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); border-radius: 4px; }
+.arch-diagram { display: grid; grid-template-columns: 1fr auto 1fr; gap: 1.5rem; align-items: start; margin: 2rem 0; padding: 2rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); border-radius: 4px; }
 .arch-node { text-align: center; padding: 1.25rem; }
 .arch-node-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); margin-bottom: 0.5rem; }
 .arch-node-title { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.35rem; }
 .arch-node-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.55; }
-.arch-arrow { font-size: 1.5rem; color: var(--gold); opacity: 0.5; }
+.arch-arrow { font-size: 1.5rem; color: var(--gold); opacity: 0.5; padding-top: 1.25rem; }
+.executor-stack { display: flex; flex-direction: column; gap: 1rem; }
+.executor-divider { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); opacity: 0.5; }
 .flow-list { list-style: none; padding: 0; margin: 1.5rem 0; counter-reset: flow; }
 .flow-list li { position: relative; padding: 0.75rem 0 0.75rem 2.5rem; color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; border-left: 1px solid rgba(212,160,90,0.15); }
 .flow-list li::before { counter-increment: flow; content: counter(flow); position: absolute; left: -0.65rem; width: 1.3rem; height: 1.3rem; background: var(--surface); border: 1px solid var(--gold); border-radius: 50%; font-size: 0.68rem; font-weight: 700; color: var(--gold); display: flex; align-items: center; justify-content: center; }
@@ -92,63 +95,76 @@
   <p><strong>The more useful your agent becomes, the more it costs to run.</strong> That's the wrong incentive curve for a company selling agent-powered services.</p>
 
   <h2 class="reveal">The insight</h2>
-  <p>Claude Max and Claude Pro are subscription plans. $200/month and $100/month respectively. Flat rate. Within the plan's usage limits, you can run as many conversations, as many tokens, as many tasks as you want. The marginal cost of the next task is zero.</p>
-  <p>Claude Code ships with both plans. It's a full terminal-based agent that can read files, write code, run commands, and iterate on its own work. It uses the same Opus and Sonnet models as the API, but billed against the subscription instead of per-token.</p>
+  <p>Claude Max, Codex Pro, and similar subscription plans charge a flat monthly rate. $200/month for Claude Max. Within the plan's usage limits, you can run as many conversations, as many tokens, as many tasks as you want. The marginal cost of the next task is zero.</p>
+  <p>Claude Code ships with Claude Max. It's a full terminal-based agent that can read files, write code, run commands, and iterate on its own work. OpenAI's Codex works similarly on the Codex Pro plan: a cloud-based execution environment that can run tasks autonomously. Both use frontier models billed against the subscription instead of per-token.</p>
   <p>The gap between API pricing and subscription pricing creates a straightforward arbitrage. Any work you can move from API calls to subscription-based execution costs less. Move enough of it, and total cost drops even as total work increases.</p>
-  <p>The question was whether we could build a system that captures that gap reliably.</p>
+  <p>The question was whether we could build a system that captures that gap reliably, across multiple execution backends.</p>
 
   <h2 class="reveal">The architecture</h2>
-  <p>Two machines, one protocol. The VPS orchestrates. The Mac executes.</p>
+  <p>One orchestrator, two execution backends, one protocol. The VPS orchestrates. Claude Code and Codex execute.</p>
 
   <div class="arch-diagram">
     <div class="arch-node">
       <div class="arch-node-label">Orchestrator</div>
       <div class="arch-node-title">VPS (srv1354778)</div>
-      <div class="arch-node-desc">Schedules tasks, builds manifests, signs with HMAC, dispatches over SSH. Lightweight API calls only when needed for routing decisions.</div>
+      <div class="arch-node-desc">Schedules tasks, builds manifests, signs with HMAC, dispatches via Discord. Lightweight API calls only when needed for routing decisions.</div>
     </div>
     <div class="arch-arrow">→</div>
-    <div class="arch-node">
-      <div class="arch-node-label">Executor</div>
-      <div class="arch-node-title">Mac (Claude Max)</div>
-      <div class="arch-node-desc">Receives signed manifests, validates HMAC, executes via Claude Code. All heavy reasoning happens here at flat-rate cost.</div>
+    <div class="executor-stack">
+      <div class="arch-node">
+        <div class="arch-node-label">Executor 1</div>
+        <div class="arch-node-title">Mac (Claude Code / Max)</div>
+        <div class="arch-node-desc">Receives signed manifests, validates HMAC, executes via Claude Code. Heavy reasoning at flat-rate cost.</div>
+      </div>
+      <div class="executor-divider">+</div>
+      <div class="arch-node">
+        <div class="arch-node-label">Executor 2</div>
+        <div class="arch-node-title">Codex Pro (Cloud)</div>
+        <div class="arch-node-desc">Cloud-based execution for parallelizable tasks. Same manifest protocol, different backend. Flat-rate cost.</div>
+      </div>
     </div>
   </div>
 
   <p>The VPS runs the scheduling layer. It knows what needs to happen and when. When a task is ready, it builds a manifest: a JSON document describing the work, the target files, the expected outputs, and the constraints. Every manifest gets an HMAC-SHA256 signature using a shared secret. No valid signature, no execution.</p>
-  <p>The Mac receives manifests over SSH, validates the signature, and hands the work to Claude Code. Claude Code does the actual reasoning, file manipulation, code generation, and iteration. All of that runs against the Max subscription. Zero marginal cost.</p>
+  <p>Dispatch happens via Discord. The orchestrator posts signed manifests to designated channels, and the execution backends pick them up. The Mac validates the signature and hands the work to Claude Code. Codex receives its manifests in a separate channel and runs them in its cloud sandbox. Both executors run against flat-rate subscriptions. Zero marginal cost.</p>
 
   <h2 class="reveal">Manifest structure</h2>
   <p>Each manifest is a signed JSON payload. The structure is deliberately simple so there's minimal surface area for things to go wrong.</p>
 
   <ol class="flow-list">
-    <li><strong>Task ID and timestamp.</strong> Every manifest gets a unique ID and a UTC timestamp. The executor rejects anything older than 5 minutes to prevent replay attacks.</li>
+    <li><strong>Task ID and timestamp.</strong> Every manifest gets a unique ID and a UTC timestamp. The executor rejects anything older than 30 minutes to prevent replay attacks.</li>
     <li><strong>Plugin name.</strong> Maps to a specific skill in the agent's repertoire. "email-triage", "crm-sync", "content-draft", "deploy-check". The executor only runs plugins it knows about. Unknown plugin names get rejected.</li>
     <li><strong>Parameters.</strong> Task-specific inputs. For email triage: the inbox to scan and the rules to apply. For content drafts: the topic, tone, and target length. Parameters are validated against the plugin's schema before execution.</li>
     <li><strong>HMAC-SHA256 signature.</strong> Computed over the canonical JSON (sorted keys, no whitespace). The shared secret never leaves the two machines. If a single byte of the manifest changes, the signature fails.</li>
     <li><strong>Execution constraints.</strong> Max runtime, allowed file paths, network access flags. The executor enforces these as hard limits regardless of what the model tries to do.</li>
   </ol>
 
-  <p>The dispatch is mechanical. No AI in the routing layer. The VPS doesn't interpret tasks or make judgment calls about what to run. It follows a schedule, builds a manifest, signs it, sends it. The intelligence lives entirely on the execution side, running on a flat-rate plan.</p>
+  <h2 class="reveal">The manifest-dispatch plugin</h2>
+  <p>We started by having the LLM route manifests. The orchestrator would describe the available plugins, pass the manifest to Claude, and let it decide which executor should handle the work. Obvious approach. Didn't work.</p>
+  <p>The LLM would second-guess the manifest. It would rewrite parameters, add "helpful" context that broke schema validation downstream. It would occasionally route tasks to the wrong executor based on its own reasoning about what seemed like a better fit. Every routing decision was a new inference call, adding latency and cost to what should have been a mechanical operation.</p>
+  <p>So we built a Node.js plugin that bypasses the LLM entirely. <code>manifest-dispatch</code> reads the plugin name from the manifest, looks it up in a static routing table, signs the payload, and sends it to the correct executor via Discord. No interpretation. No reasoning. No creativity. Just a lookup and a POST.</p>
+  <p><strong>That's the actual innovation. Not "AI routes AI." A dumb, fast, mechanical dispatcher</strong> that treats the manifest as data to forward, not a prompt to interpret. The intelligence lives at the edges: orchestration decisions on one side, execution on the other. The middle is deliberately stupid.</p>
+  <p>The dispatch is mechanical. No AI in the routing layer. The VPS doesn't interpret tasks or make judgment calls about what to run. It follows a schedule, builds a manifest, signs it, sends it. The intelligence lives entirely on the execution side, running on flat-rate plans.</p>
 
   <h2 class="reveal">Same-day red team</h2>
   <p>We shipped the architecture in the morning and red-teamed it by afternoon. Same approach as our <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold);">sanitizer red team</a>: Opus attacking its own system, trying to find ways through.</p>
   <p>The attack surface is narrow by design. The only entry point is the manifest, and the only thing the executor trusts is the HMAC signature. But narrow doesn't mean safe. We tested:</p>
   <p><strong>Manifest tampering.</strong> Modified payloads with valid-looking structures but invalid signatures. All rejected. The HMAC check runs before any parsing of the manifest body, so malformed JSON with a bad signature never even gets deserialized.</p>
-  <p><strong>Replay attacks.</strong> Captured a valid signed manifest and resent it after the 5-minute window. Rejected on timestamp. Resent it within the window. The executor's idempotency check caught the duplicate task ID.</p>
+  <p><strong>Replay attacks.</strong> Captured a valid signed manifest and resent it after the 30-minute window. Rejected on timestamp. Resent it within the window. The executor's idempotency check caught the duplicate task ID.</p>
   <p><strong>Plugin injection.</strong> Crafted manifests with plugin names that don't exist in the allowlist. Rejected. Tried plugin names with path traversal characters (../../etc/passwd as a plugin name). Rejected at schema validation before the name ever hits the filesystem.</p>
   <p><strong>Parameter overflow.</strong> Sent manifests with parameters designed to make the model behave unexpectedly. Extremely long strings, nested objects 50 levels deep, Unicode edge cases. The schema validator catches structural issues. For content-level attacks (prompt injection via parameters), the execution constraints prevent the model from taking actions outside its allowed file paths and network scope.</p>
   <p><strong>The result: zero bypasses on the dispatch layer.</strong> The architecture's security comes from its simplicity. There's no AI making trust decisions in the routing path. It's HMAC or nothing.</p>
 
-  <h2 class="reveal">The overnight run</h2>
-  <p>First real test: a full night of automated work. The VPS dispatched tasks on a schedule while we slept. Email processing, content generation, code maintenance, data aggregation. The kind of work that would normally require either a human at a keyboard or an expensive API pipeline.</p>
+  <h2 class="reveal">The two-day run</h2>
+  <p>First real test: two full days of automated work across both execution backends. The VPS dispatched tasks on a schedule while we worked on other things. Email processing, content generation, code maintenance, data aggregation. The kind of work that would normally require either a human at a keyboard or an expensive API pipeline.</p>
 
   <div class="run-stats">
     <div class="run-stat">
-      <div class="run-stat-number">37</div>
+      <div class="run-stat-number">83</div>
       <div class="run-stat-label">Tasks dispatched</div>
     </div>
     <div class="run-stat">
-      <div class="run-stat-number">37</div>
+      <div class="run-stat-number">83</div>
       <div class="run-stat-label">Tasks completed</div>
     </div>
     <div class="run-stat">
@@ -156,30 +172,31 @@
       <div class="run-stat-label">Marginal cost</div>
     </div>
     <div class="run-stat">
-      <div class="run-stat-number">~$74</div>
+      <div class="run-stat-number">~$166</div>
       <div class="run-stat-label">API equivalent</div>
     </div>
   </div>
 
-  <p>37 tasks dispatched overnight. 37 completed. Zero failures. The API-equivalent cost for the same work would have been roughly $74 based on our average token usage per task type. The actual marginal cost was zero against the existing Max subscription.</p>
-  <p>Projected monthly: if we run 37 tasks per night, that's roughly 1,100 tasks per month. The API bill for that volume would land somewhere around $2,200. The subscription costs $200. That's not a 10x reduction in the hypothetical. That's 10x measured against real work that actually ran.</p>
+  <p>83 tasks dispatched across two days. 83 completed. Zero failures. Split across Claude Code and Codex based on the routing table: long-context reasoning tasks to the Mac, parallelizable code tasks to Codex. The API-equivalent cost for the same work would have been roughly $166 based on our average token usage per task type. The actual marginal cost was zero against the existing subscriptions.</p>
+  <p>Projected monthly: at roughly 40 tasks per day, that's about 1,200 tasks per month. The API bill for that volume would land somewhere around $2,400. The subscriptions cost $200 (Max) plus $200 (Codex Pro). That's still a 6x reduction measured against real work that actually ran. Add more tasks and the ratio improves, since the subscription cost is fixed.</p>
 
   <table class="cost-table">
     <thead>
       <tr><th>Cost model</th><th>Monthly (est.)</th></tr>
     </thead>
     <tbody>
-      <tr><td>API-only (Opus, ~2M tokens/day)</td><td>~$2,200</td></tr>
-      <tr><td>Hybrid (VPS orchestration + Max execution)</td><td>~$220</td></tr>
+      <tr><td>API-only (Opus, ~2M tokens/day)</td><td>~$2,400</td></tr>
+      <tr><td>Hybrid (VPS orchestration + dual execution)</td><td>~$420</td></tr>
       <tr><td>VPS (Hetzner CAX11)</td><td>$4.50</td></tr>
       <tr><td>Claude Max subscription</td><td>$200</td></tr>
+      <tr><td>Codex Pro subscription</td><td>$200</td></tr>
       <tr><td>Residual API (routing decisions)</td><td>~$15</td></tr>
-      <tr><td><strong>Effective savings</strong></td><td><strong>~90%</strong></td></tr>
+      <tr><td><strong>Effective savings</strong></td><td><strong>~83%</strong></td></tr>
     </tbody>
   </table>
 
   <h2 class="reveal">What this means for clients</h2>
-  <p>The cost arbitrage flows directly to the service. When we deploy agent workflows for a client, the execution cost doesn't scale linearly with usage. Adding a second workflow to an existing deployment doesn't double the cost. Adding a third barely registers. The subscription absorbs the work.</p>
+  <p>The cost arbitrage flows directly to the service. When we deploy agent workflows for a client, the execution cost doesn't scale linearly with usage. Adding a second workflow to an existing deployment doesn't double the cost. Adding a third barely registers. The subscriptions absorb the work.</p>
   <p>This is why Briu can offer agent-powered services at a price point that doesn't make sense if you assume API-rate economics. We're not eating the cost. The cost structure is genuinely different.</p>
   <p><strong>More work. Less cost. That's the point of the whole company.</strong></p>
 
@@ -194,9 +211,9 @@
 
 <div id="site-footer"></div>
 
-<script src="/components.js?v=20260311a"></script>
-<script src="/shared.js?v=20260311a"></script>
-<script src="/ambient.js?v=20260311a"></script>
-<script src="/chat-bubble.js?v=20260311a"></script>
+<script src="/components.js?v=20260312a"></script>
+<script src="/shared.js?v=20260312a"></script>
+<script src="/ambient.js?v=20260312a"></script>
+<script src="/chat-bubble.js?v=20260312a"></script>
 </body>
 </html>
