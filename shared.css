@@ -286,3 +286,71 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   .calc-grid { grid-template-columns: 1fr; }
   .calc-toggles { flex-direction: column; }
 }
+
+/* ===== Print Styles ===== */
+@media print {
+  /* Base: dark-on-white */
+  :root {
+    --bg: #fff;
+    --surface: #f5f5f5;
+    --surface-2: #eee;
+    --text: #111;
+    --text-muted: #444;
+    --gold: #8B6914;
+    --gold-light: #8B6914;
+    --gold-bright: #8B6914;
+    --coral: #C0553E;
+    --forest: #3A7A68;
+    --river: #3A7A8A;
+  }
+
+  html { font-size: 12pt; }
+  body { background: #fff; color: #111; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+
+  /* Remove decorative overlays */
+  body::before, body::after, .vignette, .ambient-orb, .ambient-orb-1, .ambient-orb-2, .ambient-orb-3,
+  .cursor-glow, .nav-progress, .cta-shimmer::after, .hero-breathe::before { display: none !important; }
+
+  /* Hide interactive/non-print elements */
+  .site-header, nav, .nav-toggle, .chat-bubble, .chat-panel, .modal-overlay,
+  .skip-link, .cta-button::after { display: none !important; }
+
+  /* Hero: remove glow */
+  .hero::before, .cta-section::before { display: none !important; }
+  .hero { padding-top: 2rem; }
+
+  /* Ensure text is visible */
+  h1, h2, h3, h4, h5, h6 { color: #111 !important; }
+  p, li, td, th, span, div, label { color: #333 !important; }
+  a { color: #8B6914 !important; text-decoration: underline !important; }
+
+  /* Gradient text fix — remove clip so text prints */
+  .hero h1 em, [style*="background-clip"] {
+    -webkit-background-clip: unset !important; background-clip: unset !important;
+    -webkit-text-fill-color: #8B6914 !important; color: #8B6914 !important;
+    background: none !important;
+  }
+
+  /* Sections & cards */
+  section { padding: 1.5rem 0; }
+  .tier { border: 1px solid #ccc; background: #fff !important; box-shadow: none !important; transform: none !important; }
+  .tier:hover { transform: none !important; }
+  .principle { border-top-color: #ccc; }
+  .quote-card, .quote-block { border-left-color: #8B6914; background: #f9f7f4 !important; }
+  .callout { background: #f0f5f3 !important; border-color: #3A7A68 !important; }
+  .calc-output { background: #f5f5f5 !important; border-color: #ccc !important; }
+
+  /* Footer: show but simplify */
+  footer { border-top-color: #ccc; }
+
+  /* Page break control */
+  .tier, .principle, .quote-card { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+
+  /* CTA section: simplify */
+  .cta-section { padding: 2rem 0; }
+  .cta-button { background: none !important; color: #8B6914 !important; border: 1px solid #8B6914; padding: 0.5rem 1rem; }
+
+  /* Reveal animations: ensure visible */
+  .reveal, .reveal-scale { opacity: 1 !important; transform: none !important; }
+}
