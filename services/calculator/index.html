@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Cost Calculator</title>
+<meta name="description" content="Estimate your AI agent deployment costs. Enter your setup, see monthly API and platform costs, and find the right implementation tier.">
+<meta property="og:title" content="Briu | Cost Calculator">
+<meta property="og:description" content="Estimate your AI agent deployment costs. Enter your setup, see monthly API and platform costs, and find the right implementation tier.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/services/calculator/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Cost Calculator">
+<meta name="twitter:description" content="Estimate your AI agent deployment costs. Enter your setup, see monthly API and platform costs, and find the right implementation tier.">
+<link rel="canonical" href="https://briu.ai/services/calculator/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312">
+<style>
+.hero { padding-bottom: 2rem; }
+.hero-subtitle { font-family: var(--serif); font-size: 1.1rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+.calc-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; margin-top: 2.5rem; align-items: start; }
+
+/* Input panel */
+.calc-inputs { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2rem; }
+.calc-inputs h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 1.5rem; font-weight: 400; }
+
+.field { margin-bottom: 1.5rem; }
+.field label { display: block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.field input[type="number"],
+.field select { width: 100%; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.95rem; padding: 0.75rem 1rem; outline: none; transition: border-color 0.2s; appearance: none; -webkit-appearance: none; }
+.field input[type="number"]:focus,
+.field select:focus { border-color: rgba(212,160,90,0.4); }
+.field select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4B9A8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+.field .field-hint { font-size: 0.8rem; color: var(--text-muted); opacity: 0.7; margin-top: 0.35rem; }
+
+.use-cases { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.use-case-opt { display: flex; align-items: center; gap: 0.5rem; font-size: 0.88rem; color: var(--text-muted); cursor: pointer; padding: 0.5rem 0.75rem; border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s; }
+.use-case-opt:hover { border-color: rgba(212,160,90,0.2); }
+.use-case-opt.selected { border-color: rgba(212,160,90,0.4); background: rgba(212,160,90,0.06); color: var(--text); }
+.use-case-opt input[type="checkbox"] { accent-color: var(--gold); width: auto; margin: 0; }
+
+.calc-btn { width: 100%; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; padding: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: var(--sans); margin-top: 0.5rem; }
+.calc-btn:hover { box-shadow: 0 8px 35px rgba(212,160,90,0.25); transform: translateY(-1px); }
+
+/* Results panel */
+.calc-results { position: sticky; top: 120px; }
+.results-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 2rem; margin-bottom: 1.5rem; transition: all 0.4s ease; }
+.results-card.active { border-color: rgba(212,160,90,0.2); }
+.results-card h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 1.25rem; font-weight: 400; }
+
+.cost-row { display: flex; justify-content: space-between; align-items: center; padding: 0.65rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.cost-row:last-child { border-bottom: none; }
+.cost-label { font-size: 0.9rem; color: var(--text-muted); }
+.cost-value { font-size: 0.95rem; font-weight: 600; color: var(--text); font-family: var(--sans); }
+.cost-row.total { border-top: 1px solid rgba(212,160,90,0.2); margin-top: 0.5rem; padding-top: 1rem; }
+.cost-row.total .cost-label { color: var(--text); font-weight: 600; }
+.cost-row.total .cost-value { color: var(--gold); font-size: 1.15rem; }
+
+.empty-state { text-align: center; padding: 3rem 1rem; }
+.empty-state p { font-size: 0.92rem; color: var(--text-muted); }
+
+/* Tier recommendation */
+.tier-rec { background: linear-gradient(135deg, var(--surface) 0%, rgba(212,160,90,0.03) 100%); border: 1px solid rgba(212,160,90,0.15); padding: 1.75rem 2rem; }
+.tier-rec .tier-rec-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
+.tier-rec h4 { font-family: var(--serif); font-size: 1.2rem; color: var(--text); font-weight: 400; margin-bottom: 0.35rem; }
+.tier-rec .tier-rec-price { font-size: 1.1rem; font-weight: 600; color: var(--gold); margin-bottom: 0.75rem; }
+.tier-rec p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1rem; }
+.tier-rec-link { display: inline-block; font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); text-decoration: none; transition: opacity 0.2s; }
+.tier-rec-link:hover { opacity: 0.7; }
+.tier-rec-link::after { content: ' \2192'; }
+
+/* Comparison bar */
+.comparison { margin-top: 1.5rem; }
+.comparison p { font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.75rem; }
+.bar-group { margin-bottom: 1rem; }
+.bar-label { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 0.35rem; display: flex; justify-content: space-between; }
+.bar-track { height: 6px; background: rgba(255,255,255,0.04); width: 100%; overflow: hidden; }
+.bar-fill { height: 100%; transition: width 0.8s ease; }
+.bar-fill.briu { background: linear-gradient(90deg, var(--gold), var(--gold-light)); }
+.bar-fill.traditional { background: rgba(255,255,255,0.15); }
+
+@media (max-width: 768px) {
+  .calc-layout { grid-template-columns: 1fr; gap: 2rem; }
+  .calc-results { position: static; }
+  .use-cases { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+<div class="cursor-glow" id="cursorGlow"></div>
+
+<div id="nav-slot"></div>
+
+<main id="main">
+<section class="hero section">
+  <div class="section-label reveal">Cost Calculator</div>
+  <h1 class="reveal">What will this cost to run?</h1>
+  <p class="hero-subtitle reveal">Enter your current setup. We'll estimate monthly operating costs and recommend the right engagement tier.</p>
+</section>
+
+<section class="section" style="padding-top:0;">
+  <div class="calc-layout">
+
+    <div class="calc-inputs reveal">
+      <h3>Your Setup</h3>
+
+      <div class="field">
+        <label for="email-accounts">Email Accounts</label>
+        <input type="number" id="email-accounts" min="1" max="500" value="5" placeholder="e.g. 5">
+        <div class="field-hint">Mailboxes the agent will monitor or send from</div>
+      </div>
+
+      <div class="field">
+        <label for="crm-type">CRM Platform</label>
+        <select id="crm-type">
+          <option value="none">No CRM</option>
+          <option value="hubspot">HubSpot</option>
+          <option value="salesforce">Salesforce</option>
+          <option value="pipedrive">Pipedrive</option>
+          <option value="airtable">Airtable</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="agent-count">Agents Wanted</label>
+        <input type="number" id="agent-count" min="1" max="20" value="1" placeholder="e.g. 1">
+        <div class="field-hint">Distinct agent roles (e.g. triage, outreach, reporting)</div>
+      </div>
+
+      <div class="field">
+        <label>Use Cases</label>
+        <div class="use-cases">
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="email" checked> Email triage
+          </label>
+          <label class="use-case-opt selected" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="crm-sync"> CRM sync
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="reporting"> Reporting
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="outreach"> Outreach
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="scheduling"> Scheduling
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="data-entry"> Data entry
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="support"> Support
+          </label>
+          <label class="use-case-opt" onclick="toggleUseCase(this)">
+            <input type="checkbox" value="orchestration"> Orchestration
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="msg-volume">Daily Message Volume</label>
+        <select id="msg-volume">
+          <option value="low">Low (under 100/day)</option>
+          <option value="medium" selected>Medium (100-500/day)</option>
+          <option value="high">High (500-2,000/day)</option>
+          <option value="very-high">Very high (2,000+/day)</option>
+        </select>
+        <div class="field-hint">Emails, CRM events, and triggers combined</div>
+      </div>
+
+      <button class="calc-btn" onclick="calculate()">Estimate Costs</button>
+    </div>
+
+    <div class="calc-results reveal reveal-delay-1">
+      <div class="results-card" id="cost-card">
+        <h3>Monthly Estimate</h3>
+        <div id="cost-breakdown">
+          <div class="empty-state">
+            <p>Fill in your setup and hit estimate.</p>
+          </div>
+        </div>
+      </div>
+
+      <div id="tier-section" style="display:none;">
+        <div class="tier-rec" id="tier-card"></div>
+      </div>
+
+      <div id="comparison-section" style="display:none;">
+        <div class="results-card active">
+          <h3>vs. Traditional Hire</h3>
+          <div class="comparison" id="comparison-bars"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="cta-section section">
+  <div class="section-label reveal">Next Step</div>
+  <h2 class="reveal">Want a precise quote?</h2>
+  <p class="reveal">These are estimates. A 15-minute scoping call gets you exact numbers, no pitch.</p>
+  <a href="/services/" class="cta-button cta-shimmer reveal">View Services</a>
+</section>
+</main>
+
+<div id="footer-slot"></div>
+<div id="modal-slot"></div>
+
+<script src="/components.js"></script>
+<script src="/chat-bubble.js" defer></script>
+<script>
+(function() {
+  // Scroll reveal
+  var reveals = document.querySelectorAll('.reveal');
+  var observer = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+  }, { threshold: 0.1 });
+  reveals.forEach(function(el) { observer.observe(el); });
+
+  // Cursor glow
+  var glow = document.getElementById('cursorGlow');
+  if (glow && window.innerWidth > 768) {
+    document.addEventListener('mousemove', function(e) {
+      glow.style.transform = 'translate(' + (e.clientX - 200) + 'px,' + (e.clientY - 200) + 'px)';
+    });
+  }
+})();
+
+function toggleUseCase(label) {
+  var cb = label.querySelector('input[type="checkbox"]');
+  // Let the default checkbox behavior happen, then sync class
+  setTimeout(function() {
+    label.classList.toggle('selected', cb.checked);
+  }, 0);
+}
+
+// Initialize checked state
+document.querySelectorAll('.use-case-opt input[type="checkbox"]').forEach(function(cb) {
+  if (cb.checked) cb.closest('.use-case-opt').classList.add('selected');
+});
+
+function getSelectedUseCases() {
+  var cases = [];
+  document.querySelectorAll('.use-case-opt input[type="checkbox"]:checked').forEach(function(cb) {
+    cases.push(cb.value);
+  });
+  return cases;
+}
+
+function calculate() {
+  var emails = parseInt(document.getElementById('email-accounts').value) || 1;
+  var crm = document.getElementById('crm-type').value;
+  var agents = parseInt(document.getElementById('agent-count').value) || 1;
+  var useCases = getSelectedUseCases();
+  var volume = document.getElementById('msg-volume').value;
+
+  // API cost estimation
+  // Base: ~$0.003 per API call (input + output tokens averaged)
+  var volumeMultiplier = { low: 50, medium: 250, high: 1000, 'very-high': 3000 };
+  var dailyCalls = volumeMultiplier[volume] || 250;
+
+  // Each agent adds overhead, each use case adds ~20% more calls
+  var callsPerDay = dailyCalls * agents * (1 + useCases.length * 0.15);
+  var costPerCall = 0.004; // blended $/call across models
+  var apiCostMonthly = Math.round(callsPerDay * 30 * costPerCall);
+
+  // Platform/infra costs
+  var infraBase = 25; // Cloudflare Workers, KV, D1
+  var emailCost = Math.round(emails * 2); // per-mailbox monitoring
+  var crmCost = crm === 'none' ? 0 : crm === 'salesforce' ? 50 : 25;
+  var platformCost = infraBase + emailCost + crmCost;
+
+  var totalMonthly = apiCostMonthly + platformCost;
+
+  // Determine tier
+  var tier, tierPrice, tierDesc;
+  if (agents <= 1 && useCases.length <= 3) {
+    tier = 'Kickoff';
+    tierPrice = '$5,000';
+    tierDesc = 'Single workflow, deployed in 2 weeks. You own everything. Includes agent architecture, build, and handoff.';
+  } else if (agents <= 3 && useCases.length <= 5) {
+    tier = 'Implementation';
+    tierPrice = '$8\u201320K';
+    tierDesc = 'Multi-workflow deployment. Connected agents sharing context across your stack. Typical timeline: 4\u20138 weeks.';
+  } else {
+    tier = 'Multi-Workflow Implementation';
+    tierPrice = '$20\u201350K+';
+    tierDesc = 'Full-scale agent infrastructure. Multiple agents, multiple integrations, custom orchestration layer.';
+  }
+
+  // Traditional comparison (conservative: $60K/yr for one ops person)
+  var traditionalMonthly = Math.max(totalMonthly * 8, 5000);
+
+  // Render costs
+  var html = '';
+  html += '<div class="cost-row"><span class="cost-label">API calls (Claude)</span><span class="cost-value">$' + apiCostMonthly.toLocaleString() + '/mo</span></div>';
+  html += '<div class="cost-row"><span class="cost-label">Infrastructure</span><span class="cost-value">$' + infraBase + '/mo</span></div>';
+  html += '<div class="cost-row"><span class="cost-label">Email monitoring (' + emails + ' accounts)</span><span class="cost-value">$' + emailCost + '/mo</span></div>';
+  if (crmCost > 0) {
+    html += '<div class="cost-row"><span class="cost-label">CRM integration (' + crm + ')</span><span class="cost-value">$' + crmCost + '/mo</span></div>';
+  }
+  html += '<div class="cost-row total"><span class="cost-label">Estimated Monthly</span><span class="cost-value">$' + totalMonthly.toLocaleString() + '/mo</span></div>';
+
+  document.getElementById('cost-breakdown').innerHTML = html;
+  document.getElementById('cost-card').classList.add('active');
+
+  // Render tier
+  document.getElementById('tier-card').innerHTML =
+    '<div class="tier-rec-label">Recommended</div>' +
+    '<h4>' + tier + '</h4>' +
+    '<div class="tier-rec-price">' + tierPrice + '</div>' +
+    '<p>' + tierDesc + '</p>' +
+    '<a href="/services/#tiers" class="tier-rec-link">See full tier details</a>';
+  document.getElementById('tier-section').style.display = 'block';
+
+  // Render comparison
+  var briuPct = Math.min(100, Math.round((totalMonthly / traditionalMonthly) * 100));
+  document.getElementById('comparison-bars').innerHTML =
+    '<div class="bar-group">' +
+    '  <div class="bar-label"><span>Agent deployment</span><span>$' + totalMonthly.toLocaleString() + '/mo</span></div>' +
+    '  <div class="bar-track"><div class="bar-fill briu" style="width:' + briuPct + '%"></div></div>' +
+    '</div>' +
+    '<div class="bar-group">' +
+    '  <div class="bar-label"><span>Traditional hire</span><span>$' + traditionalMonthly.toLocaleString() + '/mo</span></div>' +
+    '  <div class="bar-track"><div class="bar-fill traditional" style="width:100%"></div></div>' +
+    '</div>';
+  document.getElementById('comparison-section').style.display = 'block';
+
+  // Scroll to results on mobile
+  if (window.innerWidth <= 768) {
+    document.getElementById('cost-card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+</script>
+</body>
+</html>
