@@ -249,6 +249,15 @@ section { padding-bottom: 2rem; }
 .vtl-entry.major:hover .vtl-card { border-color: rgba(212,160,90,0.25); }
 .vtl-entry.major .vtl-date { color: var(--gold); }
 .vtl-entry.major .vtl-title { font-size: 1.1rem; }
+/* Inflection point — Briu launch */
+.vtl-entry.vtl-inflection { flex: 0 0 280px; }
+.vtl-entry.vtl-inflection .vtl-dot { width: 24px; height: 24px; top: calc(2rem - 11px); background: linear-gradient(135deg, var(--gold), var(--coral)); box-shadow: 0 0 0 6px rgba(212,160,90,0.2), 0 0 24px rgba(212,160,90,0.3), 0 0 48px rgba(212,160,90,0.1); }
+.vtl-entry.vtl-inflection:hover .vtl-dot { box-shadow: 0 0 0 8px rgba(212,160,90,0.3), 0 0 32px rgba(212,160,90,0.4), 0 0 56px rgba(212,160,90,0.15); }
+.vtl-entry.vtl-inflection .vtl-card { border-color: rgba(212,160,90,0.2); background: linear-gradient(135deg, var(--surface), rgba(212,160,90,0.06)); border-left: 2px solid var(--gold); }
+.vtl-entry.vtl-inflection:hover .vtl-card { border-color: rgba(212,160,90,0.35); background: linear-gradient(135deg, var(--surface-2), rgba(212,160,90,0.08)); }
+.vtl-entry.vtl-inflection .vtl-title { font-size: 1.15rem; color: var(--gold-light); }
+.vtl-entry.vtl-inflection .vtl-date { color: var(--gold); font-size: 0.75rem; }
+
 /* "You are here" marker */
 .vtl-entry.vtl-now .vtl-dot { background: var(--gold-light); box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 20px rgba(212,160,90,0.3); animation: youAreHerePulse 2s ease-in-out infinite; }
 @keyframes youAreHerePulse { 0%,100% { box-shadow: 0 0 0 5px rgba(212,160,90,0.2), 0 0 20px rgba(212,160,90,0.3); } 50% { box-shadow: 0 0 0 8px rgba(212,160,90,0.1), 0 0 30px rgba(212,160,90,0.4); } }
@@ -358,9 +367,13 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
 </div>
 
 <div class="hud-bar">
-  <div class="hud-stat" data-tooltip="Running since Feb 10, 2026" style="--pulse-delay: 0s;">
-    <div class="hud-value" id="hud-days">27</div>
+  <div class="hud-stat" data-tooltip="OpenClaw running since Feb 10, 2026" style="--pulse-delay: 0s;">
+    <div class="hud-value" id="hud-days">30</div>
     <div class="hud-label">Days Running</div>
+  </div>
+  <div class="hud-stat" data-tooltip="Briu live since Mar 5, 2026" style="--pulse-delay: 0.25s;">
+    <div class="hud-value" id="hud-briu-days">7</div>
+    <div class="hud-label">Briu Live</div>
   </div>
   <div class="hud-stat" data-tooltip="Lines of code across website + agent repos" style="--pulse-delay: 0.5s;">
     <div class="hud-value" data-dynamic="lines-of-code" id="hud-loc">15.9K</div>
@@ -371,14 +384,14 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-label">Project Commits</div>
   </div>
   <div class="hud-stat" data-tooltip="Live skills across the agent stack" style="--pulse-delay: 1.5s;">
-    <div class="hud-value" data-dynamic="agent-skills" id="hud-skills">9</div>
+    <div class="hud-value" data-dynamic="agent-skills" id="hud-skills">12</div>
     <div class="hud-label">Agent Skills</div>
   </div>
   <div class="hud-stat" data-tooltip="Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing, HMAC task signing, pipeline exec parsing" style="--pulse-delay: 2s;">
     <div class="hud-value" data-dynamic="sec-defense-layers">10</div>
     <div class="hud-label">Defense Layers</div>
   </div>
-  <div class="hud-stat" data-tooltip="8 rounds of AI vs AI testing · 290+ payloads · 4-way parallel audit · 70+ findings addressed" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
+  <div class="hud-stat" data-tooltip="8 rounds of AI vs AI testing · 290+ payloads · 4-way parallel audit · 70+ findings patched" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
     <div class="hud-value" data-dynamic="sec-open-bypasses">0</div>
     <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full red-team scope)</span></div>
   </div>
@@ -386,9 +399,9 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-value" id="hud-cost">$29&ndash;39</div>
     <div class="hud-label">Daily Baseline Cost<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full stack · multi-model)</span></div>
   </div>
-  <div class="hud-stat" data-tooltip="Agent uptime since deployment" style="--pulse-delay: 3s;">
-    <div class="hud-value">99.7%</div>
-    <div class="hud-label">Uptime</div>
+  <div class="hud-stat" data-tooltip="Total tasks dispatched across all agents" style="--pulse-delay: 3s;">
+    <div class="hud-value" id="hud-tasks">50+</div>
+    <div class="hud-label">Tasks Dispatched</div>
   </div>
 </div>
 
@@ -479,12 +492,12 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       </div>
     </div>
 
-    <div class="vtl-entry major" data-category="business" data-date="2026-03-01">
+    <div class="vtl-entry major vtl-inflection" data-category="business" data-date="2026-03-05">
       <div class="vtl-dot"></div>
       <div class="vtl-card">
-        <div class="vtl-date">Mar 1<span class="vtl-relative"></span></div>
+        <div class="vtl-date">Mar 5<span class="vtl-relative"></span></div>
         <div class="vtl-title">Briu launched</div>
-        <div class="vtl-desc">Brand, domain, trademark filed. One session.</div>
+        <div class="vtl-desc">The inflection point. Everything before this was building the tool. Everything after is building the business. Brand, domain, trademark filed, services live.</div>
       </div>
     </div>
 
@@ -530,6 +543,15 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         <div class="vtl-date">Mar 11<span class="vtl-relative"></span></div>
         <div class="vtl-title">Full security red-team complete</div>
         <div class="vtl-desc">8 rounds, 290+ payloads, 4-way parallel audit, 15 critical findings patched. <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold)">Read &rarr;</a></div>
+      </div>
+    </div>
+
+    <div class="vtl-entry" data-category="agent" data-date="2026-03-12">
+      <div class="vtl-dot"></div>
+      <div class="vtl-card">
+        <div class="vtl-date">Mar 12<span class="vtl-relative"></span></div>
+        <div class="vtl-title">Multi-agent dispatch live</div>
+        <div class="vtl-desc">VPS orchestrator + Mac execution via Claude Code and Codex. Mechanical plugin routing, cost arbitrage across subscription pools.</div>
       </div>
     </div>
 
@@ -1067,14 +1089,18 @@ Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js?v=20260311b"></script>
 <script>
-/* HUD: Days Running counter */
+/* HUD: Days Running counter (OpenClaw from Feb 10) + Briu Live (from Mar 5) */
 (function() {
-  var startDate = new Date('2026-02-10T00:00:00');
+  var openclawStart = new Date('2026-02-10T00:00:00');
+  var briuStart = new Date('2026-03-05T00:00:00');
   function updateDays() {
     var now = new Date();
-    var diff = Math.floor((now - startDate) / (1000 * 60 * 60 * 24));
+    var openclawDays = Math.floor((now - openclawStart) / (1000 * 60 * 60 * 24));
+    var briuDays = Math.floor((now - briuStart) / (1000 * 60 * 60 * 24));
     var el = document.getElementById('hud-days');
-    if (el) el.textContent = diff;
+    if (el) el.textContent = openclawDays;
+    var briuEl = document.getElementById('hud-briu-days');
+    if (briuEl) briuEl.textContent = briuDays;
   }
   updateDays();
   setInterval(updateDays, 60000);

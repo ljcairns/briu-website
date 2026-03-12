@@ -30,7 +30,7 @@ var BuildData = (function () {
     { date: 'Mar 2',  cost: 1.19,   phase: 'launch',   milestone: null,                          commits: 1 },
     { date: 'Mar 3',  cost: 0.55,   phase: 'launch',   milestone: null,                          commits: 5 },
     { date: 'Mar 4',  cost: 5.15,   phase: 'launch',   milestone: null,                          commits: 13 },
-    { date: 'Mar 5',  cost: 3.22,   phase: 'launch',   milestone: 'Briu founded',                commits: 28 },
+    { date: 'Mar 5',  cost: 3.22,   phase: 'launch',   milestone: 'Briu launched',               commits: 28 },
     { date: 'Mar 6',  cost: 42.58,  phase: 'launch',   milestone: 'Website + services built',    commits: 1 },
     { date: 'Mar 7',  cost: 2.59,   phase: 'launch',   milestone: null,                          commits: 1 },
     { date: 'Mar 8',  cost: 13.78,  phase: 'launch',   milestone: 'Privacy policy + site audit', commits: 12 }

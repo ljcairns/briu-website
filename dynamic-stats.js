@@ -21,7 +21,7 @@
     peakDailyCost:     '$138.84',
     lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
     totalApiSpend:     '$550.00',
-    agentSkills:       9,     // live skills in production
+    agentSkills:       12,    // live skills in production
     chartCount:        64,
     articleCount:      10,
     // Security — scoped to sanitizer red-team taxonomy
