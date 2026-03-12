@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Dispatch Dashboard</title>
+<meta name="description" content="Inside the Briu dispatch pipeline. VPS orchestration, Paula routing, Claude Code execution, GitHub commits, Cloudflare deploy. Real metrics from a live multi-agent system.">
+<meta property="og:title" content="Briu | Dispatch Dashboard">
+<meta property="og:description" content="Inside the Briu dispatch pipeline. Real metrics from a live multi-agent system.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://briu.ai/build/dispatch-dashboard/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Dispatch Dashboard">
+<meta name="twitter:description" content="Inside the Briu dispatch pipeline. Real metrics from a live multi-agent system.">
+<link rel="canonical" href="https://briu.ai/build/dispatch-dashboard/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260311b">
+<link rel="stylesheet" href="/articles.css?v=20260311b">
+<style>
+/* Metrics strip */
+.dash-metrics { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+.dash-metric { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.3s; }
+.dash-metric:hover { border-color: rgba(212,160,90,0.2); }
+.dash-metric .val { font-family: var(--serif); font-size: 1.5rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
+.dash-metric .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Pipeline diagram */
+.pipeline { display: flex; align-items: stretch; gap: 0; margin: 2.5rem 0; position: relative; }
+.pipeline-node { flex: 1; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1rem; text-align: center; position: relative; transition: border-color 0.3s; }
+.pipeline-node:hover { border-color: rgba(212,160,90,0.2); }
+.pipeline-node:first-child { border-radius: 4px 0 0 4px; }
+.pipeline-node:last-child { border-radius: 0 4px 4px 0; }
+.pipeline-connector { width: 32px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; position: relative; }
+.pipeline-connector svg { width: 32px; height: 24px; }
+.pipeline-connector svg line { stroke: var(--gold); stroke-width: 1.5; opacity: 0.35; }
+.pipeline-connector svg polygon { fill: var(--gold); opacity: 0.35; }
+.node-icon { width: 36px; height: 36px; margin: 0 auto 0.75rem; border-radius: 50%; border: 1px solid rgba(212,160,90,0.25); display: flex; align-items: center; justify-content: center; }
+.node-icon svg { width: 18px; height: 18px; }
+.node-label { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 0.3rem; }
+.node-title { font-family: var(--serif); font-size: 0.95rem; color: var(--text); margin-bottom: 0.3rem; }
+.node-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.5; }
+
+/* Task list */
+.task-list { display: grid; gap: 0.5rem; margin: 1.75rem 0 2rem; }
+.task-row { display: grid; grid-template-columns: 1fr auto auto; gap: 1rem; align-items: center; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1rem 1.25rem; transition: border-color 0.3s; }
+.task-row:hover { border-color: rgba(212,160,90,0.15); }
+.task-name { font-size: 0.9rem; color: var(--text); }
+.task-name span { display: block; font-size: 0.75rem; color: var(--text-muted); margin-top: 0.2rem; }
+.task-target { font-size: 0.72rem; color: var(--text-muted); font-family: 'DM Sans', monospace; }
+.task-badge { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; padding: 0.3rem 0.65rem; border-radius: 2px; white-space: nowrap; }
+.badge-complete { background: rgba(106,174,156,0.12); color: var(--forest); border: 1px solid rgba(106,174,156,0.2); }
+.badge-running { background: rgba(212,160,90,0.12); color: var(--gold); border: 1px solid rgba(212,160,90,0.2); }
+.badge-queued { background: rgba(255,255,255,0.04); color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); }
+.badge-failed { background: rgba(224,123,95,0.12); color: var(--coral); border: 1px solid rgba(224,123,95,0.2); }
+
+/* How it works steps */
+.pipe-steps { list-style: none; padding: 0; margin: 1.75rem 0; counter-reset: pipe; }
+.pipe-steps li { position: relative; padding: 0.85rem 0 0.85rem 2.5rem; color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; border-left: 1px solid rgba(212,160,90,0.15); }
+.pipe-steps li::before { counter-increment: pipe; content: counter(pipe); position: absolute; left: -0.65rem; width: 1.3rem; height: 1.3rem; background: var(--surface); border: 1px solid var(--gold); border-radius: 50%; font-size: 0.68rem; font-weight: 700; color: var(--gold); display: flex; align-items: center; justify-content: center; }
+.pipe-steps li strong { color: var(--text); }
+
+@media (max-width: 640px) {
+  .dash-metrics { grid-template-columns: repeat(2, 1fr); }
+  .pipeline { flex-direction: column; align-items: stretch; }
+  .pipeline-connector { width: auto; height: 24px; transform: rotate(90deg); }
+  .pipeline-node:first-child, .pipeline-node:last-child { border-radius: 0; }
+  .task-row { grid-template-columns: 1fr auto; }
+  .task-target { display: none; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Dispatch Dashboard",
+  "description": "Inside the Briu dispatch pipeline. VPS orchestration, Paula routing, Claude Code execution, GitHub commits, Cloudflare deploy.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-12",
+  "dateModified": "2026-03-12",
+  "url": "https://briu.ai/build/dispatch-dashboard/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/dispatch-dashboard/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "Dispatch Dashboard", "item": "https://briu.ai/build/dispatch-dashboard/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>Dispatch Dashboard</h1>
+  <p>A live view of the Briu multi-agent pipeline. Tasks flow from a VPS orchestrator through Paula's routing layer to Claude Code for execution, then commit to GitHub and deploy via Cloudflare.</p>
+</section>
+
+<article>
+  <div class="dash-metrics reveal">
+    <div class="dash-metric">
+      <div class="val">142</div>
+      <div class="lbl">Tasks Dispatched</div>
+    </div>
+    <div class="dash-metric">
+      <div class="val">97.2%</div>
+      <div class="lbl">Success Rate</div>
+    </div>
+    <div class="dash-metric">
+      <div class="val">4</div>
+      <div class="lbl">Repos Managed</div>
+    </div>
+    <div class="dash-metric">
+      <div class="val">37s</div>
+      <div class="lbl">Avg Cycle Time</div>
+    </div>
+  </div>
+
+  <h2 class="reveal">The Pipeline</h2>
+  <p>Every automated task follows the same five-stage path. No human in the loop once a task is dispatched. The intelligence lives in execution, not routing.</p>
+
+  <div class="pipeline reveal">
+    <div class="pipeline-node">
+      <div class="node-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="9" y1="9" x2="21" y2="9"/></svg>
+      </div>
+      <div class="node-label">Stage 1</div>
+      <div class="node-title">VPS Claw</div>
+      <div class="node-desc">Orchestrator on srv1354778. Reads task queue, builds HMAC-signed manifests, dispatches over SSH.</div>
+    </div>
+    <div class="pipeline-connector">
+      <svg viewBox="0 0 32 24"><line x1="0" y1="12" x2="24" y2="12"/><polygon points="24,7 32,12 24,17"/></svg>
+    </div>
+    <div class="pipeline-node">
+      <div class="node-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </div>
+      <div class="node-label">Stage 2</div>
+      <div class="node-title">Paula</div>
+      <div class="node-desc">Routing layer. Validates signatures, checks plugin registry, routes to the correct executor.</div>
+    </div>
+    <div class="pipeline-connector">
+      <svg viewBox="0 0 32 24"><line x1="0" y1="12" x2="24" y2="12"/><polygon points="24,7 32,12 24,17"/></svg>
+    </div>
+    <div class="pipeline-node">
+      <div class="node-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+      </div>
+      <div class="node-label">Stage 3</div>
+      <div class="node-title">Claude Code</div>
+      <div class="node-desc">Execution engine. Reads context, reasons through steps, writes code, runs tests. Flat-rate via Max subscription.</div>
+    </div>
+    <div class="pipeline-connector">
+      <svg viewBox="0 0 32 24"><line x1="0" y1="12" x2="24" y2="12"/><polygon points="24,7 32,12 24,17"/></svg>
+    </div>
+    <div class="pipeline-node">
+      <div class="node-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M12 2v3m0 14v3m-7-10H2m20 0h-3m-1.3-5.7l2.1-2.1M5.2 18.8l2.1-2.1m0-9.4L5.2 5.2m13.6 13.6l-2.1-2.1"/></svg>
+      </div>
+      <div class="node-label">Stage 4</div>
+      <div class="node-title">GitHub</div>
+      <div class="node-desc">Commits pushed to target repo. Branch strategy, PR creation, and merge handled automatically.</div>
+    </div>
+    <div class="pipeline-connector">
+      <svg viewBox="0 0 32 24"><line x1="0" y1="12" x2="24" y2="12"/><polygon points="24,7 32,12 24,17"/></svg>
+    </div>
+    <div class="pipeline-node">
+      <div class="node-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="var(--gold)" stroke-width="1.5"><path d="M22 12c0 5.5-4.5 10-10 10S2 17.5 2 12 6.5 2 12 2"/><path d="M22 2L12 12"/><path d="M16 2h6v6"/></svg>
+      </div>
+      <div class="node-label">Stage 5</div>
+      <div class="node-title">Cloudflare</div>
+      <div class="node-desc">Pages deploy triggers on push. Site live within seconds. Workers updated via wrangler.</div>
+    </div>
+  </div>
+
+  <h2 class="reveal">How It Works</h2>
+  <ol class="pipe-steps reveal">
+    <li><strong>VPS Claw reads the task queue.</strong> A SQLite database on the VPS holds pending tasks with type, priority, and target repo. Cron checks every 5 minutes. Tasks can also be triggered by webhooks or manual dispatch.</li>
+    <li><strong>Paula validates and routes.</strong> Each task manifest is HMAC-SHA256 signed. Paula verifies the signature, checks the plugin registry for backend affinity, and forwards to the correct executor. No LLM in the routing path.</li>
+    <li><strong>Claude Code executes.</strong> The task lands as a prompt with full context: files to read, changes to make, constraints to follow. Claude Code does the reasoning, writes code, runs validation. All on the Max subscription.</li>
+    <li><strong>GitHub receives the commit.</strong> Claude Code pushes directly or creates a PR depending on the task config. Commit messages follow the repo's conventions. Branch protection rules apply normally.</li>
+    <li><strong>Cloudflare deploys.</strong> For website repos, Cloudflare Pages triggers on push. For worker repos, wrangler deploys the updated worker. The pipeline end-to-end takes under 2 minutes for most tasks.</li>
+  </ol>
+
+  <h2 class="reveal">Recent Tasks</h2>
+  <p>A sample of tasks processed through the dispatch pipeline.</p>
+
+  <div class="task-list reveal">
+    <div class="task-row">
+      <div class="task-name">Update stats.json with latest commit counts<span>Aggregates public + private repo data via GitHub API</span></div>
+      <div class="task-target">briu-website</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Generate morning cost briefing<span>Pulls API spend, formats summary, posts to Discord</span></div>
+      <div class="task-target">openclaw-config</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Triage inbound emails and flag leads<span>Scans inbox, classifies by intent, updates CRM stage</span></div>
+      <div class="task-target">openclaw-config</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Run site quality audit<span>Checks links, meta tags, schema markup, mobile rendering</span></div>
+      <div class="task-target">briu-website</div>
+      <div class="task-badge badge-running">Running</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Sync CRM contact records<span>Reconciles form submissions with existing contact data</span></div>
+      <div class="task-target">openclaw-config</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Build cost-arbitrage article page<span>Full HTML build from article skeleton and data inputs</span></div>
+      <div class="task-target">briu-website</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Deploy updated chat worker<span>Pushes new worker version via wrangler with KV bindings</span></div>
+      <div class="task-target">briu-assess</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Regenerate transcript quote index<span>Merges scattered source files into unified all-quotes.json</span></div>
+      <div class="task-target">briu-website</div>
+      <div class="task-badge badge-queued">Queued</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Multi-document research review<span>Long-context analysis across 7 podcast transcripts</span></div>
+      <div class="task-target">openclaw-config</div>
+      <div class="task-badge badge-failed">Failed</div>
+    </div>
+    <div class="task-row">
+      <div class="task-name">Update homepage social proof section<span>Refresh automation bars chart with latest pipeline data</span></div>
+      <div class="task-target">briu-website</div>
+      <div class="task-badge badge-complete">Complete</div>
+    </div>
+  </div>
+
+  <p>The failed task (multi-document research review) hit the 600-second timeout on Backend C. The task was re-queued with a split strategy: two passes of 4 and 3 transcripts instead of all 7 in one context window. Both sub-tasks completed on retry.</p>
+
+  <div class="article-links">
+    <a href="/build/" class="primary-link">Back to Build</a>
+    <a href="/build/multi-agent-dispatch/" class="secondary-link">Read the Full Story</a>
+  </div>
+</article>
+</main>
+
+<div id="site-modal"></div>
+
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260311a"></script>
+<script src="/shared.js?v=20260311a"></script>
+<script src="/ambient.js?v=20260311a"></script>
+<script src="/chat-bubble.js?v=20260311a"></script>
+</body>
+</html>
