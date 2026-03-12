@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Multi-Agent Dispatch</title>
+<meta name="description" content="47 findings. $0.24 per task. 37-second cycle. How a single-agent VPS grew into a three-backend dispatch system — and why the hardest problem was routing, not inference.">
+<meta property="og:title" content="Briu | Multi-Agent Dispatch">
+<meta property="og:description" content="47 findings. $0.24 per task. 37-second cycle. How a single-agent VPS grew into three-backend dispatch.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/build/multi-agent-dispatch/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Multi-Agent Dispatch">
+<meta name="twitter:description" content="47 findings. $0.24 per task. 37-second cycle. How a single-agent VPS grew into three-backend dispatch.">
+<link rel="canonical" href="https://briu.ai/build/multi-agent-dispatch/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260311b">
+<link rel="stylesheet" href="/articles.css?v=20260311b">
+<style>
+/* Architecture diagram */
+.arch-flow { display: flex; align-items: center; gap: 0.5rem; margin: 1.75rem 0 2rem; overflow-x: auto; padding: 0.5rem 0; }
+.arch-node { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1rem 1.25rem; text-align: center; min-width: 140px; flex-shrink: 0; transition: border-color 0.3s; }
+.arch-node:hover { border-color: rgba(212,160,90,0.15); }
+.arch-node h4 { font-size: 0.82rem; font-weight: 600; margin-bottom: 0.3rem; }
+.arch-node p { font-size: 0.72rem; color: var(--text-muted); margin: 0; line-height: 1.4; }
+.arch-node.active { border-color: rgba(212,160,90,0.35); }
+.arch-node.active h4 { color: var(--gold); }
+.arch-arrow { color: rgba(212,160,90,0.3); font-size: 1.2rem; flex-shrink: 0; }
+
+/* Timeline */
+.evolution { display: grid; grid-template-columns: 1fr; gap: 1rem; margin: 1.75rem 0 2rem; counter-reset: evo; }
+.evo-step { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; position: relative; display: grid; grid-template-columns: auto 1fr; gap: 1.25rem; transition: border-color 0.3s; }
+.evo-step:hover { border-color: rgba(212,160,90,0.15); }
+.evo-num { font-family: var(--serif); font-size: 1.6rem; color: rgba(212,160,90,0.25); line-height: 1; min-width: 2rem; }
+.evo-step h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.4rem; font-weight: 400; }
+.evo-step p { margin: 0; font-size: 0.9rem; }
+.evo-tag { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--gold); margin-top: 0.5rem; display: inline-block; }
+
+/* Build stats */
+.build-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 1.75rem 0 2rem; }
+.build-stat { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1rem; text-align: center; transition: border-color 0.3s; }
+.build-stat:hover { border-color: rgba(212,160,90,0.2); }
+.build-stat .val { font-family: var(--serif); font-size: 1.35rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.35rem; }
+.build-stat .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Backend grid */
+.backends { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.75rem 0 2rem; }
+.backend-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; transition: border-color 0.3s; }
+.backend-card:hover { border-color: rgba(212,160,90,0.15); }
+.backend-card h3 { font-family: var(--serif); font-size: 1.05rem; margin-bottom: 0.6rem; font-weight: 400; }
+.backend-card p { margin: 0 0 0.5rem; font-size: 0.9rem; }
+.backend-card p:last-child { margin-bottom: 0; }
+.backend-card .backend-label { font-size: 0.72rem; color: var(--gold); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Findings grid */
+.findings { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1rem; margin: 1.75rem 0 2rem; }
+.finding-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; transition: border-color 0.3s; }
+.finding-card:hover { border-color: rgba(212,160,90,0.15); }
+.finding-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--gold); margin-bottom: 0.5rem; }
+.finding-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0; line-height: 1.6; }
+
+/* Cost table */
+.cost-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0 2rem; }
+.cost-table th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); text-align: left; padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.cost-table td { font-size: 0.88rem; color: var(--text-muted); padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.cost-table tr:last-child td { font-weight: 600; color: var(--text); border-bottom: none; }
+.cost-table td:last-child { color: var(--gold); font-weight: 600; }
+
+/* Routing problem callout */
+.problem-box { background: var(--surface); border: 1px solid rgba(224,123,95,0.2); padding: 1.5rem; margin: 1.75rem 0 2rem; }
+.problem-box h3 { font-family: var(--serif); font-size: 1.1rem; color: rgb(224,123,95); margin-bottom: 0.75rem; font-weight: 400; }
+.problem-box p { font-size: 0.9rem; margin: 0 0 0.5rem; }
+.problem-box p:last-child { margin-bottom: 0; }
+
+/* Solution callout */
+.solution-box { background: var(--surface); border: 1px solid rgba(212,160,90,0.25); padding: 1.5rem; margin: 1.75rem 0 2rem; }
+.solution-box h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); margin-bottom: 0.75rem; font-weight: 400; }
+.solution-box p { font-size: 0.9rem; margin: 0 0 0.5rem; }
+.solution-box p:last-child { margin-bottom: 0; }
+
+/* Code block */
+.code-example { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-family: 'DM Sans', monospace; font-size: 0.82rem; line-height: 1.7; color: var(--text-muted); white-space: pre-wrap; overflow-x: auto; }
+.code-example .ex-label { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; display: block; font-family: var(--sans); }
+
+@media (max-width: 640px) {
+  .build-stats { grid-template-columns: repeat(2, 1fr); }
+  .backends { grid-template-columns: 1fr; }
+  .arch-flow { flex-wrap: wrap; justify-content: center; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Multi-Agent Dispatch",
+  "description": "47 findings. $0.24 per task. 37-second cycle. How a single-agent VPS grew into a three-backend dispatch system.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-12",
+  "dateModified": "2026-03-12",
+  "url": "https://briu.ai/build/multi-agent-dispatch/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/multi-agent-dispatch/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "Multi-Agent Dispatch", "item": "https://briu.ai/build/multi-agent-dispatch/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>Multi-Agent Dispatch</h1>
+  <p>One VPS became three backends. 47 findings. $0.24 per task. The hardest problem wasn't inference &mdash; it was routing.</p>
+</section>
+
+<article>
+  <div class="build-stats reveal">
+    <div class="build-stat">
+      <div class="val">$0.24</div>
+      <div class="lbl">Cost Per Task</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">37s</div>
+      <div class="lbl">Cycle Time</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">47</div>
+      <div class="lbl">Findings</div>
+    </div>
+    <div class="build-stat">
+      <div class="val">3</div>
+      <div class="lbl">Backends</div>
+    </div>
+  </div>
+
+  <p class="section-label reveal">How It Started</p>
+  <p>The first version was one agent on one VPS. A cron job woke it up, it read a task queue from a SQLite database, ran the task, wrote the result back. Simple. It worked for weeks.</p>
+  <p>Then the task list grew. Some tasks needed browser automation. Some needed local file access. Some needed GPU inference. One machine couldn't do all three, and spinning up a bigger VPS wasn't the answer &mdash; the tasks had fundamentally different runtime requirements.</p>
+  <p><strong>The question shifted from "how do we run tasks" to "how do we route them."</strong></p>
+
+  <h2 class="reveal">The Evolution</h2>
+
+  <div class="evolution reveal">
+    <div class="evo-step">
+      <div class="evo-num">01</div>
+      <div>
+        <h3>Single-Agent VPS</h3>
+        <p>One cron, one queue, one machine. SQLite task database, shell executor. Handled email triage, CRM updates, cost reporting. Worked until tasks started needing different runtimes.</p>
+        <div class="evo-tag">Weeks 1&ndash;4</div>
+      </div>
+    </div>
+    <div class="evo-step">
+      <div class="evo-num">02</div>
+      <div>
+        <h3>Mac Backend + HMAC Signing</h3>
+        <p>Added a Mac Mini for tasks requiring local filesystem access and browser automation. The VPS dispatches tasks to the Mac over HTTPS. Every request signed with HMAC-SHA256 &mdash; timestamp in the header, body in the signature. Replay window: 60 seconds. No shared secrets in transit.</p>
+        <div class="evo-tag">Week 5</div>
+      </div>
+    </div>
+    <div class="evo-step">
+      <div class="evo-num">03</div>
+      <div>
+        <h3>Three-Backend Dispatch</h3>
+        <p>Third backend for heavy inference and batch processing. Dispatcher on the VPS reads the task queue, checks task metadata, routes to the correct backend. Each backend has its own health check and failure mode. If one goes down, its tasks queue up instead of failing.</p>
+        <div class="evo-tag">Week 7</div>
+      </div>
+    </div>
+    <div class="evo-step">
+      <div class="evo-num">04</div>
+      <div>
+        <h3>The Routing Problem</h3>
+        <p>Three backends worked. Routing didn't. The LLM-based router couldn't reliably decide where tasks should go. Latency spiked. Misroutes caused retries. The dispatch layer was burning more tokens than the tasks themselves.</p>
+        <div class="evo-tag">Week 8 &mdash; the wall</div>
+      </div>
+    </div>
+    <div class="evo-step">
+      <div class="evo-num">05</div>
+      <div>
+        <h3>Mechanical Plugin Router</h3>
+        <p>Replaced the LLM router with a deterministic plugin system. Task type maps to backend via a config table. No inference at the routing layer. Zero ambiguity. Dispatch went from 4&ndash;12 seconds to under 50 milliseconds.</p>
+        <div class="evo-tag">Week 8 &mdash; the fix</div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="reveal">Architecture Now</h2>
+  <p>The dispatcher sits on the VPS. It reads from the task queue, looks up the task type in a plugin registry, and routes to the correct backend. No LLM in the routing path. The LLM only runs on the backend that executes the task.</p>
+
+  <div class="arch-flow reveal">
+    <div class="arch-node">
+      <h4>Task Queue</h4>
+      <p>SQLite on VPS</p>
+    </div>
+    <span class="arch-arrow">&rarr;</span>
+    <div class="arch-node active">
+      <h4>Dispatcher</h4>
+      <p>Plugin registry lookup</p>
+    </div>
+    <span class="arch-arrow">&rarr;</span>
+    <div class="arch-node">
+      <h4>Backend A</h4>
+      <p>VPS &middot; API tasks</p>
+    </div>
+    <span class="arch-arrow">&nbsp;</span>
+    <div class="arch-node">
+      <h4>Backend B</h4>
+      <p>Mac &middot; Local + browser</p>
+    </div>
+    <span class="arch-arrow">&nbsp;</span>
+    <div class="arch-node">
+      <h4>Backend C</h4>
+      <p>Batch &middot; Heavy inference</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Three Backends, Three Jobs</h2>
+
+  <div class="backends reveal">
+    <div class="backend-card">
+      <div class="backend-label">Backend A &middot; VPS</div>
+      <h3>API &amp; Coordination</h3>
+      <p>Email triage, CRM updates, webhook handling, cost aggregation. Lightweight tasks that only need network access and API keys. Runs 24/7.</p>
+      <p><strong>~60% of tasks.</strong> Average cost: $0.08/task.</p>
+    </div>
+    <div class="backend-card">
+      <div class="backend-label">Backend B &middot; Mac</div>
+      <h3>Local &amp; Browser</h3>
+      <p>File operations, screenshot capture, browser automation, document generation. Tasks that need a real filesystem or a headed browser. HMAC-signed requests from dispatcher.</p>
+      <p><strong>~25% of tasks.</strong> Average cost: $0.31/task.</p>
+    </div>
+    <div class="backend-card">
+      <div class="backend-label">Backend C &middot; Batch</div>
+      <h3>Heavy Inference</h3>
+      <p>Multi-document analysis, long-context summarization, research tasks. Anything that needs 200K+ tokens or multiple inference passes. Scales to zero when idle.</p>
+      <p><strong>~15% of tasks.</strong> Average cost: $0.62/task.</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">The Routing Problem</h2>
+
+  <div class="problem-box reveal">
+    <h3>What Went Wrong</h3>
+    <p>The original router was an LLM call. Read the task description, decide which backend. Sounded reasonable. In practice:</p>
+    <p><strong>Ambiguity killed it.</strong> "Summarize the latest client emails and update the CRM" touches both API calls and local context. The LLM would flip between Backend A and Backend B across identical tasks. Same prompt, different routing, depending on which tokens got sampled.</p>
+    <p><strong>Latency compounded.</strong> A 4&ndash;12 second routing decision before a 37-second task. For batch jobs with 20 tasks, that's 80&ndash;240 seconds of pure overhead just deciding where to send work.</p>
+    <p><strong>Cost inversion.</strong> The router was spending $0.03&ndash;0.06 per decision. For a $0.08 API task, routing cost more than execution. The dispatch layer was 40% of total spend.</p>
+  </div>
+
+  <div class="solution-box reveal">
+    <h3>The Mechanical Fix</h3>
+    <p>Replaced the LLM router with a plugin registry. Each task type has a declared backend affinity in a config table. The dispatcher does a dictionary lookup, not an inference call.</p>
+    <p><strong>Result:</strong> routing dropped from 4&ndash;12 seconds to &lt;50ms. Zero ambiguity. Zero token cost at the routing layer. Misroutes went from ~8% to 0%.</p>
+    <p>The insight: <strong>routing is a classification problem with known categories.</strong> You don't need a language model to look up a key in a table. Save the inference budget for the actual work.</p>
+  </div>
+
+  <div class="code-example reveal">
+    <span class="ex-label">Plugin Registry &mdash; Dispatch Config</span>task_type        | backend   | timeout  | retry
+-----------------+-----------+----------+------
+email_triage     | vps       | 45s      | 2
+crm_update       | vps       | 30s      | 1
+cost_report      | vps       | 60s      | 1
+browser_capture  | mac       | 120s     | 1
+doc_generate     | mac       | 90s      | 2
+file_operation   | mac       | 60s      | 1
+multi_doc_review | batch     | 300s     | 0
+research_deep    | batch     | 600s     | 0
+long_summarize   | batch     | 180s     | 1</div>
+
+  <h2 class="reveal">HMAC Signing</h2>
+  <p>The Mac backend accepts work from the VPS dispatcher over HTTPS. Every request is signed with HMAC-SHA256. The signature covers the request body and a timestamp header. Replay window is 60 seconds &mdash; any request older than that gets rejected.</p>
+  <p>No shared secrets travel over the wire. Both sides have the key pre-provisioned. The Mac validates the signature, checks the timestamp, then executes. If the signature doesn't match or the timestamp is stale, the request is dropped with a 401. No error detail in the response &mdash; failed auth looks identical regardless of failure mode.</p>
+  <p><strong>This is table stakes for multi-machine dispatch.</strong> Without request signing, anyone who discovers the Mac's endpoint can submit arbitrary tasks. With HMAC, the dispatcher proves identity on every request without a session, token exchange, or certificate authority.</p>
+
+  <h2 class="reveal">What 47 Findings Looks Like</h2>
+  <p>Running the dispatch system for three weeks produced 47 distinct operational findings. Not bugs &mdash; findings. Things the system surfaced that would have gone unnoticed in a single-machine setup.</p>
+
+  <div class="findings reveal">
+    <div class="finding-card">
+      <h4>Silent Queue Starvation</h4>
+      <p>Backend C went idle for 6 hours while 11 batch tasks queued. Health check passed (process alive) but the inference endpoint had silently OOM'd. Added memory-pressure check to health probe.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Clock Drift Rejection</h4>
+      <p>Mac's system clock drifted 73 seconds from VPS. HMAC replay window (60s) started rejecting valid requests. Looked like an attack. Was NTP misconfiguration. Added clock-skew monitoring to the dispatcher.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Cost Asymmetry</h4>
+      <p>Backend A handled 60% of tasks but only 19% of spend. Backend C handled 15% of tasks but 47% of spend. Led to the per-backend cost tracking that now feeds the morning briefing.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Retry Amplification</h4>
+      <p>A transient Mac network blip caused 3 tasks to retry. Each retry re-queued the task, which re-triggered dispatch, which re-signed the HMAC. 3 tasks became 9 dispatch events in 4 minutes. Added deduplication with task-ID idempotency keys.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Prompt Drift Across Backends</h4>
+      <p>Same task type, different system prompts on VPS vs Mac due to stale config sync. Outputs diverged subtly. Centralized prompt registry on VPS, backends pull at task start.</p>
+    </div>
+    <div class="finding-card">
+      <h4>Graceful Degradation Gap</h4>
+      <p>When Backend B went offline for maintenance, queued tasks waited. But the dispatcher had no concept of "reroutable" tasks. Some Mac tasks could have run on VPS with reduced capability. Added fallback affinity as an optional field in the plugin registry.</p>
+    </div>
+  </div>
+
+  <h2 class="reveal">Cost Breakdown</h2>
+
+  <table class="cost-table reveal">
+    <thead>
+      <tr><th>Component</th><th>Monthly</th><th>Per Task</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Backend A (VPS inference)</td><td>$14.40</td><td>$0.08</td></tr>
+      <tr><td>Backend B (Mac inference)</td><td>$13.95</td><td>$0.31</td></tr>
+      <tr><td>Backend C (Batch inference)</td><td>$16.74</td><td>$0.62</td></tr>
+      <tr><td>Dispatcher (routing)</td><td>$0.00</td><td>$0.00</td></tr>
+      <tr><td>VPS hosting</td><td>$12.00</td><td>&mdash;</td></tr>
+      <tr><td><strong>Blended average</strong></td><td><strong>$57.09</strong></td><td>$0.24</td></tr>
+    </tbody>
+  </table>
+
+  <p>The dispatcher line is the point. Before the mechanical router, dispatch cost $0.03&ndash;0.06 per task. At 200+ tasks per month, that's $6&ndash;12 in pure routing overhead &mdash; tokens spent deciding where to send work instead of doing work. Now it's a dictionary lookup. Zero inference cost.</p>
+
+  <h2 class="reveal">What Made It Non-Trivial</h2>
+  <p>"Route tasks to different machines" sounds like a solved problem. Load balancers exist. The hard parts are specific to LLM-based systems:</p>
+  <ul>
+    <li><strong>Tasks aren't homogeneous.</strong> A load balancer distributes identical requests. These tasks have fundamentally different runtime requirements &mdash; API keys, browser engines, GPU memory. Routing requires understanding what the task needs, not just which server is least busy.</li>
+    <li><strong>LLM routing is a trap.</strong> It feels natural to use an LLM to classify tasks. But classification with known categories is a lookup problem, not an inference problem. Every token spent routing is a token not spent executing.</li>
+    <li><strong>Auth between machines is mandatory.</strong> The moment you split work across backends, you need request signing. HMAC is the minimum viable approach &mdash; no session state, no token exchange, just a shared key and a timestamp.</li>
+    <li><strong>Observability changes shape.</strong> Single-machine: check the logs. Multi-machine: which machine? Was the task dispatched? Did it arrive? Did the signature validate? Did it execute? Did the result make it back? Every hop is a failure point.</li>
+  </ul>
+  <p><strong>The 37-second cycle time is the result, not the goal.</strong> The goal was reliability across heterogeneous backends. Speed came from removing the LLM from the routing path and letting each backend do what it's good at.</p>
+
+  <div class="article-links">
+    <a href="/build/" class="primary-link">Back to Build</a>
+    <a href="#" onclick="openContactForm();return false" class="secondary-link">Book a Call</a>
+  </div>
+</article>
+</main>
+
+<div id="site-modal"></div>
+
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260311a"></script>
+<script src="/shared.js?v=20260311a"></script>
+<script src="/ambient.js?v=20260311a"></script>
+<script src="/chat-bubble.js?v=20260311a"></script>
+</body>
+</html>
