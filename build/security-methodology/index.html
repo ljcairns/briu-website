@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | How We Secure AI Agent Systems</title>
+<meta name="description" content="Continuous adversarial testing against a defense-in-depth architecture. This is the methodology we use for our own systems and deploy for clients.">
+<meta property="og:title" content="Briu | How We Secure AI Agent Systems">
+<meta property="og:description" content="Continuous adversarial testing against a defense-in-depth architecture. This is the methodology we use for our own systems and deploy for clients.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://briu.ai/build/security-methodology/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | How We Secure AI Agent Systems">
+<meta name="twitter:description" content="Continuous adversarial testing against a defense-in-depth architecture. This is the methodology we use for our own systems and deploy for clients.">
+<link rel="canonical" href="https://briu.ai/build/security-methodology/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260311b">
+<link rel="stylesheet" href="/articles.css?v=20260311b">
+<style>
+/* Rounds table */
+.rounds-table { width: 100%; border-collapse: collapse; margin: 1.75rem 0 2rem; }
+.rounds-table th, .rounds-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.88rem; }
+.rounds-table thead th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08); }
+
+/* Finding table */
+.finding-table { width: 100%; border-collapse: collapse; margin: 1.75rem 0 2rem; }
+.finding-table th, .finding-table td { padding: 0.75rem 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.88rem; }
+.finding-table thead th { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); border-bottom: 1px solid rgba(255,255,255,0.08); }
+.finding-table .sev-critical { color: var(--coral); font-weight: 600; }
+
+/* Audit grid */
+.audit-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 2rem 0; }
+.audit-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; }
+.audit-card h4 { font-size: 0.82rem; font-weight: 600; color: var(--text); margin-bottom: 0.4rem; }
+.audit-card p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+
+/* Insight box */
+.insight-box { background: rgba(90,157,172,0.06); border: 1px solid rgba(90,157,172,0.15); padding: 1.5rem; margin: 2rem 0; }
+.insight-box p { margin: 0; font-size: 0.95rem; line-height: 1.7; }
+.insight-box strong { color: var(--text); }
+
+/* Layer list */
+.layer-list { list-style: none; padding: 0; margin: 1.5rem 0 2rem; counter-reset: layer-count; }
+.layer-list li { counter-increment: layer-count; padding: 0.75rem 0 0.75rem 2.5rem; border-bottom: 1px solid rgba(255,255,255,0.04); position: relative; font-size: 0.9rem; line-height: 1.6; }
+.layer-list li::before { content: counter(layer-count); position: absolute; left: 0; top: 0.75rem; font-family: var(--serif); font-size: 1.2rem; color: rgba(212,160,90,0.3); width: 2rem; text-align: center; }
+
+/* Client list */
+.client-list { list-style: none; padding: 0; margin: 1.5rem 0 2rem; }
+.client-list li { padding: 0.6rem 0 0.6rem 1.5rem; border-left: 2px solid rgba(212,160,90,0.15); margin-bottom: 0.5rem; font-size: 0.9rem; line-height: 1.6; }
+
+/* Questions list */
+.questions-list { list-style: none; padding: 0; margin: 1.5rem 0 2rem; }
+.questions-list li { padding: 0.5rem 0; font-size: 0.9rem; line-height: 1.6; color: var(--text-muted); }
+.questions-list li::before { content: '\2014\00a0'; color: rgba(212,160,90,0.4); }
+
+@media (max-width: 640px) {
+  .audit-grid { grid-template-columns: 1fr; }
+  .rounds-table th, .rounds-table td,
+  .finding-table th, .finding-table td { padding: 0.5rem; font-size: 0.78rem; }
+}
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How We Secure AI Agent Systems",
+  "description": "Continuous adversarial testing against a defense-in-depth architecture. This is the methodology we use for our own systems and deploy for clients.",
+  "author": {"@type": "Person", "name": "Lucas Cairns"},
+  "publisher": {"@type": "Organization", "name": "Briu", "url": "https://briu.ai", "logo": {"@type": "ImageObject", "url": "https://briu.ai/briu-logo-transparent.png"}},
+  "datePublished": "2026-03-11",
+  "dateModified": "2026-03-11",
+  "url": "https://briu.ai/build/security-methodology/",
+  "image": "https://briu.ai/og-image.png",
+  "mainEntityOfPage": {"@type": "WebPage", "@id": "https://briu.ai/build/security-methodology/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "Home", "item": "https://briu.ai/"},
+    {"@type": "ListItem", "position": 2, "name": "Build", "item": "https://briu.ai/build/"},
+    {"@type": "ListItem", "position": 3, "name": "Security Methodology", "item": "https://briu.ai/build/security-methodology/"}
+  ]
+}
+</script>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Build</p>
+  <h1>How We Secure AI Agent Systems</h1>
+  <p>Continuous adversarial testing against a defense-in-depth architecture. This is the methodology we use for our own systems and deploy for clients.</p>
+</section>
+
+<article>
+
+  <h2 class="reveal">The problem with AI security theater</h2>
+  <p>Most AI security is checkbox compliance: &ldquo;we use encryption&rdquo; (everyone does), &ldquo;we follow SOC 2&rdquo; (that&rsquo;s about process, not agent behavior), &ldquo;our models are aligned&rdquo; (alignment is a property of training, not a runtime guarantee).</p>
+  <p>None of that addresses the actual threat: an autonomous AI agent connected to your email, CRM, and business tools can be manipulated through the content it processes. An email subject line. A calendar invite. A form submission. A webhook payload. All of it enters the model&rsquo;s context window alongside its instructions.</p>
+  <p>The question isn&rsquo;t whether your model is aligned. The question is what happens when an attacker puts instructions inside an email and your agent reads it.</p>
+
+  <h2 class="reveal">Our approach: defense in depth, tested continuously</h2>
+
+  <h3 class="reveal">Principle 1: Every layer assumes the others failed</h3>
+  <p>We don&rsquo;t build one strong wall. We build ten independent layers, each designed to contain a breach that got past the ones before it.</p>
+
+  <ol class="layer-list reveal">
+    <li><strong>Input sanitizer</strong> &mdash; 140+ patterns, 7 detection stages, 20+ languages. Catches known injection patterns before the model sees them.</li>
+    <li><strong>Auto-sanitizer hook</strong> &mdash; plugin-level enforcement. Every tool result over 50 characters is scanned. The agent cannot opt out.</li>
+    <li><strong>Structural framing</strong> &mdash; all external content wrapped in XML tags that mark it as data, not instructions. Works even when regex fails.</li>
+    <li><strong>Sandbox isolation</strong> &mdash; external content processed by a restricted agent (read-only, no tools) with structured JSON output. Re-sanitized by a non-AI jq pipeline before the operational agent sees it.</li>
+    <li><strong>Canary tokens</strong> &mdash; daily-rotating fake credentials planted in the agent&rsquo;s context. If extracted, the leak is detected and blocked.</li>
+    <li><strong>Write protection</strong> &mdash; critical config files locked from all non-operator agents. Blocks direct and indirect writes.</li>
+    <li><strong>Exec guardrails</strong> &mdash; deny-by-default command allowlist. Blocks code execution, network exfiltration, and file writes for non-main agents.</li>
+    <li><strong>Behavioral watchdog</strong> &mdash; anomaly detection with three-tier kill switch. Critical CVEs trigger automatic lockdown.</li>
+    <li><strong>HMAC task signing</strong> &mdash; cryptographic verification of all inter-agent task manifests with nonce replay protection and 60-second expiry windows.</li>
+    <li><strong>Pipeline exec parsing</strong> &mdash; structural command parsing that validates every segment in pipes and chains against the allowlist independently.</li>
+  </ol>
+
+  <h3 class="reveal">Principle 2: Pattern matching has a ceiling</h3>
+  <p>After 290+ attack payloads across 8 red team rounds, we know exactly where regex-based detection stops working: pure semantic metaphor, novel encoding schemes, sub-threshold payloads, and composition attacks where each piece is clean individually. We don&rsquo;t pretend to catch these with patterns. We catch them with structural defenses (layers 3&ndash;10) that don&rsquo;t depend on recognizing the attack.</p>
+
+  <h3 class="reveal">Principle 3: Infrastructure enforces, prompts suggest</h3>
+  <p>Every security control is enforced at the infrastructure level, not the prompt level. An agent&rsquo;s permissions are set by tool policy, not by instructions it could be manipulated into ignoring. The difference: a prompt-level instruction is a suggestion to a language model. An infrastructure-level control is a guarantee.</p>
+
+  <h2 class="reveal">How we test: AI vs. AI red teaming</h2>
+
+  <h3 class="reveal">Payload testing</h3>
+  <p>We give an attacker model (Opus 4.6 or Codex) the full source code of our defenses and tell it to find bypasses. Multiple rounds. Each round, we patch what it found and re-test everything from scratch.</p>
+
+  <table class="rounds-table reveal">
+    <thead>
+      <tr><th>Round</th><th>Attacker</th><th>Detection Rate</th><th>Payloads</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>v5</td><td>Opus 4.6</td><td>90%</td><td>30</td></tr>
+      <tr><td>v6</td><td>Opus 4.6</td><td>83%</td><td>30</td></tr>
+      <tr><td>v7</td><td>Opus 4.6</td><td>50%*</td><td>26</td></tr>
+      <tr><td>v8</td><td>Opus 4.6</td><td>61%*</td><td>18</td></tr>
+      <tr><td>v9</td><td>Codex</td><td>100%</td><td>41</td></tr>
+      <tr><td>v9+</td><td>Codex</td><td>100%</td><td>4 audits</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:0.82rem;color:var(--text-muted);">*Remaining bypasses in v7/v8 are in structurally undetectable categories (pure metaphor, novel encoding), defended by layers 3&ndash;10 rather than the sanitizer.</p>
+
+  <h3 class="reveal">Architectural audits</h3>
+  <p>Payload testing only exercises layer 1. The real vulnerabilities are in assumptions: plugin return fields the runtime silently ignores, execution order bugs that scan content after it&rsquo;s been truncated, trust boundaries where any agent can write to state that another agent follows as instructions.</p>
+  <p>We run 4 parallel audit tracks:</p>
+
+  <div class="audit-grid reveal">
+    <div class="audit-card">
+      <h4>Plugin interaction audit</h4>
+      <p>Hook execution order, cross-plugin data flow, return field contracts with the runtime.</p>
+    </div>
+    <div class="audit-card">
+      <h4>Trust boundary audit</h4>
+      <p>Which agents write to which state tables, what the main agent consumes as trusted.</p>
+    </div>
+    <div class="audit-card">
+      <h4>External data flow audit</h4>
+      <p>Trace every path from attacker-controlled input (email, calendar, webhook, form) through sanitization to model context.</p>
+    </div>
+    <div class="audit-card">
+      <h4>Permission and filesystem audit</h4>
+      <p>Unix permissions, symlink validation, argument injection in CLI wrappers.</p>
+    </div>
+  </div>
+
+  <h3 class="reveal">Multi-agent red team</h3>
+  <p>For systems with multiple agents (personal + team, VPS + Mac, multi-model orchestration), we test the boundaries between them:</p>
+  <ul>
+    <li><strong>HMAC task signing</strong> &mdash; replay attacks, timing side channels, key extraction</li>
+    <li><strong>Transport integrity</strong> &mdash; message forgery, reordering, replay via Discord</li>
+    <li><strong>Cross-agent escalation</strong> &mdash; can a restricted agent compromise a privileged one?</li>
+    <li><strong>Compaction trust loss</strong> &mdash; security context stripped during context compression</li>
+  </ul>
+
+  <h2 class="reveal">What we found (and fixed)</h2>
+  <p>Our own system. 15 critical findings. All patched before any client deployment.</p>
+
+  <table class="finding-table reveal">
+    <thead>
+      <tr><th>Finding</th><th>Severity</th><th>What Happened</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Silent plugin drop</td>
+        <td class="sev-critical">Critical</td>
+        <td>Three security plugins returned a field the runtime silently ignored. Security context never reached the model.</td>
+      </tr>
+      <tr>
+        <td>Cross-layer bypass</td>
+        <td class="sev-critical">Critical</td>
+        <td>A fake XML tag caused the auto-sanitizer to skip scanning entirely.</td>
+      </tr>
+      <tr>
+        <td>Execution order bug</td>
+        <td class="sev-critical">Critical</td>
+        <td>Content was truncated before it was scanned. Injections in truncated portions were invisible.</td>
+      </tr>
+      <tr>
+        <td>State-db trust boundary</td>
+        <td class="sev-critical">Critical</td>
+        <td>Any agent could write to state the main agent trusted as instructions.</td>
+      </tr>
+      <tr>
+        <td>Unframed cron data</td>
+        <td class="sev-critical">Critical</td>
+        <td>Email subjects entered morning briefings without structural framing. Direct injection path.</td>
+      </tr>
+      <tr>
+        <td>HMAC never verified</td>
+        <td class="sev-critical">Critical</td>
+        <td>Task signing was designed and implemented but never wired into the execution path. Signed manifests executed without verification.</td>
+      </tr>
+      <tr>
+        <td>Pipeline exec bypass</td>
+        <td class="sev-critical">Critical</td>
+        <td>Exec guardrail checked first command in pipe only. Subsequent segments (e.g. <code>curl</code> after <code>echo</code>) bypassed the allowlist.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>70+ additional findings from architectural audits and multi-agent red team: symlink bypasses, missing exec verb blocks, canary encoding gaps, CLI argument injection, nonce replay gaps, state-db enforcement at application vs. database layer.</p>
+
+  <p>Full details: <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold);">How We Red-Teamed Our Own Agent</a></p>
+
+  <h2 class="reveal">What this means for clients</h2>
+  <p>Every agent system we deploy gets this methodology applied:</p>
+
+  <div class="client-list reveal">
+    <li><strong>Pre-deployment:</strong> architectural review, permission scoping, defense layer configuration, initial red team round</li>
+    <li><strong>At deployment:</strong> full payload testing + architectural audit against the client&rsquo;s specific integration surface</li>
+    <li><strong>Ongoing:</strong> continuous red teaming on retainer. New plugins, new tools, new data sources all get tested before they go live</li>
+    <li><strong>Transparent:</strong> clients get the full report. Every finding, every severity rating, every fix. No black boxes.</li>
+  </div>
+
+  <p>We run frontier models (Sonnet 4.6, Opus 4.6) for stronger baseline instruction resistance, but we never rely on model behavior alone. Models are one layer. Infrastructure is the other nine.</p>
+
+  <h2 class="reveal">The compaction problem (and why most agent security ignores it)</h2>
+  <p>One finding from our red team work stands apart because it&rsquo;s a fundamental property of how LLM sessions work, not something specific to any framework.</p>
+  <p>When a session gets long, the runtime compacts it: summarizes old messages to free context window. During compaction, structural framing tags get stripped. Injection payloads that were safely framed become unframed text in the summary.</p>
+
+  <div class="insight-box">
+    <p><strong>An attacker who can get a payload into the session and wait for compaction gets a free de-framing pass.</strong> The payload enters wrapped. It exits naked.</p>
+  </div>
+
+  <p>Our mitigations: re-sanitize summaries after compaction, track &ldquo;contains untrusted content&rdquo; metadata through the pipeline, inject explicit rules about compacted content into every turn. Most agent deployments we&rsquo;ve reviewed do none of these.</p>
+
+  <h2 class="reveal">Start with security</h2>
+  <p>If you&rsquo;re evaluating AI agent deployments for your business, ask your vendor:</p>
+
+  <ul class="questions-list reveal">
+    <li>How many defense layers sit between external content and agent actions?</li>
+    <li>What happens when the sanitizer misses an injection?</li>
+    <li>How do you test, and how often?</li>
+    <li>What&rsquo;s your compaction strategy?</li>
+    <li>Can you show me the red team report?</li>
+  </ul>
+
+  <p>We can. <a href="/#contact" style="color:var(--gold);">Start a conversation.</a></p>
+
+  <p style="margin-top:1.5rem;font-size:0.88rem;color:var(--text-muted);">Full architecture: <a href="/build/six-layers-deep/" style="color:var(--gold);">Six Layers Deep</a><br>Full red team results: <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold);">How We Red-Teamed Our Own Agent</a></p>
+
+  <div style="max-width:780px;margin:4rem auto;padding:0 2rem;">
+    <a href="/build/" style="font-size:0.85rem;color:var(--gold);text-decoration:none;">&larr; Back to Build</a>
+  </div>
+</article>
+</main>
+
+<div id="site-modal"></div>
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260311a"></script>
+<script src="/shared.js?v=20260311a"></script>
+<script src="/ambient.js?v=20260311a"></script>
+<script src="/chat-bubble.js?v=20260311a"></script>
+</body>
+</html>

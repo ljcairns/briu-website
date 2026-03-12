@@ -25,10 +25,10 @@
     chartCount:        64,
     articleCount:      10,
     // Security — scoped to sanitizer red-team taxonomy
-    secDefenseLayers:            8,
+    secDefenseLayers:            10,
     secOpenBypasses:             0,
-    secBypassesClosed:           210,
-    secBypassesTotal:            210,
+    secBypassesClosed:           290,
+    secBypassesTotal:            290,
     secAttackCategories:         15,
     secAttackCategoriesPassing:  15
   };

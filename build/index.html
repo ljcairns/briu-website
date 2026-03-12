@@ -375,10 +375,10 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-label">Agent Skills</div>
   </div>
   <div class="hud-stat" data-tooltip="Input sanitizer, auto-sanitizer hook, canary tokens, write protection, exec guardrails, kill switch, sandbox isolation, structural framing" style="--pulse-delay: 2s;">
-    <div class="hud-value" data-dynamic="sec-defense-layers">8</div>
+    <div class="hud-value" data-dynamic="sec-defense-layers">10</div>
     <div class="hud-label">Defense Layers</div>
   </div>
-  <div class="hud-stat" data-tooltip="6 rounds of AI vs AI testing · 210+ payloads · 4 architectural audits · 30+ findings addressed" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
+  <div class="hud-stat" data-tooltip="8 rounds of AI vs AI testing · 290+ payloads · 4-way parallel audit · 70+ findings addressed" style="--pulse-delay: 2.25s;" id="hud-open-bypasses">
     <div class="hud-value" data-dynamic="sec-open-bypasses">0</div>
     <div class="hud-label">Open Bypasses<br><span style="font-size:0.6rem;opacity:0.5;text-transform:none;letter-spacing:0;">(full red-team scope)</span></div>
   </div>
@@ -529,7 +529,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       <div class="vtl-card">
         <div class="vtl-date">Mar 11<span class="vtl-relative"></span></div>
         <div class="vtl-title">Full security red-team complete</div>
-        <div class="vtl-desc">6 rounds, 210+ payloads, 4 architectural audits, 5 critical findings patched. <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold)">Read &rarr;</a></div>
+        <div class="vtl-desc">8 rounds, 290+ payloads, 4-way parallel audit, 15 critical findings patched. <a href="/build/how-we-red-teamed-our-own-agent/" style="color:var(--gold)">Read &rarr;</a></div>
       </div>
     </div>
 
@@ -572,7 +572,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
       <div class="story-card-tag">Security</div>
       <h3>How We Red-Teamed Our Own Agent</h3>
       <div class="story-desc">Opus 4.6 and Codex vs. our own security stack. The biggest finding wasn't in the sanitizer.</div>
-      <div class="story-metric">210+ payloads · 5 critical findings · all patched</div>
+      <div class="story-metric">290+ payloads · 15 critical findings · all patched</div>
       <span class="story-link">Read the story</span>
     </a>
   </div>
@@ -592,7 +592,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="sec-arch-card">
       <div class="sec-arch-card-label">Architecture</div>
       <div class="sec-arch-primary">
-        <span class="sec-arch-num" data-dynamic="sec-defense-layers">8</span>
+        <span class="sec-arch-num" data-dynamic="sec-defense-layers">10</span>
         <span class="sec-arch-unit">Defense Layers</span>
       </div>
       <p class="sec-arch-sub">Each assumes the others failed.</p>
@@ -605,8 +605,11 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         <li><strong>Kill switch</strong> &mdash; automated lockdown on critical CVEs</li>
         <li><strong>Sandbox isolation</strong> &mdash; external content via sandboxed agent</li>
         <li><strong>Structural framing</strong> &mdash; all external data tagged as untrusted</li>
+        <li><strong>HMAC task signing</strong> &mdash; cryptographic verification of inter-agent task manifests with nonce replay protection</li>
+        <li><strong>Pipeline exec parsing</strong> &mdash; structural command parsing validates every pipe/chain segment against the allowlist</li>
       </ol>
       <a href="/build/six-layers-deep/" class="sec-arch-link">Full architecture &rarr;</a>
+      <a href="/build/security-methodology/" class="sec-arch-link" style="margin-top:0.5rem;">Security methodology &rarr;</a>
     </div>
 
     <!-- Card 2: Adversarial Testing -->
@@ -616,22 +619,22 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         <span class="sec-arch-num" data-dynamic="sec-open-bypasses">0</span>
         <span class="sec-arch-unit">Open Known Bypasses</span>
       </div>
-      <p class="sec-arch-sub">6 rounds &middot; AI vs AI &middot; full architecture</p>
+      <p class="sec-arch-sub">8 rounds &middot; AI vs AI &middot; full architecture</p>
       <div class="sec-test-stats">
         <div class="sec-test-row">
-          <span class="sec-test-val"><span data-dynamic="sec-bypasses-closed">210</span>+</span>
+          <span class="sec-test-val"><span data-dynamic="sec-bypasses-closed">290</span>+</span>
           <span class="sec-test-desc">attack payloads tested</span>
         </div>
         <div class="sec-test-row">
-          <span class="sec-test-val">5</span>
+          <span class="sec-test-val">15</span>
           <span class="sec-test-desc">critical findings &middot; all patched</span>
         </div>
         <div class="sec-test-row">
           <span class="sec-test-val">4</span>
-          <span class="sec-test-desc">architectural audits (plugins, cron, state-db, file perms)</span>
+          <span class="sec-test-desc">parallel audit tracks (Mac surface, VPS defense, trust boundaries, external attack surface)</span>
         </div>
       </div>
-      <p class="sec-scope-note">Full-stack testing: Opus 4.6 (5 payload rounds) + Codex (payloads + architectural audits). Sanitizer, plugin contracts, trust boundaries, cron injection, file permissions.</p>
+      <p class="sec-scope-note">Full-stack testing: Opus 4.6 + Codex across 8 rounds. 4-way parallel audit of two-agent architecture. Sanitizer, plugin contracts, HMAC trust model, inter-agent boundaries, external attack surface.</p>
       <a href="/build/how-we-red-teamed-our-own-agent/" class="sec-arch-link">Read the full red-team results &rarr;</a>
     </div>
 
@@ -722,8 +725,8 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Defense-in-Depth Architecture</h3>
-        <div class="skill-desc">Eight layers, each assumes the others failed</div>
-        <div class="skill-metric"><span data-dynamic="sec-defense-layers">8</span> defense layers</div>
+        <div class="skill-desc">Ten layers, each assumes the others failed</div>
+        <div class="skill-metric"><span data-dynamic="sec-defense-layers">10</span> defense layers</div>
         <div class="skill-links">
           <a href="/build/six-layers-deep/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
@@ -735,7 +738,7 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Red Team Testing</h3>
-        <div class="skill-desc">6 rounds · AI vs AI · 210+ payloads · 4 architectural audits · 5 critical findings patched</div>
+        <div class="skill-desc">8 rounds · AI vs AI · 290+ payloads · 4-way parallel audit · 15 critical findings patched</div>
         <div class="skill-metric"><span data-dynamic="sec-open-bypasses">0</span> open known bypasses</div>
         <div class="skill-links">
           <a href="/build/how-we-red-teamed-our-own-agent/" class="skill-read">Read</a>
@@ -748,10 +751,23 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
           <div class="skill-status status-live">Live</div>
         </div>
         <h3>Sanitizer v9</h3>
-        <div class="skill-desc">Input sanitizer hardened across 6 red-team rounds · <span data-dynamic="sec-bypasses-closed">210</span>+ payloads caught</div>
+        <div class="skill-desc">Input sanitizer hardened across 8 red-team rounds · <span data-dynamic="sec-bypasses-closed">290</span>+ payloads caught</div>
         <div class="skill-metric">140+ detection patterns, 20+ languages</div>
         <div class="skill-links">
           <a href="/build/how-we-red-teamed-our-own-agent/" class="skill-read">Read</a>
+          <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
+        </div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-card-top">
+          <div class="skill-badge" data-cat="security"><span class="skill-badge-dot"></span> Security</div>
+          <div class="skill-status status-live">Live</div>
+        </div>
+        <h3>Security Methodology</h3>
+        <div class="skill-desc">Defense-in-depth + continuous adversarial testing. The methodology we use for our own systems and deploy for clients.</div>
+        <div class="skill-metric">10 layers · 8 rounds · AI vs AI</div>
+        <div class="skill-links">
+          <a href="/build/security-methodology/" class="skill-read">Read</a>
           <a href="/services/#autonomous-operations" class="skill-service">See as service</a>
         </div>
       </div>
