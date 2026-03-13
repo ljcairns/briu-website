@@ -76,7 +76,7 @@ jobs:
 
           # Lines of code — public repo (local checkout)
           WEBSITE_LOC=$(find . \( -name '*.html' -o -name '*.js' -o -name '*.css' \) \
-            -not -path '*/node_modules/*' -not -path '*/.wrangler/*' -not -path '*/.github/*' \
+            -not -path '*/node_modules/*' -not -path '*/dist/*' -not -path '*/.wrangler/*' -not -path '*/.github/*' \
             -exec cat {} + | wc -l | tr -d ' ')
           echo "Website lines of code: ${WEBSITE_LOC}"
 

@@ -1245,13 +1245,13 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <div id="site-footer"></div>
 
-<script src="/components.js?v=20260312a"></script>
-<script src="/shared.js?v=20260312a"></script>
-<script src="/ambient.js?v=20260312a"></script>
-<script src="/chat-bubble.js?v=20260312a"></script>
-<script src="/interactive.js?v=20260312a"></script>
-<script src="/dynamic-stats.js?v=20260312a"></script>
-<script src="/js/chart-renderer.js?v=20260312a"></script>
+<script src="/dist/components.js?v=20260312a"></script>
+<script src="/dist/shared.js?v=20260312a"></script>
+<script src="/dist/ambient.js?v=20260312a"></script>
+<script src="/dist/chat-bubble.js?v=20260312a"></script>
+<script src="/dist/interactive.js?v=20260312a"></script>
+<script src="/dist/dynamic-stats.js?v=20260312a"></script>
+<script src="/dist/js/chart-renderer.js?v=20260312a"></script>
 <script>
 window.addEventListener('load', function() {
   renderChart('chart-deployment-velocity', 'deployment-velocity');
@@ -1284,7 +1284,7 @@ function askAIFromFAQ() {
   if (window.briuAskQuestion) window.briuAskQuestion(question);
 }
 </script>
-<script src="/charts.js?v=20260312a"></script>
+<script src="/dist/charts.js?v=20260312a"></script>
 <script>
 Briu.charts.automationBars('hp-automation-bars');
 </script>

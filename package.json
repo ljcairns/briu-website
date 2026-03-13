@@ -2,7 +2,11 @@
   "name": "briu-website",
   "private": true,
   "scripts": {
+    "build": "bash scripts/build.sh",
     "security-lint": "node scripts/security-lint.js",
     "prepare": "git config core.hooksPath .githooks"
+  },
+  "devDependencies": {
+    "terser": "^5.39.0"
   }
 }
