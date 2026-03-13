@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Briu CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #07090E;
+  --surface: #0d1117;
+  --surface-2: #161b22;
+  --gold: #d4a05a;
+  --gold-dim: rgba(212,160,90,0.15);
+  --forest: #5a9dac;
+  --text: #e6e1d9;
+  --text-muted: #8b8578;
+  --red: #e85d5d;
+  --green: #5eb85e;
+  --coral: #E07B5F;
+  --sans: 'DM Sans', system-ui, -apple-system, sans-serif;
+  --serif: 'DM Serif Display', Georgia, serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 14px; line-height: 1.5; }
+
+/* Header */
+.crm-header { padding: 1rem 2rem; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+.crm-header h1 { font-family: var(--serif); font-size: 1.1rem; color: var(--gold); }
+.crm-header .actions { display: flex; gap: 0.5rem; align-items: center; }
+
+/* Buttons */
+.btn { background: none; border: 1px solid var(--gold-dim); color: var(--gold); padding: 0.4rem 0.8rem; font-size: 12px; cursor: pointer; font-family: var(--sans); transition: background 0.2s; }
+.btn:hover { background: var(--gold-dim); }
+.btn-primary { background: var(--gold); color: var(--bg); border-color: var(--gold); font-weight: 600; }
+.btn-primary:hover { background: #c4913e; }
+
+/* Filter bar */
+.filter-bar { padding: 1rem 2rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.filter-btn { padding: 0.35rem 0.75rem; font-size: 12px; background: var(--surface); border: 1px solid rgba(255,255,255,0.06); color: var(--text-muted); cursor: pointer; font-family: var(--sans); transition: all 0.2s; }
+.filter-btn:hover { color: var(--text); border-color: rgba(255,255,255,0.12); }
+.filter-btn.active { color: var(--gold); border-color: var(--gold); background: var(--gold-dim); }
+
+/* Stats */
+.stat-strip { padding: 0 2rem 1rem; display: flex; gap: 1.5rem; }
+.stat-item .num { font-size: 1.4rem; font-weight: 600; color: var(--gold); }
+.stat-item .lbl { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); }
+
+/* Table */
+.table-wrap { padding: 0 2rem 2rem; overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; }
+th { font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.06); cursor: pointer; user-select: none; white-space: nowrap; }
+th:hover { color: var(--text); }
+th .sort-arrow { margin-left: 4px; font-size: 10px; opacity: 0.4; }
+th.sorted .sort-arrow { opacity: 1; color: var(--gold); }
+td { padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 13px; max-width: 250px; }
+tr:hover td { background: rgba(255,255,255,0.02); }
+tr { cursor: pointer; }
+.empty-state { text-align: center; padding: 3rem; color: var(--text-muted); }
+
+/* Badges */
+.badge { display: inline-block; padding: 0.15rem 0.5rem; font-size: 11px; border-radius: 2px; text-transform: capitalize; }
+.badge-cold { background: rgba(90,157,172,0.15); color: var(--forest); }
+.badge-warm { background: rgba(212,160,90,0.15); color: var(--gold); }
+.badge-hot { background: rgba(224,123,95,0.15); color: var(--coral); }
+.badge-closed { background: rgba(94,184,94,0.15); color: var(--green); }
+
+/* Modal */
+.modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 1000; align-items: center; justify-content: center; }
+.modal-overlay.open { display: flex; }
+.modal { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); width: 480px; max-width: 95vw; max-height: 90vh; overflow-y: auto; padding: 1.5rem; }
+.modal h2 { font-family: var(--serif); font-size: 1rem; color: var(--gold); margin-bottom: 1.25rem; }
+.modal label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 0.3rem; margin-top: 0.85rem; }
+.modal label:first-of-type { margin-top: 0; }
+.modal input, .modal select, .modal textarea { width: 100%; padding: 0.55rem 0.75rem; background: var(--surface-2); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-size: 13px; font-family: var(--sans); }
+.modal input:focus, .modal select:focus, .modal textarea:focus { outline: none; border-color: var(--gold); }
+.modal textarea { resize: vertical; min-height: 60px; }
+.modal select { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238b8578' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.75rem center; padding-right: 2rem; }
+.modal-actions { display: flex; gap: 0.5rem; justify-content: flex-end; margin-top: 1.25rem; }
+.btn-danger { color: var(--red); border-color: rgba(232,93,93,0.3); margin-right: auto; }
+.btn-danger:hover { background: rgba(232,93,93,0.1); }
+</style>
+</head>
+<body>
+
+<header class="crm-header">
+  <h1>Prospect CRM</h1>
+  <div class="actions">
+    <a href="/admin/" class="btn">&larr; Dashboard</a>
+    <button class="btn btn-primary" onclick="openModal()">+ Add Prospect</button>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="cold">Cold</button>
+  <button class="filter-btn" data-filter="warm">Warm</button>
+  <button class="filter-btn" data-filter="hot">Hot</button>
+  <button class="filter-btn" data-filter="closed">Closed</button>
+</div>
+
+<div class="stat-strip">
+  <div class="stat-item"><div class="num" id="stat-total">0</div><div class="lbl">Total</div></div>
+  <div class="stat-item"><div class="num" id="stat-pipeline">$0</div><div class="lbl">Pipeline</div></div>
+  <div class="stat-item"><div class="num" id="stat-hot">0</div><div class="lbl">Hot</div></div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th data-col="name">Name <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="company">Company <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="status">Status <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="last_contact">Last Contact <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="next_action">Next Action <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="deal_value">Value <span class="sort-arrow">&#9650;</span></th>
+        <th data-col="notes">Notes <span class="sort-arrow">&#9650;</span></th>
+      </tr>
+    </thead>
+    <tbody id="prospect-table"></tbody>
+  </table>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2 id="modal-title">Add Prospect</h2>
+    <form id="prospect-form" onsubmit="saveProspect(event)">
+      <input type="hidden" id="f-id">
+      <label for="f-name">Name</label>
+      <input type="text" id="f-name" required>
+      <label for="f-company">Company</label>
+      <input type="text" id="f-company">
+      <label for="f-status">Status</label>
+      <select id="f-status">
+        <option value="cold">Cold</option>
+        <option value="warm">Warm</option>
+        <option value="hot">Hot</option>
+        <option value="closed">Closed</option>
+      </select>
+      <label for="f-last-contact">Last Contact</label>
+      <input type="date" id="f-last-contact">
+      <label for="f-next-action">Next Action</label>
+      <input type="text" id="f-next-action">
+      <label for="f-deal-value">Deal Value ($)</label>
+      <input type="number" id="f-deal-value" min="0" step="1">
+      <label for="f-notes">Notes</label>
+      <textarea id="f-notes"></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-danger" id="delete-btn" style="display:none" onclick="deleteProspect()">Delete</button>
+        <button type="button" class="btn" onclick="closeModal()">Cancel</button>
+        <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script>
+let prospects = [];
+let currentFilter = 'all';
+let sortCol = 'name';
+let sortAsc = true;
+
+const DATA_PATH = '/data/prospects.json';
+
+async function loadProspects() {
+  try {
+    const res = await fetch(DATA_PATH + '?t=' + Date.now());
+    prospects = await res.json();
+  } catch {
+    prospects = [];
+  }
+  render();
+}
+
+function render() {
+  updateStats();
+  const filtered = currentFilter === 'all' ? prospects : prospects.filter(p => p.status === currentFilter);
+  const sorted = [...filtered].sort((a, b) => {
+    let va = a[sortCol] ?? '';
+    let vb = b[sortCol] ?? '';
+    if (sortCol === 'deal_value') { va = Number(va) || 0; vb = Number(vb) || 0; }
+    else { va = String(va).toLowerCase(); vb = String(vb).toLowerCase(); }
+    if (va < vb) return sortAsc ? -1 : 1;
+    if (va > vb) return sortAsc ? 1 : -1;
+    return 0;
+  });
+
+  const tbody = document.getElementById('prospect-table');
+  if (!sorted.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="empty-state">No prospects found.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = sorted.map(p => `
+    <tr onclick="openModal('${p.id}')">
+      <td>${esc(p.name)}</td>
+      <td>${esc(p.company || '')}</td>
+      <td><span class="badge badge-${p.status}">${p.status}</span></td>
+      <td>${p.last_contact || '—'}</td>
+      <td>${esc(p.next_action || '')}</td>
+      <td>${p.deal_value ? '$' + Number(p.deal_value).toLocaleString() : '—'}</td>
+      <td title="${esc(p.notes || '')}">${esc(truncate(p.notes || '', 40))}</td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.col === sortCol);
+    const arrow = th.querySelector('.sort-arrow');
+    if (arrow) arrow.innerHTML = th.dataset.col === sortCol ? (sortAsc ? '&#9650;' : '&#9660;') : '&#9650;';
+  });
+}
+
+function updateStats() {
+  document.getElementById('stat-total').textContent = prospects.length;
+  const pipeline = prospects.reduce((s, p) => s + (Number(p.deal_value) || 0), 0);
+  document.getElementById('stat-pipeline').textContent = '$' + pipeline.toLocaleString();
+  document.getElementById('stat-hot').textContent = prospects.filter(p => p.status === 'hot').length;
+}
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+function truncate(s, n) { return s.length > n ? s.slice(0, n) + '...' : s; }
+
+// Filters
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    render();
+  });
+});
+
+// Sorting
+document.querySelectorAll('th[data-col]').forEach(th => {
+  th.addEventListener('click', () => {
+    if (sortCol === th.dataset.col) { sortAsc = !sortAsc; }
+    else { sortCol = th.dataset.col; sortAsc = true; }
+    render();
+  });
+});
+
+// Modal
+function openModal(id) {
+  const modal = document.getElementById('modal');
+  const form = document.getElementById('prospect-form');
+  form.reset();
+  document.getElementById('f-id').value = '';
+  document.getElementById('delete-btn').style.display = 'none';
+  document.getElementById('modal-title').textContent = 'Add Prospect';
+
+  if (id) {
+    const p = prospects.find(x => x.id === id);
+    if (!p) return;
+    document.getElementById('modal-title').textContent = 'Edit Prospect';
+    document.getElementById('f-id').value = p.id;
+    document.getElementById('f-name').value = p.name;
+    document.getElementById('f-company').value = p.company || '';
+    document.getElementById('f-status').value = p.status;
+    document.getElementById('f-last-contact').value = p.last_contact || '';
+    document.getElementById('f-next-action').value = p.next_action || '';
+    document.getElementById('f-deal-value').value = p.deal_value || '';
+    document.getElementById('f-notes').value = p.notes || '';
+    document.getElementById('delete-btn').style.display = 'block';
+  }
+  modal.classList.add('open');
+}
+
+function closeModal() { document.getElementById('modal').classList.remove('open'); }
+
+document.getElementById('modal').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+function saveProspect(e) {
+  e.preventDefault();
+  const id = document.getElementById('f-id').value;
+  const data = {
+    id: id || String(Date.now()),
+    name: document.getElementById('f-name').value.trim(),
+    company: document.getElementById('f-company').value.trim(),
+    status: document.getElementById('f-status').value,
+    last_contact: document.getElementById('f-last-contact').value,
+    next_action: document.getElementById('f-next-action').value.trim(),
+    deal_value: Number(document.getElementById('f-deal-value').value) || 0,
+    notes: document.getElementById('f-notes').value.trim()
+  };
+
+  if (id) {
+    const idx = prospects.findIndex(p => p.id === id);
+    if (idx !== -1) prospects[idx] = data;
+  } else {
+    prospects.push(data);
+  }
+  persist();
+  closeModal();
+  render();
+}
+
+function deleteProspect() {
+  const id = document.getElementById('f-id').value;
+  if (!id) return;
+  prospects = prospects.filter(p => p.id !== id);
+  persist();
+  closeModal();
+  render();
+}
+
+function persist() {
+  localStorage.setItem('briu-crm-prospects', JSON.stringify(prospects));
+}
+
+// On load: try fetch, then overlay with localStorage edits
+(async () => {
+  try {
+    const res = await fetch(DATA_PATH + '?t=' + Date.now());
+    const seed = await res.json();
+    const local = localStorage.getItem('briu-crm-prospects');
+    prospects = local ? JSON.parse(local) : seed;
+  } catch {
+    const local = localStorage.getItem('briu-crm-prospects');
+    prospects = local ? JSON.parse(local) : [];
+  }
+  render();
+})();
+
+// Keyboard
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeModal();
+});
+</script>
+</body>
+</html>
