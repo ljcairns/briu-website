@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chart Gallery — Briu</title>
+  <meta name="description" content="Interactive data visualizations sourced from leading AI podcasts. Every chart backed by a direct quote and linked source.">
+  <meta property="og:title" content="Chart Gallery — Briu">
+  <meta property="og:description" content="9 data-backed charts on AI costs, adoption, and market dynamics.">
+  <meta property="og:type" content="website">
+  <link rel="stylesheet" href="/shared.css?v=20260313a">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Gallery Layout */
+    .gallery-intro { max-width: 620px; margin-bottom: 3rem; }
+    .gallery-intro p { font-size: 1rem; color: var(--text-muted); line-height: 1.7; }
+
+    /* Filter Bar */
+    .filter-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 3rem; }
+    .filter-btn {
+      font-family: var(--sans);
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+    .filter-btn:hover { border-color: rgba(212,160,90,0.25); color: var(--text); }
+    .filter-btn.active { border-color: var(--gold); background: rgba(212,160,90,0.1); color: var(--gold); }
+
+    /* Chart Count */
+    .gallery-count { font-size: 0.78rem; color: var(--text-muted); margin-bottom: 2rem; }
+    .gallery-count span { color: var(--gold); font-weight: 600; }
+
+    /* Card Grid */
+    .chart-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(460px, 1fr));
+      gap: 2rem;
+    }
+
+    .chart-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.04);
+      padding: 2rem 1.75rem 1.5rem;
+      transition: all 0.4s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .chart-card:hover {
+      border-color: rgba(212,160,90,0.15);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    .chart-card.hidden {
+      display: none;
+    }
+
+    /* Card Header */
+    .card-tags { display: flex; gap: 0.4rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .card-tag {
+      font-size: 0.62rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--forest);
+      background: rgba(106,174,156,0.08);
+      border: 1px solid rgba(106,174,156,0.15);
+      padding: 0.2rem 0.6rem;
+    }
+    .card-title {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      color: var(--text);
+      margin-bottom: 0.6rem;
+      line-height: 1.3;
+    }
+    .card-quote {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      font-style: italic;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+      padding-left: 0.75rem;
+      border-left: 2px solid rgba(212,160,90,0.2);
+    }
+
+    /* Chart Canvas Area */
+    .card-chart {
+      margin-bottom: 1.25rem;
+      position: relative;
+    }
+    .card-chart canvas {
+      width: 100% !important;
+    }
+
+    /* Card Footer */
+    .card-source {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255,255,255,0.04);
+    }
+    .card-speaker {
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+    .card-source-link {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--gold);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .card-source-link:hover { color: var(--gold-light); }
+
+    /* Chart Type Badge */
+    .card-type {
+      font-size: 0.6rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--river);
+      background: rgba(90,157,172,0.08);
+      border: 1px solid rgba(90,157,172,0.15);
+      padding: 0.15rem 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .chart-grid { grid-template-columns: 1fr; }
+      .chart-card { padding: 1.5rem 1.25rem 1.25rem; }
+      .card-title { font-size: 1.05rem; }
+      .filter-bar { gap: 0.35rem; }
+      .filter-btn { padding: 0.45rem 0.8rem; font-size: 0.68rem; }
+    }
+    @media (min-width: 641px) and (max-width: 960px) {
+      .chart-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="ambient-orb ambient-orb-1"></div>
+  <div class="ambient-orb ambient-orb-2"></div>
+  <div id="site-nav"></div>
+
+  <main id="main">
+    <div class="hero">
+      <div class="hero-eyebrow">Proof Library</div>
+      <h1>Chart <em>Gallery</em></h1>
+      <div class="gallery-intro">
+        <p>Every chart sourced from a direct quote. Podcast transcripts in, data visualizations out. Filter by theme, click through to the source.</p>
+      </div>
+    </div>
+
+    <section>
+      <div class="filter-bar" id="filters">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="cost">Cost</button>
+        <button class="filter-btn" data-filter="adoption">Adoption</button>
+        <button class="filter-btn" data-filter="roi">ROI</button>
+        <button class="filter-btn" data-filter="market-growth">Market Growth</button>
+        <button class="filter-btn" data-filter="funding">Funding</button>
+      </div>
+
+      <div class="gallery-count" id="gallery-count">
+        Showing <span id="visible-count">9</span> of <span id="total-count">9</span> charts
+      </div>
+
+      <div class="chart-grid" id="chart-grid"></div>
+    </section>
+  </main>
+
+  <div id="site-footer"></div>
+  <div id="site-modal"></div>
+
+  <script src="/components.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script>
+  (function () {
+    'use strict';
+
+    /* ---- Category mapping ---- */
+    /* Map topic_tags from chart-data.json to gallery filter categories */
+    var TAG_TO_CATEGORY = {
+      'automation': 'adoption',
+      'workforce': 'adoption',
+      'agents': 'adoption',
+      'cost': 'cost',
+      'comparison': 'cost',
+      'hiring': 'cost',
+      'optimization': 'cost',
+      'open-source': 'cost',
+      'deployment': 'roi',
+      'speed': 'roi',
+      'leverage': 'roi',
+      'productivity': 'roi',
+      'scaling': 'roi',
+      'strategy': 'roi',
+      'moonshots': 'roi',
+      'infrastructure': 'funding',
+      'investment': 'funding',
+      'macro': 'market-growth',
+      'jobs': 'market-growth',
+      'entrepreneurship': 'market-growth',
+      'energy': 'funding',
+      'bottleneck': 'funding'
+    };
+
+    /* Friendly titles derived from chart id */
+    var TITLES = {
+      'automation-by-role': 'Automation by Role',
+      'cost-per-hour': 'Cost per Hour',
+      'deployment-velocity': 'Deployment Velocity',
+      'employee-leverage': 'Employee Leverage',
+      'cost-compression': 'Cost Compression',
+      'infrastructure-capex': 'Infrastructure CapEx',
+      'job-creation-vs-destruction': 'Job Creation vs Destruction',
+      'energy-bottleneck': 'Energy Bottleneck',
+      'sublinear-scaling': 'Sublinear Scaling'
+    };
+
+    var PALETTE = [
+      '#D4A05A', '#E07A5F', '#5B8FA8', '#6B8F71',
+      '#9B8EC4', '#D4785C', '#4E9FAF', '#C4A76C'
+    ];
+
+    function tooltipConfig() {
+      return {
+        backgroundColor: '#0E1219',
+        borderColor: 'rgba(212,160,90,0.3)',
+        borderWidth: 1,
+        titleColor: '#D4A05A',
+        bodyColor: '#EAE7E3',
+        padding: 12
+      };
+    }
+
+    function getCategories(entry) {
+      var cats = {};
+      entry.topic_tags.forEach(function (t) {
+        var c = TAG_TO_CATEGORY[t];
+        if (c) cats[c] = true;
+      });
+      var result = Object.keys(cats);
+      return result.length ? result : ['market-growth'];
+    }
+
+    /* ---- Chart Builders ---- */
+    function buildBar(ctx, entry) {
+      return new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: entry.data_values.map(function (d) { return d.label; }),
+          datasets: [{
+            data: entry.data_values.map(function (d) { return d.value; }),
+            backgroundColor: entry.data_values.map(function (_, i) { return PALETTE[i % PALETTE.length]; }),
+            borderRadius: 4,
+            borderSkipped: false
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          animation: { duration: 800, easing: 'easeOutQuart' },
+          plugins: {
+            legend: { display: false },
+            tooltip: tooltipConfig()
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#94909A', font: { size: 11 } } },
+            y: { grid: { color: 'rgba(148,144,154,0.08)' }, ticks: { color: '#94909A', font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function buildLine(ctx, entry) {
+      var datasets = [{
+        label: entry.topic_tags[0] || entry.id,
+        data: entry.data_values.map(function (d) { return d.value; }),
+        borderColor: PALETTE[0],
+        backgroundColor: 'rgba(212,160,90,0.08)',
+        fill: true,
+        tension: 0.35,
+        pointBackgroundColor: PALETTE[0],
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }];
+
+      var hasSecondary = entry.data_values.some(function (d) { return d.secondary != null; });
+      if (hasSecondary) {
+        datasets.push({
+          label: 'Power (GW)',
+          data: entry.data_values.map(function (d) { return d.secondary; }),
+          borderColor: PALETTE[2],
+          backgroundColor: 'rgba(91,143,168,0.08)',
+          fill: true,
+          tension: 0.35,
+          pointBackgroundColor: PALETTE[2],
+          pointRadius: 4,
+          pointHoverRadius: 6
+        });
+      }
+
+      return new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: entry.data_values.map(function (d) { return d.label; }),
+          datasets: datasets
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          animation: { duration: 800, easing: 'easeOutQuart' },
+          plugins: {
+            legend: { display: hasSecondary, labels: { color: '#94909A', padding: 12 } },
+            tooltip: tooltipConfig()
+          },
+          scales: {
+            x: { grid: { display: false }, ticks: { color: '#94909A', font: { size: 11 } } },
+            y: { grid: { color: 'rgba(148,144,154,0.08)' }, ticks: { color: '#94909A', font: { size: 11 } } }
+          }
+        }
+      });
+    }
+
+    function buildDoughnut(ctx, entry) {
+      return new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: entry.data_values.map(function (d) { return d.label; }),
+          datasets: [{
+            data: entry.data_values.map(function (d) { return d.value; }),
+            backgroundColor: entry.data_values.map(function (_, i) { return PALETTE[i % PALETTE.length]; }),
+            borderColor: '#0E1219',
+            borderWidth: 2
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: true,
+          animation: { duration: 800, easing: 'easeOutQuart' },
+          plugins: {
+            legend: { position: 'bottom', labels: { color: '#94909A', padding: 12, font: { size: 11 } } },
+            tooltip: tooltipConfig()
+          }
+        }
+      });
+    }
+
+    var builders = { bar: buildBar, line: buildLine, doughnut: buildDoughnut };
+
+    /* ---- Render Cards ---- */
+    function renderGallery(entries) {
+      var grid = document.getElementById('chart-grid');
+      document.getElementById('total-count').textContent = entries.length;
+      document.getElementById('visible-count').textContent = entries.length;
+
+      Chart.defaults.color = '#94909A';
+      Chart.defaults.font.family = "'DM Sans', sans-serif";
+      Chart.defaults.font.size = 11;
+
+      entries.forEach(function (entry) {
+        var cats = getCategories(entry);
+        var card = document.createElement('div');
+        card.className = 'chart-card';
+        card.setAttribute('data-categories', cats.join(','));
+
+        /* Tags */
+        var tagsHtml = cats.map(function (c) {
+          return '<span class="card-tag">' + c.replace('-', ' ') + '</span>';
+        }).join('');
+        tagsHtml += '<span class="card-type">' + entry.chart_type + '</span>';
+
+        /* Source link */
+        var sourceLabel = entry.source.podcast + ' ' + entry.source.episode;
+
+        card.innerHTML =
+          '<div class="card-tags">' + tagsHtml + '</div>' +
+          '<div class="card-title">' + (TITLES[entry.id] || entry.id) + '</div>' +
+          '<div class="card-quote">' + entry.quote + '</div>' +
+          '<div class="card-chart"><canvas></canvas></div>' +
+          '<div class="card-source">' +
+            '<span class="card-speaker">' + entry.speaker + '</span>' +
+            '<a class="card-source-link" href="' + entry.source.url + '" target="_blank" rel="noopener">' + sourceLabel + ' &rarr;</a>' +
+          '</div>';
+
+        grid.appendChild(card);
+
+        /* Build chart */
+        var canvas = card.querySelector('canvas');
+        var build = builders[entry.chart_type] || builders.bar;
+        build(canvas.getContext('2d'), entry);
+      });
+    }
+
+    /* ---- Filtering ---- */
+    function initFilters() {
+      var buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          buttons.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+
+          var filter = btn.getAttribute('data-filter');
+          var cards = document.querySelectorAll('.chart-card');
+          var count = 0;
+
+          cards.forEach(function (card) {
+            var cats = card.getAttribute('data-categories');
+            if (filter === 'all' || cats.indexOf(filter) !== -1) {
+              card.classList.remove('hidden');
+              count++;
+            } else {
+              card.classList.add('hidden');
+            }
+          });
+
+          document.getElementById('visible-count').textContent = count;
+        });
+      });
+    }
+
+    /* ---- Init ---- */
+    fetch('/data/chart-data.json')
+      .then(function (res) { return res.json(); })
+      .then(function (entries) {
+        renderGallery(entries);
+        initFilters();
+      })
+      .catch(function (err) {
+        console.error('Failed to load chart data:', err);
+        document.getElementById('chart-grid').innerHTML =
+          '<p style="color:var(--text-muted)">Failed to load chart data.</p>';
+      });
+  })();
+  </script>
+</body>
+</html>
