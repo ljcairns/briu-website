@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Free AI Readiness Audit</title>
+<meta name="description" content="Get a free assessment of where AI agents can save your business time and money. No pitch, no obligation.">
+<meta property="og:title" content="Briu | Free AI Readiness Audit">
+<meta property="og:description" content="Free assessment of where AI agents can save your business time and money.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/free-audit/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Free AI Readiness Audit">
+<meta name="twitter:description" content="Free assessment of where AI agents can save your business time and money.">
+<link rel="canonical" href="https://briu.ai/free-audit/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Free AI Readiness Audit",
+  "url": "https://briu.ai/free-audit/",
+  "description": "Get a free assessment of where AI agents can save your business time and money.",
+  "image": "https://briu.ai/og-image.png",
+  "inLanguage": "en",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Briu",
+    "url": "https://briu.ai/",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://briu.ai/favicon.png"
+    }
+  }
+}
+</script>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<style>
+.hero { max-width: 980px; }
+.hero::before { background: radial-gradient(ellipse at center, rgba(212,160,90,0.06) 0%, rgba(224,123,95,0.03) 30%, rgba(90,157,172,0.015) 50%, transparent 70%); }
+.hero h1 { font-size: clamp(2rem, 4vw, 3rem); }
+.hero .subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.7; max-width: 600px; margin: 1rem auto 0; }
+
+.audit-layout { max-width: 980px; margin: 0 auto; padding: 2rem 2rem 6rem; display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; position: relative; z-index: 1; }
+
+.audit-value h2 { font-family: var(--serif); font-size: clamp(1.3rem, 2.5vw, 1.7rem); color: var(--text); margin-bottom: 1.5rem; }
+.audit-value p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.8; margin-bottom: 1.25rem; }
+.value-list { list-style: none; padding: 0; margin: 1.5rem 0 0; }
+.value-list li { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.85rem; font-size: 0.93rem; color: var(--text-muted); line-height: 1.6; }
+.value-list li::before { content: '\2192'; color: var(--gold); flex-shrink: 0; margin-top: 0.1rem; }
+
+.audit-form-wrapper { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2.5rem; transition: border-color 0.3s; }
+.audit-form-wrapper:hover { border-color: rgba(212,160,90,0.12); }
+.audit-form-wrapper h3 { font-family: var(--serif); font-size: 1.3rem; color: var(--text); margin-bottom: 0.4rem; }
+.audit-form-wrapper .form-sub { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+.audit-form label { display: block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.4rem; }
+.audit-form input,
+.audit-form select,
+.audit-form textarea { width: 100%; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 0.75rem 1rem; margin-bottom: 1rem; outline: none; transition: border-color 0.2s; appearance: none; -webkit-appearance: none; }
+.audit-form input:focus,
+.audit-form select:focus,
+.audit-form textarea:focus { border-color: rgba(212,160,90,0.4); }
+.audit-form input::placeholder,
+.audit-form textarea::placeholder { color: rgba(196,185,168,0.5); }
+.audit-form select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23C4B9A8' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; cursor: pointer; }
+.audit-form select option { background: var(--bg); color: var(--text); }
+.audit-form textarea { resize: vertical; min-height: 90px; }
+.audit-form .submit-btn { width: 100%; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; padding: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: var(--sans); }
+.audit-form .submit-btn:hover { box-shadow: 0 8px 35px rgba(212,160,90,0.25); transform: translateY(-1px); }
+.audit-form .form-note { font-size: 0.78rem; color: var(--text-muted); text-align: center; margin-top: 0.75rem; }
+
+#audit-success { display: none; text-align: center; padding: 3rem 1rem; }
+#audit-success h3 { font-family: var(--serif); font-size: 1.5rem; color: var(--gold); margin-bottom: 0.75rem; }
+#audit-success p { color: var(--text-muted); font-size: 0.95rem; line-height: 1.7; }
+
+@media (max-width: 768px) {
+  .audit-layout { grid-template-columns: 1fr; gap: 2rem; padding: 2rem 1.25rem 4rem; }
+}
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero" style="text-align:center;">
+  <p class="hero-eyebrow" style="font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold);margin-bottom:0.75rem;">Free Assessment</p>
+  <h1>AI Readiness Audit</h1>
+  <p class="subtitle">Find out exactly where AI agents can save your team time and money. We'll review your workflows and send back a personalized report with specific recommendations.</p>
+</section>
+
+<div class="audit-layout">
+  <div class="audit-value">
+    <h2>What you get</h2>
+    <p>A short, honest assessment of your AI readiness. No pitch deck, no sales call unless you want one. Just clear answers about what's worth automating and what isn't.</p>
+    <ul class="value-list">
+      <li>Workflow-by-workflow breakdown of automation potential</li>
+      <li>Estimated time and cost savings for top opportunities</li>
+      <li>Honest assessment of what AI can't help with yet</li>
+      <li>Tool and integration recommendations specific to your stack</li>
+      <li>Priority ranking so you know where to start</li>
+    </ul>
+    <p style="margin-top:1.5rem;">Most audits are returned within 3 business days. If we think there's nothing worth automating, we'll tell you that too.</p>
+  </div>
+
+  <div class="audit-form-wrapper">
+    <h3>Request your audit</h3>
+    <p class="form-sub">Takes about 2 minutes. All fields required unless marked optional.</p>
+
+    <form class="audit-form" id="auditForm" action="https://formspree.io/f/xwpkjpkd" method="POST">
+      <input type="text" name="_gotcha" style="display:none">
+
+      <label for="business">Business name</label>
+      <input type="text" id="business" name="business" placeholder="Acme Corp" required>
+
+      <label for="contact">Contact name</label>
+      <input type="text" id="contact" name="contact" placeholder="Jane Smith" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" placeholder="jane@acme.com" required>
+
+      <label for="role">Your role</label>
+      <input type="text" id="role" name="role" placeholder="Head of Operations" required>
+
+      <label for="size">Company size</label>
+      <select id="size" name="company_size" required>
+        <option value="" disabled selected>Select</option>
+        <option value="1-5">1 – 5 people</option>
+        <option value="6-20">6 – 20 people</option>
+        <option value="21-50">21 – 50 people</option>
+        <option value="51-200">51 – 200 people</option>
+        <option value="200+">200+ people</option>
+      </select>
+
+      <label for="current-ai">Current AI usage <span style="font-weight:400;text-transform:none;letter-spacing:0;">(optional)</span></label>
+      <textarea id="current-ai" name="current_ai_usage" placeholder="We use ChatGPT for drafting emails, but nothing integrated into our actual workflows yet."></textarea>
+
+      <button type="submit" class="submit-btn cta-shimmer">Request Free Audit</button>
+      <p class="form-note">No payment info. No obligation. We'll follow up by email.</p>
+    </form>
+
+    <div id="audit-success">
+      <h3>Audit requested</h3>
+      <p>We've got your details. Expect a personalized report in your inbox within 3 business days. If we have questions, we'll reach out first.</p>
+    </div>
+  </div>
+</div>
+</main>
+
+<div id="site-modal"></div>
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260312a"></script>
+<script src="/shared.js?v=20260312a"></script>
+<script src="/ambient.js?v=20260312a"></script>
+<script src="/chat-bubble.js?v=20260312a"></script>
+<script>
+(function() {
+  var form = document.getElementById('auditForm');
+  if (!form) return;
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var btn = form.querySelector('.submit-btn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    fetch(form.action, {
+      method: 'POST',
+      body: new FormData(form),
+      headers: { 'Accept': 'application/json' }
+    }).then(function(r) {
+      if (r.ok) {
+        form.style.display = 'none';
+        document.querySelector('.form-sub').style.display = 'none';
+        document.getElementById('audit-success').style.display = 'block';
+      } else {
+        btn.textContent = 'Something went wrong — try again';
+        btn.disabled = false;
+      }
+    }).catch(function() {
+      btn.textContent = 'Something went wrong — try again';
+      btn.disabled = false;
+    });
+  });
+})();
+</script>
+</body>
+</html>
