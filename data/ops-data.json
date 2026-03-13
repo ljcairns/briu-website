@@ -36,6 +36,20 @@
     "chatgpt_pro": { "monthly": 200, "daily": 6.67, "label": "ChatGPT Pro" },
     "vps": { "monthly": 20, "daily": 0.67, "label": "VPS" }
   },
+  "tasks": [
+    { "id": "deploy-site-v3.4", "status": "success", "duration_s": 42, "cost": 0.18 },
+    { "id": "email-digest-am", "status": "success", "duration_s": 28, "cost": 0.12 },
+    { "id": "crm-sync-hubspot", "status": "success", "duration_s": 65, "cost": 0.31 },
+    { "id": "stats-json-update", "status": "success", "duration_s": 19, "cost": 0.08 },
+    { "id": "sales-outreach-draft", "status": "failed", "duration_s": 34, "cost": 0.15 },
+    { "id": "report-weekly-kpi", "status": "success", "duration_s": 51, "cost": 0.22 },
+    { "id": "chat-retrain-v2", "status": "in-progress", "duration_s": 87, "cost": 0.41 },
+    { "id": "discord-digest-pm", "status": "success", "duration_s": 23, "cost": 0.10 },
+    { "id": "invoice-gen-003", "status": "success", "duration_s": 36, "cost": 0.16 },
+    { "id": "backup-d1-nightly", "status": "in-progress", "duration_s": 112, "cost": 0.52 },
+    { "id": "email-digest-pm", "status": "success", "duration_s": 26, "cost": 0.11 },
+    { "id": "sitemap-rebuild", "status": "success", "duration_s": 15, "cost": 0.06 }
+  ],
   "revenue": {
     "total_booked": 0,
     "target_monthly_run_rate": 10000,

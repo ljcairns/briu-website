@@ -83,6 +83,44 @@
   font-size: 0.88rem; color: var(--text-muted); text-align: center;
 }
 
+/* Discord section */
+.discord-status-strip {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.discord-stat {
+  background: var(--surface); border: 1px solid rgba(255,255,255,0.04);
+  padding: 1rem; text-align: center; transition: all 0.35s ease;
+}
+.discord-stat:hover {
+  border-color: rgba(114,137,218,0.25); transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.discord-stat .val {
+  font-family: var(--serif); font-size: 1.4rem; color: var(--text); margin-bottom: 0.2rem;
+}
+.discord-stat .lbl {
+  font-size: 0.65rem; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--text-muted);
+}
+.discord-note {
+  margin-top: 1.25rem; padding: 1rem 1.25rem;
+  border-left: 3px solid #7289DA;
+  background: rgba(114,137,218,0.05);
+  font-size: 0.85rem; color: var(--text-muted); line-height: 1.65;
+}
+.ops-label.discord { color: #7289DA; }
+.discord-charts-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;
+}
+@media (max-width: 768px) {
+  .discord-status-strip { grid-template-columns: repeat(3, 1fr); }
+  .discord-charts-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .discord-status-strip { grid-template-columns: 1fr 1fr; }
+}
+
 /* Callout */
 .transparency-callout {
   margin-top: 2rem; padding: 1.25rem 1.5rem;
@@ -208,6 +246,44 @@
 
     <div class="transparency-callout reveal">
       Briu is committed to radical transparency. We share our real costs, real output, and real revenue. This page updates automatically.
+    </div>
+  </div>
+
+  <!-- Section 4: Discord Activity -->
+  <div class="ops-section">
+    <p class="ops-label discord">04 &mdash; Discord Activity</p>
+    <h2>One human. Hundreds of agent actions.</h2>
+    <p class="desc">Discord is the orchestration layer. Agents coordinate tasks, surface insights, and generate output across channels around the clock.</p>
+
+    <!-- Live Status Card -->
+    <div class="discord-status-strip" id="discord-status-strip">
+      <div class="discord-stat reveal"><div class="val" id="ds-in-flight">--</div><div class="lbl">Tasks In Flight</div></div>
+      <div class="discord-stat reveal"><div class="val" id="ds-completed">--</div><div class="lbl">Completed Today</div></div>
+      <div class="discord-stat reveal"><div class="val" id="ds-messages">--</div><div class="lbl">Messages Today</div></div>
+      <div class="discord-stat reveal"><div class="val" id="ds-ratio">--</div><div class="lbl">Human : Agent</div></div>
+      <div class="discord-stat reveal"><div class="val" id="ds-cost">--</div><div class="lbl">Cost / Task</div></div>
+    </div>
+
+    <!-- Charts row -->
+    <div class="discord-charts-grid">
+      <div class="chart-wrap" id="gantt-chart-wrap">
+        <canvas id="ganttChart"></canvas>
+      </div>
+      <div class="chart-wrap" id="channel-chart-wrap">
+        <canvas id="channelChart"></canvas>
+      </div>
+    </div>
+    <div class="sub-legend" id="channel-legend">
+      <span><span class="swatch" style="background:#7289DA"></span>#home</span>
+      <span><span class="swatch" style="background:#43B581"></span>#emails</span>
+      <span><span class="swatch" style="background:#FAA61A"></span>#sales</span>
+      <span><span class="swatch" style="background:#F04747"></span>#orchestration</span>
+      <span style="margin-left:1rem;opacity:0.7"><span class="swatch" style="background:rgba(255,255,255,0.35)"></span>Human</span>
+      <span style="opacity:0.7"><span class="swatch" style="background:rgba(255,255,255,0.8)"></span>Agent</span>
+    </div>
+
+    <div class="discord-note reveal">
+      One human sends a few messages. Agents generate hundreds of responses, tasks, commits, and deployments.
     </div>
   </div>
 </main>
@@ -453,20 +529,203 @@
     }
   }
 
+  // --- Discord: Gantt chart ---
+  function buildGanttChart(tasks) {
+    if (!tasks || !tasks.length) {
+      document.getElementById('gantt-chart-wrap').innerHTML = '<div class="skeleton-bar">No task data available</div>';
+      return;
+    }
+    var statusColors = { success: '#43B581', failed: '#F04747', 'in-progress': '#FAA61A' };
+    var labels = tasks.map(function(t) { return t.id; });
+    var durations = tasks.map(function(t) { return t.duration_s; });
+    var colors = tasks.map(function(t) { return statusColors[t.status] || '#7289DA'; });
+
+    new Chart(document.getElementById('ganttChart'), {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: 'Duration (s)',
+          data: durations,
+          backgroundColor: colors,
+          borderRadius: 2,
+          barThickness: 14
+        }]
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Orchestration Gantt', color: '#C4B9A8', font: { size: 12, weight: '600' }, align: 'start', padding: { bottom: 12 } },
+          tooltip: {
+            backgroundColor: '#0E1219',
+            borderColor: 'rgba(114,137,218,0.2)',
+            borderWidth: 1,
+            callbacks: {
+              afterLabel: function(ctx) {
+                var t = tasks[ctx.dataIndex];
+                return 'Status: ' + t.status + '\nCost: $' + t.cost.toFixed(2);
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            beginAtZero: true,
+            title: { display: true, text: 'Duration (seconds)', color: '#C4B9A8', font: { size: 10 } },
+            grid: { color: 'rgba(255,255,255,0.03)' },
+            ticks: { font: { size: 10 } }
+          },
+          y: {
+            grid: { display: false },
+            ticks: { font: { size: 9 }, color: '#C4B9A8' }
+          }
+        }
+      }
+    });
+  }
+
+  // --- Discord: Channel Activity stacked bar ---
+  function buildChannelChart(discordData) {
+    var days = discordData.daily;
+    var labels = days.map(function(d) {
+      var dt = new Date(d.date + 'T00:00:00');
+      return dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    });
+
+    var channels = [
+      { key: 'home', label: '#home', base: '#7289DA' },
+      { key: 'emails', label: '#emails', base: '#43B581' },
+      { key: 'sales', label: '#sales', base: '#FAA61A' },
+      { key: 'orchestration', label: '#orchestration', base: '#F04747' }
+    ];
+
+    var datasets = [];
+    channels.forEach(function(ch) {
+      // Human (lighter)
+      datasets.push({
+        label: ch.label + ' (human)',
+        data: days.map(function(d) { return d[ch.key] ? d[ch.key].human : 0; }),
+        backgroundColor: ch.base + '55',
+        stack: ch.key,
+        barPercentage: 0.7
+      });
+      // Agent (full)
+      datasets.push({
+        label: ch.label + ' (agent)',
+        data: days.map(function(d) { return d[ch.key] ? d[ch.key].agent : 0; }),
+        backgroundColor: ch.base,
+        stack: ch.key,
+        barPercentage: 0.7
+      });
+    });
+
+    new Chart(document.getElementById('channelChart'), {
+      type: 'bar',
+      data: { labels: labels, datasets: datasets },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          title: { display: true, text: 'Channel Activity', color: '#C4B9A8', font: { size: 12, weight: '600' }, align: 'start', padding: { bottom: 12 } },
+          tooltip: {
+            backgroundColor: '#0E1219',
+            borderColor: 'rgba(114,137,218,0.2)',
+            borderWidth: 1
+          }
+        },
+        scales: {
+          x: { grid: { display: false }, stacked: true, ticks: { font: { size: 10 } } },
+          y: {
+            stacked: true,
+            beginAtZero: true,
+            grid: { color: 'rgba(255,255,255,0.03)' },
+            title: { display: true, text: 'Messages', color: '#C4B9A8', font: { size: 10 } },
+            ticks: { font: { size: 10 } }
+          }
+        }
+      }
+    });
+  }
+
+  // --- Discord: Live Status Card ---
+  function populateDiscordStatus(opsData, discordData) {
+    var tasks = opsData.tasks || [];
+    var inFlight = tasks.filter(function(t) { return t.status === 'in-progress'; }).length;
+    var completed = tasks.filter(function(t) { return t.status === 'success'; }).length;
+
+    // Cost per task
+    var totalTaskCost = tasks.reduce(function(s, t) { return s + (t.cost || 0); }, 0);
+    var avgCost = tasks.length > 0 ? totalTaskCost / tasks.length : 0;
+
+    // Today's messages from discord data
+    var todayMessages = 0;
+    var todayHuman = 0;
+    var todayAgent = 0;
+    if (discordData && discordData.daily && discordData.daily.length > 0) {
+      var latest = discordData.daily[discordData.daily.length - 1];
+      ['home', 'emails', 'sales', 'orchestration'].forEach(function(ch) {
+        if (latest[ch]) {
+          todayHuman += latest[ch].human || 0;
+          todayAgent += latest[ch].agent || 0;
+        }
+      });
+      todayMessages = todayHuman + todayAgent;
+    }
+
+    var ratio = todayAgent > 0 ? '1 : ' + Math.round(todayAgent / Math.max(todayHuman, 1)) : '--';
+
+    document.getElementById('ds-in-flight').textContent = inFlight;
+    document.getElementById('ds-completed').textContent = completed;
+    document.getElementById('ds-messages').textContent = todayMessages.toLocaleString();
+    document.getElementById('ds-ratio').textContent = ratio;
+    document.getElementById('ds-cost').textContent = '$' + avgCost.toFixed(2);
+  }
+
+  function showDiscordSkeleton() {
+    ['gantt-chart-wrap', 'channel-chart-wrap'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.innerHTML = '<div class="skeleton-bar">Waiting for data</div>';
+    });
+  }
+
   // Load data
-  fetch('/data/ops-data.json')
+  var opsDataPromise = fetch('/data/ops-data.json')
+    .then(function(r) {
+      if (!r.ok) throw new Error('not found');
+      return r.json();
+    });
+
+  var discordDataPromise = fetch('/data/discord-activity.json')
     .then(function(r) {
       if (!r.ok) throw new Error('not found');
       return r.json();
     })
+    .catch(function() { return null; });
+
+  opsDataPromise
     .then(function(data) {
       populateSummary(data);
       buildCostChart(data);
       buildOutputChart(data);
       populateRevenue(data);
+      buildGanttChart(data.tasks);
+
+      discordDataPromise.then(function(discordData) {
+        if (discordData) {
+          buildChannelChart(discordData);
+        } else {
+          document.getElementById('channel-chart-wrap').innerHTML = '<div class="skeleton-bar">discord-activity.json not found</div>';
+        }
+        populateDiscordStatus(data, discordData);
+      });
     })
     .catch(function() {
       showSkeleton();
+      showDiscordSkeleton();
     });
 })();
 </script>
