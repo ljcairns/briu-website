@@ -15,7 +15,8 @@
     { href: '/why-now/', label: 'Why Now' },
     { href: '/industries/', label: 'Industries' },
     { href: '/build/', label: 'Build' },
-    { href: '/services/', label: 'Services' }
+    { href: '/services/', label: 'Services' },
+    { href: '/resources/', label: 'Resources' }
   ];
 
   function buildNav() {
