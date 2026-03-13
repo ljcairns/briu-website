@@ -788,12 +788,22 @@ function tfAnswer(q, val, e) {
   var booked = params.get('booked');
   if (booked) {
     var tierNames = { kickoff: 'Kickoff', 'kickoff+workshop': 'Kickoff + Workshop' };
-    var name = tierNames[booked] || booked;
-    var banner = document.createElement('div');
-    banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--forest,#4D8070);color:white;text-align:center;padding:1rem;font-size:0.9rem;font-weight:600;animation:fadeUp 0.5s ease;';
-    banner.innerHTML = '✓ ' + name + ' reserved. We\'ll send your invoice within 24 hours. <button onclick="this.parentElement.remove()" style="background:none;border:none;color:white;font-size:1.2rem;margin-left:1rem;cursor:pointer;">&times;</button>';
-    document.body.prepend(banner);
-    history.replaceState(null, '', location.pathname);
+    var name = tierNames[booked];
+    if (!name) { booked = null; }
+    if (name) {
+      var banner = document.createElement('div');
+      banner.style.cssText = 'position:fixed;top:0;left:0;right:0;z-index:10000;background:var(--forest,#4D8070);color:white;text-align:center;padding:1rem;font-size:0.9rem;font-weight:600;animation:fadeUp 0.5s ease;';
+      var label = document.createElement('span');
+      label.textContent = '\u2713 ' + name + ' reserved. We\u2019ll send your invoice within 24 hours. ';
+      var closeBtn = document.createElement('button');
+      closeBtn.style.cssText = 'background:none;border:none;color:white;font-size:1.2rem;margin-left:1rem;cursor:pointer;';
+      closeBtn.textContent = '\u00d7';
+      closeBtn.onclick = function() { banner.remove(); };
+      banner.appendChild(label);
+      banner.appendChild(closeBtn);
+      document.body.prepend(banner);
+      history.replaceState(null, '', location.pathname);
+    }
   }
 })();
 

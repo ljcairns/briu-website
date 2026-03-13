@@ -950,7 +950,12 @@
   function safeHref(url) {
     if (!url) return '#';
     if (url.charAt(0) === '/') return url;
-    if (url.indexOf('https://') === 0) return url;
+    if (url.indexOf('https://') === 0) {
+      try {
+        var parsed = new URL(url);
+        if (parsed.hostname === 'briu.ai' || parsed.hostname.endsWith('.briu.ai')) return url;
+      } catch(e) {}
+    }
     return '#';
   }
 
@@ -964,7 +969,7 @@
     });
     // Convert [text](url) markdown links
     safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {
-      return '<a href="' + safeHref(url) + '">' + linkText + '</a>';
+      return '<a href="' + safeHref(url) + '">' + escapeHtml(linkText) + '</a>';
     });
     safe = safe.replace(/\n\n/g, '</p><p>');
     return safe;

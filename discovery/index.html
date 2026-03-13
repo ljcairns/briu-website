@@ -933,21 +933,9 @@
       renderResults();
     }
 
-    const formData = new FormData(form);
-    fetch("https://formspree.io/f/TODO_SET_ENDPOINT", { // security-lint-disable: placeholder until configured
-      method: "POST",
-      headers: { "Accept": "application/json" },
-      body: formData
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to submit");
-        resultsSummary.textContent = "Discovery intake sent. Briu can use this shortlist as a starting point for a scoped follow-up.";
-        resultsSummary.classList.add("is-visible");
-      })
-      .catch(() => {
-        resultsSummary.textContent = "Formspree placeholder not configured yet. Replace the form endpoint before using this live.";
-        resultsSummary.classList.add("is-visible");
-      });
+    // Form endpoint not yet configured — show results locally but do not submit to a placeholder URL
+    resultsSummary.textContent = "Discovery results generated. To send this intake to Briu, use the contact form or email hi@briu.ai.";
+    resultsSummary.classList.add("is-visible");
   });
 
   renderTasks();

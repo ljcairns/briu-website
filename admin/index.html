@@ -216,14 +216,14 @@ tr:hover td { background: rgba(255,255,255,0.02); }
 
 <script>
 const API = 'https://briu-assess.briu.workers.dev';
-let TOKEN = localStorage.getItem('briu_admin_token') || '';
+let TOKEN = sessionStorage.getItem('briu_admin_token') || '';
 
 async function api(path) {
   const res = await fetch(API + path, {
     headers: { 'Authorization': 'Bearer ' + TOKEN }
   });
   if (res.status === 401) {
-    localStorage.removeItem('briu_admin_token');
+    sessionStorage.removeItem('briu_admin_token');
     location.reload();
     return null;
   }
@@ -248,7 +248,7 @@ function authenticate(e) {
       document.getElementById('auth-error').textContent = 'Invalid token';
       return;
     }
-    localStorage.setItem('briu_admin_token', TOKEN);
+    sessionStorage.setItem('briu_admin_token', TOKEN);
     showDashboard();
     loadAll();
   });
