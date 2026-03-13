@@ -1,0 +1,165 @@
+[
+  {
+    "id": "automation-by-role",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E259",
+      "url": "https://www.youtube.com/watch?v=allin-e259"
+    },
+    "speaker": "Jason Calacanis",
+    "quote": "My SDR is 95% automated. My producer? 40 of 50 hours a week handled by agents.",
+    "topic_tags": ["automation", "workforce", "agents"],
+    "chart_type": "bar",
+    "data_values": [
+      { "label": "SDR", "value": 95, "unit": "%" },
+      { "label": "Producer", "value": 80, "unit": "%" },
+      { "label": "Exec Assistant", "value": 30, "unit": "%" },
+      { "label": "Investment Team", "value": 20, "unit": "%" }
+    ]
+  },
+  {
+    "id": "cost-per-hour",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E259",
+      "url": "https://www.youtube.com/watch?v=allin-e259"
+    },
+    "speaker": "Chamath Palihapitiya",
+    "quote": "The cost arbitrage is insane. You're comparing $12 an hour to $150 an hour.",
+    "topic_tags": ["cost", "comparison", "hiring"],
+    "chart_type": "bar",
+    "data_values": [
+      { "label": "AI Agent", "value": 12.5, "unit": "$/hr" },
+      { "label": "Junior Hire", "value": 25, "unit": "$/hr" },
+      { "label": "Senior Hire", "value": 50, "unit": "$/hr" },
+      { "label": "Consultant", "value": 150, "unit": "$/hr" }
+    ]
+  },
+  {
+    "id": "deployment-velocity",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E259",
+      "url": "https://www.youtube.com/watch?v=allin-e259"
+    },
+    "speaker": "Jason Calacanis",
+    "quote": "72 hours. Five agents deployed from scratch.",
+    "topic_tags": ["deployment", "speed", "agents"],
+    "chart_type": "line",
+    "data_values": [
+      { "label": "Week 1", "value": 5, "unit": "%" },
+      { "label": "Week 4", "value": 20, "unit": "%" },
+      { "label": "Week 10", "value": 50, "unit": "%" },
+      { "label": "Week 18", "value": 85, "unit": "%" },
+      { "label": "Week 26", "value": 95, "unit": "%" }
+    ]
+  },
+  {
+    "id": "employee-leverage",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E261",
+      "url": "https://www.youtube.com/watch?v=allin-e261"
+    },
+    "speaker": "Jason Calacanis",
+    "quote": "The best employees are 10 to 20x more productive with AI. The floor is 2x.",
+    "topic_tags": ["leverage", "productivity", "workforce"],
+    "chart_type": "bar",
+    "data_values": [
+      { "label": "Non-adopter", "value": 1, "unit": "x" },
+      { "label": "Minimum bar", "value": 2, "unit": "x" },
+      { "label": "Strong adopter", "value": 10, "unit": "x" },
+      { "label": "Top performer", "value": 20, "unit": "x" }
+    ]
+  },
+  {
+    "id": "cost-compression",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E259",
+      "url": "https://www.youtube.com/watch?v=allin-e259"
+    },
+    "speaker": "Chamath Palihapitiya",
+    "quote": "Route 95% of calls to local models, 5% to the cloud. $100 a day becomes $10.",
+    "topic_tags": ["cost", "optimization", "open-source"],
+    "chart_type": "bar",
+    "data_values": [
+      { "label": "Day 1 (cloud)", "value": 100, "unit": "$/day" },
+      { "label": "Closed-source at scale", "value": 1000, "unit": "$/day" },
+      { "label": "Hybrid routing", "value": 100, "unit": "$/day" },
+      { "label": "Optimized local", "value": 10, "unit": "$/day" }
+    ]
+  },
+  {
+    "id": "infrastructure-capex",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E259",
+      "url": "https://www.youtube.com/watch?v=allin-e259"
+    },
+    "speaker": "David Friedberg",
+    "quote": "Four companies alone are spending $600 billion on AI infrastructure this year.",
+    "topic_tags": ["infrastructure", "investment", "macro"],
+    "chart_type": "doughnut",
+    "data_values": [
+      { "label": "Hyperscaler capex", "value": 600, "unit": "B$" },
+      { "label": "GDP tailwind", "value": 2, "unit": "%" },
+      { "label": "Construction jobs (1 mo)", "value": 33000, "unit": "jobs" },
+      { "label": "Copper price surge", "value": 26, "unit": "%" }
+    ]
+  },
+  {
+    "id": "job-creation-vs-destruction",
+    "source": {
+      "podcast": "Moonshots with Peter Diamandis",
+      "episode": "#237",
+      "url": "https://www.youtube.com/watch?v=diamandis-237"
+    },
+    "speaker": "Alex Finn",
+    "quote": "FAANG laid off 15,000. AI will create 100 million new entrepreneurs, 300 million new jobs.",
+    "topic_tags": ["jobs", "entrepreneurship", "macro"],
+    "chart_type": "bar",
+    "data_values": [
+      { "label": "FAANG layoffs", "value": 15000, "unit": "jobs" },
+      { "label": "New entrepreneurs", "value": 100000000, "unit": "people" },
+      { "label": "Jobs created", "value": 300000000, "unit": "jobs" }
+    ]
+  },
+  {
+    "id": "energy-bottleneck",
+    "source": {
+      "podcast": "All-In Podcast",
+      "episode": "E261",
+      "url": "https://www.youtube.com/watch?v=allin-e261"
+    },
+    "speaker": "David Friedberg",
+    "quote": "Chips are outrunning power. By 2028 we'll have the silicon but not the watts.",
+    "topic_tags": ["energy", "infrastructure", "bottleneck"],
+    "chart_type": "line",
+    "data_values": [
+      { "label": "2024", "value": 15, "unit": "GW (chips)", "secondary": 20 },
+      { "label": "2025", "value": 35, "unit": "GW (chips)", "secondary": 22 },
+      { "label": "2026", "value": 60, "unit": "GW (chips)", "secondary": 25 },
+      { "label": "2028", "value": 85, "unit": "GW (chips)", "secondary": 40 },
+      { "label": "2030", "value": 100, "unit": "GW (chips)", "secondary": 60 }
+    ]
+  },
+  {
+    "id": "sublinear-scaling",
+    "source": {
+      "podcast": "Lex Fridman Podcast",
+      "episode": "#333",
+      "url": "https://www.youtube.com/watch?v=lex-333"
+    },
+    "speaker": "Andrej Karpathy",
+    "quote": "10x the ambition only requires 2-3x the effort when you fundamentally redesign the approach.",
+    "topic_tags": ["scaling", "strategy", "moonshots"],
+    "chart_type": "line",
+    "data_values": [
+      { "label": "1x ambition", "value": 1, "unit": "x effort" },
+      { "label": "2x ambition", "value": 1.4, "unit": "x effort" },
+      { "label": "5x ambition", "value": 2, "unit": "x effort" },
+      { "label": "10x ambition", "value": 2.5, "unit": "x effort" }
+    ]
+  }
+]
