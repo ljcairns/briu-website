@@ -397,8 +397,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 .assess-lookup-panel.chat-expanded .lookup-loading { display: none !important; }
 .assess-lookup-panel.chat-expanded .conv-thread { max-height: 300px; overflow-y: auto; margin-bottom: 0.75rem; }
 .assess-cta-group-bottom { margin-top: 1rem; text-align: center; }
-.rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
-
 /* Conversation UI */
 .conv-progress-bar { position: relative; height: 3px; background: rgba(255,255,255,0.06); margin-bottom: 1.5rem; overflow: hidden; }
 .conv-progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--forest)); transition: width 0.8s ease; }
@@ -481,8 +479,6 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 /* Calculator styles moved to shared.css */
 
-.footer-links { display: flex; gap: 2rem; }
-
 @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes logoSlideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
 @keyframes navCtaSlideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
@@ -502,7 +498,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   section { padding: 4rem 1.25rem; }
   .stat-row { grid-template-columns: 1fr; }
   .use-case-grid { grid-template-columns: 1fr; }
-  .integration-grid { grid-template-columns: repeat(3, 1fr); }
+  .integration-grid { grid-template-columns: repeat(2, 1fr); }
   .kickoff-grid { grid-template-columns: 1fr; }
   .followup-row { grid-template-columns: 1fr; }
   .followup-detail-grid { grid-template-columns: 1fr; }
@@ -520,6 +516,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .wave-divider svg { height: 30px; }
   .assess-teaser-btn { padding: 0.85rem 1.5rem; font-size: 0.72rem; letter-spacing: 0.1em; }
   .hero-cta-primary { padding: 0.65rem 1.25rem; font-size: 0.72rem; }
+  .hero-cta-secondary { font-size: 0.72rem; }
 }
 </style>
 <script type="application/ld+json">
