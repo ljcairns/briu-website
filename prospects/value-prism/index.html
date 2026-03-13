@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Briu | Value Prism</title>
+<title>Briu | Value Prism Consulting</title>
 <meta name="description" content="How Briu helps Value Prism automate analyst research, deal tracking, compliance monitoring, and client reporting.">
 <meta property="og:title" content="Briu | Value Prism">
 <meta property="og:description" content="AI agent deployment for valuation consultancies. Research, pipeline, compliance, and reporting — automated.">
@@ -69,6 +69,25 @@
 .fit-stat { text-align: center; }
 .fit-stat-num { font-family: var(--serif); font-size: 2rem; color: var(--gold); display: block; margin-bottom: 0.25rem; }
 .fit-stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Chatbot demo */
+.demo-section { background: var(--surface); border-top: 1px solid rgba(255,255,255,0.04); border-bottom: 1px solid rgba(255,255,255,0.04); }
+.demo-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; margin-top: 2.5rem; }
+.demo-context p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 1rem; }
+.demo-context p:last-child { margin-bottom: 0; }
+.demo-window { background: var(--bg); border: 1px solid rgba(212,160,90,0.1); padding: 0; overflow: hidden; }
+.demo-window-bar { padding: 0.75rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); display: flex; align-items: center; gap: 0.5rem; }
+.demo-window-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(212,160,90,0.3); }
+.demo-window-title { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-left: 0.5rem; }
+.demo-chat { padding: 1.25rem; display: flex; flex-direction: column; gap: 1rem; }
+.demo-msg { max-width: 85%; padding: 0.75rem 1rem; font-size: 0.85rem; line-height: 1.6; }
+.demo-msg-user { align-self: flex-end; background: rgba(212,160,90,0.08); border: 1px solid rgba(212,160,90,0.15); color: var(--text); }
+.demo-msg-agent { align-self: flex-start; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); color: var(--text-muted); }
+.demo-msg-agent strong { color: var(--text); font-weight: 500; }
+.demo-try { margin-top: 1.5rem; font-size: 0.82rem; color: var(--text-muted); }
+.demo-try a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,160,90,0.3); padding-bottom: 1px; transition: border-color 0.2s; }
+.demo-try a:hover { border-color: var(--gold); }
+@media (max-width: 640px) { .demo-layout { grid-template-columns: 1fr; } }
 
 /* Reveal */
 .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
@@ -177,6 +196,35 @@
 </div>
 </section>
 
+<!-- Chatbot demo -->
+<section class="section demo-section reveal">
+<div class="section-container">
+  <span class="section-label">See it in action</span>
+  <h2>Your team's valuation assistant</h2>
+  <div class="demo-layout">
+    <div class="demo-context">
+      <p>Every agent we deploy can answer questions about your data, your deals, and your workflows — in natural language. No dashboards to learn, no queries to write.</p>
+      <p>Here's what a research agent looks like when an analyst at Value Prism needs to pull comps or check deal status mid-engagement.</p>
+      <p class="demo-try">Try the live chatbot in the bottom-right corner — it's built on the same stack we'd deploy for you.</p>
+    </div>
+    <div class="demo-window">
+      <div class="demo-window-bar">
+        <span class="demo-window-dot"></span>
+        <span class="demo-window-dot"></span>
+        <span class="demo-window-dot"></span>
+        <span class="demo-window-title">Value Prism Agent</span>
+      </div>
+      <div class="demo-chat">
+        <div class="demo-msg demo-msg-user">Pull comparable transactions for mid-market healthcare services, last 18 months.</div>
+        <div class="demo-msg demo-msg-agent"><strong>Found 14 transactions.</strong> Median EV/EBITDA: 11.2x. Filtered to $20-80M enterprise value, healthcare services SIC codes. Three outliers flagged for review — want me to export the comp set to your template?</div>
+        <div class="demo-msg demo-msg-user">What's the status on the Meridian engagement?</div>
+        <div class="demo-msg demo-msg-agent"><strong>Meridian Health Group — Phase 2.</strong> Draft valuation report due March 21. Management interview transcripts received Tuesday, not yet incorporated. Two open data requests outstanding with their controller.</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
 <!-- How it works -->
 <section class="section reveal">
 <div class="section-container">
@@ -232,6 +280,7 @@
 <script src="/dist/components.js?v=20260312a"></script>
 <script src="/dist/shared.js?v=20260312a"></script>
 <script src="/dist/ambient.js?v=20260312a"></script>
+<script src="/dist/chat-bubble.js?v=20260312a"></script>
 <script>
 /* Scroll reveal */
 (function() {
