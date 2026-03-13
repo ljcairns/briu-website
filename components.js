@@ -14,6 +14,7 @@
   var navLinks = [
     { href: '/why-now/', label: 'Why Now' },
     { href: '/industries/', label: 'Industries' },
+    { href: '/case-studies/', label: 'Case Studies' },
     { href: '/build/', label: 'Build' },
     { href: '/services/', label: 'Services' },
     { href: '/resources/', label: 'Resources' }
