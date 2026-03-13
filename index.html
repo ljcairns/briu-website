@@ -532,6 +532,36 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .proof-wall-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
   .proof-wall-num { font-size: 1.8rem; }
 }
+
+/* Quote wall ticker */
+.quote-wall { padding-top: 4rem; padding-bottom: 4rem; overflow: hidden; }
+.ticker-wrap { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1rem; }
+.ticker { overflow: hidden; position: relative; width: 100vw; margin-left: calc(-50vw + 50%); }
+.ticker::before, .ticker::after { content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2; pointer-events: none; }
+.ticker::before { left: 0; background: linear-gradient(90deg, var(--bg), transparent); }
+.ticker::after { right: 0; background: linear-gradient(90deg, transparent, var(--bg)); }
+.ticker-content { display: flex; gap: 1rem; width: max-content; }
+.ticker-row-1 .ticker-content { animation: tickerScroll 45s linear infinite; }
+.ticker-row-2 .ticker-content { animation: tickerScroll 50s linear infinite reverse; }
+@keyframes tickerScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.ticker-card { flex-shrink: 0; width: 380px; padding: 1.25rem 1.5rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); border-left: 2px solid rgba(212,160,90,0.35); transition: border-color 0.3s ease; }
+.ticker:hover .ticker-content { animation-play-state: paused; }
+.ticker-card:hover { border-left-color: var(--gold); }
+.ticker-card blockquote { font-size: 0.88rem; color: var(--text); line-height: 1.65; margin: 0 0 0.75rem; padding: 0; font-style: normal; }
+.ticker-card cite { display: flex; flex-direction: column; gap: 0.15rem; font-style: normal; }
+.ticker-card cite strong { font-size: 0.78rem; color: var(--gold); letter-spacing: 0.02em; }
+.cite-role { font-size: 0.72rem; color: var(--text-muted); }
+.cite-source { font-size: 0.68rem; color: rgba(196,185,168,0.5); letter-spacing: 0.02em; }
+@media (max-width: 640px) {
+  .ticker-card { width: 300px; padding: 1rem 1.25rem; }
+  .ticker-card blockquote { font-size: 0.84rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ticker-row-1 .ticker-content, .ticker-row-2 .ticker-content { animation: none; }
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1263,6 +1293,13 @@ document.querySelectorAll('.followup-expandable').forEach(function(el) {
   el.querySelector('.followup-top').addEventListener('click', function() {
     el.classList.toggle('expanded');
   });
+});
+</script>
+<script>
+/* Duplicate ticker content for seamless loop */
+document.querySelectorAll('.ticker-content').forEach(function(track) {
+  var clone = track.innerHTML;
+  track.innerHTML += clone;
 });
 </script>
 <script>
