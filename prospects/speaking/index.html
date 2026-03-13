@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Speaking — Lucas Cairns</title>
+<meta name="description" content="Book Lucas Cairns for your next event. AI agents in production, real costs, real results — keynotes, workshops, and live demos.">
+<meta property="og:title" content="Briu | Speaking — Lucas Cairns">
+<meta property="og:description" content="AI agents in production: real costs, real results. Keynotes, workshops, and live demos.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/prospects/speaking/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Speaking — Lucas Cairns">
+<meta name="twitter:description" content="AI agents in production: real costs, real results.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<style>
+.hero { padding-bottom: 2.5rem; }
+
+.speaker-intro { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; max-width: 640px; }
+
+/* Talk cards */
+.talk-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.talk-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.4s ease; }
+.talk-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.talk-card-num { font-family: var(--serif); font-size: 1.6rem; color: rgba(212,160,90,0.2); margin-bottom: 0.75rem; display: block; }
+.talk-card h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 0.75rem; font-weight: 400; }
+.talk-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0; }
+.talk-meta { display: flex; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
+.talk-tag { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); padding: 0.3rem 0.75rem; border: 1px solid rgba(212,160,90,0.2); }
+
+/* Proof strip */
+.proof-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.proof-stat { text-align: center; }
+.proof-stat-num { font-family: var(--serif); font-size: 2rem; color: var(--gold); display: block; margin-bottom: 0.25rem; }
+.proof-stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Proof details */
+.proof-detail { margin-top: 2.5rem; font-size: 0.95rem; color: var(--text-muted); line-height: 1.8; max-width: 640px; }
+.proof-detail a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,160,90,0.3); padding-bottom: 1px; transition: border-color 0.2s; }
+.proof-detail a:hover { border-color: var(--gold); }
+
+/* Pricing strip */
+.pricing-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.pricing-item { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem; text-align: center; }
+.pricing-item h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 400; }
+.pricing-amount { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); display: block; margin-bottom: 0.35rem; }
+.pricing-note { font-size: 0.82rem; color: var(--text-muted); }
+
+/* CTA section */
+.cta-section { text-align: center; padding: 5rem 2rem; }
+.cta-section h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); color: var(--text); margin-bottom: 1rem; line-height: 1.2; }
+.cta-section p { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.cta-btn { display: inline-block; padding: 0.9rem 2.5rem; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: var(--gold); border: none; text-decoration: none; font-family: var(--sans); transition: all 0.3s ease; cursor: pointer; }
+.cta-btn:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,160,90,0.3); }
+.cta-secondary { display: inline-block; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1); transition: color 0.2s, border-color 0.2s; }
+.cta-secondary:hover { color: var(--gold); border-color: var(--gold); }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+@media (max-width: 640px) {
+  .proof-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .pricing-row { grid-template-columns: 1fr; gap: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main>
+
+<!-- Hero -->
+<section class="hero">
+<div class="hero-container">
+  <span class="hero-eyebrow">Speaking</span>
+  <h1>AI agents in production.<br><em>Not in theory.</em></h1>
+  <p class="speaker-intro">Lucas Cairns is co-founder of Briu AI and Subsights. He builds AI agent systems for real businesses — and shares the actual numbers, failures, and architecture decisions that most talks skip over.</p>
+</div>
+</section>
+
+<!-- Talk topics -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">Talk topics</span>
+  <h2>Three talks, one thread: what actually works</h2>
+  <div class="talk-grid">
+
+    <div class="talk-card reveal reveal-delay-1">
+      <span class="talk-card-num">01</span>
+      <h3>Building a Company With AI Agents: Real Costs, Real Results</h3>
+      <p>How we built a consultancy from scratch using AI agents for everything from brand identity to client delivery. Exact dollar amounts, tool choices, and the workflows that paid off vs. the ones we scrapped. No hand-waving about "the future" — just what it cost and what it produced.</p>
+      <div class="talk-meta">
+        <span class="talk-tag">Keynote</span>
+        <span class="talk-tag">45-60 min</span>
+      </div>
+    </div>
+
+    <div class="talk-card reveal reveal-delay-2">
+      <span class="talk-card-num">02</span>
+      <h3>Live Demo: What an AI Agent Stack Actually Looks Like</h3>
+      <p>A live walkthrough of a production agent system — the orchestration layer, the tool integrations, the monitoring, and the failure modes. Audience sees real code, real API calls, and real cost breakdowns running against live data.</p>
+      <div class="talk-meta">
+        <span class="talk-tag">Workshop / Breakout</span>
+        <span class="talk-tag">90 min</span>
+      </div>
+    </div>
+
+    <div class="talk-card reveal reveal-delay-3">
+      <span class="talk-card-num">03</span>
+      <h3>The Business Case for AI Agents in Tourism Marketing</h3>
+      <p>Tailored for tourism and destination marketing organizations. How AI agents handle seasonal campaign cycles, multi-channel content, visitor data analysis, and partner coordination — with case studies from real deployments.</p>
+      <div class="talk-meta">
+        <span class="talk-tag">Industry keynote</span>
+        <span class="talk-tag">30-45 min</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- Proof -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">Proof</span>
+  <h2>Built in public, backed by data</h2>
+  <div class="proof-grid">
+    <div class="proof-stat">
+      <span class="proof-stat-num">$711</span>
+      <span class="proof-stat-label">Total build cost</span>
+    </div>
+    <div class="proof-stat">
+      <span class="proof-stat-num">12</span>
+      <span class="proof-stat-label">Agent skills</span>
+    </div>
+    <div class="proof-stat">
+      <span class="proof-stat-num">64</span>
+      <span class="proof-stat-label">Data charts</span>
+    </div>
+    <div class="proof-stat">
+      <span class="proof-stat-num">0%</span>
+      <span class="proof-stat-label">Security bypass rate</span>
+    </div>
+  </div>
+  <div class="proof-detail">
+    <p>Every claim comes with receipts. The full build log — costs, commits, architecture decisions, and lessons learned — is published at <a href="https://briu.ai/build/">briu.ai/build</a>. Four articles document the process from naming to daily agent operations. Client work spans workflow automation, CRM integration, and reporting systems for small teams.</p>
+  </div>
+</div>
+</section>
+
+<!-- Pricing -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">Investment</span>
+  <h2>Formats and pricing</h2>
+  <div class="pricing-row">
+    <div class="pricing-item">
+      <h3>Keynote</h3>
+      <span class="pricing-amount">$5,000</span>
+      <span class="pricing-note">30-60 minutes + Q&A</span>
+    </div>
+    <div class="pricing-item">
+      <h3>Half-Day Workshop</h3>
+      <span class="pricing-amount">$7,500</span>
+      <span class="pricing-note">3-4 hours, hands-on</span>
+    </div>
+    <div class="pricing-item">
+      <h3>Corporate / Custom</h3>
+      <span class="pricing-amount">Let's talk</span>
+      <span class="pricing-note">Multi-session, panels, advisory</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2>Book Lucas for your event</h2>
+  <p>Send over the event details — date, audience, format — and we'll confirm availability and fit.</p>
+  <a href="mailto:lucas@briu.ai?subject=Speaking%20inquiry%20%E2%80%94%20%5BEvent%20Name%5D" class="cta-btn">Get in touch</a>
+  <br>
+  <a href="https://briu.ai/build/" class="cta-secondary">See the full build log</a>
+</section>
+
+</main>
+
+<div id="site-modal"></div>
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260312a"></script>
+<script src="/shared.js?v=20260312a"></script>
+<script src="/ambient.js?v=20260312a"></script>
+<script>
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  var observer = new IntersectionObserver(function(entries) {
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].isIntersecting) {
+        entries[i].target.classList.add('visible');
+        observer.unobserve(entries[i].target);
+      }
+    }
+  }, { threshold: 0.15 });
+  for (var i = 0; i < els.length; i++) observer.observe(els[i]);
+})();
+</script>
+</body>
+</html>
