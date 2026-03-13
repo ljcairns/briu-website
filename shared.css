@@ -79,22 +79,6 @@ nav { width: 100%; padding: 1.25rem 2rem; display: flex; justify-content: space-
 .modal textarea { resize: vertical; min-height: 100px; }
 .modal-btn { width: 100%; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); border: none; padding: 1rem; cursor: pointer; transition: all 0.3s ease; font-family: var(--sans); }
 .modal-btn:hover { box-shadow: 0 8px 35px rgba(212,160,90,0.25); transform: translateY(-1px); }
-.modal .form-success { display: none; text-align: center; padding: 2rem 0; }
-.modal .form-success h3 { margin-bottom: 0.75rem; }
-.q-step { display: none; }
-.q-step.active { display: block; }
-.q-option { display: block; width: 100%; text-align: left; background: var(--bg); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.9rem; padding: 1rem 1.25rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s; }
-.q-option:hover { border-color: rgba(212,160,90,0.4); background: rgba(212,160,90,0.05); }
-.q-option .q-opt-label { font-weight: 600; margin-bottom: 0.25rem; }
-.q-option .q-opt-desc { font-size: 0.8rem; color: var(--text-muted); }
-.q-progress { display: flex; gap: 6px; margin-bottom: 1.5rem; }
-.q-dot { height: 3px; flex: 1; background: rgba(255,255,255,0.08); transition: background 0.3s; }
-.q-dot.filled { background: var(--gold); }
-.q-back { background: none; border: none; color: var(--text-muted); font-family: var(--sans); font-size: 0.8rem; cursor: pointer; padding: 0; margin-top: 0.75rem; }
-.q-back:hover { color: var(--text); }
-.q-option-selected { border-color: rgba(212,160,90,0.4) !important; background: rgba(212,160,90,0.08) !important; }
-.q-focus-opt { margin-bottom: 0.5rem; }
-
 /* Booking modal */
 .booking-tier-label { color: var(--gold); }
 .booking-payment-methods { margin-bottom: 1.25rem; }
@@ -111,28 +95,17 @@ nav { width: 100%; padding: 1.25rem 2rem; display: flex; justify-content: space-
 @keyframes heroBreathe { 0%, 100% { opacity: 0.06; } 50% { opacity: 0.1; } }
 .hero-breathe::before { animation: heroBreathe 30s ease-in-out infinite; }
 
-/* Pull Quote Decorations */
-.quote-decorated { position: relative; }
-.quote-decorated::before { content: '\201C'; position: absolute; top: -0.5rem; left: -0.25rem; font-family: var(--serif); font-size: 4rem; color: var(--gold); opacity: 0.12; line-height: 1; pointer-events: none; }
-
 /* Cursor Glow */
 .cursor-glow { position: fixed; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(212,160,90,0.045), transparent 70%); pointer-events: none; z-index: 0; top: 0; left: 0; will-change: transform; }
 
 /* Personalization Badge */
 .rec-badge { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.75rem; }
 
-/* Quote Card */
-.quote-card { border-left: 2px solid var(--gold); padding: 18px 22px; background: rgba(212,160,90,0.03); margin-bottom: 20px; transition: all 0.3s ease; position: relative; }
-.quote-card:hover { background: rgba(212,160,90,0.06); border-left-color: var(--gold-light); transform: translateX(4px); }
-.quote-card p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0; }
-.quote-card .quote-attr { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; margin-top: 10px; margin-bottom: 0; }
-.quote-card .quote-attr .quote-speaker { color: rgba(212,160,90,0.7); }
-
 /* Quote Block */
 .quote-block { border-left: 2px solid var(--gold); padding: 1rem 0 1rem 1.5rem; margin: 2rem 0; position: relative; }
 .quote-block p { font-family: var(--sans); font-size: 1.05rem; color: var(--text); font-weight: 400; line-height: 1.8; margin-bottom: 0.4rem; }
 .quote-source { font-family: var(--sans); font-size: 0.8rem; color: var(--text-muted); font-style: normal; }
-.quote-card::before, .quote-block::before { content: '\201C'; position: absolute; top: -0.5rem; left: 0.5rem; font-size: 4rem; font-family: var(--serif); color: rgba(212,160,90,0.12); line-height: 1; pointer-events: none; }
+.quote-block::before { content: '\201C'; position: absolute; top: -0.5rem; left: 0.5rem; font-size: 4rem; font-family: var(--serif); color: rgba(212,160,90,0.12); line-height: 1; pointer-events: none; }
 
 /* Service Tiers */
 .tier { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2.5rem; display: grid; grid-template-columns: 240px 1fr; gap: 2.5rem; transition: all 0.4s ease; }
@@ -336,7 +309,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   .tier { border: 1px solid #ccc; background: #fff !important; box-shadow: none !important; transform: none !important; }
   .tier:hover { transform: none !important; }
   .principle { border-top-color: #ccc; }
-  .quote-card, .quote-block { border-left-color: #8B6914; background: #f9f7f4 !important; }
+  .quote-block { border-left-color: #8B6914; background: #f9f7f4 !important; }
   .callout { background: #f0f5f3 !important; border-color: #3A7A68 !important; }
   .calc-output { background: #f5f5f5 !important; border-color: #ccc !important; }
 
@@ -344,7 +317,7 @@ section p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.8; marg
   footer { border-top-color: #ccc; }
 
   /* Page break control */
-  .tier, .principle, .quote-card { break-inside: avoid; }
+  .tier, .principle { break-inside: avoid; }
   h2, h3 { break-after: avoid; }
 
   /* CTA section: simplify */

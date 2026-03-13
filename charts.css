@@ -95,30 +95,6 @@
 .week-donut-item-num { font-family: var(--serif); font-size: 1.3rem; color: var(--text); line-height: 1; }
 .week-donut-item-label { font-size: 0.82rem; color: var(--text-muted); margin-top: 2px; }
 
-/* ---- Chart 9: Agent Team Org ---- */
-.agent-org { display: flex; flex-direction: column; align-items: center; gap: 0; }
-.agent-org-level { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-.agent-org-node { background: var(--surface-2); border: 1px solid rgba(255,255,255,0.06); padding: 14px 20px; text-align: center; min-width: 120px; transition: all 0.4s ease; opacity: 0; transform: translateY(12px); }
-.briu-chart.visible .agent-org-node { opacity: 1; transform: translateY(0); }
-.agent-org-node:hover { border-color: rgba(212,160,90,0.25); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
-.agent-org-node.human { border-color: rgba(90,157,172,0.3); border-top: 2px solid var(--river); }
-.agent-org-node.meta { border-color: rgba(212,160,90,0.3); border-top: 2px solid var(--gold); background: linear-gradient(135deg, var(--surface-2) 0%, rgba(212,160,90,0.04) 100%); }
-.agent-org-node.sub { border-top: 2px solid var(--forest); }
-.agent-org-icon { font-size: 1.4rem; margin-bottom: 6px; }
-.agent-org-title { font-family: var(--serif); font-size: 0.95rem; color: var(--text); margin-bottom: 2px; }
-.agent-org-desc { font-size: 0.72rem; color: var(--text-muted); line-height: 1.4; }
-.agent-org-connector { width: 2px; height: 28px; background: linear-gradient(180deg, rgba(212,160,90,0.3), rgba(77,128,112,0.2)); margin: 0 auto; }
-.agent-org-fan { display: flex; justify-content: center; align-items: flex-start; gap: 0; margin-bottom: -4px; }
-.agent-org-fan-line { width: 2px; height: 20px; background: rgba(77,128,112,0.2); }
-.agent-org-fan-bar { height: 2px; background: rgba(77,128,112,0.2); }
-.briu-chart.visible .agent-org-node:nth-child(1) { transition-delay: 0s; }
-.briu-chart.visible .agent-org-node:nth-child(2) { transition-delay: 0.15s; }
-.briu-chart.visible .agent-org-node:nth-child(3) { transition-delay: 0.3s; }
-.briu-chart.visible .agent-org-node:nth-child(4) { transition-delay: 0.45s; }
-.agent-org-tools { display: flex; gap: 6px; justify-content: center; margin-top: 6px; flex-wrap: wrap; }
-.agent-org-tool { font-size: 0.65rem; color: var(--text-muted); background: rgba(255,255,255,0.04); padding: 2px 6px; border-radius: 2px; }
-.agent-org-env { font-size: 0.62rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); margin-top: 6px; margin-bottom: 2px; opacity: 0.7; }
-
 /* ---- Chart 10: Cost Per Hour ---- */
 .cph-bars { display: flex; flex-direction: column; gap: 14px; }
 .cph-row { display: grid; grid-template-columns: 110px 1fr 70px; align-items: center; gap: 14px; }
@@ -179,7 +155,6 @@
 .cl-step-title { font-size: 0.88rem; font-weight: 600; color: var(--text); margin-bottom: 4px; }
 .cl-step-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
 .cl-step-example { font-size: 0.72rem; color: var(--gold); margin-top: 8px; font-style: italic; }
-.cl-arrow { position: absolute; color: var(--gold); opacity: 0.4; font-size: 1rem; }
 .cl-center { grid-column: 1 / -1; text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(212,160,90,0.06), rgba(77,128,112,0.04)); border: 1px solid rgba(212,160,90,0.15); }
 .cl-center-num { font-family: var(--serif); font-size: 2rem; background: linear-gradient(135deg, var(--gold), var(--forest)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; line-height: 1; margin-bottom: 4px; }
 .cl-center-label { font-size: 0.82rem; color: var(--text-muted); }
@@ -195,8 +170,6 @@
   .compress-bar-label { min-width: 70px; font-size: 0.75rem; }
   .week-donut { grid-template-columns: 1fr; }
   .week-donut-ring { width: 160px; height: 160px; }
-  .agent-org-level { flex-direction: column; align-items: center; }
-  .agent-org-node { min-width: 160px; }
   .cph-row { grid-template-columns: 90px 1fr 60px; gap: 10px; }
   .intel-events { grid-template-columns: repeat(2, 1fr); }
   .own-compare { grid-template-columns: 1fr; }
@@ -410,9 +383,6 @@
 .sb-card { background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.05); border-radius: 8px; padding: 0.6rem 0.75rem; transition: all 0.3s ease; position: relative; overflow: hidden; }
 .sb-card::before { content: ''; position: absolute; top: 0; left: 0; bottom: 0; width: 2px; background: rgba(255,255,255,0.06); border-radius: 2px; }
 .sb-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent); }
-.sb-gold::before { background: linear-gradient(180deg, var(--gold), var(--coral)); opacity: 0.5; }
-.sb-forest::before { background: linear-gradient(180deg, var(--forest), var(--river)); opacity: 0.5; }
-.sb-teal::before { background: linear-gradient(180deg, var(--river), var(--gold)); opacity: 0.5; }
 .sb-card:hover { background: rgba(255,255,255,0.04); border-color: rgba(255,255,255,0.08); transform: translateX(2px); }
 .sb-card:hover::after { background: linear-gradient(90deg, transparent, rgba(212,160,90,0.1), transparent); }
 
@@ -453,10 +423,6 @@
 .briu-chart.visible .sb-col-agents .sb-card:nth-child(3) { opacity: 1; transform: translateY(0); transition-delay: 0.3s; }
 .briu-chart.visible .sb-col-agents .sb-card:nth-child(4) { opacity: 1; transform: translateY(0); transition-delay: 0.4s; }
 .briu-chart.visible .sb-col-agents .sb-card:nth-child(5) { opacity: 1; transform: translateY(0); transition-delay: 0.5s; }
-
-/* Audit footer */
-.sb-audit { margin-top: 1rem; padding-top: 0.75rem; border-top: 1px solid rgba(255,255,255,0.04); font-size: 0.68rem; color: var(--text-muted); display: flex; align-items: center; justify-content: center; gap: 0.5rem; }
-.sb-audit-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-muted); opacity: 0.4; }
 
 /* Mobile: stack to single column */
 @media (max-width: 820px) {

@@ -21,7 +21,7 @@
   var companyFetching = false;
   var inputBound = false; // prevent duplicate event listeners
 
-  var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
+  var FREE_PROVIDERS = (window.Briu && window.Briu.FREE_PROVIDERS) || ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   // Restore saved state
   var CONV_VERSION = 8; // bump to clear stale conversations

@@ -24,7 +24,6 @@
   var scrollVelocity = 0;
   var lastScrollY = window.scrollY;
   var scrollSample = 0;
-  var mouseX = -1, mouseY = -1;
   var time = 0;
 
   // Palette at very low opacity
@@ -157,13 +156,6 @@
     }
     requestAnimationFrame(render);
   }
-
-  // Mouse influence: filaments near cursor glow slightly brighter
-  // (keeping it very subtle — just tracking position for potential future use)
-  document.addEventListener('mousemove', function(e) {
-    mouseX = e.clientX;
-    mouseY = e.clientY;
-  }, { passive: true });
 
   window.addEventListener('resize', function() {
     resize();

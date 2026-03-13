@@ -51,10 +51,6 @@
     }
   } catch(e) {}
 
-  // Always show the bubble — email gate handles first interaction
-  function shouldShow() {
-    return true;
-  }
 
   // ─── Inject CSS ───
   function injectStyles() {
@@ -302,7 +298,7 @@
   }
 
   // ─── Email gate ───
-  var FREE_PROVIDERS = ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
+  var FREE_PROVIDERS = (window.Briu && window.Briu.FREE_PROVIDERS) || ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
   function renderEmailGate(prefill) {
     var thread = document.getElementById('bcThread');
@@ -979,7 +975,6 @@
 
   // ─── Init ───
   function init() {
-    if (!shouldShow()) return;
     injectStyles();
     injectBubble();
   }
@@ -1020,7 +1015,7 @@
           if (p._v === CONV_VERSION) conversation = p.msgs || [];
         }
       } catch(ex) {}
-      if (shouldShow() && !document.getElementById('briuChatBubble')) {
+      if (!document.getElementById('briuChatBubble')) {
         injectStyles();
         injectBubble();
       }

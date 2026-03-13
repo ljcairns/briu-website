@@ -30,7 +30,10 @@
     if (user.stage === 'visitor') user.stage = 'assessed';
   }
 
-  window.Briu = { user: user };
+  window.Briu = {
+    user: user,
+    FREE_PROVIDERS: ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com']
+  };
 
   // Update stage helper — called by interactive.js and chat-bubble.js
   window.briuSetStage = function(stage) {
@@ -100,10 +103,6 @@ function openContactForm(prefill) {
     window.briuToggleChatPanel({ prefill: context });
   }
 }
-function closeContactForm() {}
-function selectAI() {}
-function selectTeam() {}
-window.selectTeam = selectTeam;
 
 /* Scroll Progress Bar — fixed below nav */
 (function() {
