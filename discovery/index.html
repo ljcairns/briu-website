@@ -483,6 +483,22 @@
     display: block;
   }
 
+  @media (max-width: 699px) {
+    input[type="range"] {
+      height: 36px;
+      -webkit-appearance: none;
+      appearance: none;
+      background: transparent;
+    }
+    input[type="range"]::-webkit-slider-thumb {
+      width: 28px;
+      height: 28px;
+    }
+    .slider-scale {
+      padding: 0 2px;
+    }
+  }
+
   @media (min-width: 700px) {
     .page-shell { padding: 1.75rem 1.5rem 6rem; }
     .hero-stats,
@@ -496,6 +512,77 @@
     }
     .button-row .button {
       min-width: 220px;
+    }
+  }
+
+  @media print {
+    body {
+      background: #fff !important;
+      color: #1a1a1a !important;
+    }
+    .page-shell::before {
+      display: none !important;
+    }
+    .page-shell {
+      width: 100% !important;
+      max-width: none !important;
+      padding: 0 !important;
+    }
+    nav, footer, .chat-bubble-container,
+    .button-row, .lead-card, .footnote,
+    .eyebrow::before, .eyebrow::after {
+      display: none !important;
+    }
+    .panel::before,
+    .result-card::before {
+      display: none !important;
+    }
+    .stat-card, .panel, .task-card,
+    .result-card, .lead-card {
+      background: none !important;
+      box-shadow: none !important;
+      border-color: #ccc !important;
+      break-inside: avoid;
+    }
+    .results-shell {
+      display: grid !important;
+    }
+    .summary-strip {
+      display: block !important;
+      background: none !important;
+      border-color: #999 !important;
+      color: #1a1a1a !important;
+    }
+    .result-rank, .insight-pill, .section-step {
+      color: #555 !important;
+    }
+    .result-score {
+      color: #2a7a6a !important;
+    }
+    .eyebrow, .stat-value, .slider-value {
+      color: #8a6a2e !important;
+    }
+    .hero h1 span {
+      color: #8a6a2e !important;
+    }
+    * {
+      animation: none !important;
+      transition: none !important;
+    }
+    input[type="range"] {
+      display: none;
+    }
+    .slider-value {
+      font-size: 1rem;
+    }
+    .slider-scale {
+      display: none;
+    }
+    h2, .section-head p, .hero p {
+      color: #333 !important;
+    }
+    .task-card p, .result-card p {
+      color: #555 !important;
     }
   }
 </style>
@@ -750,13 +837,22 @@
     taskList.innerHTML = TASKS.map(buildTaskMarkup).join("");
   }
 
+  function bindSliderListeners() {
+    form.querySelectorAll('input[type="range"]').forEach((input) => {
+      const output = form.querySelector(`[data-output-for="${input.id}"]`);
+      if (output) {
+        output.textContent = input.value;
+        input.addEventListener("input", () => {
+          output.textContent = input.value;
+        });
+      }
+    });
+  }
+
   function syncSliderOutputs() {
     form.querySelectorAll('input[type="range"]').forEach((input) => {
       const output = form.querySelector(`[data-output-for="${input.id}"]`);
       if (output) output.textContent = input.value;
-      input.addEventListener("input", () => {
-        if (output) output.textContent = input.value;
-      });
     });
   }
 
@@ -854,7 +950,7 @@
   });
 
   renderTasks();
-  syncSliderOutputs();
+  bindSliderListeners();
 </script>
 </body>
 </html>
