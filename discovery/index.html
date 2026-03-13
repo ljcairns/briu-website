@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Discovery Questionnaire</title>
+<meta name="description" content="Identify the highest-leverage workflows for AI deployment with Briu's discovery questionnaire.">
+<meta property="og:title" content="Briu | Discovery Questionnaire">
+<meta property="og:description" content="Score operational tasks, surface friction, and identify the highest-leverage agent opportunities.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/discovery/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Discovery Questionnaire">
+<meta name="twitter:description" content="Score operational tasks, surface friction, and identify the highest-leverage agent opportunities.">
+<link rel="canonical" href="https://briu.ai/discovery/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #07090E;
+    --surface: #0E1219;
+    --surface-2: #131923;
+    --line: rgba(255, 255, 255, 0.08);
+    --line-strong: rgba(212, 160, 90, 0.26);
+    --text: #F3EFE7;
+    --muted: #A8A598;
+    --gold: #D4A05A;
+    --gold-bright: #E6BC7A;
+    --forest: #6AAE9C;
+    --coral: #E07B5F;
+    --shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
+    --serif: "DM Serif Display", Georgia, serif;
+    --sans: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at top left, rgba(212, 160, 90, 0.12), transparent 28%),
+      radial-gradient(circle at 85% 12%, rgba(106, 174, 156, 0.08), transparent 26%),
+      linear-gradient(180deg, #05070B 0%, var(--bg) 18%, #080B11 100%);
+    color: var(--text);
+    font-family: var(--sans);
+    line-height: 1.6;
+  }
+
+  a { color: inherit; }
+
+  .page-shell {
+    width: min(100%, 760px);
+    margin: 0 auto;
+    padding: 1.25rem 1rem 5rem;
+    position: relative;
+  }
+
+  .page-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+    background-size: 36px 36px;
+    mask-image: radial-gradient(circle at center, black 32%, transparent 82%);
+    opacity: 0.3;
+  }
+
+  .hero {
+    padding: 2.2rem 0 1.6rem;
+    position: relative;
+  }
+
+  .eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.74rem;
+    font-weight: 700;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 1.1rem;
+  }
+
+  .eyebrow::before,
+  .eyebrow::after {
+    content: "";
+    width: 28px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(212, 160, 90, 0.9));
+  }
+
+  .eyebrow::after {
+    background: linear-gradient(90deg, rgba(212, 160, 90, 0.9), transparent);
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: var(--serif);
+    font-weight: 400;
+    margin: 0;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.4rem, 10vw, 4rem);
+    line-height: 1.06;
+    margin-bottom: 1rem;
+    max-width: 10ch;
+  }
+
+  .hero h1 span {
+    color: var(--gold);
+  }
+
+  .hero p {
+    margin: 0 0 1.6rem;
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 38rem;
+  }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.8rem;
+  }
+
+  .stat-card,
+  .panel,
+  .task-card,
+  .result-card,
+  .lead-card {
+    background: linear-gradient(180deg, rgba(19, 25, 35, 0.92), rgba(11, 15, 23, 0.94));
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+  }
+
+  .stat-card {
+    padding: 1rem 1.1rem;
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .stat-label {
+    color: var(--muted);
+    font-size: 0.74rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    font-weight: 700;
+  }
+
+  .stat-value {
+    color: var(--gold);
+    font-size: 1.45rem;
+    font-family: var(--serif);
+  }
+
+  .panel {
+    margin-top: 1.1rem;
+    padding: 1.3rem 1rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(212, 160, 90, 0.07), transparent 36%);
+  }
+
+  .section-head {
+    margin-bottom: 1.1rem;
+    position: relative;
+  }
+
+  .section-step {
+    display: inline-block;
+    color: var(--forest);
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .section-head h2 {
+    font-size: 1.55rem;
+    margin-bottom: 0.45rem;
+  }
+
+  .section-head p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  .task-list {
+    display: grid;
+    gap: 0.95rem;
+  }
+
+  .task-card {
+    padding: 1rem;
+    border-color: rgba(255, 255, 255, 0.06);
+  }
+
+  .task-card h3 {
+    font-size: 1.1rem;
+    margin-bottom: 0.25rem;
+  }
+
+  .task-card p {
+    margin: 0 0 0.95rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .slider-group {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .slider-row {
+    display: grid;
+    gap: 0.35rem;
+  }
+
+  .slider-meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.75rem;
+    align-items: baseline;
+  }
+
+  .slider-meta label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .slider-value {
+    font-family: var(--serif);
+    color: var(--gold);
+    font-size: 1.05rem;
+    min-width: 1.5rem;
+    text-align: right;
+  }
+
+  input[type="range"] {
+    width: 100%;
+    accent-color: var(--gold);
+    cursor: pointer;
+  }
+
+  .slider-scale {
+    display: flex;
+    justify-content: space-between;
+    color: rgba(168, 165, 152, 0.72);
+    font-size: 0.72rem;
+  }
+
+  .field-grid {
+    display: grid;
+    gap: 0.9rem;
+  }
+
+  .field-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: var(--text);
+    font-size: 0.86rem;
+    font-weight: 600;
+  }
+
+  textarea,
+  input[type="text"],
+  input[type="email"] {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text);
+    font: inherit;
+    outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  textarea {
+    min-height: 110px;
+    resize: vertical;
+  }
+
+  textarea:focus,
+  input[type="text"]:focus,
+  input[type="email"]:focus {
+    border-color: rgba(212, 160, 90, 0.45);
+    background: rgba(255, 255, 255, 0.045);
+  }
+
+  .checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.7rem;
+  }
+
+  .checkbox-item,
+  .radio-item {
+    display: flex;
+    gap: 0.75rem;
+    align-items: flex-start;
+    padding: 0.85rem 0.95rem;
+    background: rgba(255, 255, 255, 0.025);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .checkbox-item input,
+  .radio-item input {
+    margin-top: 0.15rem;
+    accent-color: var(--gold);
+  }
+
+  .choice-copy strong {
+    display: block;
+    font-size: 0.9rem;
+  }
+
+  .choice-copy span {
+    display: block;
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-top: 0.2rem;
+  }
+
+  .button-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.1rem;
+  }
+
+  .button {
+    border: none;
+    cursor: pointer;
+    font: inherit;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.95rem 1.15rem;
+    transition: transform 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+  }
+
+  .button:hover { transform: translateY(-1px); }
+  .button:active { transform: translateY(0); }
+
+  .button-primary {
+    color: #090B11;
+    background: linear-gradient(135deg, var(--gold), var(--gold-bright));
+  }
+
+  .button-secondary {
+    color: var(--text);
+    background: transparent;
+    border: 1px solid rgba(212, 160, 90, 0.25);
+  }
+
+  .results-shell {
+    display: none;
+    gap: 0.9rem;
+  }
+
+  .results-shell.is-visible {
+    display: grid;
+  }
+
+  .result-card {
+    padding: 1rem;
+    border: 1px solid var(--line-strong);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, rgba(212, 160, 90, 0.16), transparent 68%);
+    transform: translate(35%, -35%);
+  }
+
+  .result-rank {
+    color: var(--gold);
+    font-size: 0.74rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+
+  .result-card h3 {
+    font-size: 1.2rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .result-score {
+    color: var(--forest);
+    font-size: 0.86rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 0.6rem;
+  }
+
+  .result-card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  .insight-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-top: 0.7rem;
+  }
+
+  .insight-pill {
+    padding: 0.35rem 0.55rem;
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .lead-card {
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  .lead-card p {
+    color: var(--muted);
+    margin: 0.35rem 0 1rem;
+  }
+
+  .lead-grid {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .footnote {
+    margin-top: 1rem;
+    color: rgba(168, 165, 152, 0.78);
+    font-size: 0.78rem;
+  }
+
+  .summary-strip {
+    display: none;
+    margin-top: 1rem;
+    padding: 0.95rem 1rem;
+    border: 1px solid rgba(106, 174, 156, 0.22);
+    background: rgba(106, 174, 156, 0.08);
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+
+  .summary-strip.is-visible {
+    display: block;
+  }
+
+  @media (min-width: 700px) {
+    .page-shell { padding: 1.75rem 1.5rem 6rem; }
+    .hero-stats,
+    .lead-grid,
+    .checkbox-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .button-row {
+      flex-direction: row;
+      justify-content: flex-start;
+    }
+    .button-row .button {
+      min-width: 220px;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="page-shell">
+    <section class="hero" aria-labelledby="page-title">
+      <div class="eyebrow">Briu Discovery</div>
+      <h1 id="page-title">Find the first <span>three workflows</span> worth automating.</h1>
+      <p>
+        This questionnaire surfaces the tasks that burn the most time, repeat the most often,
+        and depend least on human judgment. You will get a ranked shortlist, a draft agent angle,
+        and a cleaner intake for a working session.
+      </p>
+      <div class="hero-stats" aria-label="Discovery outcomes">
+        <div class="stat-card">
+          <span class="stat-label">What this does</span>
+          <span class="stat-value">Prioritizes operational leverage</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">What you leave with</span>
+          <span class="stat-value">Top 3 agent candidates + context</span>
+        </div>
+      </div>
+    </section>
+
+    <form id="discovery-form" novalidate>
+      <section class="panel" aria-labelledby="section-workflows">
+        <div class="section-head">
+          <span class="section-step">Section 1</span>
+          <h2 id="section-workflows">Score your current workflows</h2>
+          <p>Rate each task from 1 to 5 for time intensity, repetition, and judgment required.</p>
+        </div>
+        <div class="task-list" id="task-list"></div>
+      </section>
+
+      <section class="panel" aria-labelledby="section-pain">
+        <div class="section-head">
+          <span class="section-step">Section 2</span>
+          <h2 id="section-pain">Where does work break down?</h2>
+          <p>Use these prompts to capture bottlenecks, rework, and operating friction in plain language.</p>
+        </div>
+        <div class="field-grid">
+          <div>
+            <label class="field-label" for="pain-1">What work gets delayed because it depends on one person?</label>
+            <textarea id="pain-1" name="pain_owner_dependency" placeholder="Example: quoting lives in one spreadsheet and only two people know how to update it."></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="pain-2">What gets copied from one system into another more than once?</label>
+            <textarea id="pain-2" name="pain_duplicate_entry" placeholder="Example: lead notes move from forms into CRM, then into onboarding docs, then into Slack."></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="pain-3">What customer or internal requests feel repetitive but still require attention?</label>
+            <textarea id="pain-3" name="pain_repetitive_requests" placeholder="Example: recurring questions about pricing, timelines, order status, or policy interpretation."></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="pain-4">Where do errors, missed follow-ups, or context loss show up most often?</label>
+            <textarea id="pain-4" name="pain_context_loss" placeholder="Example: handoffs between sales and delivery lose specs, constraints, or approved scope."></textarea>
+          </div>
+          <div>
+            <label class="field-label" for="pain-5">If one process worked materially better next month, which would change the business fastest?</label>
+            <textarea id="pain-5" name="pain_highest_leverage" placeholder="Example: better qualification and routing would cut wasted calls and shorten the sales cycle."></textarea>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="section-stack">
+        <div class="section-head">
+          <span class="section-step">Section 3</span>
+          <h2 id="section-stack">What is already in your stack?</h2>
+          <p>Select every system an agent would likely need to read from, write to, or coordinate with.</p>
+        </div>
+        <div class="checkbox-grid">
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="CRM"><span class="choice-copy"><strong>CRM</strong><span>Salesforce, HubSpot, Pipedrive, Close, Attio</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Support"><span class="choice-copy"><strong>Support desk</strong><span>Zendesk, Intercom, Help Scout, Gorgias</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Email"><span class="choice-copy"><strong>Email + calendar</strong><span>Google Workspace, Microsoft 365, scheduling tools</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Docs"><span class="choice-copy"><strong>Docs + wiki</strong><span>Google Docs, Notion, Confluence, Airtable</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Comms"><span class="choice-copy"><strong>Internal comms</strong><span>Slack, Teams, Discord, SMS notifications</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Data"><span class="choice-copy"><strong>Databases + BI</strong><span>Postgres, BigQuery, Snowflake, Metabase, Looker</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Finance"><span class="choice-copy"><strong>Finance + ERP</strong><span>QuickBooks, NetSuite, Stripe, procurement systems</span></span></label>
+          <label class="checkbox-item"><input type="checkbox" name="tools" value="Ops"><span class="choice-copy"><strong>Operations tooling</strong><span>Project management, fulfillment, scheduling, ticket routing</span></span></label>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="section-champion">
+        <div class="section-head">
+          <span class="section-step">Section 4</span>
+          <h2 id="section-champion">Who can carry this internally?</h2>
+          <p>A deployment usually needs a sponsor, an operator, or both. Pick the closest fit.</p>
+        </div>
+        <div class="field-grid">
+          <div role="radiogroup" aria-labelledby="champion-group-label">
+            <span id="champion-group-label" class="field-label">Internal champion profile</span>
+            <label class="radio-item"><input type="radio" name="champion_profile" value="Founder / executive sponsor" checked><span class="choice-copy"><strong>Founder / executive sponsor</strong><span>Can prioritize the work, unblock access, and define success.</span></span></label>
+            <label class="radio-item"><input type="radio" name="champion_profile" value="Operations lead"><span class="choice-copy"><strong>Operations lead</strong><span>Owns the workflow and can test changes against real throughput.</span></span></label>
+            <label class="radio-item"><input type="radio" name="champion_profile" value="Revenue / CX lead"><span class="choice-copy"><strong>Revenue / CX lead</strong><span>Feels the pain directly and can judge customer-facing quality quickly.</span></span></label>
+            <label class="radio-item"><input type="radio" name="champion_profile" value="Technical owner"><span class="choice-copy"><strong>Technical owner</strong><span>Can help with integrations, permissions, and production hardening.</span></span></label>
+            <label class="radio-item"><input type="radio" name="champion_profile" value="No clear owner yet"><span class="choice-copy"><strong>No clear owner yet</strong><span>Useful signal: the business case may be stronger than the operating design today.</span></span></label>
+          </div>
+          <div>
+            <label class="field-label" for="champion-name">Who is the likely champion?</label>
+            <input id="champion-name" type="text" name="champion_name" placeholder="Name, role, or team">
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="section-results">
+        <div class="section-head">
+          <span class="section-step">Results</span>
+          <h2 id="section-results">Your highest-leverage agent opportunities</h2>
+          <p>The score weights time and repetition most heavily, then discounts workflows that need more judgment.</p>
+        </div>
+        <div class="button-row">
+          <button type="button" class="button button-primary" id="calculate-button">Calculate top 3</button>
+          <button type="reset" class="button button-secondary">Reset questionnaire</button>
+        </div>
+        <div class="summary-strip" id="results-summary" aria-live="polite"></div>
+        <div class="results-shell" id="results-shell" aria-live="polite"></div>
+
+        <div class="lead-card">
+          <h3>Send this to Briu</h3>
+          <p>Leave your details and we can turn the shortlist into a scoped deployment conversation.</p>
+        <div class="lead-grid">
+          <div>
+            <label class="field-label" for="lead-name">Name</label>
+            <input id="lead-name" type="text" name="name" autocomplete="name" required>
+            </div>
+            <div>
+              <label class="field-label" for="lead-email">Email</label>
+              <input id="lead-email" type="email" name="email" autocomplete="email" required>
+            </div>
+            <div>
+              <label class="field-label" for="lead-company">Company</label>
+              <input id="lead-company" type="text" name="company" autocomplete="organization" required>
+            </div>
+            <div>
+            <label class="field-label" for="lead-industry">Industry</label>
+            <input id="lead-industry" type="text" name="industry" placeholder="Healthcare, logistics, legal, retail..." required>
+          </div>
+        </div>
+        <input type="hidden" name="top_opportunities" id="top-opportunities">
+        <input type="hidden" name="selected_tools" id="selected-tools">
+        <input type="hidden" name="champion_profile_result" id="champion-profile-result">
+        <div class="button-row">
+          <button type="submit" class="button button-primary">Send discovery intake</button>
+        </div>
+          <p class="footnote">Form action is a placeholder. Replace `https://formspree.io/f/your-form-id` with the live endpoint.</p>
+        </div>
+      </section>
+    </form>
+  </main>
+
+<script>
+  const TASKS = [
+    {
+      id: "lead-intake",
+      name: "Lead intake and qualification",
+      detail: "Inbound requests, routing, enrichment, and initial prioritization.",
+      agent: "An intake agent can normalize inbound forms, enrich accounts, score fit, and route qualified leads with clean context into your CRM and calendar workflow."
+    },
+    {
+      id: "proposal-generation",
+      name: "Proposal and quote generation",
+      detail: "Drafting scopes, pricing documents, and follow-up revisions.",
+      agent: "A proposal agent can assemble approved pricing logic, prior scope language, and customer-specific details into faster first drafts with fewer manual edits."
+    },
+    {
+      id: "customer-support",
+      name: "Customer support triage",
+      detail: "Sorting, classifying, and responding to repetitive support requests.",
+      agent: "A support triage agent can classify tickets, draft high-confidence responses, pull policy context, and escalate edge cases with cleaner summaries."
+    },
+    {
+      id: "onboarding",
+      name: "Client or employee onboarding",
+      detail: "Coordinating steps, collecting documents, and monitoring completion.",
+      agent: "An onboarding agent can orchestrate checklists, chase missing inputs, trigger reminders, and keep every stakeholder looking at one current state."
+    },
+    {
+      id: "reporting",
+      name: "Recurring reporting and KPI updates",
+      detail: "Weekly or monthly reporting packages built from multiple systems.",
+      agent: "A reporting agent can gather source data, compile narratives, flag anomalies, and deliver a consistent first-pass operating brief on schedule."
+    },
+    {
+      id: "scheduling",
+      name: "Scheduling and coordination",
+      detail: "Booking meetings, handoffs, or field operations around constraints.",
+      agent: "A scheduling agent can reconcile availability, prioritize urgency, collect missing context, and reduce the back-and-forth that slows execution."
+    },
+    {
+      id: "invoice-collections",
+      name: "Invoice follow-up and collections",
+      detail: "Tracking receivables, reminders, and escalation on overdue accounts.",
+      agent: "A collections agent can monitor receivables, trigger tailored reminders, summarize account status, and escalate exceptions before cash flow slips."
+    },
+    {
+      id: "vendor-procurement",
+      name: "Vendor and procurement coordination",
+      detail: "Requests, approvals, pricing comparisons, and status chasing.",
+      agent: "A procurement agent can collect requirements, compare quotes, route approvals, and maintain a current log of outstanding decisions and blockers."
+    },
+    {
+      id: "compliance-review",
+      name: "Compliance and document review prep",
+      detail: "Pre-screening forms, evidence, and recurring policy checks.",
+      agent: "A review agent can gather supporting evidence, check required fields, surface missing items, and package a cleaner queue for final human approval."
+    },
+    {
+      id: "knowledge-answers",
+      name: "Internal knowledge and policy questions",
+      detail: "Repeated operational questions answered from docs, SOPs, and prior cases.",
+      agent: "A knowledge agent can answer recurring internal questions, cite current sources, and reduce the constant interruption load on your most context-rich operators."
+    }
+  ];
+
+  const form = document.getElementById("discovery-form");
+  const taskList = document.getElementById("task-list");
+  const resultsShell = document.getElementById("results-shell");
+  const resultsSummary = document.getElementById("results-summary");
+  const calculateButton = document.getElementById("calculate-button");
+
+  function buildTaskMarkup(task) {
+    return `
+      <article class="task-card">
+        <h3>${task.name}</h3>
+        <p>${task.detail}</p>
+        <div class="slider-group">
+          ${buildSlider(task.id, "time", "Time intensity")}
+          ${buildSlider(task.id, "repetition", "Repetition")}
+          ${buildSlider(task.id, "judgment", "Judgment required")}
+        </div>
+      </article>
+    `;
+  }
+
+  function buildSlider(taskId, metric, label) {
+    const inputId = `${taskId}-${metric}`;
+    return `
+      <div class="slider-row">
+        <div class="slider-meta">
+          <label for="${inputId}">${label}</label>
+          <span class="slider-value" data-output-for="${inputId}">3</span>
+        </div>
+        <input id="${inputId}" type="range" min="1" max="5" step="1" value="3" data-metric="${metric}" data-task="${taskId}">
+        <div class="slider-scale"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+      </div>
+    `;
+  }
+
+  function renderTasks() {
+    taskList.innerHTML = TASKS.map(buildTaskMarkup).join("");
+  }
+
+  function syncSliderOutputs() {
+    form.querySelectorAll('input[type="range"]').forEach((input) => {
+      const output = form.querySelector(`[data-output-for="${input.id}"]`);
+      if (output) output.textContent = input.value;
+      input.addEventListener("input", () => {
+        if (output) output.textContent = input.value;
+      });
+    });
+  }
+
+  function calculateScores() {
+    return TASKS.map((task) => {
+      const time = Number(form.querySelector(`[data-task="${task.id}"][data-metric="time"]`).value);
+      const repetition = Number(form.querySelector(`[data-task="${task.id}"][data-metric="repetition"]`).value);
+      const judgment = Number(form.querySelector(`[data-task="${task.id}"][data-metric="judgment"]`).value);
+      const score = (time * 2) + (repetition * 2) + (6 - judgment);
+      return { ...task, time, repetition, judgment, score };
+    }).sort((a, b) => b.score - a.score);
+  }
+
+  function getSelectedTools() {
+    return Array.from(form.querySelectorAll('input[name="tools"]:checked')).map((input) => input.value);
+  }
+
+  function renderResults() {
+    const ranked = calculateScores();
+    const topThree = ranked.slice(0, 3);
+    const selectedTools = getSelectedTools();
+    const champion = form.querySelector('input[name="champion_profile"]:checked')?.value || "Not selected";
+
+    document.getElementById("top-opportunities").value = topThree
+      .map((task, index) => `${index + 1}. ${task.name} (score ${task.score})`)
+      .join(" | ");
+    document.getElementById("selected-tools").value = selectedTools.join(", ");
+    document.getElementById("champion-profile-result").value = champion;
+
+    resultsShell.innerHTML = topThree.map((task, index) => `
+      <article class="result-card">
+        <div class="result-rank">Priority ${index + 1}</div>
+        <h3>${task.name}</h3>
+        <div class="result-score">Score ${task.score}</div>
+        <p>${task.agent}</p>
+        <div class="insight-bar">
+          <span class="insight-pill">Time ${task.time}/5</span>
+          <span class="insight-pill">Repetition ${task.repetition}/5</span>
+          <span class="insight-pill">Judgment ${task.judgment}/5</span>
+        </div>
+      </article>
+    `).join("");
+
+    const toolSummary = selectedTools.length ? selectedTools.join(", ") : "No tools selected yet";
+    resultsSummary.textContent = `Top workflows identified. Champion: ${champion}. Stack signals: ${toolSummary}.`;
+
+    resultsShell.classList.add("is-visible");
+    resultsSummary.classList.add("is-visible");
+    resultsShell.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  calculateButton.addEventListener("click", renderResults);
+
+  form.addEventListener("reset", () => {
+    window.setTimeout(() => {
+      syncSliderOutputs();
+      resultsShell.classList.remove("is-visible");
+      resultsSummary.classList.remove("is-visible");
+      resultsShell.innerHTML = "";
+      resultsSummary.textContent = "";
+    }, 0);
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const requiredFields = ["lead-name", "lead-email", "lead-company", "lead-industry"];
+    const missing = requiredFields.some((id) => !document.getElementById(id).value.trim());
+    if (missing) {
+      resultsSummary.textContent = "Add your contact details before sending the intake.";
+      resultsSummary.classList.add("is-visible");
+      resultsSummary.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+
+    if (!resultsShell.classList.contains("is-visible")) {
+      renderResults();
+    }
+
+    const formData = new FormData(form);
+    fetch("https://formspree.io/f/your-form-id", {
+      method: "POST",
+      headers: { "Accept": "application/json" },
+      body: formData
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to submit");
+        resultsSummary.textContent = "Discovery intake sent. Briu can use this shortlist as a starting point for a scoped follow-up.";
+        resultsSummary.classList.add("is-visible");
+      })
+      .catch(() => {
+        resultsSummary.textContent = "Formspree placeholder not configured yet. Replace the form endpoint before using this live.";
+        resultsSummary.classList.add("is-visible");
+      });
+  });
+
+  renderTasks();
+  syncSliderOutputs();
+</script>
+</body>
+</html>
