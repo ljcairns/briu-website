@@ -13,6 +13,7 @@
   // --- NAV ---
   var navLinks = [
     { href: '/why-now/', label: 'Why Now' },
+    { href: '/industries/', label: 'Industries' },
     { href: '/build/', label: 'Build' },
     { href: '/services/', label: 'Services' }
   ];

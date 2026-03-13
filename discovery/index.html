@@ -952,6 +952,14 @@
 
   renderTasks();
   bindSliderListeners();
+
+  // Pre-fill industry from query param (e.g. ?industry=Healthcare)
+  var urlParams = new URLSearchParams(window.location.search);
+  var industryParam = urlParams.get('industry');
+  if (industryParam) {
+    var industryField = document.getElementById('lead-industry');
+    if (industryField) industryField.value = industryParam;
+  }
 </script>
 </body>
 </html>

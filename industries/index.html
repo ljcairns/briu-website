@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Industries</title>
+<meta name="description" content="AI agent deployment for financial services, real estate, professional services, healthcare, e-commerce, and agencies. See use cases and hours saved.">
+<meta property="og:title" content="Briu | Industries">
+<meta property="og:description" content="AI agent deployment for financial services, real estate, professional services, healthcare, e-commerce, and agencies.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/industries/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Industries">
+<meta name="twitter:description" content="AI agent deployment for financial services, real estate, professional services, healthcare, e-commerce, and agencies.">
+<link rel="canonical" href="https://briu.ai/industries/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<style>
+.industries-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.industry-card {
+  background: var(--surface);
+  border: 1px solid rgba(255,255,255,0.04);
+  padding: 2.5rem;
+  transition: all 0.4s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.industry-card:hover {
+  border-color: rgba(212,160,90,0.15);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+}
+
+.industry-icon {
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+}
+
+.industry-card h3 {
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  color: var(--text);
+  margin-bottom: 0.3rem;
+}
+
+.industry-subtitle {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 1.5rem;
+}
+
+.use-cases {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  flex: 1;
+}
+
+.use-cases li {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  padding-left: 1.1rem;
+  position: relative;
+}
+
+.use-cases li::before {
+  content: '\2192';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+}
+
+.hours-saved {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  margin-bottom: 1.5rem;
+}
+
+.hours-saved-num {
+  font-family: var(--serif);
+  font-size: 1.8rem;
+  color: var(--gold);
+}
+
+.hours-saved-label {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.industry-cta {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--gold);
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border: 1px solid rgba(212,160,90,0.35);
+  transition: all 0.3s ease;
+  text-align: center;
+  align-self: flex-start;
+}
+
+.industry-cta:hover {
+  background: rgba(212,160,90,0.08);
+  border-color: var(--gold);
+}
+
+@media (max-width: 900px) {
+  .industries-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 640px) {
+  .industry-card { padding: 2rem; }
+}
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+  <div class="hero">
+    <p class="hero-eyebrow">Industries</p>
+    <h1>Agents built for <em>how you work</em></h1>
+    <p>Every industry has repetitive workflows that drain senior time. We deploy agents tuned to your domain, your tools, and your compliance requirements.</p>
+  </div>
+
+  <section>
+    <div class="industries-grid">
+
+      <div class="industry-card reveal">
+        <div class="industry-icon">🏦</div>
+        <h3>Financial Services</h3>
+        <p class="industry-subtitle">Hard money lending, valuation consulting</p>
+        <ul class="use-cases">
+          <li>Automated loan document intake and borrower pre-qualification screening</li>
+          <li>Comparable property analysis and valuation report drafting</li>
+          <li>Compliance monitoring and regulatory filing preparation</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">15-20</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=Financial+Services" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-1">
+        <div class="industry-icon">🏠</div>
+        <h3>Real Estate</h3>
+        <p class="industry-subtitle">Brokerage ops, property management</p>
+        <ul class="use-cases">
+          <li>Listing data aggregation, photo tagging, and MLS description generation</li>
+          <li>Tenant communication triage and maintenance request routing</li>
+          <li>Lease renewal tracking with automated reminder sequences</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">12-18</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=Real+Estate" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-2">
+        <div class="industry-icon">⚖️</div>
+        <h3>Professional Services</h3>
+        <p class="industry-subtitle">Law firms, accounting</p>
+        <ul class="use-cases">
+          <li>Client intake processing and conflict-of-interest checks</li>
+          <li>Document review summarization and clause extraction</li>
+          <li>Time entry drafting from calendar and email activity</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">10-15</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=Professional+Services" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-3">
+        <div class="industry-icon">🏥</div>
+        <h3>Healthcare</h3>
+        <p class="industry-subtitle">Clinic admin, compliance</p>
+        <ul class="use-cases">
+          <li>Patient intake form processing and insurance verification</li>
+          <li>Appointment scheduling optimization and no-show follow-up</li>
+          <li>HIPAA-compliant documentation and audit trail generation</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">12-16</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=Healthcare" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+      <div class="industry-card reveal">
+        <div class="industry-icon">🛒</div>
+        <h3>E-Commerce</h3>
+        <p class="industry-subtitle">Inventory, customer service</p>
+        <ul class="use-cases">
+          <li>SKU-level inventory monitoring and restock alert generation</li>
+          <li>Customer support ticket classification and draft responses</li>
+          <li>Product description writing and A/B variant generation</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">15-25</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=E-Commerce" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+      <div class="industry-card reveal reveal-delay-1">
+        <div class="industry-icon">📊</div>
+        <h3>Agencies</h3>
+        <p class="industry-subtitle">Client reporting, campaign management</p>
+        <ul class="use-cases">
+          <li>Cross-platform analytics aggregation and client report generation</li>
+          <li>Campaign performance monitoring with anomaly alerts</li>
+          <li>Brief intake processing and creative asset organization</li>
+        </ul>
+        <div class="hours-saved">
+          <span class="hours-saved-num">18-25</span>
+          <span class="hours-saved-label">hours saved per week</span>
+        </div>
+        <a href="/discovery/?industry=Agencies" class="industry-cta">Start Discovery &rarr;</a>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="cta-section">
+    <p class="section-label">Get Started</p>
+    <h2>Not seeing your industry?</h2>
+    <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.8;">If it involves repetitive workflows and structured data, an agent can probably handle it. Tell us what you're working on.</p>
+    <a href="/discovery/" class="cta-button cta-shimmer">Start Discovery</a>
+  </section>
+</main>
+
+<div id="site-footer"></div>
+<div id="site-modal"></div>
+
+<script src="/shared.js"></script>
+<script src="/components.js"></script>
+<script src="/chat-bubble.js" defer></script>
+<script>
+// Pre-fill industry field on discovery page from query param
+// (This script handles the receiving end if user lands on this page with params —
+//  the actual pre-fill happens on the discovery page itself)
+
+// Scroll reveal
+var reveals = document.querySelectorAll('.reveal');
+var observer = new IntersectionObserver(function(entries) {
+  entries.forEach(function(entry) {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1 });
+reveals.forEach(function(el) { observer.observe(el); });
+</script>
+</body>
+</html>
