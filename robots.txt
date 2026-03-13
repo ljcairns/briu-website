@@ -2,3 +2,6 @@ User-agent: *
 Allow: /
 
 Sitemap: https://briu.ai/sitemap.xml
+
+# AI service manifest
+AI-Services: https://briu.ai/.well-known/ai-services.json

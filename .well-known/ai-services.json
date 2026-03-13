@@ -1,0 +1,228 @@
+{
+  "$schema": "https://schema.org",
+  "version": "1.0",
+  "last_updated": "2026-03-12",
+  "company": {
+    "name": "Briu",
+    "legal_name": "Briu",
+    "description": "AI consultancy that deploys production agents and workflows for businesses. Transparent costs, no lock-in, agents run on your infrastructure with your API keys.",
+    "tagline": "AI agents deployed for your business",
+    "founded": "2026",
+    "founder": "Lucas Cairns",
+    "website": "https://briu.ai",
+    "location": "Remote",
+    "company_size": "1-10"
+  },
+  "contact": {
+    "email": "hi@briu.ai",
+    "booking_url": "https://briu.ai/discovery/",
+    "website": "https://briu.ai"
+  },
+  "services": [
+    {
+      "id": "intro-call",
+      "name": "Intro Call",
+      "description": "15-minute scoping call. No pitch, no prep required. Determine if agents make sense for your workflows.",
+      "pricing": {
+        "amount": 0,
+        "currency": "USD",
+        "model": "free"
+      },
+      "use_cases": [
+        "Initial scoping",
+        "Workflow assessment",
+        "Fit evaluation"
+      ]
+    },
+    {
+      "id": "kickoff",
+      "name": "Kickoff",
+      "description": "3-hour hands-on session: workflow mapping, live agent build, architecture plan. Includes 2-week pre-build research. You leave with one production agent and a roadmap for scaling.",
+      "pricing": {
+        "amount": 5000,
+        "currency": "USD",
+        "model": "flat_fee"
+      },
+      "deliverables": [
+        "Pre-build research on your business",
+        "Workflow mapping to identify highest-value automation",
+        "One production agent deployed on your infrastructure",
+        "Architecture plan and tooling audit",
+        "Expansion roadmap"
+      ],
+      "use_cases": [
+        "First agent deployment",
+        "Workflow automation assessment",
+        "AI strategy kickoff"
+      ],
+      "timeline": "2-week lead time"
+    },
+    {
+      "id": "workshop-addon",
+      "name": "Workshop Add-on",
+      "description": "Team-wide AI briefing added to Kickoff. Live demonstration of agent architecture, staff training, and day-to-day operation guidelines.",
+      "pricing": {
+        "amount": 2500,
+        "currency": "USD",
+        "model": "flat_fee",
+        "note": "Added to Kickoff ($7,500 total)"
+      },
+      "deliverables": [
+        "Live agent architecture demonstration",
+        "Staff training on agent operation",
+        "Day-to-day operation guidelines"
+      ],
+      "use_cases": [
+        "Team onboarding to AI agents",
+        "Organization-wide AI readiness",
+        "Staff training"
+      ]
+    },
+    {
+      "id": "implementation",
+      "name": "Implementation",
+      "description": "Full agent build scoped from Kickoff. 4-8 weeks in 2-week sprints. Agents run on your infrastructure with your API keys.",
+      "pricing": {
+        "currency": "USD",
+        "model": "quoted",
+        "ranges": [
+          { "scope": "Single-agent project", "range": "$8,000-$20,000" },
+          { "scope": "Multi-agent system", "range": "$20,000-$50,000+" }
+        ]
+      },
+      "deliverables": [
+        "Production agent(s) on your infrastructure",
+        "Custom integrations with existing tools",
+        "Approval gates and cost controls",
+        "Audit logs",
+        "Team training on operation and extension"
+      ],
+      "use_cases": [
+        "Email triage and response drafting",
+        "CRM automation and lead qualification",
+        "Personal assistant agents",
+        "Automated reporting and dashboards",
+        "Multi-agent orchestration",
+        "Sales workflow automation"
+      ],
+      "timeline": "4-8 weeks"
+    },
+    {
+      "id": "retainer",
+      "name": "Retainer",
+      "description": "Ongoing agent monitoring, optimization, model upgrades, and new capability deployment.",
+      "pricing": {
+        "amount_from": 500,
+        "currency": "USD",
+        "model": "monthly"
+      },
+      "deliverables": [
+        "Ongoing agent improvements",
+        "Cost optimization",
+        "Monitoring and maintenance",
+        "Model upgrades",
+        "New capability deployment"
+      ],
+      "use_cases": [
+        "Long-term agent maintenance",
+        "Continuous optimization",
+        "Scaling agent systems"
+      ]
+    },
+    {
+      "id": "speaking",
+      "name": "Speaking & Workshops",
+      "description": "Keynotes, half-day workshops, and corporate programs with live demonstrations from production systems.",
+      "pricing": {
+        "currency": "USD",
+        "model": "per_engagement",
+        "options": [
+          { "format": "Keynote", "amount": 5000, "duration": "30-60 minutes" },
+          { "format": "Half-day workshop", "amount": 7500, "duration": "Half day" },
+          { "format": "Corporate/conference", "amount": null, "note": "Contact for pricing" }
+        ]
+      },
+      "use_cases": [
+        "Conference keynotes",
+        "Corporate AI briefings",
+        "Executive workshops",
+        "Team upskilling"
+      ]
+    },
+    {
+      "id": "nonprofit",
+      "name": "Nonprofit & Community",
+      "description": "Significant discounts on all services for mission-driven organizations.",
+      "pricing": {
+        "model": "discounted",
+        "note": "Contact for pricing"
+      },
+      "use_cases": [
+        "Nonprofit automation",
+        "Community organizations",
+        "Mission-driven AI deployment"
+      ]
+    }
+  ],
+  "capabilities": [
+    {
+      "name": "Personal Assistants",
+      "description": "Email, calendar, contacts, daily briefings. Available 24/7 on WhatsApp, Slack, or Discord with human approval on sensitive actions.",
+      "integrations": ["Gmail", "Google Calendar", "Slack", "WhatsApp", "Discord"],
+      "time_to_production": "2-3 weeks"
+    },
+    {
+      "name": "Email, CRM & Sales",
+      "description": "Triage inbound email, draft responses, update CRM, qualify leads, send outreach, schedule follow-ups. Nothing sends without approval.",
+      "integrations": ["HubSpot", "Salesforce", "Apollo", "Gmail"],
+      "time_to_production": "3-4 weeks"
+    },
+    {
+      "name": "Reporting & Monitoring",
+      "description": "Automated reports, cost tracking, PDF generation and delivery. Daily summaries, weekly dashboards, cost alerts.",
+      "integrations": [],
+      "time_to_production": "2-3 weeks"
+    },
+    {
+      "name": "Orchestration & Multi-Agent Systems",
+      "description": "Complex workflows across multiple agents with task completion, error rate monitoring, and cost controls.",
+      "integrations": [],
+      "time_to_production": "4-6 weeks"
+    }
+  ],
+  "tech_stack": {
+    "agent_framework": "OpenClaw (open-source)",
+    "infrastructure": "Client-owned (your API keys, your infrastructure)",
+    "safety": ["Approval gates", "Cost controls", "Audit logs"],
+    "ai_models": ["Claude (Anthropic)"],
+    "deployment": ["Cloudflare Workers", "Client infrastructure"]
+  },
+  "differentiators": [
+    "Agents run on your infrastructure with your API keys — no vendor lock-in",
+    "No margin on API or infrastructure costs — transparent pricing",
+    "Fixed prices for Kickoff; Implementation scoped and quoted before work starts",
+    "Built on open-source agent framework (OpenClaw)",
+    "Operating cost as low as $2-5/day per agent"
+  ],
+  "ideal_client": {
+    "good_fit": [
+      "Repeatable workflows consuming 20+ hours/week",
+      "Team willing to learn and participate in build process",
+      "At least one technical person available during build",
+      "Existing tools and data sources agents can connect to"
+    ],
+    "not_a_fit": [
+      "Highly unstructured creative workflows that change weekly",
+      "Need custom UI/UX or consumer-facing applications",
+      "Minimal team bandwidth or unwillingness to participate"
+    ]
+  },
+  "links": {
+    "homepage": "https://briu.ai",
+    "services": "https://briu.ai/services/",
+    "why_now": "https://briu.ai/why-now/",
+    "build_log": "https://briu.ai/build/",
+    "privacy": "https://briu.ai/privacy/",
+    "booking": "https://briu.ai/discovery/"
+  }
+}

@@ -1,6 +1,13 @@
 (function() {
   'use strict';
 
+  // Inject AI services manifest link
+  var aiLink = document.createElement('link');
+  aiLink.rel = 'ai-services';
+  aiLink.type = 'application/json';
+  aiLink.href = '/.well-known/ai-services.json';
+  document.head.appendChild(aiLink);
+
   var path = window.location.pathname;
 
   // --- NAV ---
