@@ -161,5 +161,206 @@
       { "label": "5x ambition", "value": 2, "unit": "x effort" },
       { "label": "10x ambition", "value": 2.5, "unit": "x effort" }
     ]
+  },
+
+  {
+    "id": "ai-code-shipped-25pct",
+    "stat": "25% of code shipped at top companies is AI-generated",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "adoption",
+    "value": 25,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "ai-code-adoption-over-50pct",
+    "stat": "Over 50% of code at some companies written with AI assistance",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "adoption",
+    "value": 50,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "developer-ai-tool-adoption",
+    "stat": "80% of developers now use AI coding tools",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "adoption",
+    "value": 80,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "model-training-cost-range",
+    "stat": "Training a frontier model costs $5-10M; serving millions of users costs billions",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "cost",
+    "value": 10,
+    "unit": "$M",
+    "year": 2026
+  },
+  {
+    "id": "training-data-scale-trillions",
+    "stat": "Training datasets now 5-50 trillion tokens",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "market-growth",
+    "value": 50,
+    "unit": "T tokens",
+    "year": 2026
+  },
+  {
+    "id": "ai-tools-100x-specialist",
+    "stat": "Specialized AI tools make domain experts 100x more effective",
+    "source": "Lex Fridman Podcast",
+    "source_url": "https://www.youtube.com/watch?v=EV7WhVT270Q",
+    "category": "roi",
+    "value": 100,
+    "unit": "x",
+    "year": 2026
+  },
+  {
+    "id": "nvidia-market-valuation",
+    "stat": "NVIDIA valued at $4.3 trillion, operating like a startup",
+    "source": "Latent Space",
+    "source_url": "https://www.youtube.com/watch?v=64D6tcsPH1U",
+    "category": "market-growth",
+    "value": 4.3,
+    "unit": "$T",
+    "year": 2026
+  },
+  {
+    "id": "saas-market-cap-crash",
+    "stat": "SaaS companies lost $300B+ in market cap as AI disrupts software",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "market-growth",
+    "value": 300,
+    "unit": "$B",
+    "year": 2026
+  },
+  {
+    "id": "reuters-down-20pct",
+    "stat": "Reuters revenue down 20%, LexisNexis down 15% from AI displacement",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "adoption",
+    "value": 20,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "figma-down-80pct",
+    "stat": "Figma down 80% from highs as AI generates design directly",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "market-growth",
+    "value": 80,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "knowledge-work-to-agents-30pct",
+    "stat": "20-30% of knowledge work already moved to AI agents",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "adoption",
+    "value": 30,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "saas-spend-10pct-to-1pct",
+    "stat": "Enterprise SaaS spend projected to drop from 10% of budget to 1%",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "cost",
+    "value": 1,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "ai-companies-growing-60pct",
+    "stat": "Leading AI companies growing over 60% at scale",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "market-growth",
+    "value": 60,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "work-shifting-10-20pct-monthly",
+    "stat": "Every month 10-20% more work shifts from SaaS to AI agents",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "adoption",
+    "value": 20,
+    "unit": "%/mo",
+    "year": 2026
+  },
+  {
+    "id": "anthropic-raising-20b",
+    "stat": "Anthropic raising $20 billion in new funding",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=gzwRflcLPAA",
+    "category": "funding",
+    "value": 20,
+    "unit": "$B",
+    "year": 2026
+  },
+  {
+    "id": "pentagon-anthropic-200m-contract",
+    "stat": "Pentagon cancelled Anthropic $200M contract over use-case restrictions",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=gzwRflcLPAA",
+    "category": "market-growth",
+    "value": 200,
+    "unit": "$M",
+    "year": 2026
+  },
+  {
+    "id": "ai-revenue-ramp-3x-quarterly",
+    "stat": "AI company revenues ramping 3x every three months",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=gzwRflcLPAA",
+    "category": "market-growth",
+    "value": 3,
+    "unit": "x",
+    "year": 2026
+  },
+  {
+    "id": "white-collar-50pct-disruption",
+    "stat": "AI projected to disrupt 50% of white-collar work",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=gzwRflcLPAA",
+    "category": "adoption",
+    "value": 50,
+    "unit": "%",
+    "year": 2026
+  },
+  {
+    "id": "compute-demand-70-100x",
+    "stat": "Compute demand growing 70-100x over current levels",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "market-growth",
+    "value": 100,
+    "unit": "x",
+    "year": 2026
+  },
+  {
+    "id": "spacex-xai-biggest-ipo",
+    "stat": "SpaceX-xAI merger could be the biggest IPO in history",
+    "source": "All-In Podcast",
+    "source_url": "https://www.youtube.com/watch?v=wTiHheA40nI",
+    "category": "funding",
+    "value": null,
+    "unit": null,
+    "year": 2026
   }
 ]
