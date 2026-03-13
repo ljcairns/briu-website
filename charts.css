@@ -393,10 +393,6 @@
 .sb-status::before { content: ''; width: 5px; height: 5px; border-radius: 50%; }
 .sb-status-active { color: #4dbd74; background: rgba(77,189,116,0.08); }
 .sb-status-active::before { background: #4dbd74; animation: statusPulse 2s ease-in-out infinite; }
-.sb-status-audit { color: var(--text-muted); background: rgba(255,255,255,0.04); }
-.sb-status-audit::before { background: var(--text-muted); }
-.sb-status-open { color: var(--gold); background: rgba(212,160,90,0.08); }
-.sb-status-open::before { background: var(--gold); animation: statusPulse 3s ease-in-out infinite; }
 @keyframes statusPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
 
 /* Card details */
@@ -404,11 +400,6 @@
 .sb-card-tools { font-size: 0.65rem; color: var(--text-muted); }
 .sb-card-metric { font-size: 0.65rem; color: var(--gold); opacity: 0.8; margin-top: 0.2rem; font-variant-numeric: tabular-nums; }
 .sb-card-env { font-size: 0.52rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--forest); opacity: 0.45; margin-top: 0.2rem; }
-
-/* Future card */
-.sb-future { border-style: dashed; border-color: rgba(212,160,90,0.15); background: rgba(212,160,90,0.02); }
-.sb-future .sb-card-name { color: var(--gold); }
-.sb-future .sb-card-tools { font-style: italic; }
 
 /* Reveal animation */
 .sb-card { opacity: 0; transform: translateY(6px); transition: opacity 0.4s ease, transform 0.4s ease, background 0.3s ease, border-color 0.3s ease; }

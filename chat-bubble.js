@@ -7,6 +7,8 @@
 
   var API_BASE = 'https://briu-assess.briu.workers.dev';
   var SESSION_KEY = 'briu_sid';
+  var CONV_KEY = 'briu_conv';
+  var CONV_VERSION = 8;
   var conversation = [];
   var sessionId = null;
   var conversationLoaded = false;
@@ -842,8 +844,6 @@
     .then(function() {
       if (window.briuSetStage) window.briuSetStage('contacted');
       var el = container.parentElement || container;
-      if (el.classList && el.classList.contains('bc-handoff')) el = container;
-      else el = container.parentElement || container;
       el.innerHTML = '<div class="bc-handoff-sent">Sent to the Briu team. Lucas will follow up within 24 hours.</div>';
     })
     .catch(function() {
@@ -853,8 +853,6 @@
   }
 
   // ─── Expand/collapse panel ───
-  var hasExpanded = false;
-
   window.briuToggleExpand = function() {
     var panel = document.getElementById('briuChatPanel');
     if (!panel) return;
@@ -866,7 +864,6 @@
     var panel = document.getElementById('briuChatPanel');
     if (!panel || panel.classList.contains('bc-expanded')) return;
     panel.classList.add('bc-expanded');
-    hasExpanded = true;
     // Show the toggle button so user can collapse
     var toggle = document.getElementById('bcExpandToggle');
     if (toggle) toggle.style.display = '';

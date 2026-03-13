@@ -293,8 +293,8 @@ window.submitBooking = function(e) {
     name: form.querySelector('#book-name').value,
     email: form.querySelector('#book-email').value,
     company: form.querySelector('#book-company').value,
-    payment_method: form.querySelector('input[name="payment_method"]:checked')?.value || 'invoice',
-    message: form.querySelector('#book-message')?.value || '',
+    payment_method: (form.querySelector('input[name="payment_method"]:checked') || {}).value || 'invoice',
+    message: (form.querySelector('#book-message') || {}).value || '',
   };
 
   fetch('https://briu-assess.briu.workers.dev/api/book', {

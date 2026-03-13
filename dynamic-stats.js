@@ -15,22 +15,15 @@
   var FALLBACKS = {
     commits:           740,   // totalCommits (website + agent repos)
     websiteCommits:    440,   // website repo only (ljcairns/briu-website)
-    agentCommits:      300,   // private agent config repo
     linesOfCode:       '17.7K', // total (website + agent)
     avgDailyCost:      '$29\u201339', // full stack: API + Claude Max + ChatGPT Pro + VPS
     peakDailyCost:     '$138.84',
-    lightDailyCost:    '$2\u20135', // light single-agent, personal-assistant usage
     totalApiSpend:     '$550.00',
     agentSkills:       12,    // live skills in production
-    chartCount:        64,
-    articleCount:      10,
     // Security — scoped to sanitizer red-team taxonomy
     secDefenseLayers:            10,
     secOpenBypasses:             0,
-    secBypassesClosed:           290,
-    secBypassesTotal:            290,
-    secAttackCategories:         15,
-    secAttackCategoriesPassing:  15
+    secBypassesClosed:           290
   };
 
   function pacificNow() {
@@ -54,28 +47,17 @@
     }
   }
 
-  function computeMonthlyTotal(dailyCost) {
-    // Full stack: Claude Max $200 + ChatGPT Pro $200 + VPS $10 + API daily
-    return '$' + Math.round(410 + dailyCost * 30).toLocaleString();
-  }
-
   function initFallbacks() {
     updateEls('commits',              FALLBACKS.commits.toLocaleString());
     updateEls('website-commits',      FALLBACKS.websiteCommits.toLocaleString());
-    updateEls('agent-commits',        FALLBACKS.agentCommits.toLocaleString());
     updateEls('lines-of-code',        FALLBACKS.linesOfCode);
     updateEls('avg-daily-cost',       FALLBACKS.avgDailyCost);
-    updateEls('monthly-total-cost',   computeMonthlyTotal(parseFloat(FALLBACKS.avgDailyCost.replace('$',''))));
     updateEls('peak-daily-cost',      FALLBACKS.peakDailyCost);
     updateEls('total-api-spend',      FALLBACKS.totalApiSpend);
     updateEls('agent-skills',         FALLBACKS.agentSkills);
-    updateEls('chart-count',          FALLBACKS.chartCount);
-    updateEls('article-count',        FALLBACKS.articleCount);
     updateEls('sec-defense-layers',   FALLBACKS.secDefenseLayers);
     updateEls('sec-open-bypasses',    FALLBACKS.secOpenBypasses);
     updateEls('sec-bypasses-closed',  FALLBACKS.secBypassesClosed);
-    updateEls('sec-bypasses-total',   FALLBACKS.secBypassesTotal);
-    updateEls('sec-attack-categories',FALLBACKS.secAttackCategories);
   }
 
   function updateComputed() {
@@ -136,21 +118,13 @@
   function applyStats(data) {
     updateEls('commits', data.totalCommits.toLocaleString());
     if (data.websiteCommits) updateEls('website-commits', data.websiteCommits.toLocaleString());
-    if (data.privateAgentCommits) updateEls('agent-commits', data.privateAgentCommits.toLocaleString());
     if (data.linesOfCode) {
       var loc = data.linesOfCode >= 1000 ? (data.linesOfCode / 1000).toFixed(1) + 'K' : data.linesOfCode.toLocaleString();
       updateEls('lines-of-code', loc);
     }
-    if (data.websiteLinesOfCode) updateEls('website-loc', data.websiteLinesOfCode.toLocaleString());
-    if (data.agentLinesOfCode) updateEls('agent-loc', data.agentLinesOfCode.toLocaleString());
     if (data.agentSkills) updateEls('agent-skills', data.agentSkills);
-    if (data.chartCount) updateEls('chart-count', data.chartCount.toLocaleString());
-    if (data.articleCount) updateEls('article-count', data.articleCount.toLocaleString());
-    if (data.wordsOfContent) updateEls('words-of-content', data.wordsOfContent.toLocaleString());
-    if (data.pageCount) updateEls('page-count', data.pageCount.toLocaleString());
     if (data.avgDailyCost) {
       updateEls('avg-daily-cost', '$' + data.avgDailyCost.toFixed(2));
-      updateEls('monthly-total-cost', computeMonthlyTotal(data.avgDailyCost));
     }
     if (data.peakDailyCost) updateEls('peak-daily-cost', '$' + data.peakDailyCost.toFixed(2));
     if (data.totalApiSpend) updateEls('total-api-spend', '$' + data.totalApiSpend.toFixed(2));
@@ -202,9 +176,6 @@
         if (sec.defenseLayers !== undefined)           updateEls('sec-defense-layers',   sec.defenseLayers);
         if (sec.openKnownSanitizerBypasses !== undefined) updateEls('sec-open-bypasses', sec.openKnownSanitizerBypasses);
         if (sec.knownSanitizerBypassesClosed !== undefined) updateEls('sec-bypasses-closed', sec.knownSanitizerBypassesClosed);
-        if (sec.knownSanitizerBypassesTotal !== undefined)  updateEls('sec-bypasses-total',  sec.knownSanitizerBypassesTotal);
-        if (sec.attackCategoriesTested !== undefined)  updateEls('sec-attack-categories', sec.attackCategoriesTested);
-        if (sec.attackCategoriesPassing !== undefined) updateEls('sec-attack-categories-passing', sec.attackCategoriesPassing);
         // Update any tooltip data-attributes that reference security stats
         var hudSec = document.getElementById('hud-open-bypasses');
         if (hudSec && sec.lastRedTeamDate) {

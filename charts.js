@@ -768,11 +768,11 @@ Briu.charts.briuOrg = function(containerId) {
   if (!container) return;
 
   function card(c) {
-    var cls = 'sb-card' + (c.accent ? ' sb-' + c.accent : '') + (c.future ? ' sb-future' : '');
+    var cls = 'sb-card' + (c.accent ? ' sb-' + c.accent : '');
     var h = '<div class="' + cls + '">';
     h += '<div class="sb-card-head">';
     h += '<span class="sb-card-name">' + c.name + '</span>';
-    if (c.status) h += '<span class="sb-status sb-status-' + c.status + '">' + (c.status === 'active' ? 'Active' : c.status === 'audit' ? 'Verifying' : 'Open') + '</span>';
+    if (c.status) h += '<span class="sb-status sb-status-' + c.status + '">' + (c.status === 'active' ? 'Active' : c.status) + '</span>';
     h += '</div>';
     if (c.role) h += '<div class="sb-card-role">' + c.role + '</div>';
     if (c.tools) h += '<div class="sb-card-tools">' + c.tools + '</div>';

@@ -1,5 +1,55 @@
 # Code Quality Pass — 2026-03-12
 
+## Pass 2 — 2026-03-12
+
+### Dead Code Removed
+
+**dynamic-stats.js**
+- Removed `computeMonthlyTotal()` function — targeted `data-dynamic="monthly-total-cost"` which doesn't exist in any HTML.
+- Removed 12 `updateEls()` calls in `initFallbacks()` and `applyStats()` that targeted non-existent DOM elements: `agent-commits`, `monthly-total-cost`, `chart-count`, `article-count`, `website-loc`, `agent-loc`, `words-of-content`, `page-count`. These ran harmlessly (empty NodeList) but were dead code from removed page sections.
+- Removed 3 `updateEls()` calls in `loadSecurityMetrics()` for `sec-bypasses-total`, `sec-attack-categories`, `sec-attack-categories-passing` — no matching elements in HTML.
+- Removed 7 unused FALLBACKS properties: `agentCommits`, `lightDailyCost`, `chartCount`, `articleCount`, `secBypassesTotal`, `secAttackCategories`, `secAttackCategoriesPassing`. Kept `websiteCommits` (used by charts.js System Status Board).
+
+**charts.js**
+- Removed dead `c.future ? ' sb-future' : ''` branch in System Status Board `card()` function — no card data sets `future: true`.
+- Simplified status label ternary — removed `audit`/`open` branches since only `active` status is used.
+
+**chat-bubble.js**
+- Extracted `CONV_KEY` and `CONV_VERSION` constants (were hardcoded string/magic number at usage sites, now consistent with interactive.js naming).
+- Removed unused `hasExpanded` variable — set but never read.
+- Removed duplicate `bc-handoff` container check in handoff send — `el` was reassigned to the same value on both branches.
+
+**shared.js**
+- Replaced optional chaining (`?.`) with ES5-compatible `(el || {}).value` pattern in `submitBooking()` — ensures cross-browser compatibility with the project's ES5 style.
+
+**workers/assess/src/index.js**
+- Wrapped Discord webhook call in try-catch — prevents uncaught fetch errors from breaking the handoff flow.
+- Removed legacy KV lead storage in `processHandoff()` — D1 is the active store; KV writes were redundant.
+- Removed legacy KV booking storage in `handleBooking()` — same D1 migration.
+- Added missing `quiz.q3` quality scoring (q1, q2, q4 were scored; q3 was skipped).
+
+### Unused CSS Removed
+
+**charts.css**
+- Removed `.sb-status-audit` + `::before` (2 rules) — no chart card uses `status: 'audit'`.
+- Removed `.sb-status-open` + `::before` (2 rules) — no chart card uses `status: 'open'`.
+- Removed `.sb-future`, `.sb-future .sb-card-name`, `.sb-future .sb-card-tools` (3 rules) — no card data sets `future: true`.
+
+### File Summary (Pass 2)
+
+| File | Lines removed | Type |
+|------|--------------|------|
+| dynamic-stats.js | ~30 | Dead function, orphaned updateEls, unused FALLBACKS |
+| charts.js | 2 | Dead conditional branches |
+| charts.css | ~11 | Unused status/future classes |
+| chat-bubble.js | 4 | Dead variable, duplicate code |
+| shared.js | 2 | ES5 compat fix |
+| workers/assess/src/index.js | ~35 | Legacy KV removal, error handling, bug fix |
+
+---
+
+## Pass 1 — 2026-03-12
+
 ## Changes Made
 
 ### Dead Code Removed

@@ -1275,6 +1275,7 @@ ${conversationLog}`;
   if (company && company.workflows && company.workflows.length > 0) qualityScore += 10;
   if (quiz && quiz.q1) qualityScore += 5;
   if (quiz && quiz.q2) qualityScore += 5;
+  if (quiz && quiz.q3) qualityScore += 5;
   if (quiz && quiz.q4) qualityScore += 5;
   if (messages.length >= 4) qualityScore += 5;
 
@@ -1311,33 +1312,37 @@ ${conversationLog}`;
     }
   }
 
-  // Discord fallback (if no OpenClaw webhook, or as secondary notification)
+  // Discord fallback (if no OpenClaw webhook)
   if (env.DISCORD_WEBHOOK && !env.OPENCLAW_WEBHOOK) {
-    const sanitize = (s) => (s || '').replace(/@(everyone|here)/gi, '[at-$1]').replace(/```/g, '').slice(0, 1024);
-    const lastFewMessages = messages.slice(-6).map(m =>
-      `${m.role === 'user' ? '👤' : '🤖'} ${sanitize(m.content)}`
-    ).join('\n');
-    const safeName = sanitize(name || email.split('@')[0]);
-    const safeEmail = sanitize(email);
-    const safeSummary = sanitize(summary);
+    try {
+      const sanitize = (s) => (s || '').replace(/@(everyone|here)/gi, '[at-$1]').replace(/```/g, '').slice(0, 1024);
+      const lastFewMessages = messages.slice(-6).map(m =>
+        `${m.role === 'user' ? '👤' : '🤖'} ${sanitize(m.content)}`
+      ).join('\n');
+      const safeName = sanitize(name || email.split('@')[0]);
+      const safeEmail = sanitize(email);
+      const safeSummary = sanitize(summary);
 
-    await fetch(env.DISCORD_WEBHOOK, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        content: `🔔 **HANDOFF: New lead from briu.ai**`,
-        embeds: [{
-          title: `${safeName} wants to talk`,
-          color: 0xd4a05a,
-          fields: [
-            { name: 'Email', value: safeEmail, inline: true },
-            { name: 'Context', value: safeSummary.slice(0, 200), inline: false },
-            { name: 'Recent Conversation', value: lastFewMessages.slice(0, 900) || 'No messages', inline: false },
-          ],
-          footer: { text: `Action: Draft a follow-up email for ${safeEmail} based on their conversation. Suggest specific next steps and pricing.` },
-        }],
-      }),
-    });
+      await fetch(env.DISCORD_WEBHOOK, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          content: `🔔 **HANDOFF: New lead from briu.ai**`,
+          embeds: [{
+            title: `${safeName} wants to talk`,
+            color: 0xd4a05a,
+            fields: [
+              { name: 'Email', value: safeEmail, inline: true },
+              { name: 'Context', value: safeSummary.slice(0, 200), inline: false },
+              { name: 'Recent Conversation', value: lastFewMessages.slice(0, 900) || 'No messages', inline: false },
+            ],
+            footer: { text: `Action: Draft a follow-up email for ${safeEmail} based on their conversation. Suggest specific next steps and pricing.` },
+          }],
+        }),
+      });
+    } catch (e) {
+      console.error('Discord webhook error:', e);
+    }
   }
 
   if (env.MAIL_DESTINATION) {
@@ -1355,28 +1360,6 @@ ${conversationLog}`;
     } catch (e) {
       console.error('Email send failed:', e);
     }
-  }
-
-  // Store lead in KV (legacy)
-  if (env.CONVERSATIONS) {
-    const leadRecord = {
-      type: 'lead',
-      name,
-      email,
-      summary,
-      company: company ? {
-        name: company.name || null,
-        domain: company.domain || null,
-        industries: company.industries || [],
-        workflows: company.workflows || [],
-      } : null,
-      quiz: quiz || null,
-      qualityScore,
-      messages,
-      createdAt: new Date().toISOString(),
-    };
-    env.CONVERSATIONS.put('lead:' + Date.now() + '_' + email, JSON.stringify(leadRecord), { expirationTtl: 2592000 }) // 30 days
-      .catch(e => console.error('KV lead write error:', e));
   }
 
   // Store lead in D1
@@ -1531,15 +1514,6 @@ async function handleBooking(body, env, corsHeaders) {
     message: message || '',
     createdAt: new Date().toISOString(),
   };
-
-  // Store in KV (legacy)
-  if (env.CONVERSATIONS) {
-    await env.CONVERSATIONS.put(
-      'booking:' + bookingId,
-      JSON.stringify(booking),
-      { expirationTtl: 7776000 } // 90 days
-    );
-  }
 
   // Store in D1
   if (env.DB) {
