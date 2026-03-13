@@ -177,16 +177,28 @@ const DOMAIN_RE = /I work at ([\w.-]+\.\w{2,})/i;
 
 // SSRF protection: block private/reserved IP ranges and internal domains
 function isBlockedDomain(domain) {
-  const lower = domain.toLowerCase();
+  const lower = domain.toLowerCase().replace(/\.$/, '');
   // Block common internal hostnames
   if (['localhost', '127.0.0.1', '0.0.0.0', '[::1]', 'metadata.google.internal'].includes(lower)) return true;
-  // Block AWS metadata endpoint
+  // Block AWS/cloud metadata endpoints
   if (lower === '169.254.169.254') return true;
   // Block .internal, .local, .localhost TLDs
   if (/\.(internal|local|localhost|test|invalid|example)$/i.test(lower)) return true;
-  // Block IP addresses entirely (only allow domain names)
-  if (/^[\d.]+$/.test(lower) || lower.startsWith('[')) return true;
+  // Block any IP address format — IPv4, IPv6 (bracketed or expanded), hex-encoded
+  if (/^[\d.]+$/.test(lower) || lower.startsWith('[') || /^[0-9a-f:]+$/i.test(lower)) return true;
+  // Block zero-prefixed IPs (e.g., 0177.0.0.1 = 127.0.0.1 in octal)
+  if (/^0[xo]?\d/i.test(lower)) return true;
   return false;
+}
+
+// Validate fetch response URL hasn't redirected to a blocked domain
+function isRedirectSafe(responseUrl, originalDomain) {
+  try {
+    const redirectHost = new URL(responseUrl).hostname;
+    if (isBlockedDomain(redirectHost)) return false;
+    if (/^[\d.]+$/.test(redirectHost) || redirectHost.startsWith('[') || /^[0-9a-f:]+$/i.test(redirectHost)) return false;
+    return true;
+  } catch { return false; }
 }
 
 async function fetchCompanyInfo(domain) {
@@ -199,10 +211,12 @@ async function fetchCompanyInfo(domain) {
 
     const res = await fetch('https://' + domain, {
       headers: { 'User-Agent': 'Briu-Agent/1.0' },
-      redirect: 'follow', // Cloudflare Workers don't follow to private IPs
+      redirect: 'follow',
       signal: AbortSignal.timeout(5000),
     });
     if (!res.ok) return null;
+    // Verify redirect chain didn't land on a blocked domain
+    if (!isRedirectSafe(res.url, domain)) return null;
     const html = await res.text();
 
     // Extract useful text: title, meta description, and first ~1500 chars of visible text
@@ -574,7 +588,32 @@ function checkAdminAuth(request, env) {
 }
 
 async function handleAdmin(request, env, corsHeaders) {
+  // Rate limit admin auth attempts
+  const adminIp = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const adminRateKey = `admin-auth:${adminIp}`;
+  let adminAttempts = 0;
+  if (env.RATE_LIMIT) {
+    adminAttempts = parseInt(await env.RATE_LIMIT.get(adminRateKey) || '0');
+  } else {
+    if (!globalThis._adminRateLimits) globalThis._adminRateLimits = new Map();
+    const entry = globalThis._adminRateLimits.get(adminRateKey);
+    if (entry && Date.now() - entry.ts < 900000) adminAttempts = entry.count;
+    else globalThis._adminRateLimits.delete(adminRateKey);
+  }
+  if (adminAttempts >= 5) {
+    return new Response(JSON.stringify({ error: 'Too many auth attempts. Try again later.' }), {
+      status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+  }
+
   if (!checkAdminAuth(request, env)) {
+    // Track failed attempt
+    if (env.RATE_LIMIT) {
+      await env.RATE_LIMIT.put(adminRateKey, String(adminAttempts + 1), { expirationTtl: 900 });
+    } else {
+      if (!globalThis._adminRateLimits) globalThis._adminRateLimits = new Map();
+      globalThis._adminRateLimits.set(adminRateKey, { count: adminAttempts + 1, ts: Date.now() });
+    }
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -616,8 +655,8 @@ async function handleAdmin(request, env, corsHeaders) {
 
   // GET /api/admin/conversations — recent conversations with messages
   if (path === '/api/admin/conversations') {
-    const limit = parseInt(url.searchParams.get('limit') || '20');
-    const offset = parseInt(url.searchParams.get('offset') || '0');
+    const limit = Math.min(Math.max(parseInt(url.searchParams.get('limit') || '20') || 20, 1), 100);
+    const offset = Math.max(parseInt(url.searchParams.get('offset') || '0') || 0, 0);
     const convos = await db.prepare(
       `SELECT c.id, c.session_id, c.page, c.message_count, c.has_handoff, c.quality_score, c.created_at,
               v.email, v.name, v.company_name, v.company_domain, v.stage, v.quiz_role, v.quiz_focus
@@ -839,6 +878,13 @@ export default {
 
     if (request.method === 'OPTIONS') {
       return new Response(null, { status: 204, headers: corsHeaders });
+    }
+
+    // Enforce Origin on state-changing requests (CSRF protection)
+    if (request.method === 'POST' && origin && !isAllowed) {
+      return new Response(JSON.stringify({ error: 'Forbidden' }), {
+        status: 403, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
 
     const url = new URL(request.url);

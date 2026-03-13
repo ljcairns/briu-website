@@ -31,14 +31,33 @@
     'Agents as capital, not expense.'
   ];
 
+  // ─── TTL helpers for PII in localStorage (24h expiry) ───
+  var PII_TTL = 86400000; // 24 hours in ms
+  function setPII(key, value) {
+    try { localStorage.setItem(key, JSON.stringify({ v: value, t: Date.now() })); } catch(e) {}
+  }
+  function getPII(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      if (!raw) return null;
+      // Migrate plain values from before TTL wrapper
+      try { var obj = JSON.parse(raw); } catch(e) { return raw; }
+      if (obj && obj.t && (Date.now() - obj.t > PII_TTL)) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return obj && obj.v !== undefined ? obj.v : obj;
+    } catch(e) { return null; }
+  }
+
   // ─── Restore state from localStorage ───
   try {
-    var savedEmail = localStorage.getItem('briu_email');
+    var savedEmail = getPII('briu_email');
     if (savedEmail) userEmail = savedEmail;
-    var savedCompany = localStorage.getItem('briu_company');
-    if (savedCompany) companyData = JSON.parse(savedCompany);
-    var savedAnswers = localStorage.getItem('briu_assess');
-    if (savedAnswers) answers = JSON.parse(savedAnswers);
+    var savedCompany = getPII('briu_company');
+    if (savedCompany) { if (typeof savedCompany === 'string') savedCompany = JSON.parse(savedCompany); companyData = savedCompany; }
+    var savedAnswers = getPII('briu_assess');
+    if (savedAnswers) { if (typeof savedAnswers === 'string') savedAnswers = JSON.parse(savedAnswers); answers = savedAnswers; }
     var savedSid = localStorage.getItem(SESSION_KEY);
     if (savedSid) sessionId = savedSid;
     // Migrate legacy conversation format
@@ -346,7 +365,7 @@
       return;
     }
     userEmail = email;
-    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    setPII('briu_email', email);
 
     var domain = email.split('@')[1].toLowerCase();
     if (FREE_PROVIDERS.indexOf(domain) === -1) {
@@ -369,7 +388,7 @@
       .then(function(data) {
         if (data && data.found) {
           companyData = data;
-          try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
+          setPII('briu_company', data);
         }
         exitGate(prefill);
       })
@@ -815,7 +834,7 @@
       return;
     }
     userEmail = email;
-    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    setPII('briu_email', email);
     var card = input.closest('.bc-handoff');
     if (card) {
       card.innerHTML = '<div class="bc-handoff-label">Sending...</div>';
@@ -1057,12 +1076,12 @@
     if (sid) sessionId = sid;
     // Re-read other state that may have changed
     try {
-      var e = localStorage.getItem('briu_email');
+      var e = getPII('briu_email');
       if (e) userEmail = e;
-      var c = localStorage.getItem('briu_company');
-      if (c) companyData = JSON.parse(c);
-      var a = localStorage.getItem('briu_assess');
-      if (a) answers = JSON.parse(a);
+      var c = getPII('briu_company');
+      if (c) { if (typeof c === 'string') c = JSON.parse(c); companyData = c; }
+      var a = getPII('briu_assess');
+      if (a) { if (typeof a === 'string') a = JSON.parse(a); answers = a; }
     } catch(ex) {}
     // If bubble exists and panel is open, refresh the thread
     var thread = document.getElementById('bcThread');

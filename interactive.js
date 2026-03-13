@@ -23,13 +23,31 @@
 
   var FREE_PROVIDERS = (window.Briu && window.Briu.FREE_PROVIDERS) || ['gmail.com','yahoo.com','hotmail.com','outlook.com','icloud.com','aol.com','protonmail.com','mail.com','ymail.com','live.com'];
 
+  // TTL helpers for PII in localStorage (24h expiry)
+  var PII_TTL = 86400000;
+  function setPII(key, value) {
+    try { localStorage.setItem(key, JSON.stringify({ v: value, t: Date.now() })); } catch(e) {}
+  }
+  function getPII(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      if (!raw) return null;
+      try { var obj = JSON.parse(raw); } catch(e) { return raw; }
+      if (obj && obj.t && (Date.now() - obj.t > PII_TTL)) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return obj && obj.v !== undefined ? obj.v : obj;
+    } catch(e) { return null; }
+  }
+
   // Restore saved state
   var CONV_VERSION = 8; // bump to clear stale conversations
   try {
-    var savedEmail = localStorage.getItem('briu_email');
+    var savedEmail = getPII('briu_email');
     if (savedEmail) userEmail = savedEmail;
-    var savedCompany = localStorage.getItem('briu_company');
-    if (savedCompany) companyData = JSON.parse(savedCompany);
+    var savedCompany = getPII('briu_company');
+    if (savedCompany) { if (typeof savedCompany === 'string') savedCompany = JSON.parse(savedCompany); companyData = savedCompany; }
     var savedSession = localStorage.getItem(SESSION_KEY);
     if (savedSession) sessionId = savedSession;
     var savedStep = localStorage.getItem('briu_step');
@@ -236,7 +254,7 @@
     }
     input.style.borderColor = ''; // clear error state
     userEmail = email;
-    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    setPII('briu_email', email);
     // Bubble becomes available once we have an email
     if (window.briuShowChatBubble) window.briuShowChatBubble();
     var domain = email.split('@')[1].toLowerCase();
@@ -265,7 +283,7 @@
         companyFetching = false;
         if (data && data.found) {
           companyData = data;
-          try { localStorage.setItem('briu_company', JSON.stringify(data)); } catch(e) {}
+          setPII('briu_company', data);
           showLookupReady(data);
         } else {
           if (panel) panel.style.display = 'none';
@@ -1027,7 +1045,7 @@
     var email = input.value.trim();
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
     userEmail = email;
-    try { localStorage.setItem('briu_email', email); } catch(e) {}
+    setPII('briu_email', email);
     var name = email.split('@')[0];
     var parent = input.closest('.conv-action-card');
     sendHandoff(name, email, parent);

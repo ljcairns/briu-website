@@ -2,14 +2,28 @@
 
 /* ─── User State & Personalization ─── */
 (function() {
+  var PII_TTL = 86400000; // 24 hours
+  function getPII(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      if (!raw) return null;
+      try { var obj = JSON.parse(raw); } catch(e) { return raw; }
+      if (obj && obj.t && (Date.now() - obj.t > PII_TTL)) {
+        localStorage.removeItem(key);
+        return null;
+      }
+      return obj && obj.v !== undefined ? obj.v : obj;
+    } catch(e) { return null; }
+  }
+
   var user = { email: null, company: null, answers: null, stage: 'visitor', score: 0 };
   try {
-    var e = localStorage.getItem('briu_email');
+    var e = getPII('briu_email');
     if (e) user.email = e;
-    var c = localStorage.getItem('briu_company');
-    if (c) user.company = JSON.parse(c);
-    var a = localStorage.getItem('briu_assess');
-    if (a) user.answers = JSON.parse(a);
+    var c = getPII('briu_company');
+    if (c) { if (typeof c === 'string') c = JSON.parse(c); user.company = c; }
+    var a = getPII('briu_assess');
+    if (a) { if (typeof a === 'string') a = JSON.parse(a); user.answers = a; }
     var s = localStorage.getItem('briu_stage');
     if (s) user.stage = s;
     var conv = localStorage.getItem('briu_conv');
