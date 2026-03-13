@@ -106,8 +106,8 @@
   <div class="arch-diagram">
     <div class="arch-node">
       <div class="arch-node-label">Orchestrator</div>
-      <div class="arch-node-title">VPS (srv1354778)</div>
-      <div class="arch-node-desc">Schedules tasks, builds manifests, signs with HMAC, dispatches via Discord. Lightweight API calls only when needed for routing decisions.</div>
+      <div class="arch-node-title">VPS</div>
+      <div class="arch-node-desc">Schedules tasks, builds manifests, signs cryptographically, dispatches to executors. Lightweight API calls only when needed for routing decisions.</div>
     </div>
     <div class="arch-arrow">→</div>
     <div class="executor-stack">
@@ -125,24 +125,24 @@
     </div>
   </div>
 
-  <p>The VPS runs the scheduling layer. It knows what needs to happen and when. When a task is ready, it builds a manifest: a JSON document describing the work, the target files, the expected outputs, and the constraints. Every manifest gets an HMAC-SHA256 signature using a shared secret. No valid signature, no execution.</p>
-  <p>Dispatch happens via Discord. The orchestrator posts signed manifests to designated channels, and the execution backends pick them up. The Mac validates the signature and hands the work to Claude Code. Codex receives its manifests in a separate channel and runs them in its cloud sandbox. Both executors run against flat-rate subscriptions. Zero marginal cost.</p>
+  <p>The VPS runs the scheduling layer. It knows what needs to happen and when. When a task is ready, it builds a manifest: a JSON document describing the work, the target files, the expected outputs, and the constraints. Every manifest gets a cryptographic signature. No valid signature, no execution.</p>
+  <p>Dispatch happens via Discord. The orchestrator posts signed manifests to designated channels, and the execution backends pick them up. Each executor validates the signature and runs the work. Both run against flat-rate subscriptions. Zero marginal cost.</p>
 
   <h2 class="reveal">Manifest structure</h2>
   <p>Each manifest is a signed JSON payload. The structure is deliberately simple so there's minimal surface area for things to go wrong.</p>
 
   <ol class="flow-list">
-    <li><strong>Task ID and timestamp.</strong> Every manifest gets a unique ID and a UTC timestamp. The executor rejects anything older than 30 minutes to prevent replay attacks.</li>
+    <li><strong>Task ID and timestamp.</strong> Every manifest gets a unique ID and a UTC timestamp. The executor rejects stale requests to prevent replay attacks.</li>
     <li><strong>Plugin name.</strong> Maps to a specific skill in the agent's repertoire. "email-triage", "crm-sync", "content-draft", "deploy-check". The executor only runs plugins it knows about. Unknown plugin names get rejected.</li>
     <li><strong>Parameters.</strong> Task-specific inputs. For email triage: the inbox to scan and the rules to apply. For content drafts: the topic, tone, and target length. Parameters are validated against the plugin's schema before execution.</li>
-    <li><strong>HMAC-SHA256 signature.</strong> Computed over the canonical JSON (sorted keys, no whitespace). The shared secret never leaves the two machines. If a single byte of the manifest changes, the signature fails.</li>
+    <li><strong>Cryptographic signature.</strong> Computed over the canonical payload. If a single byte of the manifest changes, the signature fails.</li>
     <li><strong>Execution constraints.</strong> Max runtime, allowed file paths, network access flags. The executor enforces these as hard limits regardless of what the model tries to do.</li>
   </ol>
 
   <h2 class="reveal">The manifest-dispatch plugin</h2>
   <p>We started by having the LLM route manifests. The orchestrator would describe the available plugins, pass the manifest to Claude, and let it decide which executor should handle the work. Obvious approach. Didn't work.</p>
   <p>The LLM would second-guess the manifest. It would rewrite parameters, add "helpful" context that broke schema validation downstream. It would occasionally route tasks to the wrong executor based on its own reasoning about what seemed like a better fit. Every routing decision was a new inference call, adding latency and cost to what should have been a mechanical operation.</p>
-  <p>So we built a Node.js plugin that bypasses the LLM entirely. <code>manifest-dispatch</code> reads the plugin name from the manifest, looks it up in a static routing table, signs the payload, and sends it to the correct executor via Discord. No interpretation. No reasoning. No creativity. Just a lookup and a POST.</p>
+  <p>So we built a plugin that bypasses the LLM entirely. It reads the plugin name from the manifest, looks it up in a static routing table, signs the payload, and sends it to the correct executor via Discord. No interpretation. No reasoning. No creativity. Just a lookup and a POST.</p>
   <p><strong>That's the actual innovation. Not "AI routes AI." A dumb, fast, mechanical dispatcher</strong> that treats the manifest as data to forward, not a prompt to interpret. The intelligence lives at the edges: orchestration decisions on one side, execution on the other. The middle is deliberately stupid.</p>
   <p>The dispatch is mechanical. No AI in the routing layer. The VPS doesn't interpret tasks or make judgment calls about what to run. It follows a schedule, builds a manifest, signs it, sends it. The intelligence lives entirely on the execution side, running on flat-rate plans.</p>
 
@@ -187,7 +187,7 @@
     <tbody>
       <tr><td>API-only (Opus, ~2M tokens/day)</td><td>~$2,400</td></tr>
       <tr><td>Hybrid (VPS orchestration + dual execution)</td><td>~$420</td></tr>
-      <tr><td>VPS (Hetzner CAX11)</td><td>$4.50</td></tr>
+      <tr><td>VPS hosting</td><td>~$5</td></tr>
       <tr><td>Claude Max subscription</td><td>$200</td></tr>
       <tr><td>Codex Pro subscription</td><td>$200</td></tr>
       <tr><td>Residual API (routing decisions)</td><td>~$15</td></tr>

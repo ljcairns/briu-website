@@ -823,8 +823,8 @@ Briu.charts.briuOrg = function(containerId) {
     /* Center: VPS Orchestrator */
     '<div class="sb-col sb-col-interfaces">' +
     '<div class="sb-col-label">Orchestrator</div>' +
-    card({ name: 'Claw (VPS)', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw &middot; HMAC manifests', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
-    '<div class="sb-arrow" style="text-align:center;color:var(--gold);font-size:0.75rem;padding:4px 0;">HMAC-signed manifests &darr;</div>' +
+    card({ name: 'VPS Agent', accent: 'gold', status: 'active', role: 'Orchestrator', tools: 'Discord &middot; OpenClaw &middot; Signed manifests', metric: '<span data-dynamic="agent-skills">9</span> skills &middot; 24/7', env: 'Sandboxed VPS' }) +
+    '<div class="sb-arrow" style="text-align:center;color:var(--gold);font-size:0.75rem;padding:4px 0;">Signed manifests &darr;</div>' +
     card({ name: 'Dispatch Daemon', accent: 'forest', status: 'active', role: 'Task Router', tools: 'Mac &middot; cron &middot; queue', metric: 'Routes tasks to execution agents', env: 'Local machine' }) +
     '</div>' +
 

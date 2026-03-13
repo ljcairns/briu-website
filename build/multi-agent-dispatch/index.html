@@ -177,8 +177,8 @@
     <div class="evo-step">
       <div class="evo-num">02</div>
       <div>
-        <h3>Mac Backend + HMAC Signing</h3>
-        <p>Added a Mac Mini for tasks requiring local filesystem access and browser automation. The VPS dispatches tasks to the Mac over HTTPS. Every request signed with HMAC-SHA256 &mdash; timestamp in the header, body in the signature. Replay window: 60 seconds. No shared secrets in transit.</p>
+        <h3>Mac Backend + Request Signing</h3>
+        <p>Added a Mac Mini for tasks requiring local filesystem access and browser automation. The VPS dispatches tasks to the Mac over HTTPS. Every request cryptographically signed &mdash; timestamp in the header, body in the signature. No shared secrets in transit.</p>
         <div class="evo-tag">Week 5</div>
       </div>
     </div>
@@ -250,7 +250,7 @@
     <div class="backend-card">
       <div class="backend-label">Backend B &middot; Mac</div>
       <h3>Local &amp; Browser</h3>
-      <p>File operations, screenshot capture, browser automation, document generation. Tasks that need a real filesystem or a headed browser. HMAC-signed requests from dispatcher.</p>
+      <p>File operations, screenshot capture, browser automation, document generation. Tasks that need a real filesystem or a headed browser. Signed requests from dispatcher.</p>
       <p><strong>~25% of tasks.</strong> Average cost: $0.31/task.</p>
     </div>
     <div class="backend-card">
@@ -278,23 +278,12 @@
     <p>The insight: <strong>routing is a classification problem with known categories.</strong> You don't need a language model to look up a key in a table. Save the inference budget for the actual work.</p>
   </div>
 
-  <div class="code-example reveal">
-    <span class="ex-label">Plugin Registry &mdash; Dispatch Config</span>task_type        | backend   | timeout  | retry
------------------+-----------+----------+------
-email_triage     | vps       | 45s      | 2
-crm_update       | vps       | 30s      | 1
-cost_report      | vps       | 60s      | 1
-browser_capture  | mac       | 120s     | 1
-doc_generate     | mac       | 90s      | 2
-file_operation   | mac       | 60s      | 1
-multi_doc_review | batch     | 300s     | 0
-research_deep    | batch     | 600s     | 0
-long_summarize   | batch     | 180s     | 1</div>
+  <p>Each task type maps to a backend through a static config table. Email triage, CRM updates, and cost reports route to the VPS. Browser automation and document generation route to the Mac. Multi-document analysis and research route to the batch backend. Each entry includes a timeout and retry policy.</p>
 
-  <h2 class="reveal">HMAC Signing</h2>
-  <p>The Mac backend accepts work from the VPS dispatcher over HTTPS. Every request is signed with HMAC-SHA256. The signature covers the request body and a timestamp header. Replay window is 60 seconds &mdash; any request older than that gets rejected.</p>
+  <h2 class="reveal">Request Signing</h2>
+  <p>The Mac backend accepts work from the VPS dispatcher over HTTPS. Every request is cryptographically signed. The signature covers the request body and a timestamp header. Requests older than the replay window get rejected.</p>
   <p>No shared secrets travel over the wire. Both sides have the key pre-provisioned. The Mac validates the signature, checks the timestamp, then executes. If the signature doesn't match or the timestamp is stale, the request is dropped with a 401. No error detail in the response &mdash; failed auth looks identical regardless of failure mode.</p>
-  <p><strong>This is table stakes for multi-machine dispatch.</strong> Without request signing, anyone who discovers the Mac's endpoint can submit arbitrary tasks. With HMAC, the dispatcher proves identity on every request without a session, token exchange, or certificate authority.</p>
+  <p><strong>This is table stakes for multi-machine dispatch.</strong> Without request signing, anyone who discovers the Mac's endpoint can submit arbitrary tasks. With request signing, the dispatcher proves identity on every request without a session, token exchange, or certificate authority.</p>
 
   <h2 class="reveal">What 47 Findings Looks Like</h2>
   <p>Running the dispatch system for three weeks produced 47 distinct operational findings. Not bugs &mdash; findings. Things the system surfaced that would have gone unnoticed in a single-machine setup.</p>
@@ -306,7 +295,7 @@ long_summarize   | batch     | 180s     | 1</div>
     </div>
     <div class="finding-card">
       <h4>Clock Drift Rejection</h4>
-      <p>Mac's system clock drifted 73 seconds from VPS. HMAC replay window (60s) started rejecting valid requests. Looked like an attack. Was NTP misconfiguration. Added clock-skew monitoring to the dispatcher.</p>
+      <p>Mac's system clock drifted beyond the replay window. Valid requests started getting rejected. Looked like an attack. Was NTP misconfiguration. Added clock-skew monitoring to the dispatcher.</p>
     </div>
     <div class="finding-card">
       <h4>Cost Asymmetry</h4>
@@ -314,7 +303,7 @@ long_summarize   | batch     | 180s     | 1</div>
     </div>
     <div class="finding-card">
       <h4>Retry Amplification</h4>
-      <p>A transient Mac network blip caused 3 tasks to retry. Each retry re-queued the task, which re-triggered dispatch, which re-signed the HMAC. 3 tasks became 9 dispatch events in 4 minutes. Added deduplication with task-ID idempotency keys.</p>
+      <p>A transient Mac network blip caused 3 tasks to retry. Each retry re-queued the task, which re-triggered dispatch, which re-signed the request. 3 tasks became 9 dispatch events in 4 minutes. Added deduplication with task-ID idempotency keys.</p>
     </div>
     <div class="finding-card">
       <h4>Prompt Drift Across Backends</h4>
@@ -349,7 +338,7 @@ long_summarize   | batch     | 180s     | 1</div>
   <ul>
     <li><strong>Tasks aren't homogeneous.</strong> A load balancer distributes identical requests. These tasks have fundamentally different runtime requirements &mdash; API keys, browser engines, GPU memory. Routing requires understanding what the task needs, not just which server is least busy.</li>
     <li><strong>LLM routing is a trap.</strong> It feels natural to use an LLM to classify tasks. But classification with known categories is a lookup problem, not an inference problem. Every token spent routing is a token not spent executing.</li>
-    <li><strong>Auth between machines is mandatory.</strong> The moment you split work across backends, you need request signing. HMAC is the minimum viable approach &mdash; no session state, no token exchange, just a shared key and a timestamp.</li>
+    <li><strong>Auth between machines is mandatory.</strong> The moment you split work across backends, you need request signing. Request signing is the minimum viable approach &mdash; no session state, no token exchange, just a shared key and a timestamp.</li>
     <li><strong>Observability changes shape.</strong> Single-machine: check the logs. Multi-machine: which machine? Was the task dispatched? Did it arrive? Did the signature validate? Did it execute? Did the result make it back? Every hop is a failure point.</li>
   </ul>
   <p><strong>The 37-second cycle time is the result, not the goal.</strong> The goal was reliability across heterogeneous backends. Speed came from removing the LLM from the routing path and letting each backend do what it's good at.</p>

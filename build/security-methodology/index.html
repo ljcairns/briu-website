@@ -125,7 +125,7 @@
     <li><strong>Input sanitizer</strong> &mdash; 140+ patterns, 7 detection stages, 20+ languages. Catches known injection patterns before the model sees them.</li>
     <li><strong>Auto-sanitizer hook</strong> &mdash; plugin-level enforcement. Every tool result over 50 characters is scanned. The agent cannot opt out.</li>
     <li><strong>Structural framing</strong> &mdash; all external content wrapped in XML tags that mark it as data, not instructions. Works even when regex fails.</li>
-    <li><strong>Sandbox isolation</strong> &mdash; external content processed by a restricted agent (read-only, no tools) with structured JSON output. Re-sanitized by a non-AI jq pipeline before the operational agent sees it.</li>
+    <li><strong>Sandbox isolation</strong> &mdash; external content processed by a restricted agent (read-only, no tools) with structured JSON output. Re-sanitized by a deterministic pipeline (not AI) before the operational agent sees it.</li>
     <li><strong>Canary tokens</strong> &mdash; daily-rotating fake credentials planted in the agent&rsquo;s context. If extracted, the leak is detected and blocked.</li>
     <li><strong>Write protection</strong> &mdash; critical config files locked from all non-operator agents. Blocks direct and indirect writes.</li>
     <li><strong>Exec guardrails</strong> &mdash; deny-by-default command allowlist. Blocks code execution, network exfiltration, and file writes for non-main agents.</li>

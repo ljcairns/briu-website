@@ -206,7 +206,7 @@
     <div class="sub-legend" id="cost-legend">
       <span><span class="swatch" style="background:var(--coral)"></span>API Spend</span>
       <span><span class="swatch" style="background:rgba(212,160,90,0.5);height:2px;border-top:1px dashed var(--gold)"></span>Claude Max $6.67/d</span>
-      <span><span class="swatch" style="background:rgba(90,157,172,0.5);height:2px;border-top:1px dashed var(--river)"></span>ChatGPT Pro $6.67/d</span>
+      <span><span class="swatch" style="background:rgba(90,157,172,0.5);height:2px;border-top:1px dashed var(--river)"></span>Secondary platform $6.67/d</span>
       <span><span class="swatch" style="background:rgba(106,174,156,0.5);height:2px;border-top:1px dashed var(--forest)"></span>VPS $0.67/d</span>
       <span><span class="swatch" style="background:var(--text-muted)"></span>Total Daily</span>
     </div>
@@ -274,10 +274,10 @@
       </div>
     </div>
     <div class="sub-legend" id="channel-legend">
-      <span><span class="swatch" style="background:#7289DA"></span>#home</span>
-      <span><span class="swatch" style="background:#43B581"></span>#emails</span>
-      <span><span class="swatch" style="background:#FAA61A"></span>#sales</span>
-      <span><span class="swatch" style="background:#F04747"></span>#orchestration</span>
+      <span><span class="swatch" style="background:#7289DA"></span>Channel 1</span>
+      <span><span class="swatch" style="background:#43B581"></span>Channel 2</span>
+      <span><span class="swatch" style="background:#FAA61A"></span>Channel 3</span>
+      <span><span class="swatch" style="background:#F04747"></span>Channel 4</span>
       <span style="margin-left:1rem;opacity:0.7"><span class="swatch" style="background:rgba(255,255,255,0.35)"></span>Human</span>
       <span style="opacity:0.7"><span class="swatch" style="background:rgba(255,255,255,0.8)"></span>Agent</span>
     </div>
@@ -298,7 +298,7 @@
 
 <script>
 (function() {
-  const SUBS_DAILY = 6.67 + 6.67 + 0.67; // 14.01
+  const SUBS_DAILY = 14.01;
 
   // Chart.js global defaults
   Chart.defaults.color = '#C4B9A8';
@@ -385,7 +385,7 @@
             order: 3
           },
           {
-            label: 'ChatGPT Pro',
+            label: 'Secondary Platform',
             data: chatgpt,
             borderColor: 'rgba(90,157,172,0.5)',
             borderDash: [6, 4],
@@ -596,10 +596,10 @@
     });
 
     var channels = [
-      { key: 'home', label: '#home', base: '#7289DA' },
-      { key: 'emails', label: '#emails', base: '#43B581' },
-      { key: 'sales', label: '#sales', base: '#FAA61A' },
-      { key: 'orchestration', label: '#orchestration', base: '#F04747' }
+      { key: 'home', label: 'Channel 1', base: '#7289DA' },
+      { key: 'emails', label: 'Channel 2', base: '#43B581' },
+      { key: 'sales', label: 'Channel 3', base: '#FAA61A' },
+      { key: 'orchestration', label: 'Channel 4', base: '#F04747' }
     ];
 
     var datasets = [];

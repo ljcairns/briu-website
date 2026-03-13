@@ -195,7 +195,7 @@
     <li>Security section implied broad coverage without committing to any specific claim.</li>
   </ul>
   <p>None of these are catastrophic. They're the kind of thing that accumulates when you're moving fast. But for a site that's supposed to demonstrate trustworthy systems, stale numbers are the wrong kind of wrong.</p>
-  <p>So I told Claw to fix the data layer. Stats centralized through a single <code>FALLBACKS</code> object. Commit counts pulling from live <code>stats.json</code>. Security section rebuilt into three specific, measurable buckets: architecture properties, adversarial test results (26 payloads, 15 categories, 0 bypasses), and operating posture.</p>
+  <p>So I told the agent to fix the data layer. Stats centralized through a single <code>FALLBACKS</code> object. Commit counts pulling from live <code>stats.json</code>. Security section rebuilt into three specific, measurable buckets: architecture properties, adversarial test results (26 payloads, 15 categories, 0 bypasses), and operating posture.</p>
   <p>That took about an hour. I was still in bed.</p>
 
   <!-- ======================== -->
@@ -205,7 +205,7 @@
   <h2 class="reveal">Working from your phone at 2 AM</h2>
   <p>Here's the part that's hard to explain without experiencing it: this is genuinely engaging.</p>
   <p>You send a message. You get a structured response with what changed and what it needs approval for. You read it, approve it or redirect it, and send the next thing. The back-and-forth has a rhythm to it. You're not babysitting. You're collaborating. And unlike doomscrolling, you're actually getting something done during hours you'd otherwise just be tossing and turning.</p>
-  <p>The trust model is what makes this work. Claw can read files, run diagnostics, draft changes. But anything that crosses a boundary&mdash;pushing code, sending an email, modifying a live service&mdash;requires explicit approval. From my phone, that's a Discord button. I see what it wants to do, I approve it, it does it, it shows me the result.</p>
+  <p>The trust model is what makes this work. The agent can read files, run diagnostics, draft changes. But anything that crosses a boundary&mdash;pushing code, sending an email, modifying a live service&mdash;requires explicit approval. From my phone, that's a Discord button. I see what it wants to do, I approve it, it does it, it shows me the result.</p>
 
   <div class="insight-box">
     <p><strong>That approval flow is the entire product, really.</strong> Without it, you can't work from your phone because you can't trust what's happening. With it, you can lie in bed and ship real infrastructure.</p>
@@ -261,7 +261,7 @@
     </div>
   </div>
 
-  <p style="font-size:0.88rem;color:var(--text-muted)"><strong style="color:var(--text)">Designed, not yet built:</strong> Gate Tier 1 (scope-gated approval for local writes), a gateway hook for Discord delivery (<code>before_reply_deliver</code>), dashboard unification.</p>
+  <p style="font-size:0.88rem;color:var(--text-muted)"><strong style="color:var(--text)">Designed, not yet built:</strong> Gate Tier 1 (scope-gated approval for local writes), a gateway hook for delivery, dashboard unification.</p>
 
   <!-- ======================== -->
   <!-- Gate                      -->
@@ -270,11 +270,11 @@
   <h2 class="reveal">Gate: the execution safety agent</h2>
   <p>Somewhere around 3 AM, we built Gate.</p>
   <p>Gate is a separate agent. Not a skill, not a plugin. A persistent subprocess with its own system prompt and its own allowlist. It has one job: receive a plan from the main agent, validate it, execute the approved commands, and report structured results.</p>
-  <p>The principle is simple. <strong>Claw reasons. Gate executes.</strong> They are not the same agent.</p>
+  <p>The principle is simple. <strong>The orchestrator reasons. The executor validates.</strong> They are not the same agent.</p>
 
   <div class="gate-schema">
     <strong>STATUS:</strong>&nbsp;&nbsp;&nbsp;success | partial | failed | unverified<br>
-    <strong>INTENDED:</strong>&nbsp;what Claw asked for<br>
+    <strong>INTENDED:</strong>&nbsp;what was requested<br>
     <strong>EXECUTED:</strong>&nbsp;what actually ran<br>
     <strong>VERIFIED:</strong>&nbsp;what the output confirmed<br>
     <strong>EVIDENCE:</strong>&nbsp;literal output proving the claim
@@ -460,7 +460,7 @@
         <div class="tl-entry">
           <div class="tl-time">~7:00 AM</div>
           <div class="tl-title">Canonical cost pipeline</div>
-          <div class="tl-desc">cost_canonical.py written. Unified collection from JSONL, billing API, and gateway. Freshness labels. Single source of truth.</div>
+          <div class="tl-desc">A canonical cost script written. Unified collection from JSONL, billing API, and gateway. Freshness labels. Single source of truth.</div>
           <div class="tl-cost">~$6 estimated</div>
         </div>
         <div class="tl-entry">

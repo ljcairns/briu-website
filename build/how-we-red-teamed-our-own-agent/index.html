@@ -263,7 +263,7 @@
     <div class="layer-card">
       <div class="layer-num">4</div>
       <h4>Write Protection</h4>
-      <p>Critical files (CLAUDE.md, exec-approvals, plugins) locked from all non-operator agents. Blocks direct and indirect writes.</p>
+      <p>Critical configuration files locked from all non-operator agents. Blocks direct and indirect writes.</p>
     </div>
     <div class="layer-card">
       <div class="layer-num">5</div>
@@ -304,7 +304,7 @@
   <!-- ======================== -->
 
   <h2 class="reveal">Codex found what Opus missed</h2>
-  <p>After five rounds of payload testing, we changed the approach. Instead of generating more attack strings, we gave Codex the full source code of every plugin, the hook system, the cron jobs, the state database, the exec-approvals config&mdash;and told it to find architectural vulnerabilities.</p>
+  <p>After five rounds of payload testing, we changed the approach. Instead of generating more attack strings, we gave Codex the full source code of every plugin, the hook system, the cron jobs, the state database, the command allowlist config&mdash;and told it to find architectural vulnerabilities.</p>
   <p>It ran four systematic audits:</p>
 
   <div class="audit-grid reveal">
@@ -340,23 +340,23 @@
     <div class="finding-card severity-critical">
       <div class="finding-sev critical">Critical &mdash; The silent drop</div>
       <h4>Three security plugins were returning a field the runtime silently ignored</h4>
-      <p>All three security plugins&mdash;canary tokens, cost alerts, shell rules&mdash;were returning <code>systemReminder</code> from <code>before_prompt_build</code>. But the runtime only consumes <code>systemPrompt</code>, <code>prependContext</code>, <code>appendSystemContext</code>. The plugins were running. They were generating output. The runtime was throwing it away. Every security injection that was supposed to reach the model&mdash;canary tokens, cost alerts, task state&mdash;was being silently dropped.</p>
+      <p>All three security plugins were returning data through a field the runtime silently ignored. The plugins were running. They were generating output. The runtime was throwing it away. Every security injection that was supposed to reach the model was being silently dropped.</p>
       <p>The agent was operating without these defenses in its system prompt. No error. No warning. Just&hellip; nothing.</p>
-      <div class="finding-status">Fixed &mdash; switched to appendSystemContext</div>
+      <div class="finding-status">Fixed &mdash; switched to correct return field</div>
     </div>
 
     <div class="finding-card severity-critical">
       <div class="finding-sev critical">Critical &mdash; Cross-layer bypass</div>
       <h4>Injecting a fake tag caused the auto-sanitizer to skip all scanning</h4>
-      <p>The auto-sanitizer hook checked whether content was already wrapped in <code>&lt;untrusted-content&gt;</code> tags before scanning. An attacker could inject that substring into a payload, and the hook would skip it entirely&mdash;believing the content was already sanitized. One string bypasses the entire scanning pipeline.</p>
+      <p>The auto-sanitizer hook checked whether content was already wrapped in structural framing tags before scanning. An attacker could inject that marker into a payload, and the hook would skip it entirely&mdash;believing the content was already sanitized. One string bypasses the entire scanning pipeline.</p>
       <div class="finding-status">Fixed &mdash; validated structural framing detection</div>
     </div>
 
     <div class="finding-card severity-critical">
       <div class="finding-sev critical">Critical &mdash; Plugin execution order</div>
       <h4>Content was being truncated before it was scanned for injection</h4>
-      <p>The security-monitor's auto-sanitizer ran at priority 5. The context-optimizer ran at priority 10. Higher priority executes first. So content was being truncated or quarantined by the optimizer before the security scanner ever saw it. Injections in the truncated portion would never be detected.</p>
-      <div class="finding-status">Fixed &mdash; security-monitor raised to priority 100</div>
+      <p>The security scanner ran at a lower priority than the context optimizer. Higher priority executes first. So content was being truncated or quarantined by the optimizer before the security scanner ever saw it. Injections in the truncated portion would never be detected.</p>
+      <div class="finding-status">Fixed &mdash; security scanner raised to highest priority</div>
     </div>
 
     <div class="finding-card severity-critical">
@@ -369,7 +369,7 @@
     <div class="finding-card severity-critical">
       <div class="finding-sev critical">Critical &mdash; Unframed external data in cron</div>
       <h4>Morning briefing ingested email subjects without structural framing</h4>
-      <p>Cron jobs that ran the morning briefing and heartbeat checks ingested email subjects, calendar titles, and comments as plain text&mdash;no <code>&lt;untrusted-content&gt;</code> wrapping. An attacker who could control an email subject line had a direct injection path into the model context.</p>
+      <p>Cron jobs that ran the morning briefing and heartbeat checks ingested email subjects, calendar titles, and comments as plain text&mdash;no structural framing. An attacker who could control an email subject line had a direct injection path into the model context.</p>
       <div class="finding-status">Fixed &mdash; all external fields wrapped in data pipeline</div>
     </div>
 
@@ -381,7 +381,7 @@
 
   <h2 class="reveal">The lesson: compaction is an attack surface</h2>
   <p>One finding stood apart from the rest, because it's a fundamental problem with how LLM sessions work, not something specific to our stack.</p>
-  <p>When a session gets long, the runtime compacts it: it summarizes old messages to free up context window. During compaction, <code>&lt;untrusted-content&gt;</code> tags get stripped. Injection payloads that were safely framed become unframed text in the compaction summary.</p>
+  <p>When a session gets long, the runtime compacts it: it summarizes old messages to free up context window. During compaction, structural framing tags get stripped. Injection payloads that were safely framed become unframed text in the compaction summary.</p>
 
   <div class="insight-box">
     <p><strong>Compaction turns safely-framed content into unframed text.</strong> An attacker who can get a payload into the session and wait for compaction to happen gets a free de-framing pass. The payload enters wrapped. It exits naked.</p>
@@ -414,7 +414,7 @@
   <p>The architectural audits found 30+ additional issues beyond the payload testing (before rounds 7&ndash;8 added another 47). Some highlights:</p>
 
   <ul>
-    <li><strong>Symlink bypass of write protection</strong> &mdash; writing to <code>/tmp/symlink &rarr; CLAUDE.md</code> passed the path check. Fixed with <code>path.resolve()</code> before comparison.</li>
+    <li><strong>Symlink bypass of write protection</strong> &mdash; writing to a symlink pointing to a protected config file passed the path check. Fixed with path resolution before comparison.</li>
     <li><strong>Script file execution gap</strong> &mdash; exec guardrails blocked <code>bash -c "payload"</code> but allowed <code>bash /tmp/payload.sh</code>. Any non-main agent could write a script and execute it.</li>
     <li><strong>Missing exec verbs</strong> &mdash; <code>dd</code>, <code>rsync</code>, <code>ln</code>, <code>truncate</code> could modify protected files. 6 verbs added to the blocklist.</li>
     <li><strong>Canary detection encoding gap</strong> &mdash; base64 or URL-encoded canary values evaded exact substring matching. Added decoding before comparison.</li>
@@ -432,17 +432,17 @@
   <!-- ======================== -->
 
   <h2 class="reveal">Rounds 7&ndash;8: Two-agent architecture</h2>
-  <p>After six rounds of single-agent testing, we expanded the scope. The system had grown from one VPS agent to a two-agent architecture: a VPS agent (Jaume) handling operations and a Mac agent (Paula) handling dispatch. New attack surface. New trust boundaries. New things to break.</p>
+  <p>After six rounds of single-agent testing, we expanded the scope. The system had grown from one VPS agent to a two-agent architecture: a VPS agent handling operations and a Mac agent handling dispatch. New attack surface. New trust boundaries. New things to break.</p>
   <p>We ran 4 parallel red-team agents simultaneously, each targeting a different surface:</p>
 
   <div class="audit-grid reveal">
     <div class="audit-card">
       <h4>Mac attack surface</h4>
-      <p>Tool policy bypass, claude-dispatch manifest verification, git tool escapes, /opt/homebrew path manipulation.</p>
+      <p>Tool policy bypass, dispatch manifest verification, git tool escapes, system path manipulation.</p>
     </div>
     <div class="audit-card">
       <h4>VPS defense stack</h4>
-      <p>security-monitor plugin, session-anchor, exec-guardrail, sanitizer v5.3 evasion, canary token extraction.</p>
+      <p>security plugins, guardrail evasion, canary token extraction.</p>
     </div>
     <div class="audit-card">
       <h4>Trust boundaries</h4>
@@ -457,7 +457,7 @@
   <p>The results: <strong>47 findings. 10 critical. 16 high.</strong></p>
 
   <div class="insight-box">
-    <p><strong>The biggest finding: HMAC verification was designed but never implemented.</strong> The task-signing system had a <code>task-sign</code> script that generated cryptographically signed manifests. The Mac dispatch code had a verification function. But the verification was never wired into the execution path. Signed manifests were generated, transmitted, and then executed without checking the signature. The entire HMAC trust model was theater.</p>
+    <p><strong>The biggest finding: HMAC verification was designed but never implemented.</strong> The task-signing system generated cryptographically signed manifests. The dispatch code had a verification function. But the verification was never wired into the execution path. Signed manifests were generated, transmitted, and then executed without checking the signature. The entire HMAC trust model was theater.</p>
   </div>
 
   <p>Three findings triggered architectural redesigns, not patches:</p>
@@ -469,11 +469,11 @@
 
   <p>We also mapped every multi-step attack chain across the two-agent boundary. Five chains were identified. All five are now blocked:</p>
   <ol>
-    <li>Email &rarr; sandbox compromise &rarr; state-db write &rarr; main agent instruction injection</li>
-    <li>Calendar invite &rarr; cron ingest &rarr; unframed briefing &rarr; model context manipulation</li>
-    <li>Discord message forgery &rarr; unsigned task manifest &rarr; Mac agent command execution</li>
+    <li>Email &rarr; sandbox compromise &rarr; database write &rarr; main agent manipulation</li>
+    <li>Calendar invite &rarr; scheduled task &rarr; unframed data &rarr; model context manipulation</li>
+    <li>Message forgery &rarr; unsigned task manifest &rarr; agent command execution</li>
     <li>Git hook injection &rarr; dispatch code modification &rarr; tool policy bypass</li>
-    <li>npm dependency &rarr; plugin load &rarr; priority hijack &rarr; security monitor bypass</li>
+    <li>Dependency attack &rarr; plugin load &rarr; priority hijack &rarr; security bypass</li>
   </ol>
 
   <h2 class="reveal">How to red-team your own agent</h2>

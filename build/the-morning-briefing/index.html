@@ -161,7 +161,7 @@
   </div>
 
   <p class="section-label reveal">What It Does</p>
-  <p>Every weekday at 6:54 AM, a shell script fires. It queries 10 separate database tables, checks 3 email accounts (9 queries total), pulls CRM pipeline data from HubSpot, fetches 2 calendars, gets cost data from the gateway API, and pulls a daily report from Subsights. All of it gets assembled into a single JSON snapshot file.</p>
+  <p>Every weekday at 6:54 AM, a shell script fires. It queries 10 separate database tables, checks 3 email accounts (9 queries total), pulls CRM pipeline data from HubSpot, fetches 2 calendars, gets cost data from the gateway API, and pulls a daily report from our previous platform. All of it gets assembled into a single JSON snapshot file.</p>
   <p>At 7:04 AM, the agent reads that snapshot and composes a structured briefing. Before writing a single line, it runs a reconciliation pass: cross-checking email subjects against state-db action records, flagging anything that doesn't match. Then it writes 9&ndash;11 sections and posts to Discord, split across 3&ndash;4 messages due to Discord's 2K character limit.</p>
   <p><strong>Total time from trigger to delivery: about 2 minutes.</strong> A human doing this same work across the same sources would need 30&ndash;45 minutes. Every morning.</p>
 
@@ -171,7 +171,7 @@
   <div class="pipeline reveal">
     <div class="pipeline-stage">
       <h3>Pre-Fetch</h3>
-      <p>235-line shell script. Runs 10 minutes before composition. Queries state-db, 3 email accounts, HubSpot CRM, 2 calendars, cost API, Subsights. Assembles everything into one JSON file with atomic rename for safety.</p>
+      <p>235-line shell script. Runs 10 minutes before composition. Queries state-db, 3 email accounts, HubSpot CRM, 2 calendars, cost API, reporting platform. Assembles everything into one JSON file with atomic rename for safety.</p>
       <div class="stage-time">6:54 AM &middot; ~30 seconds</div>
     </div>
     <div class="pipeline-stage">
@@ -181,13 +181,13 @@
     </div>
     <div class="pipeline-stage">
       <h3>Composition</h3>
-      <p>230-line prompt. Sonnet 4.6 reads the snapshot, runs reconciliation, composes 10 sections with chain-format grouping. Posts to Discord #home. 7&ndash;21 turns, 165K&ndash;750K tokens.</p>
+      <p>230-line prompt. Sonnet 4.6 reads the snapshot, runs reconciliation, composes 10 sections with chain-format grouping. Posts to Discord. 7&ndash;21 turns, 165K&ndash;750K tokens.</p>
       <div class="stage-time">7:04 AM &middot; ~90 seconds</div>
     </div>
   </div>
 
   <h2 class="reveal">What's In the Briefing</h2>
-  <p>9 core sections per run. Drift Detection appears only when something is wrong &mdash; omitted when clean. Items are grouped by <strong>person or company</strong>, not by source. Mark Cairns's email, HubSpot record, state-db thread status, and calendar events all appear in one block &mdash; not scattered across four tools.</p>
+  <p>9 core sections per run. Drift Detection appears only when something is wrong &mdash; omitted when clean. Items are grouped by <strong>person or company</strong>, not by source. A contact's email, HubSpot record, state-db thread status, and calendar events all appear in one block &mdash; not scattered across four tools.</p>
 
   <div class="sections-grid reveal">
     <div class="section-card">
@@ -222,7 +222,7 @@
     </div>
     <div class="section-card">
       <div class="section-num">07</div>
-      <h4>Subsights Comments</h4>
+      <h4>Platform Comments</h4>
       <p>Customer feedback across all workspaces. Linked to the feedback loop automation.</p>
     </div>
     <div class="section-card">
@@ -246,7 +246,7 @@
     <div class="source"><strong>HubSpot CRM</strong> Pipeline deals with pinned contact/deal filtering via jq</div>
     <div class="source"><strong>Calendar</strong> 2 accounts: today + tomorrow events</div>
     <div class="source"><strong>Cost API</strong> Gateway spend data: yesterday, running total, per-model</div>
-    <div class="source"><strong>Subsights</strong> Daily report: new comments, conversation metrics</div>
+    <div class="source"><strong>Reporting Platform</strong> Daily report: new comments, conversation metrics</div>
   </div>
 
   <h2 class="reveal">Why Pre-Fetch Matters</h2>
@@ -275,31 +275,30 @@
   <p>Verbatim from the Feb 27 briefing. This is what arrives in Discord at 7:04 AM:</p>
 
   <div class="briefing-example reveal">
-    <span class="ex-label">Priority Actions &mdash; Feb 27</span>Log Mark M (Sales Pipeline Gurus) in HubSpot as inbound-sales + reply
-  with referral ask. He emailed 2/26 with Apollo Summit replay link.
+    <span class="ex-label">Priority Actions &mdash; Feb 27</span>Log Client A (Partner Lead) in HubSpot as inbound-sales + reply
+  with referral ask. They emailed 2/26 with conference replay link.
   5-msg thread since 2/4, still not logged. [overdue]
 
-Log WatchTower IT Solutions (Tony + Rebekka) in HubSpot as inbound-sales
+Log Client B (Inbound Lead) in HubSpot as inbound-sales
   + reply with referral ask. [overdue]
 
-Google AI Studio: Migrate to Gemini 3.1 Pro Preview before March 9.
+API migration: Review deprecation notice before deadline.
   Email in work inbox from 2/26. Decide: migrate or drop the API.
 
-Tax prep: calendar event Tue 3/3 8am. Anthropic monthly invoice arrived
+Tax prep: calendar event Tue 3/3 8am. Platform monthly invoice arrived
   2/26, pull for records.</div>
 
   <div class="briefing-example reveal">
-    <span class="ex-label">Home Dashboard &mdash; Feb 28</span> SUBSIGHTS x OPENCLAW
+    <span class="ex-label">Home Dashboard &mdash; Feb 28</span> [PLATFORM STATUS]
  Status: OPERATIONAL
- Version: 2026.2.21 | Model: Sonnet 4.6
 -------------------------------------
  THREADS
- -> Mark Cairns -- OpenClaw Setup [blocked-on-us, stale]
- -> Emily Burke -- Gartner Vendor Directory [waiting-on-them]
+ -> [Contact Name] -- Setup Request [blocked-on-us, stale]
+ -> [Contact Name] -- Vendor Directory [waiting-on-them]
 -------------------------------------
  TASKS             3 open actions | 2 open tasks
  CLIENTS           3 active | 0 alerts
- PIPELINE          Empty | 1 orphaned HubSpot deal (Visit Sun Valley)
+ PIPELINE          Empty | 1 orphaned HubSpot deal ([Deal Name])
 -------------------------------------
  TODAY
  -> Clear calendar (Saturday)
@@ -317,15 +316,15 @@ Tax prep: calendar event Tue 3/3 8am. Anthropic monthly invoice arrived
     </div>
     <div class="catch-card">
       <h4>18-Month Stale Deal</h4>
-      <p>Visit Sun Valley HubSpot deal (stage: presentationscheduled, last touched Aug 2024) appeared under DRIFT in every briefing. Cross-referenced against state-db pipeline, found no matching entry. Flagged daily until resolved.</p>
+      <p>[Deal Name] HubSpot deal (stage: presentationscheduled, last touched Aug 2024) appeared under DRIFT in every briefing. Cross-referenced against state-db pipeline, found no matching entry. Flagged daily until resolved.</p>
     </div>
     <div class="catch-card">
       <h4>12-Hour Deadline Surface</h4>
-      <p>Google AI Studio deprecation email (March 9 deadline) arrived Feb 26. Surfaced as Priority #3 by 7:04 AM Feb 27: &ldquo;decide: migrate or drop the API.&rdquo; Turned a buried email into a binary decision.</p>
+      <p>A platform deprecation email (March 9 deadline) arrived Feb 26. Surfaced as Priority #3 by 7:04 AM Feb 27: &ldquo;decide: migrate or drop the API.&rdquo; Turned a buried email into a binary decision.</p>
     </div>
     <div class="catch-card">
       <h4>Cross-Source Linking</h4>
-      <p>Anthropic invoice in personal Gmail (Feb 26, 9:29 AM) cross-referenced with pre-scheduled &ldquo;Do all taxes&rdquo; calendar event (Mar 3, 8 AM). Surfaced as single linked item. Neither obvious alone.</p>
+      <p>Platform invoice in personal Gmail (Feb 26, 9:29 AM) cross-referenced with pre-scheduled &ldquo;Do all taxes&rdquo; calendar event (Mar 3, 8 AM). Surfaced as single linked item. Neither obvious alone.</p>
     </div>
     <div class="catch-card">
       <h4>Self-Recovery</h4>
@@ -333,11 +332,11 @@ Tax prep: calendar event Tue 3/3 8am. Anthropic monthly invoice arrived
     </div>
     <div class="catch-card">
       <h4>Client State Mismatch</h4>
-      <p>Dylan's Tours showed &ldquo;active&rdquo; in state-db but &ldquo;churned Feb 2026&rdquo; in MEMORY.md. Briefing flagged under DRIFT: &ldquo;Update state-db to churned.&rdquo;</p>
+      <p>[Client Name] showed &ldquo;active&rdquo; in state-db but &ldquo;churned Feb 2026&rdquo; in MEMORY.md. Briefing flagged under DRIFT: &ldquo;Update state-db to churned.&rdquo;</p>
     </div>
     <div class="catch-card">
       <h4>Phishing Detection</h4>
-      <p>Fake USPTO trademark notice from tsdrusptonotification.com flagged during a routine email scan. The agent recognized the spoofed domain and surfaced it as a security alert instead of passing it through as a legitimate action item.</p>
+      <p>Fake USPTO trademark notice from [spoofed domain] flagged during a routine email scan. The agent recognized the spoofed domain and surfaced it as a security alert instead of passing it through as a legitimate action item.</p>
     </div>
   </div>
 

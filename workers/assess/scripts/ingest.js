@@ -139,7 +139,7 @@ Mark Cuban called it "the smartest counter I've seen to AI taking over jobs."`,
   'curated/security': `Security Architecture:
 8 independent defense layers: Input sanitizer (140+ patterns, 7 detection stages), auto-sanitizer hook, canary tokens (daily-rotating), write protection on critical files, exec guardrails, kill switch on critical CVEs, sandbox isolation (read-only Haiku agent), structural framing (XML data tags).
 Red-teamed with 6 rounds of AI vs AI: 210+ attack payloads, 4 architectural audits by Codex. 5 critical findings, all patched. 30+ total fixes.
-Every layer assumes the others have failed. For injection to succeed: must fool sanitizer + sandbox agent + jq extraction + main agent + exec-approvals.`,
+Every layer assumes the others have failed. For injection to succeed: must fool sanitizer + sandbox agent + jq extraction + main agent + the command allowlist.`,
 
   'curated/whynow': `Why Deploy Agents Now:
 Agents as capital investment — every email triaged teaches patterns, every CRM update teaches deal flow. Knowledge is permanent.

@@ -417,7 +417,7 @@
   <p>Regex is fast, deterministic, and zero-cost. It catches the obvious stuff reliably. But it can't understand intent. It matches strings, not meaning.</p>
   <p>A 100% catch rate against a known adversary using a known taxonomy isn't the same as invulnerability. A different adversary with a different approach, or a 16th category we haven't defined, could find new paths. That's why this is a continuous process, not a milestone.</p>
   <p><strong>We chose regex because it's predictable, auditable, and has zero latency.</strong> We don't ask it to solve the problem alone. We ask it to raise the cost of attack. To make the easy paths harder and force adversaries into increasingly creative approaches that our deeper layers are designed to catch.</p>
-  <p>Even a bypass that fools the sanitizer still needs to fool the sandbox agent, survive re-sanitization on the output side, fool the main agent (which is told to distrust external content), and produce a command that passes exec-approvals. The sanitizer is the first checkpoint, not the last.</p>
+  <p>Even a bypass that fools the sanitizer still needs to fool the sandbox agent, survive re-sanitization on the output side, fool the main agent (which is told to distrust external content), and produce a command that passes the command allowlist. The sanitizer is the first checkpoint, not the last.</p>
 
   <!-- Section 7: What We Fixed -->
   <h2 class="reveal">What Changed Across Three Versions</h2>
