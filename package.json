@@ -1,0 +1,8 @@
+{
+  "name": "briu-website",
+  "private": true,
+  "scripts": {
+    "security-lint": "node scripts/security-lint.js",
+    "prepare": "git config core.hooksPath .githooks"
+  }
+}

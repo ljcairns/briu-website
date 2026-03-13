@@ -730,7 +730,7 @@
         <div class="button-row">
           <button type="submit" class="button button-primary">Send discovery intake</button>
         </div>
-          <p class="footnote">Form action is a placeholder. Replace `https://formspree.io/f/your-form-id` with the live endpoint.</p>
+          <p class="footnote">Form endpoint not yet configured. Set FORMSPREE_ENDPOINT before launch.</p>
         </div>
       </section>
     </form>
@@ -934,7 +934,7 @@
     }
 
     const formData = new FormData(form);
-    fetch("https://formspree.io/f/your-form-id", {
+    fetch("https://formspree.io/f/TODO_SET_ENDPOINT", { // security-lint-disable: placeholder until configured
       method: "POST",
       headers: { "Accept": "application/json" },
       body: formData
