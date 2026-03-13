@@ -1,0 +1,44 @@
+{
+  "daily": [
+    { "date": "2026-02-10", "api_spend": 12.40, "commits": 8, "tasks_dispatched": 14, "skills": 3 },
+    { "date": "2026-02-11", "api_spend": 9.80, "commits": 5, "tasks_dispatched": 11, "skills": 3 },
+    { "date": "2026-02-12", "api_spend": 15.20, "commits": 12, "tasks_dispatched": 19, "skills": 4 },
+    { "date": "2026-02-13", "api_spend": 11.50, "commits": 7, "tasks_dispatched": 16, "skills": 4 },
+    { "date": "2026-02-14", "api_spend": 8.90, "commits": 4, "tasks_dispatched": 9, "skills": 4 },
+    { "date": "2026-02-15", "api_spend": 6.30, "commits": 3, "tasks_dispatched": 7, "skills": 4 },
+    { "date": "2026-02-16", "api_spend": 4.10, "commits": 2, "tasks_dispatched": 5, "skills": 4 },
+    { "date": "2026-02-17", "api_spend": 14.60, "commits": 10, "tasks_dispatched": 22, "skills": 5 },
+    { "date": "2026-02-18", "api_spend": 16.80, "commits": 14, "tasks_dispatched": 25, "skills": 5 },
+    { "date": "2026-02-19", "api_spend": 13.20, "commits": 9, "tasks_dispatched": 18, "skills": 5 },
+    { "date": "2026-02-20", "api_spend": 10.40, "commits": 6, "tasks_dispatched": 13, "skills": 6 },
+    { "date": "2026-02-21", "api_spend": 18.50, "commits": 15, "tasks_dispatched": 28, "skills": 6 },
+    { "date": "2026-02-22", "api_spend": 7.60, "commits": 4, "tasks_dispatched": 8, "skills": 6 },
+    { "date": "2026-02-23", "api_spend": 5.20, "commits": 2, "tasks_dispatched": 6, "skills": 6 },
+    { "date": "2026-02-24", "api_spend": 19.30, "commits": 16, "tasks_dispatched": 30, "skills": 7 },
+    { "date": "2026-02-25", "api_spend": 14.10, "commits": 11, "tasks_dispatched": 21, "skills": 7 },
+    { "date": "2026-02-26", "api_spend": 12.90, "commits": 9, "tasks_dispatched": 17, "skills": 8 },
+    { "date": "2026-02-27", "api_spend": 16.40, "commits": 13, "tasks_dispatched": 24, "skills": 8 },
+    { "date": "2026-02-28", "api_spend": 11.70, "commits": 8, "tasks_dispatched": 15, "skills": 9 },
+    { "date": "2026-03-01", "api_spend": 9.50, "commits": 6, "tasks_dispatched": 12, "skills": 9 },
+    { "date": "2026-03-02", "api_spend": 7.80, "commits": 4, "tasks_dispatched": 8, "skills": 9 },
+    { "date": "2026-03-03", "api_spend": 20.10, "commits": 18, "tasks_dispatched": 32, "skills": 10 },
+    { "date": "2026-03-04", "api_spend": 17.60, "commits": 14, "tasks_dispatched": 27, "skills": 10 },
+    { "date": "2026-03-05", "api_spend": 15.30, "commits": 11, "tasks_dispatched": 23, "skills": 11 },
+    { "date": "2026-03-06", "api_spend": 13.80, "commits": 10, "tasks_dispatched": 20, "skills": 11 },
+    { "date": "2026-03-07", "api_spend": 18.90, "commits": 16, "tasks_dispatched": 29, "skills": 12 },
+    { "date": "2026-03-08", "api_spend": 14.50, "commits": 12, "tasks_dispatched": 22, "skills": 12 },
+    { "date": "2026-03-09", "api_spend": 8.20, "commits": 5, "tasks_dispatched": 10, "skills": 12 },
+    { "date": "2026-03-10", "api_spend": 21.30, "commits": 19, "tasks_dispatched": 35, "skills": 12 },
+    { "date": "2026-03-11", "api_spend": 16.70, "commits": 13, "tasks_dispatched": 26, "skills": 12 }
+  ],
+  "subscriptions": {
+    "claude_max": { "monthly": 200, "daily": 6.67, "label": "Claude Max" },
+    "chatgpt_pro": { "monthly": 200, "daily": 6.67, "label": "ChatGPT Pro" },
+    "vps": { "monthly": 20, "daily": 0.67, "label": "VPS" }
+  },
+  "revenue": {
+    "total_booked": 0,
+    "target_monthly_run_rate": 10000,
+    "entries": []
+  }
+}
