@@ -391,10 +391,6 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
     <div class="hud-value" id="hud-days">30</div>
     <div class="hud-label">Days Running</div>
   </div>
-  <div class="hud-stat" data-tooltip="Briu live since Mar 5, 2026" style="--pulse-delay: 0.25s;">
-    <div class="hud-value" id="hud-briu-days">7</div>
-    <div class="hud-label">Briu Live</div>
-  </div>
   <div class="hud-stat" data-tooltip="Lines of code across website + agent repos" style="--pulse-delay: 0.5s;">
     <div class="hud-value" data-dynamic="lines-of-code" id="hud-loc">15.9K</div>
     <div class="hud-label">Lines of Code</div>
@@ -1109,18 +1105,14 @@ Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js?v=20260312a"></script>
 <script>
-/* HUD: Days Running counter (OpenClaw from Feb 10) + Briu Live (from Mar 5) */
+/* HUD: Days Running counter (OpenClaw from Feb 10) */
 (function() {
   var openclawStart = new Date('2026-02-10T00:00:00');
-  var briuStart = new Date('2026-03-05T00:00:00');
   function updateDays() {
     var now = new Date();
     var openclawDays = Math.floor((now - openclawStart) / (1000 * 60 * 60 * 24));
-    var briuDays = Math.floor((now - briuStart) / (1000 * 60 * 60 * 24));
     var el = document.getElementById('hud-days');
     if (el) el.textContent = openclawDays;
-    var briuEl = document.getElementById('hud-briu-days');
-    if (briuEl) briuEl.textContent = briuDays;
   }
   updateDays();
   setInterval(updateDays, 60000);
