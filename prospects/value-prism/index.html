@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Value Prism</title>
+<meta name="description" content="How Briu helps Value Prism automate analyst research, deal tracking, compliance monitoring, and client reporting.">
+<meta property="og:title" content="Briu | Value Prism">
+<meta property="og:description" content="AI agent deployment for valuation consultancies. Research, pipeline, compliance, and reporting — automated.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/prospects/value-prism/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Value Prism">
+<meta name="twitter:description" content="AI agent deployment for valuation consultancies.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<style>
+.hero { padding-bottom: 2.5rem; }
+
+/* Prospect intro */
+.prospect-intro { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; max-width: 640px; }
+
+/* Use-case cards */
+.uc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-top: 2.5rem; }
+.uc-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.4s ease; }
+.uc-card:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.uc-icon { font-size: 1.6rem; margin-bottom: 1rem; display: block; }
+.uc-card h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 0.75rem; font-weight: 400; }
+.uc-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0; }
+
+/* Before / After */
+.ba-row { margin-top: 1.25rem; }
+.ba-item { font-size: 0.88rem; line-height: 1.65; margin-bottom: 0.6rem; padding-left: 1rem; border-left: 2px solid rgba(255,255,255,0.06); }
+.ba-item.after { color: var(--text); border-left-color: rgba(212,160,90,0.3); }
+.ba-item.before { color: var(--text-muted); }
+.ba-item strong { display: block; font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 0.25rem; }
+.ba-item.before strong { color: var(--text-muted); }
+.ba-item.after strong { color: var(--gold-light); }
+
+/* How it works */
+.steps { display: grid; gap: 0; margin-top: 2.5rem; }
+.step { display: grid; grid-template-columns: 60px 1fr; gap: 1.5rem; padding: 1.75rem 0; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.step:first-child { padding-top: 0; }
+.step:last-child { border-bottom: none; }
+.step-num { font-family: var(--serif); font-size: 1.8rem; color: rgba(212,160,90,0.2); line-height: 1.2; }
+.step-content h3 { font-family: var(--serif); font-size: 1.15rem; color: var(--text); margin-bottom: 0.4rem; font-weight: 400; }
+.step-content p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 0; }
+
+/* CTA section */
+.cta-section { text-align: center; padding: 5rem 2rem; }
+.cta-section h2 { font-family: var(--serif); font-size: clamp(1.8rem, 3.5vw, 2.6rem); color: var(--text); margin-bottom: 1rem; line-height: 1.2; }
+.cta-section p { font-size: 1.05rem; color: var(--text-muted); margin-bottom: 2rem; max-width: 520px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+.cta-btn { display: inline-block; padding: 0.9rem 2.5rem; font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--bg); background: var(--gold); border: none; text-decoration: none; font-family: var(--sans); transition: all 0.3s ease; cursor: pointer; }
+.cta-btn:hover { background: var(--gold-light); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(212,160,90,0.3); }
+.cta-secondary { display: inline-block; margin-top: 1rem; font-size: 0.85rem; color: var(--text-muted); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.1); transition: color 0.2s, border-color 0.2s; }
+.cta-secondary:hover { color: var(--gold); border-color: var(--gold); }
+
+/* Fit signals */
+.fit-strip { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 2.5rem; }
+.fit-stat { text-align: center; }
+.fit-stat-num { font-family: var(--serif); font-size: 2rem; color: var(--gold); display: block; margin-bottom: 0.25rem; }
+.fit-stat-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* Reveal */
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+@media (max-width: 640px) {
+  .uc-grid { grid-template-columns: 1fr; }
+  .fit-strip { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .step { grid-template-columns: 40px 1fr; gap: 1rem; }
+  .step-num { font-size: 1.4rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="site-nav"></div>
+
+<main>
+
+<!-- Hero -->
+<section class="hero">
+<div class="hero-container">
+  <span class="hero-eyebrow">Prepared for Value Prism</span>
+  <h1>Four analysts.<br>Hundreds of deals.<br><em>One agent layer.</em></h1>
+  <p class="prospect-intro">Valuation consultancies run on research depth and deadline precision. Briu deploys AI agents that handle the volume work — so your analysts spend time on judgment, not formatting.</p>
+</div>
+</section>
+
+<!-- Fit signals -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">Why this fits</span>
+  <h2>Built for firms like yours</h2>
+  <div class="fit-strip">
+    <div class="fit-stat">
+      <span class="fit-stat-num">4</span>
+      <span class="fit-stat-label">Team size</span>
+    </div>
+    <div class="fit-stat">
+      <span class="fit-stat-num">High</span>
+      <span class="fit-stat-label">Research volume</span>
+    </div>
+    <div class="fit-stat">
+      <span class="fit-stat-num">Strict</span>
+      <span class="fit-stat-label">Compliance deadlines</span>
+    </div>
+    <div class="fit-stat">
+      <span class="fit-stat-num">Manual</span>
+      <span class="fit-stat-label">Reporting today</span>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- Use cases -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">What we'd deploy</span>
+  <h2>Four agents, four bottlenecks removed</h2>
+  <div class="uc-grid">
+
+    <div class="uc-card reveal reveal-delay-1">
+      <span class="uc-icon">01</span>
+      <h3>Analyst Research Automation</h3>
+      <p>Your analysts pull comps, scrape filings, and normalize data across dozens of sources per engagement. An agent handles the intake — gathering public filings, extracting key metrics, and assembling structured comp sets before an analyst touches them.</p>
+      <div class="ba-row">
+        <div class="ba-item before"><strong>Today</strong>Hours of manual data gathering per deal, across SEC filings, databases, and prior work product.</div>
+        <div class="ba-item after"><strong>With Briu</strong>Structured comp sets drafted automatically. Analysts review and refine, not search and copy.</div>
+      </div>
+    </div>
+
+    <div class="uc-card reveal reveal-delay-2">
+      <span class="uc-icon">02</span>
+      <h3>Deal Pipeline Tracking</h3>
+      <p>With multiple active engagements, status lives in inboxes, spreadsheets, and memory. A pipeline agent monitors deal stages, surfaces stalled items, and keeps everyone seeing the same state without manual updates.</p>
+      <div class="ba-row">
+        <div class="ba-item before"><strong>Today</strong>Status check meetings, Slack threads, and spreadsheet updates that fall behind by Thursday.</div>
+        <div class="ba-item after"><strong>With Briu</strong>Live pipeline view. Auto-updated from email activity, calendar events, and document state.</div>
+      </div>
+    </div>
+
+    <div class="uc-card reveal reveal-delay-3">
+      <span class="uc-icon">03</span>
+      <h3>Compliance Deadline Monitoring</h3>
+      <p>Missed filing dates or audit windows aren't just embarrassing — they're liability. A compliance agent tracks regulatory calendars, client-specific deadlines, and deliverable due dates, escalating before anything slips.</p>
+      <div class="ba-row">
+        <div class="ba-item before"><strong>Today</strong>Calendar reminders and personal tracking. Works until someone's out or a deadline shifts.</div>
+        <div class="ba-item after"><strong>With Briu</strong>Automated deadline tracking with escalation chains. No single point of failure.</div>
+      </div>
+    </div>
+
+    <div class="uc-card reveal reveal-delay-1">
+      <span class="uc-icon">04</span>
+      <h3>Client Reporting</h3>
+      <p>Valuation reports follow consistent structures but require pulling data from multiple sources and formatting to spec. A reporting agent assembles first drafts — tables, narratives, and appendices — from your templates and live data.</p>
+      <div class="ba-row">
+        <div class="ba-item before"><strong>Today</strong>Senior analysts spend hours on formatting, table assembly, and narrative boilerplate.</div>
+        <div class="ba-item after"><strong>With Briu</strong>Report drafts assembled automatically. Analysts focus on conclusions and client-specific insight.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+</section>
+
+<!-- How it works -->
+<section class="section reveal">
+<div class="section-container">
+  <span class="section-label">Process</span>
+  <h2>How we'd get started</h2>
+  <div class="steps">
+    <div class="step">
+      <span class="step-num">01</span>
+      <div class="step-content">
+        <h3>Discovery questionnaire</h3>
+        <p>A 10-minute assessment to score your workflows by time, repetition, and judgment required. We use this to confirm which agents deliver the most leverage for your team.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">02</span>
+      <div class="step-content">
+        <h3>Kickoff session</h3>
+        <p>We map your tools, data sources, and approval flows. You get a deployment architecture and your first agent within two weeks. Cost: $5,000 flat.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">03</span>
+      <div class="step-content">
+        <h3>Implementation</h3>
+        <p>We build the remaining agents, integrate with your existing stack, and train your team. Typical valuation firm scope: $12-20K for all four workflows.</p>
+      </div>
+    </div>
+    <div class="step">
+      <span class="step-num">04</span>
+      <div class="step-content">
+        <h3>You own everything</h3>
+        <p>No vendor lock-in. Every agent, prompt, and integration belongs to you. Optional retainer for ongoing tuning and support starts at $500/month.</p>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section reveal">
+  <h2>Start with the questionnaire</h2>
+  <p>Takes 10 minutes. Tells us exactly which workflows will move the needle for Value Prism.</p>
+  <a href="/discovery/?company=Value+Prism&team_size=4&profile=reporting,compliance-review,lead-intake,proposal-generation&time=5,4,4,4&repetition=5,4,3,4&judgment=2,2,3,2" class="cta-btn">Take the Discovery Questionnaire</a>
+  <br>
+  <a href="mailto:hi@briu.ai" class="cta-secondary">Or just reply to this email</a>
+</section>
+
+</main>
+
+<div id="site-modal"></div>
+<div id="site-footer"></div>
+
+<script src="/components.js?v=20260312a"></script>
+<script src="/shared.js?v=20260312a"></script>
+<script src="/ambient.js?v=20260312a"></script>
+<script>
+/* Scroll reveal */
+(function() {
+  var els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  var observer = new IntersectionObserver(function(entries) {
+    for (var i = 0; i < entries.length; i++) {
+      if (entries[i].isIntersecting) {
+        entries[i].target.classList.add('visible');
+        observer.unobserve(entries[i].target);
+      }
+    }
+  }, { threshold: 0.15 });
+  for (var i = 0; i < els.length; i++) observer.observe(els[i]);
+})();
+</script>
+</body>
+</html>
