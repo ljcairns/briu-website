@@ -22,6 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260312a">
 <link rel="stylesheet" href="/charts.css?v=20260312a">
 <style>
@@ -163,6 +164,7 @@
   .arc-num { font-size: 1.4rem; }
   .arc-step-highlight { padding-left: 1rem; }
   .scenario-grid { grid-template-columns: 1fr; }
+  .chart-pair { grid-template-columns: 1fr !important; }
   .build-meta { flex-direction: column; gap: 0.5rem; }
   .tier-scope { flex-direction: column; gap: 0.75rem; }
 }
@@ -375,6 +377,12 @@
       </div>
     </div>
   </div>
+
+  <div class="reveal chart-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:3rem;max-width:900px;">
+    <div id="chart-cost-per-hour" style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;border-radius:0;"></div>
+    <div id="chart-cost-compression" style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;border-radius:0;"></div>
+  </div>
+  <p class="reveal" style="font-size:0.72rem;color:var(--text-muted);opacity:0.6;margin-top:0.75rem;">Source: All-In Podcast E259 — Chamath Palihapitiya</p>
 </section>
 
 <section>
@@ -715,6 +723,13 @@
 <script src="/chat-bubble.js?v=20260312a"></script>
 <script src="/dynamic-stats.js?v=20260312a"></script>
 <script src="/charts.js?v=20260312a"></script>
+<script src="/js/chart-renderer.js?v=20260312a"></script>
+<script>
+window.addEventListener('load', function() {
+  renderChart('chart-cost-per-hour', 'cost-per-hour');
+  renderChart('chart-cost-compression', 'cost-compression');
+});
+</script>
 <script>
 /* Expandable capability cards */
 function toggleCapability(el) {

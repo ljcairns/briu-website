@@ -22,6 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260312a">
 <style>
 .hero { padding-bottom: 2.5rem; }
@@ -190,6 +191,11 @@
 </table>
 <p class="table-note">In-house estimates based on US median salaries (Levels.fyi, Glassdoor 2025). Briu estimate uses Kickoff + mid-range single implementation + $500/mo retainer.</p>
 
+<div class="reveal" style="max-width:500px;margin:2rem auto;background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;">
+  <div id="chart-cost-per-hour-pl"></div>
+</div>
+<p style="font-size:0.72rem;color:var(--text-muted);opacity:0.6;margin-top:0.5rem;text-align:center;">Source: All-In Podcast E259 — Chamath Palihapitiya</p>
+
 <!-- Savings Callout -->
 <div class="savings-callout reveal">
   <div class="savings-stat">
@@ -303,6 +309,12 @@
 <script src="/shared.js?v=20260312a"></script>
 <script src="/ambient.js?v=20260312a"></script>
 <script src="/chat-bubble.js?v=20260312a"></script>
+<script src="/js/chart-renderer.js?v=20260312a"></script>
+<script>
+window.addEventListener('load', function() {
+  renderChart('chart-cost-per-hour-pl', 'cost-per-hour');
+});
+</script>
 <script>
 (function() {
   // Scroll reveal

@@ -22,6 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <link rel="stylesheet" href="/shared.css?v=20260312a">
 <link rel="stylesheet" href="/charts.css?v=20260312a">
 <style>
@@ -1051,6 +1052,11 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
   <div id="hp-automation-bars"></div>
 
+  <div class="reveal" style="max-width:600px;margin:2.5rem auto 0;background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;">
+    <div id="chart-deployment-velocity"></div>
+  </div>
+  <p class="reveal" style="font-size:0.72rem;color:var(--text-muted);opacity:0.6;margin-top:0.75rem;text-align:center;">Source: All-In Podcast E259 — Jason Calacanis</p>
+
   <div class="proof-cta reveal">
     <a href="/build/" class="proof-link">See the full build dashboard &rarr;</a>
     <a href="/why-now/" class="proof-link">Read why now &rarr;</a>
@@ -1215,6 +1221,12 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <script src="/chat-bubble.js?v=20260312a"></script>
 <script src="/interactive.js?v=20260312a"></script>
 <script src="/dynamic-stats.js?v=20260312a"></script>
+<script src="/js/chart-renderer.js?v=20260312a"></script>
+<script>
+window.addEventListener('load', function() {
+  renderChart('chart-deployment-velocity', 'deployment-velocity');
+});
+</script>
 <script>
 /* FAQ Search */
 function filterFAQ(query) {

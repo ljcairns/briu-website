@@ -194,6 +194,7 @@
   .footer-links { justify-content: center; }
   .timeline-wrapper { padding: 2rem 1.25rem 3rem; }
   .tl-content-section { padding: 0 1.25rem; margin: 3rem auto; }
+  .chart-pair { grid-template-columns: 1fr !important; }
 }
 </style>
 <script type="application/ld+json">
@@ -310,6 +311,19 @@
   <!-- Nodes injected by JS -->
 </div>
 
+<div class="wn-section reveal" style="margin-bottom:3rem;">
+  <p class="section-label" style="text-align:center;">The Scale of What's Happening</p>
+  <div class="chart-pair" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2rem;max-width:900px;margin-left:auto;margin-right:auto;">
+    <div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;">
+      <div id="chart-infra-capex"></div>
+    </div>
+    <div style="background:var(--surface);border:1px solid rgba(255,255,255,0.06);padding:1.5rem;">
+      <div id="chart-energy-bottleneck"></div>
+    </div>
+  </div>
+  <p style="font-size:0.72rem;color:var(--text-muted);opacity:0.6;margin-top:0.75rem;text-align:center;">Sources: All-In Podcast E259, E261 — David Friedberg</p>
+</div>
+
 <!-- Discovery CTA before bottom CTA -->
 <div class="wn-section" style="margin-bottom:3rem; text-align:center;">
   <div style="background:rgba(212,160,90,0.04); border:1px solid rgba(212,160,90,0.15); padding:2rem; max-width:560px; margin:0 auto;">
@@ -339,6 +353,13 @@
 <script src="/dynamic-stats.js?v=20260312a"></script>
 <script src="/interactive.js?v=20260312a"></script>
 <script src="/charts.js?v=20260312a"></script>
+<script src="/js/chart-renderer.js?v=20260312a"></script>
+<script>
+window.addEventListener('load', function() {
+  renderChart('chart-infra-capex', 'infrastructure-capex');
+  renderChart('chart-energy-bottleneck', 'energy-bottleneck');
+});
+</script>
 <script>
 (function() {
   'use strict';
