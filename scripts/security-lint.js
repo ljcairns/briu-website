@@ -5,7 +5,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 
-const EXCLUDE_DIRS = new Set(['node_modules', '.git', 'scripts']);
+const EXCLUDE_DIRS = new Set(['node_modules', '.git', 'scripts', 'dist']);
 
 function walkDir(dir) {
   const results = [];
