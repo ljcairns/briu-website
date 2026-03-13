@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Briu | Built for TMR</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260313a">
+<style>
+/* Auth gate */
+.auth-gate { position: fixed; inset: 0; z-index: 9999; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+.auth-gate.hidden { display: none; }
+.auth-box { text-align: center; max-width: 380px; padding: 2rem; }
+.auth-box .logo-img { height: 64px; margin-bottom: 2rem; opacity: 0.7; }
+.auth-box p { font-size: 0.88rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.auth-input { width: 100%; background: var(--surface); border: 1px solid rgba(255,255,255,0.08); color: var(--text); font-family: var(--sans); font-size: 0.95rem; padding: 0.85rem 1.1rem; outline: none; transition: border-color 0.2s; text-align: center; letter-spacing: 0.08em; }
+.auth-input:focus { border-color: rgba(212,160,90,0.4); }
+.auth-input::placeholder { color: rgba(196,185,168,0.4); letter-spacing: 0.04em; }
+.auth-error { color: var(--coral); font-size: 0.8rem; margin-top: 0.75rem; opacity: 0; transition: opacity 0.2s; }
+.auth-error.show { opacity: 1; }
+
+/* Page content hidden until auth */
+.page-content { display: none; }
+.page-content.visible { display: block; }
+
+/* Hero */
+.hero { min-height: 80vh; display: flex; flex-direction: column; justify-content: center; text-align: center; align-items: center; padding: 8rem 2rem 4rem; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 1rem; }
+.hero-eyebrow::before, .hero-eyebrow::after { content: ''; width: 40px; height: 1px; background: linear-gradient(90deg, transparent, var(--gold)); }
+.hero-eyebrow::after { background: linear-gradient(90deg, var(--gold), transparent); }
+.hero h1 { margin-bottom: 1.5rem; }
+.hero-subtitle { font-size: 1.05rem; color: var(--text-muted); max-width: 560px; line-height: 1.75; }
+
+/* Team cards */
+.team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.25rem; margin-top: 2.5rem; }
+.team-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 2rem; transition: all 0.35s ease; }
+.team-card:hover { border-color: rgba(212,160,90,0.2); transform: translateY(-3px); box-shadow: 0 12px 40px rgba(0,0,0,0.3); }
+.team-card-name { font-family: var(--serif); font-size: 1.3rem; color: var(--text); margin-bottom: 0.3rem; }
+.team-card-hours { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--gold); margin-bottom: 1.25rem; }
+.team-card ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 0.6rem; }
+.team-card li { font-size: 0.9rem; color: var(--text-muted); line-height: 1.55; padding-left: 1.1rem; position: relative; }
+.team-card li::before { content: '\2192'; position: absolute; left: 0; color: var(--gold); font-size: 0.85rem; }
+
+/* Pitch quote */
+.pitch-section { text-align: center; padding: 6rem 2rem; }
+.pitch-quote { font-family: var(--serif); font-size: clamp(1.3rem, 2.8vw, 1.8rem); color: var(--text); max-width: 760px; margin: 0 auto; line-height: 1.5; position: relative; }
+
+/* Process */
+.process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; margin-top: 2.5rem; counter-reset: step; }
+.process-step { padding: 1.5rem; border-top: 2px solid rgba(255,255,255,0.06); counter-increment: step; transition: all 0.35s ease; }
+.process-step:hover { border-color: var(--gold); }
+.process-step::before { content: '0' counter(step); font-family: var(--serif); font-size: 2rem; color: rgba(212,160,90,0.15); display: block; margin-bottom: 0.75rem; }
+.process-step h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--text); margin-bottom: 0.5rem; font-weight: 400; }
+.process-step p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 0; }
+
+/* CTA */
+.cta-section .cta-tagline { font-family: var(--sans); font-size: 0.95rem; color: var(--text-muted); max-width: 480px; margin: 0 auto 2.5rem; line-height: 1.7; font-style: italic; }
+
+/* Proof footer */
+.proof-footer { text-align: center; padding: 2rem 2rem 1rem; }
+.proof-footer p { font-size: 0.78rem; color: rgba(196,185,168,0.5); letter-spacing: 0.04em; }
+
+@media (max-width: 640px) {
+  .hero { min-height: auto; padding: 7rem 1.25rem 3rem; }
+  .team-grid { grid-template-columns: 1fr; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+
+<!-- Auth Gate -->
+<div class="auth-gate" id="authGate">
+  <div class="auth-box">
+    <img src="/briu-logo-transparent.png" alt="Briu" class="logo-img">
+    <p>This page is private. Enter the password to continue.</p>
+    <input type="password" class="auth-input" id="authInput" placeholder="Password" autofocus>
+    <div class="auth-error" id="authError">Incorrect password</div>
+  </div>
+</div>
+
+<!-- Page Content -->
+<div class="page-content" id="pageContent">
+
+<header class="site-header">
+<nav>
+  <a href="/" class="logo"><img src="/briu-logo-transparent.png" alt="Briu"></a>
+</nav>
+</header>
+
+<main>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-eyebrow">Built for TMR</div>
+  <h1>What AI agents would look like inside a <em>billion-dollar portfolio</em></h1>
+  <p class="hero-subtitle">A personalized look at how agents could save your team dozens of hours every week — without replacing a single person.</p>
+</div>
+
+<!-- Team -->
+<section>
+  <div class="section-label">Your Team, Augmented</div>
+  <h2>Five roles. Five agents. One system.</h2>
+  <p>Each card shows what an agent would actually do for that person — not a demo, not a pitch deck. Real workflows, real time saved.</p>
+
+  <div class="team-grid">
+    <div class="team-card reveal">
+      <div class="team-card-name">Joe</div>
+      <div class="team-card-hours">~12 hrs saved / week</div>
+      <ul>
+        <li>Investor research briefs assembled before every meeting</li>
+        <li>Meeting prep packets with property performance and market comps</li>
+        <li>Portfolio reporting pulled and formatted automatically</li>
+      </ul>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-name">Ryan</div>
+      <div class="team-card-hours">~10 hrs saved / week</div>
+      <ul>
+        <li>Property status dashboards updated without manual entry</li>
+        <li>Contractor tracking with automatic follow-ups on milestones</li>
+        <li>Draw schedules generated and reconciled from project data</li>
+      </ul>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-name">Morgan</div>
+      <div class="team-card-hours">~14 hrs saved / week</div>
+      <ul>
+        <li>Data extraction from spreadsheets into clean, structured formats</li>
+        <li>Automated recording and reporting across county systems</li>
+        <li>Cross-system sync so nothing falls through the cracks</li>
+      </ul>
+    </div>
+
+    <div class="team-card reveal reveal-delay-1">
+      <div class="team-card-name">Isaac</div>
+      <div class="team-card-hours">~8 hrs saved / week</div>
+      <ul>
+        <li>Deal screening against your criteria before it hits your desk</li>
+        <li>Comp analysis pulled from multiple sources in minutes</li>
+        <li>Underwriting assistance with standardized model inputs</li>
+      </ul>
+    </div>
+
+    <div class="team-card reveal reveal-delay-2">
+      <div class="team-card-name">Leanne</div>
+      <div class="team-card-hours">~10 hrs saved / week</div>
+      <ul>
+        <li>Scheduling coordinated across calendars without the back-and-forth</li>
+        <li>Document routing to the right person at the right stage</li>
+        <li>Investor inquiry responses drafted and queued for review</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- The Pitch -->
+<section class="pitch-section">
+  <p class="pitch-quote">You don't wait for one software company to build the perfect tool. You build your own agent that connects to the tools you already use — and does the work your team is too stretched to finish.</p>
+</section>
+
+<!-- How It Works -->
+<section>
+  <div class="section-label">How It Works</div>
+  <h2>From call to deployed in two weeks</h2>
+
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <h3>Discovery Call</h3>
+      <p>We learn your workflows, tools, and where time is disappearing.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-1">
+      <h3>2-Week Kickoff</h3>
+      <p>First agent built, tested against your real data, and ready to run.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <h3>Agent Deployed</h3>
+      <p>Live in your environment, connected to your tools, doing real work.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-1">
+      <h3>Team Trained</h3>
+      <p>Your people know how to use it, adjust it, and trust it.</p>
+    </div>
+    <div class="process-step reveal reveal-delay-2">
+      <h3>Ongoing Support</h3>
+      <p>We monitor, iterate, and expand as your team finds new use cases.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="section-label">Next Step</div>
+  <h2>Lucas built this page while texting you.<br>That is the point.</h2>
+  <p class="cta-tagline">The same agents that assembled this page are the ones we'd deploy for TMR.</p>
+  <a href="mailto:lucas@briu.ai" class="cta-button cta-shimmer">Book a Call</a>
+</section>
+
+</main>
+
+<!-- Proof Footer -->
+<div class="proof-footer">
+  <p>This page was built by AI agents in under 5 minutes. The same system we would deploy for TMR.</p>
+</div>
+
+<footer>
+  <p>&copy; 2026 Briu</p>
+</footer>
+
+</div>
+
+<script>
+(function() {
+  var PASSWORD = 'nashville22';
+  var STORAGE_KEY = 'briu_tmr_auth';
+
+  var gate = document.getElementById('authGate');
+  var content = document.getElementById('pageContent');
+  var input = document.getElementById('authInput');
+  var error = document.getElementById('authError');
+
+  function unlock() {
+    gate.classList.add('hidden');
+    content.classList.add('visible');
+    sessionStorage.setItem(STORAGE_KEY, '1');
+    initReveals();
+  }
+
+  // Check session
+  if (sessionStorage.getItem(STORAGE_KEY) === '1') {
+    unlock();
+  }
+
+  // Handle enter key
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') {
+      if (input.value === PASSWORD) {
+        unlock();
+      } else {
+        error.classList.add('show');
+        input.value = '';
+        setTimeout(function() { error.classList.remove('show'); }, 2000);
+      }
+    }
+  });
+
+  // Scroll reveal
+  function initReveals() {
+    var reveals = document.querySelectorAll('.reveal');
+    if (!reveals.length) return;
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(function(el) { observer.observe(el); });
+  }
+})();
+</script>
+</body>
+</html>
