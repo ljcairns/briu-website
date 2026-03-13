@@ -318,9 +318,9 @@ async function loadAll() {
     ct.innerHTML = convos.conversations.map(c =>
       '<tr class="clickable" onclick="viewConversation(' + c.id + ')">' +
       '<td>' + timeAgo(c.created_at) + '</td>' +
-      '<td>' + (c.email || c.name || '<span style="color:var(--text-muted)">anonymous</span>') + '</td>' +
-      '<td>' + (c.company_name || '') + '</td>' +
-      '<td>' + (c.page || '/') + '</td>' +
+      '<td>' + (escapeHtml(c.email) || escapeHtml(c.name) || '<span style="color:var(--text-muted)">anonymous</span>') + '</td>' +
+      '<td>' + escapeHtml(c.company_name || '') + '</td>' +
+      '<td>' + escapeHtml(c.page || '/') + '</td>' +
       '<td>' + c.message_count + '</td>' +
       '<td>' + badge(c.stage) + '</td>' +
       '<td>' + (c.has_handoff ? '<span style="color:var(--green)">Yes</span>' : '') + '</td>' +
@@ -336,12 +336,12 @@ async function loadAll() {
     lt.innerHTML = leads.leads.map(l =>
       '<tr>' +
       '<td>' + timeAgo(l.created_at) + '</td>' +
-      '<td>' + (l.name || '') + '</td>' +
-      '<td>' + l.email + '</td>' +
-      '<td>' + (l.company_name || '') + '</td>' +
+      '<td>' + escapeHtml(l.name || '') + '</td>' +
+      '<td>' + escapeHtml(l.email) + '</td>' +
+      '<td>' + escapeHtml(l.company_name || '') + '</td>' +
       '<td>' + (l.quality_score || 0) + '</td>' +
       '<td>' + badge(l.status) + '</td>' +
-      '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + (l.summary || '') + '</td>' +
+      '<td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">' + escapeHtml(l.summary || '') + '</td>' +
       '</tr>'
     ).join('');
   }
@@ -354,11 +354,11 @@ async function loadAll() {
     bt.innerHTML = bookings.bookings.map(b =>
       '<tr>' +
       '<td>' + timeAgo(b.created_at) + '</td>' +
-      '<td>' + b.name + '</td>' +
-      '<td>' + b.email + '</td>' +
-      '<td>' + (b.tier_name || b.tier) + '</td>' +
+      '<td>' + escapeHtml(b.name) + '</td>' +
+      '<td>' + escapeHtml(b.email) + '</td>' +
+      '<td>' + escapeHtml(b.tier_name || b.tier) + '</td>' +
       '<td>' + (b.amount ? '$' + b.amount.toLocaleString() : 'TBD') + '</td>' +
-      '<td>' + (b.payment_method || '') + '</td>' +
+      '<td>' + escapeHtml(b.payment_method || '') + '</td>' +
       '<td>' + badge(b.status) + '</td>' +
       '</tr>'
     ).join('');
@@ -377,7 +377,7 @@ async function viewConversation(id) {
     (conv.email || conv.name || 'Anonymous') + (conv.company_name ? ' (' + conv.company_name + ')' : '');
 
   document.getElementById('detail-meta').innerHTML =
-    '<span>Page: ' + (conv.page || '/') + '</span>' +
+    '<span>Page: ' + escapeHtml(conv.page || '/') + '</span>' +
     '<span>Messages: ' + conv.message_count + '</span>' +
     '<span>Stage: ' + badge(conv.stage) + '</span>' +
     '<span>' + timeAgo(conv.created_at) + '</span>';

@@ -2,7 +2,7 @@
   "name": "briu-website",
   "private": true,
   "scripts": {
-    "build": "bash scripts/build.sh",
+    "build": "node scripts/build.js",
     "security-lint": "node scripts/security-lint.js",
     "prepare": "git config core.hooksPath .githooks"
   },
