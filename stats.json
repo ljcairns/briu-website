@@ -1,17 +1,17 @@
 {
-  "websiteCommits": 528,
+  "websiteCommits": 530,
   "privateAgentCommits": 305,
-  "totalCommits": 833,
-  "websiteLinesOfCode": 26416,
+  "totalCommits": 835,
+  "websiteLinesOfCode": 26453,
   "agentLinesOfCode": 3549,
-  "linesOfCode": 29965,
+  "linesOfCode": 30002,
   "chartCount": 64,
   "articleCount": 19,
   "wordsOfContent": 42325,
   "pageCount": 42,
   "agentSkills": 12,
-  "avgDailyCost": 15.16,
-  "peakDailyCost": 40.74,
-  "totalApiSpend": 318.29,
-  "lastUpdated": "2026-03-13T21:17:18Z"
+  "avgDailyCost": 3.20,
+  "peakDailyCost": 8.40,
+  "totalApiSpend": 0,
+  "lastUpdated": "2026-03-13T21:17:52Z"
 }
