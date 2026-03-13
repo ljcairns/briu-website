@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Pricing Logic</title>
+<meta name="description" content="The subscription cost arbitrage math: what it costs to hire vs. what it costs to deploy an agent. Comparison table, monthly savings, ROI timeline.">
+<meta property="og:title" content="Briu | Pricing Logic">
+<meta property="og:description" content="The subscription cost arbitrage math: what it costs to hire vs. what it costs to deploy an agent. Comparison table, monthly savings, ROI timeline.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/why-now/pricing-logic/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Pricing Logic">
+<meta name="twitter:description" content="The subscription cost arbitrage math: what it costs to hire vs. what it costs to deploy an agent.">
+<link rel="canonical" href="https://briu.ai/why-now/pricing-logic/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<style>
+.hero { padding-bottom: 2.5rem; }
+
+/* Prose sections */
+.pl-section { max-width: 900px; margin: 0 auto; padding: 0 2rem; position: relative; z-index: 1; }
+.pl-section h2 { font-family: var(--serif); font-size: clamp(1.5rem, 3vw, 2rem); line-height: 1.25; color: var(--text); margin-bottom: 1.25rem; margin-top: 3.5rem; }
+.pl-section p { color: var(--text-muted); font-size: 1.02rem; line-height: 1.8; margin-bottom: 1.25rem; }
+.pl-section .highlight { color: var(--text); font-weight: 500; }
+
+/* Comparison table */
+.compare-table { width: 100%; border-collapse: collapse; margin: 2rem 0; }
+.compare-table thead th { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); text-align: left; padding: 0.85rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.compare-table thead th:first-child { width: 40%; }
+.compare-table thead th.col-hire { color: var(--coral); }
+.compare-table thead th.col-briu { color: var(--gold); }
+.compare-table tbody td { font-size: 0.92rem; color: var(--text-muted); padding: 0.85rem 1.25rem; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: top; }
+.compare-table tbody td:first-child { color: var(--text); font-weight: 500; }
+.compare-table tbody tr:last-child td { border-bottom: none; }
+.compare-table tfoot td { padding: 1rem 1.25rem; border-top: 1px solid rgba(255,255,255,0.08); font-weight: 600; font-size: 1rem; }
+.compare-table tfoot td:first-child { color: var(--text); }
+.compare-table tfoot .total-hire { color: var(--coral); }
+.compare-table tfoot .total-briu { color: var(--gold); }
+.table-note { font-size: 0.78rem; color: var(--text-muted); opacity: 0.7; margin-top: 0.75rem; }
+
+/* Savings callout */
+.savings-callout { background: rgba(212,160,90,0.04); border: 1px solid rgba(212,160,90,0.15); padding: 2rem 2.5rem; margin: 2.5rem 0; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2rem; text-align: center; }
+.savings-stat { }
+.savings-num { font-family: var(--serif); font-size: clamp(1.6rem, 3vw, 2.2rem); color: var(--gold); margin-bottom: 0.3rem; }
+.savings-label { font-size: 0.78rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; }
+
+/* ROI timeline */
+.roi-timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2rem 0; }
+.roi-month { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem 1.25rem; text-align: center; border-top: 2px solid rgba(255,255,255,0.06); transition: all 0.4s ease; }
+.roi-month:hover { border-color: rgba(212,160,90,0.15); transform: translateY(-2px); }
+.roi-month.roi-breakeven { border-top-color: var(--gold); }
+.roi-month.roi-breakeven .roi-label { color: var(--gold); }
+.roi-month .roi-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 0.5rem; }
+.roi-month .roi-value { font-family: var(--serif); font-size: 1.4rem; margin-bottom: 0.25rem; }
+.roi-month .roi-desc { font-size: 0.78rem; color: var(--text-muted); line-height: 1.5; }
+.roi-negative { color: var(--coral); }
+.roi-positive { color: var(--forest); }
+
+/* What you don't pay for */
+.hidden-costs { list-style: none; padding: 0; margin: 2rem 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+.hidden-costs li { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.25rem; border-top: 2px solid var(--forest); transition: border-color 0.3s; }
+.hidden-costs li:hover { border-color: rgba(106,174,156,0.2); border-top-color: var(--forest); }
+.hidden-costs li strong { color: var(--text); display: block; font-size: 0.92rem; margin-bottom: 0.4rem; }
+.hidden-costs li span { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+/* CTA section */
+.cta-section { text-align: center; max-width: 660px; margin: 4rem auto 0; padding: 0 2rem; }
+.cta-section h2 { font-family: var(--serif); font-size: clamp(1.4rem, 2.5vw, 1.8rem); color: var(--text); margin-bottom: 1rem; }
+.cta-section p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; line-height: 1.7; }
+.cta-btn { display: inline-block; font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--gold); text-decoration: none; padding: 0.85rem 2.5rem; border: 1px solid rgba(212,160,90,0.4); transition: all 0.35s ease; }
+.cta-btn:hover { background: rgba(212,160,90,0.08); border-color: var(--gold); box-shadow: 0 0 30px rgba(212,160,90,0.1); }
+
+/* Back link */
+.back-link { display: inline-block; font-size: 0.78rem; font-weight: 500; color: var(--text-muted); text-decoration: none; letter-spacing: 0.06em; transition: color 0.3s ease; margin-top: 1rem; }
+.back-link:hover { color: var(--text); }
+
+/* Mobile */
+@media (max-width: 768px) {
+  .savings-callout { grid-template-columns: 1fr; gap: 1.5rem; padding: 1.5rem; }
+  .roi-timeline { grid-template-columns: repeat(2, 1fr); }
+  .hidden-costs { grid-template-columns: 1fr; }
+  .compare-table { display: block; overflow-x: auto; }
+}
+
+@media (max-width: 480px) {
+  .roi-timeline { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<div id="site-nav"></div>
+
+<main id="main">
+<section class="hero hero-breathe">
+  <p class="hero-eyebrow">Pricing Logic</p>
+  <h1>The cost arbitrage behind subscription agents.</h1>
+  <p>What it actually costs to hire a team vs. deploy through Briu. The math, the savings, and when you break even.</p>
+  <div style="display:flex;gap:1.25rem;flex-wrap:wrap;align-items:center;margin-top:2rem;">
+    <a href="/services/" class="cta-btn cta-shimmer">See Pricing</a>
+    <a href="/why-now/" class="back-link">&larr; Back to Why Now</a>
+  </div>
+</section>
+
+<div class="pl-section" style="margin-top:3rem;">
+
+<!-- Section 1: The Problem -->
+<h2>The traditional cost of automation</h2>
+<p>When a business wants to automate workflows internally, the standard path is to hire. An AI/ML engineer, a data engineer, a project manager. Even a modest team costs six figures per month before they ship a single workflow.</p>
+<p><span class="highlight">The subscription model flips this.</span> Instead of building a team, you subscribe to outcomes. Same workflows, fraction of the cost, deployed in weeks instead of quarters.</p>
+
+<!-- Comparison Table -->
+<h2>Head-to-head: hire vs. subscribe</h2>
+
+<table class="compare-table reveal">
+  <thead>
+    <tr>
+      <th>Cost line</th>
+      <th class="col-hire">Hire in-house</th>
+      <th class="col-briu">Briu subscription</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>AI/ML Engineer</td>
+      <td>$12,500/mo</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Data Engineer</td>
+      <td>$11,000/mo</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Project Manager (half-time)</td>
+      <td>$5,000/mo</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Cloud / API infrastructure</td>
+      <td>$2,000/mo</td>
+      <td>Included</td>
+    </tr>
+    <tr>
+      <td>Recruiting &amp; onboarding</td>
+      <td>$3,000/mo (amortized)</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Benefits &amp; overhead (25%)</td>
+      <td>$7,125/mo</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Briu Kickoff</td>
+      <td>&mdash;</td>
+      <td>$5,000 (one-time)</td>
+    </tr>
+    <tr>
+      <td>Implementation (single workflow)</td>
+      <td>&mdash;</td>
+      <td>$8&ndash;20K (one-time)</td>
+    </tr>
+    <tr>
+      <td>Monthly retainer</td>
+      <td>&mdash;</td>
+      <td>From $500/mo</td>
+    </tr>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td>Year 1 total</td>
+      <td class="total-hire">$487,500</td>
+      <td class="total-briu">$19,000&ndash;$31,000</td>
+    </tr>
+  </tfoot>
+</table>
+<p class="table-note">In-house estimates based on US median salaries (Levels.fyi, Glassdoor 2025). Briu estimate uses Kickoff + mid-range single implementation + $500/mo retainer.</p>
+
+<!-- Savings Callout -->
+<div class="savings-callout reveal">
+  <div class="savings-stat">
+    <div class="savings-num">15&ndash;25&times;</div>
+    <div class="savings-label">Cost reduction</div>
+  </div>
+  <div class="savings-stat">
+    <div class="savings-num">$456K+</div>
+    <div class="savings-label">Year 1 savings</div>
+  </div>
+  <div class="savings-stat">
+    <div class="savings-num">2&ndash;4 wks</div>
+    <div class="savings-label">Time to first workflow</div>
+  </div>
+</div>
+
+<!-- Monthly Savings Breakdown -->
+<h2>Monthly savings calculation</h2>
+<p>Take a single automated workflow &mdash; say, CRM enrichment that currently takes a team member 15 hours per week. Here's what the math looks like month by month once your agent is live:</p>
+
+<div class="savings-callout reveal" style="grid-template-columns:1fr 1fr;max-width:600px;margin-left:auto;margin-right:auto;">
+  <div class="savings-stat">
+    <div class="savings-num">$3,750</div>
+    <div class="savings-label">Monthly labor saved</div>
+  </div>
+  <div class="savings-stat">
+    <div class="savings-num">$3,250</div>
+    <div class="savings-label">Net monthly savings</div>
+  </div>
+</div>
+
+<p>That's 15 hours/week &times; $62.50/hr (fully loaded mid-level salary) = <span class="highlight">$3,750/mo in labor displaced</span>, minus $500/mo retainer = <span class="highlight">$3,250/mo in net savings</span>. One workflow. The second one stacks.</p>
+
+<!-- ROI Timeline -->
+<h2>ROI timeline</h2>
+<p>From kickoff to payback and beyond. Based on a single-workflow Kickoff + Implementation engagement with $500/mo retainer.</p>
+
+<div class="roi-timeline reveal">
+  <div class="roi-month">
+    <div class="roi-label">Month 1</div>
+    <div class="roi-value roi-negative">&minus;$18K</div>
+    <div class="roi-desc">Kickoff + implementation. Agent built, tested, deployed.</div>
+  </div>
+  <div class="roi-month">
+    <div class="roi-label">Month 3</div>
+    <div class="roi-value roi-negative">&minus;$12.5K</div>
+    <div class="roi-desc">Agent running. Savings accumulating at $3,250/mo.</div>
+  </div>
+  <div class="roi-month roi-breakeven">
+    <div class="roi-label">Month 6</div>
+    <div class="roi-value roi-positive">Breakeven</div>
+    <div class="roi-desc">Total savings pass total investment. Everything after is margin.</div>
+  </div>
+  <div class="roi-month">
+    <div class="roi-label">Month 12</div>
+    <div class="roi-value roi-positive">+$21K</div>
+    <div class="roi-desc">$39K saved &minus; $18K invested. 2.2&times; return on a single workflow.</div>
+  </div>
+</div>
+
+<!-- What You Don't Pay For -->
+<h2>What you don't pay for</h2>
+<p>The comparison table only captures direct costs. The hidden costs of hiring are where the real gap lives.</p>
+
+<ul class="hidden-costs reveal">
+  <li>
+    <strong>Recruiting time</strong>
+    <span>3&ndash;6 months to hire an AI engineer. Your automation waits while you interview.</span>
+  </li>
+  <li>
+    <strong>Ramp-up period</strong>
+    <span>New hires need 2&ndash;4 months to understand your stack, your data, your processes.</span>
+  </li>
+  <li>
+    <strong>Retention risk</strong>
+    <span>AI talent has a median tenure of 18 months. When they leave, institutional knowledge leaves with them.</span>
+  </li>
+  <li>
+    <strong>Management overhead</strong>
+    <span>Someone has to manage, review, and unblock. That's your time or another hire.</span>
+  </li>
+  <li>
+    <strong>Tooling &amp; infra</strong>
+    <span>Dev environments, CI/CD, monitoring, model hosting. Costs that compound before anything ships.</span>
+  </li>
+  <li>
+    <strong>Opportunity cost</strong>
+    <span>Every month spent building a team is a month your competitors are deploying agents.</span>
+  </li>
+</ul>
+
+<!-- When hiring makes sense -->
+<h2>When hiring does make sense</h2>
+<p>This isn't a blanket argument against building internal AI capability. If you have 10+ workflows to automate, a proprietary model to fine-tune, or AI is your core product differentiator &mdash; you should hire. <span class="highlight">Briu is for the 90% of businesses where AI is a tool, not the product.</span> We get you running while you decide whether to build the team later.</p>
+
+</div>
+
+<!-- CTA -->
+<section class="cta-section reveal" style="padding-bottom:5rem;">
+  <h2>Run the numbers on your workflow.</h2>
+  <p>Tell us what you're automating. We'll build a custom cost model and show you exactly what the savings look like.</p>
+  <a href="#" onclick="openDiscovery();return false" class="cta-btn cta-shimmer">Find Your Use Case</a>
+</section>
+
+</main>
+
+<div id="site-footer"></div>
+<div id="site-modal"></div>
+
+<script src="/components.js?v=20260312a"></script>
+<script src="/shared.js?v=20260312a"></script>
+<script src="/ambient.js?v=20260312a"></script>
+<script src="/chat-bubble.js?v=20260312a"></script>
+<script>
+(function() {
+  // Scroll reveal
+  var reveals = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window) {
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    reveals.forEach(function(el) { observer.observe(el); });
+  } else {
+    reveals.forEach(function(el) { el.classList.add('visible'); });
+  }
+
+  // Show chat bubble
+  if (window.briuShowChatBubble) window.briuShowChatBubble();
+})();
+</script>
+</body>
+</html>
