@@ -1,4 +1,11 @@
 {
+  "summary": {
+    "total_tasks_completed": 552,
+    "total_commits": 286,
+    "daily_throughput": 26,
+    "launch_date": "2026-02-10",
+    "last_updated": "2026-03-12"
+  },
   "daily": [
     { "date": "2026-02-10", "api_spend": 12.40, "commits": 8, "tasks_dispatched": 14, "skills": 3 },
     { "date": "2026-02-11", "api_spend": 9.80, "commits": 5, "tasks_dispatched": 11, "skills": 3 },

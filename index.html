@@ -518,6 +518,19 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   .hero-cta-primary { padding: 0.65rem 1.25rem; font-size: 0.72rem; }
   .hero-cta-secondary { font-size: 0.72rem; }
 }
+
+/* Proof Wall */
+.proof-wall { text-align: center; }
+.proof-wall-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin: 3rem 0 2rem; }
+.proof-wall-item { padding: 2rem 1rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); transition: all 0.4s ease; }
+.proof-wall-item:hover { border-color: rgba(212,160,90,0.2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.proof-wall-num { font-family: var(--serif); font-size: clamp(2rem, 4vw, 2.8rem); color: var(--gold); line-height: 1; margin-bottom: 0.5rem; }
+.proof-wall-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.1em; line-height: 1.4; }
+.proof-wall-note { font-size: 0.85rem; color: var(--text-muted); font-style: italic; margin-top: 0; line-height: 1.6; }
+@media (max-width: 640px) {
+  .proof-wall-grid { grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+  .proof-wall-num { font-size: 1.8rem; }
+}
 </style>
 <script type="application/ld+json">
 {
@@ -1045,6 +1058,33 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 </section>
 
 
+<!-- PROOF WALL -->
+<section class="proof-wall" id="proof-wall">
+  <p class="section-label reveal">Live Production Data</p>
+  <h2 class="reveal">The numbers behind what we do.</h2>
+
+  <div class="proof-wall-grid reveal">
+    <div class="proof-wall-item">
+      <div class="proof-wall-num" id="pw-tasks">0</div>
+      <div class="proof-wall-label">Tasks Completed</div>
+    </div>
+    <div class="proof-wall-item">
+      <div class="proof-wall-num" id="pw-commits">0</div>
+      <div class="proof-wall-label">Git Commits</div>
+    </div>
+    <div class="proof-wall-item">
+      <div class="proof-wall-num" id="pw-throughput">0</div>
+      <div class="proof-wall-label">Daily Throughput</div>
+    </div>
+    <div class="proof-wall-item">
+      <div class="proof-wall-num" id="pw-days">0</div>
+      <div class="proof-wall-label">Days Since Launch</div>
+    </div>
+  </div>
+
+  <p class="proof-wall-note reveal">Every number on this page is real. Updated daily from our live production system.</p>
+</section>
+
 <!-- FAQ -->
 <section>
   <p class="section-label reveal">FAQ</p>
@@ -1212,6 +1252,47 @@ document.querySelectorAll('.followup-expandable').forEach(function(el) {
     el.classList.toggle('expanded');
   });
 });
+</script>
+<script>
+(function() {
+  function animateCount(el, target, duration) {
+    var start = 0, startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      var eased = 1 - Math.pow(1 - progress, 3);
+      el.textContent = Math.round(eased * target).toLocaleString();
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function daysBetween(a, b) {
+    return Math.floor((b - a) / 86400000);
+  }
+
+  var animated = false;
+  var wall = document.getElementById('proof-wall');
+  if (!wall) return;
+
+  var observer = new IntersectionObserver(function(entries) {
+    if (entries[0].isIntersecting && !animated) {
+      animated = true;
+      observer.disconnect();
+      fetch('/data/ops-data.json')
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          var s = data.summary;
+          var days = daysBetween(new Date(s.launch_date), new Date());
+          animateCount(document.getElementById('pw-tasks'), s.total_tasks_completed, 1500);
+          animateCount(document.getElementById('pw-commits'), s.total_commits, 1500);
+          animateCount(document.getElementById('pw-throughput'), s.daily_throughput, 1200);
+          animateCount(document.getElementById('pw-days'), days, 1200);
+        });
+    }
+  }, { threshold: 0.2 });
+  observer.observe(wall);
+})();
 </script>
 </body>
 </html>
