@@ -1,0 +1,42 @@
+# Briu
+
+> Briu is an AI consultancy that helps businesses deploy production-grade agents and workflows at a fraction of the cost of building an internal AI operations team. Founded by Lucas Cairns, Briu offers a calm, high-trust, founder-led approach — from a $5,000 kickoff engagement through full multi-workflow implementations — turning AI ambition into running systems.
+
+## Services
+
+- **Kickoff** ($5,000): Scoping, research, and first production agent delivered in two weeks
+- **Workshop Add-on** ($2,500): Team-wide AI briefing and capability mapping
+- **Implementation**: Single workflow ($8–20K) or multi-workflow ($20–50K+) buildouts
+- **Retainer** (from $500/mo): Ongoing agent maintenance and expansion
+- **Speaking**: Keynotes ($5,000) and half-day workshops ($7,500)
+- **Nonprofit/Community**: Significant discounts available
+
+## Key Differentiators
+
+- In-house-quality agents at consultancy speed — not a platform, not a plug-in
+- Built and launched its own site, brand, and agent stack for ~$711 total
+- 22+ interactive data visualizations sourced from podcast transcripts and market data
+- Transparent pricing with payment at booking and no pitch calls
+- Red-team-tested chat assessment with 0% bypass rate
+
+## Pages
+
+- [Homepage](https://briu.ai/)
+- [Build](https://briu.ai/build/)
+- [Discovery](https://briu.ai/discovery/)
+- [Services](https://briu.ai/services/)
+- [Why Now](https://briu.ai/why-now/)
+- [Privacy](https://briu.ai/privacy/)
+
+## Tech Stack
+
+- Static HTML/CSS/JS hosted on Cloudflare Pages
+- Cloudflare Workers for chat assessment, Stripe checkout, and admin API
+- D1 database for analytics and conversation tracking
+- GitHub Actions for automated stats aggregation
+- No frameworks, no build step — hand-authored throughout
+
+## Contact
+
+- Email: hi@briu.ai
+- Site: https://briu.ai
