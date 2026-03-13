@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briu | Velocity</title>
+<meta name="description" content="The acceleration curve of an AI agent system. From 2 tasks a day to 50+ autonomous runs in four weeks.">
+<meta property="og:title" content="Briu | Velocity">
+<meta property="og:description" content="The acceleration curve of an AI agent system. From 2 tasks a day to 50+ autonomous runs in four weeks.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://briu.ai/build/velocity/">
+<meta property="og:image" content="https://briu.ai/og-image.png">
+<meta property="og:image:width" content="2000">
+<meta property="og:image:height" content="1200">
+<meta name="twitter:image" content="https://briu.ai/og-image.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Briu | Velocity">
+<meta name="twitter:description" content="The acceleration curve of an AI agent system. From 2 tasks a day to 50+ autonomous runs in four weeks.">
+<link rel="canonical" href="https://briu.ai/build/velocity/">
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/shared.css?v=20260312a">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+<style>
+/* Hero overrides */
+.hero::before { width: 760px; background: radial-gradient(ellipse at center, rgba(212,160,90,0.08) 0%, rgba(224,123,95,0.04) 30%, rgba(90,157,172,0.02) 50%, transparent 70%); }
+.hero h1 { font-size: clamp(2.2rem, 4.5vw, 3.5rem); }
+.hero p { max-width: 720px; }
+
+/* Velocity stats strip */
+.vel-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 900px; margin: 2.5rem auto 0; }
+.vel-stat { text-align: center; padding: 1.25rem 0.75rem; background: var(--surface); border: 1px solid rgba(255,255,255,0.04); transition: border-color 0.3s; }
+.vel-stat:hover { border-color: rgba(212,160,90,0.2); }
+.vel-stat .val { font-family: var(--serif); font-size: 1.6rem; color: var(--gold); line-height: 1.2; margin-bottom: 0.3rem; }
+.vel-stat .lbl { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+/* Chart sections */
+.chart-section { max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+.chart-section + .chart-section { margin-top: 4rem; }
+.chart-header { margin-bottom: 1.5rem; }
+.chart-header .eyebrow { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.18em; color: var(--gold); margin-bottom: 0.5rem; }
+.chart-header h2 { font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 400; color: var(--text); margin-bottom: 0.5rem; }
+.chart-header p { font-size: 0.9rem; color: var(--text-muted); max-width: 600px; }
+.chart-wrap { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; position: relative; }
+.chart-wrap canvas { width: 100% !important; }
+
+/* Week timeline */
+.weeks { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 900px; margin: 0 auto; padding: 0 2rem; }
+.week-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.4rem; transition: border-color 0.3s, transform 0.3s; }
+.week-card:hover { border-color: rgba(212,160,90,0.2); transform: translateY(-3px); }
+.week-card .week-num { font-size: 0.68rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--gold); margin-bottom: 0.5rem; }
+.week-card h3 { font-family: var(--serif); font-size: 1.05rem; font-weight: 400; margin-bottom: 0.5rem; }
+.week-card p { font-size: 0.82rem; color: var(--text-muted); margin: 0; line-height: 1.5; }
+.week-card .task-count { font-family: var(--serif); font-size: 1.35rem; color: var(--text); margin-top: 0.75rem; }
+.week-card .task-count span { font-size: 0.72rem; color: var(--text-muted); font-family: var(--sans); }
+
+/* CTA */
+.velocity-cta { text-align: center; max-width: 600px; margin: 0 auto; padding: 0 2rem; }
+.velocity-cta h2 { font-family: var(--serif); font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 400; margin-bottom: 0.75rem; }
+.velocity-cta p { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+.velocity-cta a { display: inline-block; font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.14em; color: var(--bg); background: linear-gradient(135deg, var(--gold), var(--gold-light)); text-decoration: none; padding: 1rem 2.5rem; transition: all 0.3s ease; }
+.velocity-cta a:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(212,160,90,0.25); }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .vel-stats { grid-template-columns: repeat(2, 1fr); }
+  .weeks { grid-template-columns: 1fr; }
+  .chart-section { padding: 0 1rem; }
+  .chart-wrap { padding: 1rem 0.75rem; }
+  .weeks { padding: 0 1rem; }
+  .velocity-cta { padding: 0 1rem; }
+}
+@media (max-width: 480px) {
+  .vel-stats { grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+}
+</style>
+</head>
+<body>
+<a href="#main" class="skip-link">Skip to content</a>
+<div class="vignette"></div>
+<div class="ambient-orb ambient-orb-1"></div>
+<div class="ambient-orb ambient-orb-2"></div>
+<div class="ambient-orb ambient-orb-3"></div>
+
+<main id="main">
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="eyebrow reveal">Build Log</p>
+    <h1 class="reveal reveal-delay-1">Velocity</h1>
+    <p class="reveal reveal-delay-2">From manual email triage to 50+ autonomous tasks a day in four weeks. This is what compound acceleration looks like when agents build the system that builds the company.</p>
+    <div class="vel-stats reveal reveal-delay-3">
+      <div class="vel-stat">
+        <div class="val">25x</div>
+        <div class="lbl">Throughput gain</div>
+      </div>
+      <div class="vel-stat">
+        <div class="val">$0.24</div>
+        <div class="lbl">Cost per task</div>
+      </div>
+      <div class="vel-stat">
+        <div class="val">12</div>
+        <div class="lbl">Skills deployed</div>
+      </div>
+      <div class="vel-stat">
+        <div class="val">30</div>
+        <div class="lbl">Days</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Week cards -->
+<section class="section">
+  <div class="weeks">
+    <div class="week-card reveal">
+      <div class="week-num">Week 1 &middot; Feb 10&ndash;16</div>
+      <h3>Manual bootstrap</h3>
+      <p>Email triage, basic CRM sync. Everything hand-triggered. Learning what the agent can handle.</p>
+      <div class="task-count">2&ndash;3 <span>tasks / day</span></div>
+    </div>
+    <div class="week-card reveal reveal-delay-1">
+      <div class="week-num">Week 2 &middot; Feb 17&ndash;23</div>
+      <h3>Skill explosion</h3>
+      <p>12 skills deployed. Sales prospecting, client reporting pipeline, automated research loops.</p>
+      <div class="task-count">5&ndash;10 <span>tasks / day</span></div>
+    </div>
+    <div class="week-card reveal reveal-delay-2">
+      <div class="week-num">Week 3 &middot; Feb 24&ndash;Mar 4</div>
+      <h3>Stress &amp; optimize</h3>
+      <p>Cost crisis forced optimization. Multi-agent security audit. System hardened under pressure.</p>
+      <div class="task-count">15&ndash;20 <span>tasks / day</span></div>
+    </div>
+    <div class="week-card reveal reveal-delay-3">
+      <div class="week-num">Week 4 &middot; Mar 5&ndash;12</div>
+      <h3>Autonomous ops</h3>
+      <p>Briu launched. Multi-agent dispatch across dual backends. Overnight autonomous runs. Podcast intelligence. Sales tools.</p>
+      <div class="task-count">50+ <span>tasks / day</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- Chart 1: Tasks per day -->
+<section class="section chart-section reveal">
+  <div class="chart-header">
+    <p class="eyebrow">Throughput</p>
+    <h2>Tasks per day</h2>
+    <p>The inflection point hits when agents start creating their own tooling. Week 3's cost crisis actually accelerated the curve.</p>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="tasksChart" height="320"></canvas>
+  </div>
+</section>
+
+<!-- Chart 2: Capabilities -->
+<section class="section chart-section reveal">
+  <div class="chart-header">
+    <p class="eyebrow">Capabilities</p>
+    <h2>Cumulative skills deployed</h2>
+    <p>Each skill compounds. A reporting skill enables a monitoring skill, which enables an alerting skill. The graph is the capability stack, not a feature list.</p>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="skillsChart" height="320"></canvas>
+  </div>
+</section>
+
+<!-- Chart 3: Cost per task -->
+<section class="section chart-section reveal">
+  <div class="chart-header">
+    <p class="eyebrow">Efficiency</p>
+    <h2>Cost per task</h2>
+    <p>Volume drives cost down. The same $29&ndash;39/day operating budget handles 25x more work by week four.</p>
+  </div>
+  <div class="chart-wrap">
+    <canvas id="costChart" height="320"></canvas>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section velocity-cta reveal">
+  <h2>This is what we build for clients</h2>
+  <p>The same compound acceleration, deployed to your workflows. Start with a Kickoff and see the curve in your own business.</p>
+  <a href="/#contact" class="contact-trigger">Get started</a>
+</section>
+
+</main>
+
+<script src="/components.js"></script>
+<script>
+// Chart.js global config
+Chart.defaults.color = '#C4B9A8';
+Chart.defaults.borderColor = 'rgba(255,255,255,0.04)';
+Chart.defaults.font.family = "'DM Sans', -apple-system, sans-serif";
+Chart.defaults.font.size = 12;
+
+const gold = '#D4A05A';
+const goldLight = '#E2B574';
+const coral = '#E07B5F';
+const river = '#5A9DAC';
+const forest = '#6AAE9C';
+const surface = '#0E1219';
+
+// Smooth gradient helper
+function createGradient(ctx, color1, color2, alpha) {
+  const gradient = ctx.createLinearGradient(0, 0, 0, 320);
+  gradient.addColorStop(0, color1.replace(')', `,${alpha})`).replace('rgb', 'rgba'));
+  gradient.addColorStop(1, color1.replace(')', ',0.02)').replace('rgb', 'rgba'));
+  return gradient;
+}
+
+// Data
+const days = [
+  'Feb 10','Feb 12','Feb 14','Feb 16',
+  'Feb 18','Feb 20','Feb 22',
+  'Feb 25','Feb 27','Mar 1','Mar 3',
+  'Mar 5','Mar 7','Mar 9','Mar 11','Mar 12'
+];
+
+const tasksData = [1, 2, 2, 3, 5, 7, 10, 12, 15, 17, 20, 28, 35, 42, 50, 55];
+
+const skillsDays = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+const skillsData = [3, 12, 18, 26];
+const skillsNew = [3, 9, 6, 8];
+
+const costData = [14.50, 11.20, 6.80, 4.50, 3.20, 2.80, 2.10, 1.80, 1.50, 1.30, 1.10, 0.85, 0.62, 0.45, 0.30, 0.24];
+
+// Tooltip style
+const tooltipConfig = {
+  backgroundColor: '#151B24',
+  titleColor: '#EAE7E3',
+  bodyColor: '#C4B9A8',
+  borderColor: 'rgba(212,160,90,0.2)',
+  borderWidth: 1,
+  cornerRadius: 0,
+  padding: 12,
+  titleFont: { family: "'DM Sans'", weight: 600 },
+  bodyFont: { family: "'DM Sans'" },
+  displayColors: false,
+};
+
+// Intersection Observer for chart animation
+const chartObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      if (id === 'tasksChart') initTasksChart();
+      if (id === 'skillsChart') initSkillsChart();
+      if (id === 'costChart') initCostChart();
+      chartObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.3 });
+
+document.querySelectorAll('canvas').forEach(c => chartObserver.observe(c));
+
+function initTasksChart() {
+  const ctx = document.getElementById('tasksChart').getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 320);
+  grad.addColorStop(0, 'rgba(212,160,90,0.25)');
+  grad.addColorStop(1, 'rgba(212,160,90,0.02)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Tasks / day',
+        data: tasksData,
+        borderColor: gold,
+        backgroundColor: grad,
+        borderWidth: 2.5,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: gold,
+        pointHoverBorderColor: '#07090E',
+        pointHoverBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 2000, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tooltipConfig,
+          callbacks: {
+            label: (ctx) => `${ctx.parsed.y} tasks/day`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { maxRotation: 45, font: { size: 11 } }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255,255,255,0.03)' },
+          ticks: {
+            callback: (v) => v + ' tasks'
+          }
+        }
+      }
+    }
+  });
+}
+
+function initSkillsChart() {
+  const ctx = document.getElementById('skillsChart').getContext('2d');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: skillsDays,
+      datasets: [
+        {
+          label: 'Cumulative skills',
+          data: skillsData,
+          backgroundColor: 'rgba(212,160,90,0.15)',
+          borderColor: gold,
+          borderWidth: 1.5,
+          borderRadius: 0,
+          order: 1,
+        },
+        {
+          label: 'New this week',
+          data: skillsNew,
+          backgroundColor: gold,
+          borderColor: goldLight,
+          borderWidth: 0,
+          borderRadius: 0,
+          order: 0,
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 1800, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: {
+          position: 'top',
+          align: 'end',
+          labels: {
+            boxWidth: 12,
+            boxHeight: 12,
+            padding: 16,
+            font: { size: 11 },
+            usePointStyle: false,
+          }
+        },
+        tooltip: tooltipConfig,
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255,255,255,0.03)' },
+          ticks: {
+            stepSize: 5,
+            callback: (v) => v + ' skills'
+          }
+        }
+      }
+    }
+  });
+}
+
+function initCostChart() {
+  const ctx = document.getElementById('costChart').getContext('2d');
+  const grad = ctx.createLinearGradient(0, 0, 0, 320);
+  grad.addColorStop(0, 'rgba(106,174,156,0.2)');
+  grad.addColorStop(1, 'rgba(106,174,156,0.02)');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: days,
+      datasets: [{
+        label: 'Cost per task',
+        data: costData,
+        borderColor: forest,
+        backgroundColor: grad,
+        borderWidth: 2.5,
+        fill: true,
+        tension: 0.4,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointHoverBackgroundColor: forest,
+        pointHoverBorderColor: '#07090E',
+        pointHoverBorderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 2000, easing: 'easeOutQuart' },
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          ...tooltipConfig,
+          callbacks: {
+            label: (ctx) => `$${ctx.parsed.y.toFixed(2)} per task`
+          }
+        }
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { maxRotation: 45, font: { size: 11 } }
+        },
+        y: {
+          beginAtZero: true,
+          grid: { color: 'rgba(255,255,255,0.03)' },
+          ticks: {
+            callback: (v) => '$' + v.toFixed(2)
+          }
+        }
+      }
+    }
+  });
+}
+
+// Scroll reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
