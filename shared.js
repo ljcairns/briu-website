@@ -104,6 +104,111 @@ function openContactForm(prefill) {
   }
 }
 
+// Discovery flow — opens chat pre-seeded with discovery question
+function openDiscovery(prefillText) {
+  var context = prefillText || 'What kind of business do you run?';
+  if (window.briuToggleChatPanel) {
+    window.briuToggleChatPanel({ prefill: context });
+  } else {
+    openContactForm();
+  }
+}
+window.openDiscovery = openDiscovery;
+
+// Discovery context — called from industry cards
+function openDiscoveryContext(type) {
+  var messages = {
+    services: "I run a professional services firm and want to see what agents would do for me",
+    ecommerce: "I run an e-commerce brand and want to see what agents would do for me",
+    sales: "I lead a sales-focused business and want to see what agents would do for me",
+    solo: "I'm a solo founder and want to see what agents would do for me"
+  };
+  var msg = messages[type] || "I want to see what agents could do for my business";
+  openDiscovery(msg);
+}
+window.openDiscoveryContext = openDiscoveryContext;
+
+// Discovery popup — 30s time trigger + scroll-past-hero trigger
+(function() {
+  var popupShown = false;
+  var pageLoadTime = Date.now();
+
+  function canShowPopup() {
+    if (popupShown) return false;
+    if (sessionStorage.getItem('briu_popup_dismissed')) return false;
+    var stage = localStorage.getItem('briu_stage');
+    if (stage === 'assessed' || stage === 'chatting' || stage === 'contacted') return false;
+    return true;
+  }
+
+  function showDiscoveryPopup() {
+    if (!canShowPopup()) return;
+    popupShown = true;
+
+    var popup = document.createElement('div');
+    popup.id = 'briu-discovery-popup';
+    popup.innerHTML = '<div class="dp-overlay" onclick="closeBriuPopup()"></div>' +
+      '<div class="dp-card">' +
+        '<button class="dp-close" onclick="closeBriuPopup()" aria-label="Close">&times;</button>' +
+        '<p class="dp-eyebrow">Quick question</p>' +
+        '<h3 class="dp-headline">What does your business do?</h3>' +
+        '<p class="dp-sub">Answer 3 questions and we\'ll show you exactly what an agent would do for your specific situation — what it would handle, what it would cost, and what to build first.</p>' +
+        '<a href="#" class="dp-cta" onclick="closeBriuPopup();openDiscovery();return false">Find My Use Case \u2192</a>' +
+        '<button class="dp-skip" onclick="closeBriuPopup()">Not now</button>' +
+      '</div>';
+
+    // Inject styles
+    if (!document.getElementById('briuPopupStyles')) {
+      var style = document.createElement('style');
+      style.id = 'briuPopupStyles';
+      style.textContent = '#briu-discovery-popup .dp-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:10000;}' +
+        '#briu-discovery-popup .dp-card{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:10001;background:var(--surface,#0E1219);border:1px solid rgba(212,160,90,0.2);padding:2.5rem;max-width:440px;width:calc(100% - 3rem);box-shadow:0 20px 60px rgba(0,0,0,0.5);animation:fadeUp 0.3s ease;}' +
+        '#briu-discovery-popup .dp-close{position:absolute;top:0.75rem;right:0.75rem;background:none;border:none;color:var(--text-muted,#999);font-size:1.4rem;cursor:pointer;line-height:1;padding:0.25rem 0.5rem;transition:color 0.2s;}' +
+        '#briu-discovery-popup .dp-close:hover{color:var(--text,#e8e4dc);}' +
+        '#briu-discovery-popup .dp-eyebrow{font-size:0.72rem;font-weight:600;text-transform:uppercase;letter-spacing:0.18em;color:var(--gold,#d4a05a);margin-bottom:0.75rem;}' +
+        '#briu-discovery-popup .dp-headline{font-family:var(--serif,"DM Serif Display",serif);font-size:1.4rem;color:var(--text,#e8e4dc);margin-bottom:0.75rem;line-height:1.3;}' +
+        '#briu-discovery-popup .dp-sub{font-size:0.9rem;color:var(--text-muted,#999);line-height:1.65;margin-bottom:1.5rem;}' +
+        '#briu-discovery-popup .dp-cta{display:block;text-align:center;padding:0.85rem 1.5rem;background:rgba(212,160,90,0.08);border:1px solid rgba(212,160,90,0.4);color:var(--gold,#d4a05a);font-size:0.85rem;font-weight:600;text-transform:uppercase;letter-spacing:0.12em;text-decoration:none;transition:all 0.3s ease;margin-bottom:0.75rem;}' +
+        '#briu-discovery-popup .dp-cta:hover{background:rgba(212,160,90,0.15);border-color:var(--gold,#d4a05a);}' +
+        '#briu-discovery-popup .dp-skip{display:block;width:100%;text-align:center;background:none;border:none;color:var(--text-muted,#999);font-size:0.78rem;cursor:pointer;font-family:var(--sans,"DM Sans",sans-serif);padding:0.25rem;opacity:0.7;transition:opacity 0.2s;}' +
+        '#briu-discovery-popup .dp-skip:hover{opacity:1;}';
+      document.head.appendChild(style);
+    }
+
+    document.body.appendChild(popup);
+  }
+
+  window.closeBriuPopup = function() {
+    var popup = document.getElementById('briu-discovery-popup');
+    if (popup) popup.remove();
+    sessionStorage.setItem('briu_popup_dismissed', '1');
+  };
+
+  // 30-second time trigger
+  setTimeout(function() {
+    if (canShowPopup()) showDiscoveryPopup();
+  }, 30000);
+
+  // Scroll-past-hero trigger (min 15s on page)
+  document.addEventListener('DOMContentLoaded', function() {
+    var heroEl = document.querySelector('.hero');
+    if (!heroEl || !window.IntersectionObserver) return;
+    var scrollTriggered = false;
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (!entry.isIntersecting && !scrollTriggered) {
+          var timeOnPage = Date.now() - pageLoadTime;
+          if (timeOnPage > 15000 && canShowPopup()) {
+            scrollTriggered = true;
+            showDiscoveryPopup();
+          }
+        }
+      });
+    }, { threshold: 0 });
+    observer.observe(heroEl);
+  });
+})();
+
 /* Scroll Progress Bar — fixed below nav */
 (function() {
   var bar = document.createElement('div');

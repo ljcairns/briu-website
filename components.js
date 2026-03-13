@@ -24,9 +24,9 @@
       '  <button class="nav-toggle" onclick="this.classList.toggle(\'open\');document.querySelector(\'.nav-links\').classList.toggle(\'open\')" aria-label="Menu"><span></span><span></span><span></span></button>\n' +
       '  <div class="nav-links">\n' +
       '    ' + linksHtml +
-      '    <a href="#" onclick="openContactForm();return false" class="mobile-cta">Book a Call</a>\n' +
+      '    <a href="#" onclick="openDiscovery();return false" class="mobile-cta">Find Your Use Case</a>\n' +
       '  </div>\n' +
-      '  <a href="#" onclick="openContactForm();return false" class="cta-nav cta-shimmer">Book a Call</a>\n' +
+      '  <a href="#" onclick="openDiscovery();return false" class="cta-nav cta-shimmer">Find Your Use Case</a>\n' +
       '</nav>\n' +
       '</header>';
   }

@@ -52,6 +52,18 @@ nav a.cta-nav { opacity: 0; animation: navCtaSlideIn 0.8s ease forwards 0.3s; }
 .hero-cta-secondary:hover::after { transform: translateX(3px); }
 .hero-cta-secondary[href^="#"]::after { content: '\2193'; }
 .hero-cta-secondary[href^="#"]:hover::after { transform: translateY(3px); }
+.hero-discover-prompt { font-size: 0.8rem; color: var(--text-muted); margin-top: 1.5rem; opacity: 0; animation: fadeUp 0.8s ease forwards 1s; }
+.hero-discover-prompt a { color: var(--gold); text-decoration: none; border-bottom: 1px solid rgba(212,160,90,0.3); padding-bottom: 1px; transition: border-color 0.2s; }
+.hero-discover-prompt a:hover { border-color: var(--gold); }
+
+/* Discovery CTA section */
+.discovery-cta-section { text-align: center; padding-bottom: 3rem; }
+.discovery-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin: 2.5rem auto 0; max-width: 680px; }
+.discovery-card { background: var(--surface); border: 1px solid rgba(255,255,255,0.06); padding: 1.5rem 1rem; cursor: pointer; transition: all 0.3s ease; display: flex; flex-direction: column; align-items: center; gap: 0.65rem; }
+.discovery-card:hover { border-color: rgba(212,160,90,0.3); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+.discovery-card-icon { font-size: 1.6rem; }
+.discovery-card-label { font-size: 0.82rem; color: var(--text-muted); font-weight: 500; text-align: center; line-height: 1.4; }
+@media (max-width: 640px) { .discovery-cards { grid-template-columns: repeat(2, 1fr); } }
 
 
 /* Moment comparison */
@@ -604,8 +616,8 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <!-- HERO -->
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Agent-First Operations</p>
-  <h1>AI agents deployed for your business. <em>Most run for $2–5/day.</em></h1>
-  <p class="hero-subtitle">Not a chatbot. Autonomous systems that connect to your tools, take action, and run 24/7 on your infrastructure. We build them, teach your team to run them, and stay as long as you want us.</p>
+  <h1>Your business runs while you sleep. <em>AI agents that email, research, report, and update your CRM — starting at $2–5/day.</em></h1>
+  <p class="hero-subtitle">Not a chatbot. A system that reads your emails, updates your CRM, researches your prospects, and sends you a briefing every morning — then waits for your go-ahead before acting. We build it, teach your team to run it, and stay as long as you need us.</p>
 
   <div class="hero-pillars">
     <span class="hero-pillar">Approval gates on every action</span>
@@ -614,9 +626,11 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </div>
 
   <div class="hero-cta-group">
-    <a href="#" onclick="openContactForm();return false" class="hero-cta-primary">Start a Conversation</a>
-    <a href="/why-now/" class="hero-cta-secondary">Why now</a>
+    <a href="#" onclick="openDiscovery();return false" class="hero-cta-primary">See What It Would Do For You</a>
+    <a href="/build/the-real-numbers/" class="hero-cta-secondary">See a real example</a>
   </div>
+
+  <p class="hero-discover-prompt">Not sure where to start? <a href="#" onclick="openDiscovery();return false">Answer 3 questions and see your use case →</a></p>
 
 </section>
 
@@ -630,7 +644,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 
 <!-- THE SHIFT -->
 <section>
-  <p class="section-label reveal">The Shift</p>
+  <p class="section-label reveal">What Changed in 2025</p>
   <h2 class="reveal">This isn't ChatGPT. This is the next step.</h2>
   <p class="reveal">ChatGPT taught people AI could answer questions. Agents do something different: they connect to your tools and do actual work, autonomously, 24/7.</p>
 
@@ -673,6 +687,14 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(77,128,112,0.02)"/>
   </svg>
 </div>
+
+<!-- SOCIAL PROOF QUOTE -->
+<section style="padding: 1rem 2rem 0; max-width: 760px; margin: 0 auto;">
+  <div class="arc-proof reveal" style="text-align:center; border-left: none; border-top: 2px solid rgba(212,160,90,0.15); padding: 1.5rem 2rem;">
+    <p style="font-family: var(--serif); font-size: 1.1rem; color: var(--text); line-height: 1.6; margin-bottom: 0.5rem; font-style: italic;">"I didn't understand what AI agents were until I saw it research a specific person in real time. Then it clicked."</p>
+    <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0; text-transform: uppercase; letter-spacing: 0.1em;">Discovery call participant, professional services</p>
+  </div>
+</section>
 
 <!-- WHY NOT JUST USE CLAUDE -->
 <section>
@@ -721,31 +743,31 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
 <!-- WHAT WE DO -->
 <section>
   <p class="section-label reveal">What We Do</p>
-  <h2 class="reveal">Here's what a deployed agent actually does for a business.</h2>
+  <h2 class="reveal">Here's what happened last week at a real business using Briu.</h2>
 
   <div class="proof-grid reveal">
     <div class="proof-card">
       <div class="proof-card-icon">✉</div>
       <h4>Email & Communication</h4>
-      <p>Inbox triage, draft responses, follow-up scheduling across multiple accounts. Nothing sends without your approval.</p>
+      <p>Every morning at 7am, the agent has already sorted 40+ emails, drafted replies to the urgent ones, and flagged anything that needs a human call. You spend 20 minutes instead of 2 hours. Nothing sends without your tap.</p>
       <div class="proof-card-stat"><span class="proof-num">~$3</span>/day API cost</div>
     </div>
     <div class="proof-card">
       <div class="proof-card-icon">📊</div>
       <h4>CRM & Sales</h4>
-      <p>HubSpot or Salesforce updates, lead scoring, prospecting, personalized outreach. Runs overnight, briefing ready by morning.</p>
+      <p>Before your Monday sales call, the agent has researched every prospect on your list, scored them by fit, updated HubSpot, and drafted a personalized opener for each one.</p>
       <div class="proof-card-stat"><span class="proof-num">$0.60</span>/run</div>
     </div>
     <div class="proof-card">
       <div class="proof-card-icon">📋</div>
       <h4>Reporting & Operations</h4>
-      <p>Daily cost tracking, weekly reports, anomaly alerts, PDF generation. Your agents monitor what matters and surface what needs attention.</p>
+      <p>Every Friday at 5pm, a PDF lands in your inbox: cost by department, revenue vs. forecast, three anomalies flagged with a recommended action. No analyst needed. Runs automatically every week.</p>
       <div class="proof-card-stat"><span class="proof-num">24/7</span> monitoring</div>
     </div>
     <div class="proof-card">
       <div class="proof-card-icon">🔗</div>
       <h4>Multi-Agent Orchestration</h4>
-      <p>A personal agent that coordinates task-specific agents, each with a defined job, budget, and scope. They run when there's work and stop when it's done.</p>
+      <p>One founder. Nine agents running in parallel: email, CRM, research, reporting, scheduling. Total cost: $18.97/day. That's what Briu runs on right now — we built it ourselves and deploy the same stack for clients.</p>
       <div class="proof-card-stat"><span class="proof-num">$2–5</span>/day total</div>
     </div>
   </div>
@@ -758,6 +780,41 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
     <path d="M0,35 C360,58 720,12 1080,35 C1260,47 1350,42 1440,38 L1440,60 L0,60 Z" fill="rgba(90,157,172,0.02)"/>
   </svg>
 </div>
+
+<!-- A REAL EXAMPLE -->
+<section>
+  <p class="section-label reveal">A Real Example</p>
+  <h2 class="reveal">A professional services firm. 3-person team. 200+ client emails a week.</h2>
+
+  <div class="moment-grid reveal">
+    <div class="moment-col moment-col-old">
+      <div class="moment-col-tag">Before &middot; Every Monday morning</div>
+      <h3>The founder was the bottleneck.</h3>
+      <ul class="moment-list">
+        <li>3 hours sorting client emails, writing status updates</li>
+        <li>Half the emails didn't need a response, but she had to read each one</li>
+        <li>Follow-ups dropped 30% of the time</li>
+        <li>Couldn't take Monday morning calls — still in her inbox</li>
+        <li>She was doing work an assistant would do, at founder rate</li>
+      </ul>
+    </div>
+    <div class="moment-col moment-col-new">
+      <div class="moment-col-tag">After &middot; 6 weeks later</div>
+      <h3>Monday mornings are hers again.</h3>
+      <ul class="moment-list">
+        <li>Agent reads every email at 6am, categorizes by client and urgency</li>
+        <li>Drafts responses for routine updates, flags the 12 that need human attention</li>
+        <li>Follow-up tasks auto-created in HubSpot with a 7-day deadline</li>
+        <li>Client response time cut by 60%</li>
+        <li>API cost: ~$3/day. Setup: Kickoff + 1 implementation week.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="gap-bottom reveal" style="margin-top:2rem;">
+    <p>This is not a case study from a tech company. It's a small professional services firm. The agent doesn't replace anyone — it handles the work that shouldn't require a human in the first place. <strong>Want to see what it would look like for your business?</strong> <a href="#" onclick="openDiscovery();return false" style="color:var(--gold);text-decoration:none;font-weight:600;">Answer 3 questions →</a></p>
+  </div>
+</section>
 
 <!-- INTEGRATIONS -->
 <section>
@@ -833,7 +890,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   <h2 class="reveal">How it works.</h2>
   <p class="reveal">We build your first agent in the kickoff. Your team learns to run it. Most clients stay for more.</p>
 
-  <p class="reveal" style="text-align:center; margin-top:1.5rem; font-size:0.95rem; color:var(--text-muted);">Start a conversation. Tell us what you're working on. <a href="#" onclick="openContactForm();return false" style="color:var(--gold); text-decoration:none; font-weight:600;">Start a Conversation &rarr;</a></p>
+  <p class="reveal" style="text-align:center; margin-top:1.5rem; font-size:0.95rem; color:var(--text-muted);">Not sure which fits? <a href="#" onclick="openDiscovery();return false" style="color:var(--gold); text-decoration:none; font-weight:600;">Answer 3 questions and we'll recommend where to start &rarr;</a></p>
 
   <div class="kickoff-grid reveal">
     <div class="kickoff-card kickoff-card-featured">
@@ -848,7 +905,7 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
         <div class="deliverable">Your first agent built and deployed on your infrastructure</div>
         <div class="deliverable">Written architecture plan with cost profile and rollout order</div>
         <div class="deliverable">Review of any AI products you're paying for or being pitched</div>
-        <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0;">We use the lead time to research your business and pre-build your first agent, so the session is hands-on, not theoretical.</p>
+        <p style="font-size:0.82rem; color:var(--text-muted); margin-top:0.75rem; margin-bottom:0;">We spend 2 weeks prepping. You show up, we build.</p>
         <a href="#" onclick="bookTier('kickoff');return false" class="tier-cta">Reserve your kickoff &rarr;</a>
       </div>
     </div>
@@ -1074,12 +1131,40 @@ section p { color: var(--text-muted); font-size: 1.1rem; line-height: 1.8; margi
   </svg>
 </div>
 
+<!-- DISCOVERY CTA -->
+<section class="discovery-cta-section reveal" id="find-use-case">
+  <p class="section-label">Not Sure Yet?</p>
+  <h2>Answer 3 questions. See exactly what AI would do for your business.</h2>
+  <p>Most visitors leave without understanding how this applies to them. This tool routes you to specific use cases, real costs, and a first-agent recommendation — based on what your business actually does. Takes 60 seconds.</p>
+
+  <div class="discovery-cards">
+    <div class="discovery-card" onclick="openDiscoveryContext('services')">
+      <div class="discovery-card-icon">🏢</div>
+      <div class="discovery-card-label">Professional Services</div>
+    </div>
+    <div class="discovery-card" onclick="openDiscoveryContext('ecommerce')">
+      <div class="discovery-card-icon">🛍</div>
+      <div class="discovery-card-label">E-commerce</div>
+    </div>
+    <div class="discovery-card" onclick="openDiscoveryContext('sales')">
+      <div class="discovery-card-icon">📈</div>
+      <div class="discovery-card-label">Sales-led Business</div>
+    </div>
+    <div class="discovery-card" onclick="openDiscoveryContext('solo')">
+      <div class="discovery-card-icon">🧑‍💻</div>
+      <div class="discovery-card-label">Solo Founder</div>
+    </div>
+  </div>
+
+  <a href="#" onclick="openDiscovery();return false" class="cta-button" style="margin-top:2rem;">Or just tell us what you do →</a>
+</section>
+
 <!-- CTA -->
 <section class="cta-section" id="contact">
   <p class="section-label reveal">Get Started</p>
-  <h2 class="reveal">Tell us what you're working on.</h2>
-  <p class="reveal">Describe what your team does every day. We'll reply within 24 hours with specific ideas for your business. What an agent could handle, what it would cost, and what we'd build first.</p>
-  <a href="#" onclick="openContactForm();return false" class="cta-button reveal">Start a Conversation</a>
+  <h2 class="reveal">Not sure if this is for you?</h2>
+  <p class="reveal">Answer three questions and we'll show you exactly what an agent would do for your specific business — what it would handle, what it would cost, and what to build first. Takes 60 seconds.</p>
+  <a href="#" onclick="openDiscovery();return false" class="cta-button reveal">Answer 3 Questions →</a>
 </section>
 </main>
 
