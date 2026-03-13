@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Briu Command Center</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #0a0a0a; color: #f0f0f0; font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; font-size: 13px; line-height: 1.5; padding: 20px 30px; }
+  h1 { font-size: 18px; font-weight: 600; margin-bottom: 4px; letter-spacing: 1px; }
+  h2 { font-size: 15px; font-weight: 600; color: #a0a0a0; margin: 30px 0 10px; border-bottom: 1px solid #222; padding-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  h3 { font-size: 13px; font-weight: 600; color: #777; margin: 18px 0 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  a { color: #6ea8fe; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  table { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+  th { text-align: left; padding: 6px 10px; background: #141414; color: #888; font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; cursor: pointer; user-select: none; border-bottom: 1px solid #222; }
+  th:hover { color: #ccc; }
+  th.sort-asc::after { content: ' ▲'; font-size: 9px; }
+  th.sort-desc::after { content: ' ▼'; font-size: 9px; }
+  td { padding: 5px 10px; border-bottom: 1px solid #1a1a1a; }
+  tr:hover td { background: #111; }
+  .badge { display: inline-block; padding: 1px 7px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+  .badge-success { background: #22c55e22; color: #22c55e; }
+  .badge-failed { background: #ef444422; color: #ef4444; }
+  .badge-pending { background: #eab30822; color: #eab308; }
+  .badge-timeout { background: #f9731622; color: #f97316; }
+  .subtitle { color: #555; font-size: 12px; margin-bottom: 20px; }
+  .commit-block { margin-bottom: 14px; }
+  .commit-hash { color: #f59e0b; font-weight: 600; }
+  .commit-msg { color: #d4d4d4; }
+  .commit-time { color: #555; font-size: 12px; }
+  .commit-files { margin: 3px 0 0 20px; color: #666; font-size: 12px; }
+  .commit-files .added { color: #22c55e; }
+  .commit-files .modified { color: #eab308; }
+  .commit-files .deleted { color: #ef4444; }
+  .refresh-btn { background: #1a1a1a; color: #888; border: 1px solid #333; padding: 4px 12px; font-family: inherit; font-size: 12px; cursor: pointer; border-radius: 3px; }
+  .refresh-btn:hover { color: #f0f0f0; border-color: #555; }
+  footer { margin-top: 40px; padding-top: 12px; border-top: 1px solid #222; color: #444; font-size: 11px; }
+  .empty-msg { color: #555; padding: 10px; font-style: italic; }
+  .section-count { color: #555; font-weight: normal; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>BRIU COMMAND CENTER</h1>
+<p class="subtitle">Internal dashboard &mdash; password-protected, noindex</p>
+
+<div id="pages-section"></div>
+<div id="tasks-section"></div>
+<div id="reports-section"></div>
+<div id="changes-section"></div>
+
+<footer>
+  Last updated: <span id="build-time"></span> &middot; Password-protected. noindex.
+</footer>
+
+<script>
+// === AUTH GATE ===
+(function() {
+  if (sessionStorage.getItem('briu_cmd_auth') === 'ok') return;
+  var p = prompt('Password:');
+  if (p !== 'briu2026') { location.href = 'https://briu.ai'; return; }
+  sessionStorage.setItem('briu_cmd_auth', 'ok');
+})();
+
+// === BUILD TIMESTAMP ===
+document.getElementById('build-time').textContent = '2026-03-13T21:02:37Z';
+
+// === SECTION 1: PAGES ===
+var pages = [
+  { path: '404.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'admin/crm/index.html', hash: 'f359694', date: '2026-03-12 21:13:15 -0700' },
+  { path: 'admin/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'agents/index.html', hash: '780515b', date: '2026-03-12 21:24:26 -0700' },
+  { path: 'build/brand-in-a-session/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/cost-arbitrage/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/dispatch-dashboard/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/from-comment-to-fix-in-one-loop/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'build/how-we-built-briu-using-our-own-agent-stack/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'build/how-we-red-teamed-our-own-agent/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'build/multi-agent-dispatch/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/operations/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/security-methodology/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/six-layers-deep/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/the-morning-briefing/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/the-real-numbers/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'build/velocity/index.html', hash: '37a91bb', date: '2026-03-12 21:17:56 -0700' },
+  { path: 'build/voice-profile/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'build/we-tried-to-break-our-own-sanitizer/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'build/what-a-real-session-actually-costs/index.html', hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700' },
+  { path: 'chart-preview.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'discovery/index.html', hash: '8d432bc', date: '2026-03-13 13:54:29 -0700' },
+  { path: 'free-audit/index.html', hash: '347d2aa', date: '2026-03-13 13:43:48 -0700' },
+  { path: 'index.html', hash: '95c3149', date: '2026-03-12 22:06:00 -0700' },
+  { path: 'industries/index.html', hash: '538b2a1', date: '2026-03-12 22:09:09 -0700' },
+  { path: 'insights/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'insights/manifesto/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'press/index.html', hash: 'fd8d43c', date: '2026-03-13 13:45:11 -0700' },
+  { path: 'privacy/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'prospects/live/index.html', hash: '2f717b7', date: '2026-03-12 21:26:24 -0700' },
+  { path: 'prospects/speaking/index.html', hash: '9d94dd2', date: '2026-03-12 21:13:45 -0700' },
+  { path: 'prospects/value-prism/index.html', hash: '1b44bbf', date: '2026-03-13 13:43:48 -0700' },
+  { path: 'refer/index.html', hash: '6c7bac9', date: '2026-03-13 13:43:48 -0700' },
+  { path: 'services/calculator/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'services/index.html', hash: 'd8415ce', date: '2026-03-12 21:18:33 -0700' },
+  { path: 'why-now-economics/index.html', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { path: 'why-now/index.html', hash: 'cad3416', date: '2026-03-12 20:48:00 -0700' },
+  { path: 'why-now/pricing-logic/index.html', hash: '3c6a573', date: '2026-03-13 13:45:20 -0700' }
+];
+
+function categorize(p) {
+  if (p.startsWith('build/') && p !== 'build/index.html') return 'Build Articles';
+  if (p.startsWith('prospects/')) return 'Prospects';
+  if (p.startsWith('admin/')) return 'Admin';
+  if (p === 'chart-preview.html' || p.startsWith('services/calculator')) return 'Tools';
+  return 'Main Pages';
+}
+
+function renderPages() {
+  var groups = {};
+  var order = ['Main Pages', 'Build Articles', 'Prospects', 'Tools', 'Admin'];
+  order.forEach(function(g) { groups[g] = []; });
+  pages.forEach(function(pg) {
+    var cat = categorize(pg.path);
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(pg);
+  });
+  var html = '<h2>Pages <span class="section-count">(' + pages.length + ' files)</span></h2>';
+  order.forEach(function(group) {
+    if (!groups[group] || !groups[group].length) return;
+    html += '<h3>' + group + ' (' + groups[group].length + ')</h3>';
+    html += '<table><thead><tr><th>Path</th><th>Last Modified</th><th>Commit</th><th>Live Link</th></tr></thead><tbody>';
+    groups[group].forEach(function(pg) {
+      var livePath = pg.path === 'index.html' ? '' : pg.path.replace(/\/index\.html$/, '/').replace(/\.html$/, '');
+      var liveUrl = 'https://briu.ai/' + livePath;
+      var shortDate = pg.date.split(' ').slice(0, 2).join(' ');
+      html += '<tr>';
+      html += '<td>' + pg.path + '</td>';
+      html += '<td>' + shortDate + '</td>';
+      html += '<td><span class="commit-hash">' + pg.hash + '</span></td>';
+      html += '<td><a href="' + liveUrl + '" target="_blank">' + liveUrl + '</a></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+  });
+  document.getElementById('pages-section').innerHTML = html;
+}
+renderPages();
+
+// === SECTION 2: TASKS ===
+(function() {
+  var el = document.getElementById('tasks-section');
+  fetch('/ops-data.json').then(function(r) {
+    if (!r.ok) throw new Error('404');
+    return r.json();
+  }).then(function(data) {
+    renderTasks(data.tasks || []);
+  }).catch(function() {
+    // Try relative path
+    fetch('../../ops-data.json').then(function(r) {
+      if (!r.ok) throw new Error('404');
+      return r.json();
+    }).then(function(data) {
+      renderTasks(data.tasks || []);
+    }).catch(function() {
+      renderTasks([]);
+    });
+  });
+
+  function renderTasks(tasks) {
+    var html = '<h2>Tasks <span class="section-count">(' + tasks.length + ')</span></h2>';
+    if (!tasks.length) {
+      html += '<p class="empty-msg">No tasks in ops-data.json. Add tasks to populate this section.</p>';
+      el.innerHTML = html;
+      return;
+    }
+    html += '<table id="tasks-table"><thead><tr>';
+    html += '<th data-sort="string">Task ID</th><th data-sort="string">Status</th><th data-sort="string">Created</th><th data-sort="string">Duration</th><th data-sort="string">Summary</th>';
+    html += '</tr></thead><tbody>';
+    tasks.forEach(function(t) {
+      var badgeClass = 'badge-' + (t.status || 'pending');
+      html += '<tr>';
+      html += '<td>' + (t.id || '') + '</td>';
+      html += '<td><span class="badge ' + badgeClass + '">' + (t.status || 'unknown') + '</span></td>';
+      html += '<td>' + (t.created || '') + '</td>';
+      html += '<td>' + (t.duration || '') + '</td>';
+      html += '<td>' + (t.summary || '') + '</td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+    el.innerHTML = html;
+    makeSortable(document.getElementById('tasks-table'));
+  }
+})();
+
+// === SECTION 3: REPORTS ===
+var reports = [
+  { file: 'AGENTS.md', path: 'AGENTS.md', hash: 'de14728', date: '2026-03-07 09:55:12 -0800' },
+  { file: 'CHATBOT-AUDIT.md', path: 'CHATBOT-AUDIT.md', hash: 'a4e66de', date: '2026-03-12 11:12:52 -0700' },
+  { file: 'CODE-QUALITY.md', path: 'CODE-QUALITY.md', hash: '5c1bd1e', date: '2026-03-12 18:44:04 -0700' },
+  { file: 'CONSISTENCY-AUDIT.md', path: 'CONSISTENCY-AUDIT.md', hash: '2290acb', date: '2026-03-12 18:35:12 -0700' },
+  { file: 'FORM-SECURITY.md', path: 'FORM-SECURITY.md', hash: 'd682df0', date: '2026-03-13 13:42:25 -0700' },
+  { file: 'LINK-CHECK.md', path: 'LINK-CHECK.md', hash: '9490a1c', date: '2026-03-12 21:15:58 -0700' },
+  { file: 'MOBILE-QA.md', path: 'MOBILE-QA.md', hash: '82ee124', date: '2026-03-13 13:44:35 -0700' },
+  { file: 'NAV-AUDIT.md', path: 'NAV-AUDIT.md', hash: 'a28333b', date: '2026-03-13 13:45:32 -0700' },
+  { file: 'OVERNIGHT-QA.md', path: 'OVERNIGHT-QA.md', hash: '3b70d1c', date: '2026-03-13 13:43:22 -0700' },
+  { file: 'PERFORMANCE-AUDIT.md', path: 'PERFORMANCE-AUDIT.md', hash: 'c2aff00', date: '2026-03-12 11:12:52 -0700' },
+  { file: 'PERFORMANCE-CHECK.md', path: 'PERFORMANCE-CHECK.md', hash: '3f975d7', date: '2026-03-12 21:15:22 -0700' },
+  { file: 'SECURITY-AUDIT.md', path: 'SECURITY-AUDIT.md', hash: '1edfe34', date: '2026-03-13 13:46:50 -0700' },
+  { file: 'SEO-AUDIT.md', path: 'SEO-AUDIT.md', hash: '2b4cd82', date: '2026-03-12 11:12:52 -0700' },
+  { file: 'SEO-FIXES.md', path: 'SEO-FIXES.md', hash: '0846be2', date: '2026-03-12 20:57:22 -0700' },
+  { file: 'SEO-TECHNICAL-AUDIT.md', path: 'SEO-TECHNICAL-AUDIT.md', hash: 'f6b8b14', date: '2026-03-12 21:24:45 -0700' },
+  { file: 'SITE-AUDIT.md', path: 'SITE-AUDIT.md', hash: '2a24ae8', date: '2026-03-12 11:12:52 -0700' },
+  { file: 'red-team-article-skeleton.md', path: 'build/red-team-article-skeleton.md', hash: '2f4e787', date: '2026-03-09 09:09:35 -0700' },
+  { file: 'red-team-results.md', path: 'build/red-team-results.md', hash: '2f4e787', date: '2026-03-09 09:09:35 -0700' },
+  { file: 'briu-strategy.md', path: 'docs/briu-strategy.md', hash: 'de14728', date: '2026-03-07 09:55:12 -0800' },
+  { file: 'codex-findings.md', path: 'from-vps/transfer/codex-findings.md', hash: '0e4c84a', date: '2026-03-11 17:31:43 -0700' },
+  { file: 'security-summary-for-website.md', path: 'from-vps/transfer/security-summary-for-website.md', hash: '0e4c84a', date: '2026-03-11 17:31:43 -0700' },
+  { file: 'README.md', path: 'press/assets/README.md', hash: 'fd8d43c', date: '2026-03-13 13:45:11 -0700' }
+];
+
+function classifyReport(r) {
+  var p = (r.path + ' ' + r.file).toLowerCase();
+  if (p.indexOf('security') !== -1 || p.indexOf('form-security') !== -1 || p.indexOf('red-team') !== -1) return 'Security';
+  if (p.indexOf('audit') !== -1 || p.indexOf('qa') !== -1 || p.indexOf('check') !== -1 || p.indexOf('consistency') !== -1 || p.indexOf('performance') !== -1 || p.indexOf('link-check') !== -1 || p.indexOf('mobile') !== -1) return 'Audit / QA';
+  if (p.indexOf('seo') !== -1) return 'SEO';
+  if (p.indexOf('strategy') !== -1 || p.indexOf('codex') !== -1 || p.indexOf('agents') !== -1) return 'Research';
+  return 'Notes / Docs';
+}
+
+(function() {
+  var groups = {};
+  var groupOrder = ['Security', 'Audit / QA', 'SEO', 'Research', 'Notes / Docs'];
+  groupOrder.forEach(function(g) { groups[g] = []; });
+  reports.forEach(function(r) {
+    var cat = classifyReport(r);
+    groups[cat].push(r);
+  });
+  var html = '<h2>Reports <span class="section-count">(' + reports.length + ' files)</span></h2>';
+  groupOrder.forEach(function(group) {
+    if (!groups[group] || !groups[group].length) return;
+    html += '<h3>' + group + ' (' + groups[group].length + ')</h3>';
+    html += '<table><thead><tr><th>Filename</th><th>Path</th><th>Last Modified</th><th>Commit</th><th>Raw Link</th></tr></thead><tbody>';
+    groups[group].forEach(function(r) {
+      var rawUrl = 'https://raw.githubusercontent.com/ljcairns/briu-website/main/' + r.path;
+      var shortDate = r.date.split(' ').slice(0, 2).join(' ');
+      html += '<tr>';
+      html += '<td>' + r.file + '</td>';
+      html += '<td>' + r.path + '</td>';
+      html += '<td>' + shortDate + '</td>';
+      html += '<td><span class="commit-hash">' + r.hash + '</span></td>';
+      html += '<td><a href="' + rawUrl + '" target="_blank">raw</a></td>';
+      html += '</tr>';
+    });
+    html += '</tbody></table>';
+  });
+  document.getElementById('reports-section').innerHTML = html;
+})();
+
+// === SECTION 4: WHAT CHANGED TODAY ===
+var recentCommits = [
+  { hash: '0da8b41', date: '2026-03-13 20:56:02 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'f30d55b', date: '2026-03-13 13:55:41 -0700', msg: 'Security disclosure pruning: remove internal implementation details from public pages', files: [{ status: 'M', path: 'build/brand-in-a-session/index.html' },{ status: 'M', path: 'build/cost-arbitrage/index.html' },{ status: 'M', path: 'build/dispatch-dashboard/index.html' },{ status: 'M', path: 'build/how-we-red-teamed-our-own-agent/index.html' },{ status: 'M', path: 'build/multi-agent-dispatch/index.html' },{ status: 'M', path: 'build/operations/index.html' },{ status: 'M', path: 'build/security-methodology/index.html' },{ status: 'M', path: 'build/six-layers-deep/index.html' },{ status: 'M', path: 'build/the-morning-briefing/index.html' },{ status: 'M', path: 'build/we-tried-to-break-our-own-sanitizer/index.html' },{ status: 'M', path: 'build/what-a-real-session-actually-costs/index.html' },{ status: 'M', path: 'charts.js' },{ status: 'M', path: 'workers/assess/scripts/ingest.js' },{ status: 'M', path: 'workers/assess/src/index.js' }] },
+  { hash: '7a76480', date: '2026-03-13 20:54:54 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '8d432bc', date: '2026-03-13 13:54:29 -0700', msg: 'security: add pre-push linter with HIGH/MEDIUM/LOW checks', files: [{ status: 'A', path: '.githooks/pre-push' },{ status: 'M', path: 'discovery/index.html' },{ status: 'A', path: 'package.json' },{ status: 'A', path: 'scripts/security-lint.js' }] },
+  { hash: 'b768f8c', date: '2026-03-13 20:47:11 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '1edfe34', date: '2026-03-13 13:46:50 -0700', msg: 'Add full-codebase security audit with 17 findings', files: [{ status: 'A', path: 'SECURITY-AUDIT.md' }] },
+  { hash: 'fa5a1ab', date: '2026-03-13 20:45:54 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'a28333b', date: '2026-03-13 13:45:32 -0700', msg: 'Add cross-page navigation audit and fix sitemap gaps', files: [{ status: 'A', path: 'NAV-AUDIT.md' },{ status: 'M', path: 'sitemap.xml' }] },
+  { hash: '3c6a573', date: '2026-03-13 13:45:20 -0700', msg: 'Add pricing logic page with subscription cost arbitrage math', files: [{ status: 'A', path: 'why-now/pricing-logic/index.html' }] },
+  { hash: 'fd8d43c', date: '2026-03-13 13:45:11 -0700', msg: 'Add press kit page with company overview, founder bio, and assets section', files: [{ status: 'M', path: 'components.js' },{ status: 'A', path: 'press/assets/README.md' },{ status: 'A', path: 'press/index.html' }] },
+  { hash: 'ae4bfb9', date: '2026-03-13 20:44:55 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '82ee124', date: '2026-03-13 13:44:35 -0700', msg: 'Add mobile responsiveness audit for new pages', files: [{ status: 'A', path: 'MOBILE-QA.md' }] },
+  { hash: 'b2503c0', date: '2026-03-13 20:44:22 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'c76c1c4', date: '2026-03-13 13:43:59 -0700', msg: 'Add llms.txt for AI-readable site summary', files: [{ status: 'A', path: 'llms.txt' }] },
+  { hash: '1b44bbf', date: '2026-03-13 13:43:48 -0700', msg: 'Strip internal scoring parameters from prospect discovery URL', files: [{ status: 'M', path: 'prospects/value-prism/index.html' }] },
+  { hash: '347d2aa', date: '2026-03-13 13:43:48 -0700', msg: 'Add free AI readiness audit landing page', files: [{ status: 'A', path: 'free-audit/index.html' }] },
+  { hash: '6c7bac9', date: '2026-03-13 13:43:48 -0700', msg: 'Add referral page with 10% commission program', files: [{ status: 'M', path: 'components.js' },{ status: 'A', path: 'refer/index.html' },{ status: 'M', path: 'sitemap.xml' }] },
+  { hash: '91f51a9', date: '2026-03-13 20:43:38 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '3b70d1c', date: '2026-03-13 13:43:22 -0700', msg: 'Add overnight QA report for new pages', files: [{ status: 'A', path: 'OVERNIGHT-QA.md' }] },
+  { hash: 'd246d73', date: '2026-03-13 20:42:52 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'd682df0', date: '2026-03-13 13:42:25 -0700', msg: 'Add form security review for discovery page', files: [{ status: 'A', path: 'FORM-SECURITY.md' }] },
+  { hash: '55f96c8', date: '2026-03-13 18:39:46 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '0619a41', date: '2026-03-13 12:55:44 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '05afd91', date: '2026-03-13 06:51:36 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'e80d50e', date: '2026-03-13 05:09:26 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '538b2a1', date: '2026-03-12 22:09:09 -0700', msg: 'Add industries page', files: [{ status: 'M', path: 'components.js' },{ status: 'M', path: 'discovery/index.html' },{ status: 'A', path: 'industries/index.html' },{ status: 'M', path: 'sitemap.xml' }] },
+  { hash: '4df5dc9', date: '2026-03-13 05:06:26 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '95c3149', date: '2026-03-12 22:06:00 -0700', msg: 'Add animated proof wall section to homepage', files: [{ status: 'M', path: 'data/ops-data.json' },{ status: 'M', path: 'index.html' }] },
+  { hash: 'ce3a381', date: '2026-03-13 04:26:45 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '2f717b7', date: '2026-03-12 21:26:24 -0700', msg: 'feat: add live meeting demo page at prospects/live/', files: [{ status: 'A', path: 'prospects/live/index.html' }] },
+  { hash: '43b37ff', date: '2026-03-13 04:25:17 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '3648f93', date: '2026-03-12 21:24:53 -0700', msg: 'feat: add Discord activity section to operations dashboard', files: [{ status: 'M', path: 'build/operations/index.html' },{ status: 'A', path: 'data/discord-activity.json' },{ status: 'M', path: 'data/ops-data.json' }] },
+  { hash: 'f6b8b14', date: '2026-03-12 21:24:45 -0700', msg: 'docs: add SEO-TECHNICAL-AUDIT.md', files: [{ status: 'A', path: 'SEO-TECHNICAL-AUDIT.md' }] },
+  { hash: '780515b', date: '2026-03-12 21:24:26 -0700', msg: 'feat: add agent-facing landing page at /agents/', files: [{ status: 'A', path: 'agents/index.html' },{ status: 'M', path: 'components.js' },{ status: 'M', path: 'sitemap.xml' }] },
+  { hash: '4c2ba51', date: '2026-03-13 04:22:47 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'b3846de', date: '2026-03-12 21:22:26 -0700', msg: 'feat: add .well-known/ai-services.json', files: [{ status: 'A', path: '.well-known/ai-services.json' },{ status: 'M', path: 'components.js' },{ status: 'M', path: 'robots.txt' }] },
+  { hash: 'f9021cb', date: '2026-03-13 04:19:53 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '1169212', date: '2026-03-12 21:19:20 -0700', msg: 'feat: add operations dashboard at build/operations/', files: [{ status: 'A', path: 'build/operations/index.html' },{ status: 'A', path: 'data/ops-data.json' }] },
+  { hash: 'c14d4d4', date: '2026-03-13 04:18:49 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'd8415ce', date: '2026-03-12 21:18:33 -0700', msg: 'fix: consistency review - resolve CSS conflicts and layout issues', files: [{ status: 'M', path: 'discovery/index.html' },{ status: 'M', path: 'index.html' },{ status: 'M', path: 'services/index.html' },{ status: 'M', path: 'shared.css' }] },
+  { hash: '8fa56a1', date: '2026-03-13 04:18:13 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '37a91bb', date: '2026-03-12 21:17:56 -0700', msg: 'feat: add velocity visualization at build/velocity/', files: [{ status: 'A', path: 'build/velocity/index.html' }] },
+  { hash: 'e37a1e8', date: '2026-03-13 04:16:20 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '9490a1c', date: '2026-03-12 21:15:58 -0700', msg: 'chore: add LINK-CHECK.md', files: [{ status: 'A', path: 'LINK-CHECK.md' }] },
+  { hash: 'b4ffbe6', date: '2026-03-13 04:15:39 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '3f975d7', date: '2026-03-12 21:15:22 -0700', msg: 'chore: add PERFORMANCE-CHECK.md', files: [{ status: 'A', path: 'PERFORMANCE-CHECK.md' }] },
+  { hash: 'b1c1cdf', date: '2026-03-13 04:14:03 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '9d94dd2', date: '2026-03-12 21:13:45 -0700', msg: 'feat: add speaking pitch page at prospects/speaking/', files: [{ status: 'A', path: 'prospects/speaking/index.html' }] },
+  { hash: '1ccb295', date: '2026-03-13 04:13:36 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'f359694', date: '2026-03-12 21:13:15 -0700', msg: 'feat: add internal prospect CRM at admin/crm/', files: [{ status: 'A', path: 'admin/crm/index.html' },{ status: 'A', path: 'data/prospects.json' }] },
+  { hash: '1974ce9', date: '2026-03-13 03:57:40 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '0846be2', date: '2026-03-12 20:57:22 -0700', msg: 'fix: SEO cleanup pass', files: [{ status: 'M', path: '404.html' },{ status: 'A', path: 'SEO-FIXES.md' },{ status: 'M', path: 'admin/index.html' },{ status: 'M', path: 'build/index.html' },{ status: 'M', path: 'chart-preview.html' },{ status: 'M', path: 'discovery/index.html' },{ status: 'M', path: 'insights/index.html' },{ status: 'M', path: 'insights/manifesto/index.html' },{ status: 'M', path: 'privacy/index.html' },{ status: 'M', path: 'prospects/value-prism/index.html' },{ status: 'M', path: 'why-now-economics/index.html' }] },
+  { hash: '52e0dc2', date: '2026-03-13 03:49:48 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: '81326fe', date: '2026-03-12 20:49:24 -0700', msg: 'feat: Value Prism prospect page', files: [{ status: 'A', path: 'prospects/value-prism/index.html' }] },
+  { hash: '2dfcb7e', date: '2026-03-12 20:49:15 -0700', msg: 'feat: chart data library', files: [{ status: 'A', path: 'data/chart-data.json' },{ status: 'A', path: 'js/chart-renderer.js' }] },
+  { hash: '00a03dc', date: '2026-03-13 03:48:26 +0000', msg: 'Update stats.json [automated]', files: [{ status: 'M', path: 'stats.json' }] },
+  { hash: 'cad3416', date: '2026-03-12 20:48:00 -0700', msg: 'fix: site consistency pass', files: [{ status: 'M', path: '404.html' },{ status: 'M', path: 'build/brand-in-a-session/index.html' },{ status: 'M', path: 'build/dispatch-dashboard/index.html' },{ status: 'M', path: 'build/from-comment-to-fix-in-one-loop/index.html' },{ status: 'M', path: 'build/how-we-built-briu-using-our-own-agent-stack/index.html' },{ status: 'M', path: 'build/how-we-red-teamed-our-own-agent/index.html' },{ status: 'M', path: 'build/index.html' },{ status: 'M', path: 'build/multi-agent-dispatch/index.html' },{ status: 'M', path: 'build/security-methodology/index.html' },{ status: 'M', path: 'build/six-layers-deep/index.html' },{ status: 'M', path: 'build/the-morning-briefing/index.html' },{ status: 'M', path: 'build/the-real-numbers/index.html' },{ status: 'M', path: 'build/voice-profile/index.html' },{ status: 'M', path: 'build/we-tried-to-break-our-own-sanitizer/index.html' },{ status: 'M', path: 'build/what-a-real-session-actually-costs/index.html' },{ status: 'M', path: 'index.html' },{ status: 'M', path: 'privacy/index.html' },{ status: 'M', path: 'services/calculator/index.html' },{ status: 'M', path: 'services/index.html' },{ status: 'M', path: 'why-now/index.html' }] }
+];
+
+(function() {
+  var html = '<h2>What Changed Today <span class="section-count">(' + recentCommits.length + ' commits)</span></h2>';
+  html += '<button class="refresh-btn" onclick="location.reload()">↻ Refresh</button><br><br>';
+  recentCommits.forEach(function(c) {
+    html += '<div class="commit-block">';
+    html += '<span class="commit-hash">' + c.hash + '</span> ';
+    html += '<span class="commit-time">' + c.date + '</span><br>';
+    html += '<span class="commit-msg">' + c.msg + '</span>';
+    if (c.files && c.files.length) {
+      html += '<div class="commit-files">';
+      c.files.forEach(function(f) {
+        var cls = f.status === 'A' ? 'added' : f.status === 'D' ? 'deleted' : 'modified';
+        html += '<span class="' + cls + '">' + f.status + '</span> ' + f.path + '<br>';
+      });
+      html += '</div>';
+    }
+    html += '</div>';
+  });
+  document.getElementById('changes-section').innerHTML = html;
+})();
+
+// === PURE JS TABLE SORTING ===
+function makeSortable(table) {
+  if (!table) return;
+  var headers = table.querySelectorAll('th');
+  headers.forEach(function(th, idx) {
+    th.addEventListener('click', function() {
+      var tbody = table.querySelector('tbody');
+      var rows = Array.from(tbody.querySelectorAll('tr'));
+      var asc = !th.classList.contains('sort-asc');
+      headers.forEach(function(h) { h.classList.remove('sort-asc', 'sort-desc'); });
+      th.classList.add(asc ? 'sort-asc' : 'sort-desc');
+      rows.sort(function(a, b) {
+        var at = (a.cells[idx] || {}).textContent || '';
+        var bt = (b.cells[idx] || {}).textContent || '';
+        return asc ? at.localeCompare(bt) : bt.localeCompare(at);
+      });
+      rows.forEach(function(r) { tbody.appendChild(r); });
+    });
+  });
+}
+
+// Make all tables sortable
+document.querySelectorAll('table').forEach(makeSortable);
+</script>
+</body>
+</html>
