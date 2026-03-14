@@ -1,0 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightlag — AI-Mediated Interplanetary Communication</title>
+<meta name="description" content="An open research concept for AI-optimized communication across planetary distances. Built by Briu.ai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080a;
+  --bg-elevated: #0c1015;
+  --bg-panel: #111820;
+  --text: #d4dae3;
+  --text-dim: #6b7a8d;
+  --text-bright: #f0f4f8;
+  --accent: #3d9e9e;
+  --accent-glow: rgba(61, 158, 158, 0.15);
+  --mars: #c0714a;
+  --mars-glow: rgba(192, 113, 74, 0.15);
+  --earth: #4a8ec0;
+  --earth-glow: rgba(74, 142, 192, 0.15);
+  --amber: #d4a843;
+  --border: rgba(107, 122, 141, 0.15);
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+
+/* ========== GRID NOISE OVERLAY ========== */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ========== LAYOUT ========== */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+section {
+  padding: 100px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(6, 8, 10, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.topbar-brand {
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.topbar-status {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.topbar-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* ========== HERO ========== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 80px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-label {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 32px;
+}
+
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(42px, 7vw, 80px);
+  font-weight: 400;
+  line-height: 1.05;
+  color: var(--text-bright);
+  margin-bottom: 40px;
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  font-size: 15px;
+  color: var(--text-dim);
+  max-width: 600px;
+  line-height: 1.8;
+  margin-bottom: 60px;
+}
+
+/* ========== LIVE TELEMETRY ========== */
+.telemetry {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin-bottom: 60px;
+}
+
+.telemetry-cell {
+  background: var(--bg-elevated);
+  padding: 24px;
+}
+
+.telemetry-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.telemetry-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.telemetry-value .unit {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--text-dim);
+  margin-left: 4px;
+}
+
+.telemetry-value.earth { color: var(--earth); }
+.telemetry-value.mars { color: var(--mars); }
+.telemetry-value.accent { color: var(--accent); }
+
+/* ========== SECTION HEADERS ========== */
+.section-num {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 400;
+  color: var(--text-bright);
+  margin-bottom: 32px;
+  line-height: 1.15;
+}
+
+.section-body {
+  color: var(--text);
+  line-height: 1.85;
+  font-size: 14px;
+}
+
+.section-body p + p { margin-top: 20px; }
+
+.highlight {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ========== PROTOCOL DIAGRAM ========== */
+.protocol-visual {
+  margin: 48px 0;
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  overflow: hidden;
+}
+
+.protocol-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+}
+
+.protocol-body {
+  padding: 32px 24px;
+}
+
+.round {
+  display: grid;
+  grid-template-columns: 1fr 80px 1fr;
+  gap: 0;
+  align-items: start;
+  margin-bottom: 32px;
+}
+
+.round:last-child { margin-bottom: 0; }
+
+.round-earth, .round-mars {
+  padding: 16px;
+  border: 1px solid var(--border);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.round-earth {
+  border-color: rgba(74, 142, 192, 0.3);
+  background: rgba(74, 142, 192, 0.05);
+}
+
+.round-mars {
+  border-color: rgba(192, 113, 74, 0.3);
+  background: rgba(192, 113, 74, 0.05);
+}
+
+.round-label {
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  font-weight: 500;
+}
+
+.round-earth .round-label { color: var(--earth); }
+.round-mars .round-label { color: var(--mars); }
+
+.round-arrow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 0;
+  color: var(--text-dim);
+  font-size: 10px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.round-arrow svg {
+  margin: 6px 0;
+}
+
+.round-tag {
+  display: inline-block;
+  padding: 2px 6px;
+  background: rgba(61, 158, 158, 0.15);
+  color: var(--accent);
+  font-size: 10px;
+  margin-top: 8px;
+  letter-spacing: 0.5px;
+}
+
+/* ========== INTERACTIVE SIMULATION ========== */
+.sim-container {
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+  overflow: hidden;
+  margin: 48px 0;
+}
+
+.sim-header {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sim-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.sim-controls {
+  display: flex;
+  gap: 8px;
+}
+
+.sim-btn {
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sim-btn:hover, .sim-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.sim-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 500px;
+}
+
+.sim-panel {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+.sim-panel-earth {
+  border-right: 1px solid var(--border);
+}
+
+.sim-panel-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sim-panel-earth .sim-panel-label { color: var(--earth); }
+.sim-panel-mars .sim-panel-label { color: var(--mars); }
+
+.sim-messages {
+  flex: 1;
+  overflow-y: auto;
+  margin-bottom: 16px;
+}
+
+.sim-msg {
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-size: 12px;
+  line-height: 1.6;
+  border-left: 2px solid;
+  animation: msg-in 0.3s ease;
+}
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sim-msg.human {
+  border-color: var(--text-dim);
+  background: rgba(107, 122, 141, 0.08);
+}
+
+.sim-msg.ai {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.sim-msg.ai-expanded {
+  border-color: var(--amber);
+  background: rgba(212, 168, 67, 0.08);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.sim-msg .msg-tag {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-weight: 500;
+}
+
+.sim-msg.human .msg-tag { color: var(--text-dim); }
+.sim-msg.ai .msg-tag { color: var(--accent); }
+.sim-msg.ai-expanded .msg-tag { color: var(--amber); }
+
+.sim-input-row {
+  display: flex;
+  gap: 8px;
+}
+
+.sim-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sim-input:focus { border-color: var(--accent); }
+
+.sim-send {
+  padding: 10px 20px;
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.sim-send:hover { opacity: 0.85; }
+.sim-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+.sim-transit {
+  grid-column: 1 / -1;
+  padding: 16px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  display: none;
+}
+
+.sim-transit.active { display: block; }
+
+.sim-transit .progress-bar {
+  height: 2px;
+  background: var(--border);
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.sim-transit .progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--earth), var(--mars));
+  transition: width linear;
+}
+
+/* ========== STATS ROW ========== */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  margin: 48px 0;
+}
+
+.stat {
+  background: var(--bg-elevated);
+  padding: 32px 24px;
+}
+
+.stat-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 8px;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.stat-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+/* ========== TIMELINE ========== */
+.timeline {
+  position: relative;
+  padding-left: 40px;
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 12px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: var(--border);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 48px;
+}
+
+.timeline-item::before {
+  content: '';
+  position: absolute;
+  left: -33px;
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  background: var(--bg);
+}
+
+.timeline-item.active::before {
+  background: var(--accent);
+  box-shadow: 0 0 12px var(--accent-glow);
+}
+
+.timeline-year {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--accent);
+  margin-bottom: 6px;
+}
+
+.timeline-title {
+  font-family: var(--serif);
+  font-size: 20px;
+  color: var(--text-bright);
+  margin-bottom: 8px;
+}
+
+.timeline-desc {
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.7;
+}
+
+/* ========== STACK DIAGRAM ========== */
+.stack {
+  margin: 48px 0;
+}
+
+.stack-layer {
+  border: 1px solid var(--border);
+  border-bottom: none;
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.stack-layer:last-child { border-bottom: 1px solid var(--border); }
+
+.stack-layer:hover { background: var(--bg-elevated); }
+
+.stack-layer.highlight-layer {
+  background: var(--accent-glow);
+  border-color: rgba(61, 158, 158, 0.3);
+}
+
+.stack-layer.highlight-layer + .stack-layer {
+  border-top-color: rgba(61, 158, 158, 0.3);
+}
+
+.stack-layer-name {
+  font-weight: 500;
+  color: var(--text-bright);
+}
+
+.stack-layer-desc {
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.stack-layer.highlight-layer .stack-layer-name { color: var(--accent); }
+.stack-layer.highlight-layer .stack-layer-desc { color: var(--accent); opacity: 0.7; }
+
+.stack-annotation {
+  font-size: 11px;
+  color: var(--accent);
+  text-align: right;
+  margin-top: 8px;
+  font-style: italic;
+  font-family: var(--serif);
+}
+
+/* ========== CTA / WAITLIST ========== */
+.cta-section {
+  text-align: center;
+  padding: 120px 0;
+}
+
+.cta-section .section-title {
+  max-width: 600px;
+  margin: 0 auto 24px;
+}
+
+.cta-sub {
+  color: var(--text-dim);
+  font-size: 14px;
+  margin-bottom: 40px;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.8;
+}
+
+.waitlist-form {
+  display: flex;
+  gap: 8px;
+  max-width: 440px;
+  margin: 0 auto 24px;
+}
+
+.waitlist-input {
+  flex: 1;
+  padding: 14px 18px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.waitlist-input:focus { border-color: var(--accent); }
+
+.waitlist-submit {
+  padding: 14px 28px;
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.waitlist-submit:hover { opacity: 0.85; }
+
+.waitlist-note {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+/* ========== FOOTER ========== */
+.footer {
+  padding: 48px 0;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.footer a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.footer a:hover { text-decoration: underline; }
+
+.footer-line {
+  margin-top: 12px;
+  font-size: 11px;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 700px) {
+  .telemetry { grid-template-columns: 1fr; }
+  .sim-split { grid-template-columns: 1fr; }
+  .sim-panel-earth { border-right: none; border-bottom: 1px solid var(--border); }
+  .stats-row { grid-template-columns: 1fr; }
+  .round { grid-template-columns: 1fr; }
+  .round-arrow { flex-direction: row; padding: 12px 16px; }
+  .waitlist-form { flex-direction: column; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-brand">Lightlag</div>
+  <div class="topbar-status">
+    <span class="dot"></span>
+    <span id="topbar-delay">Calculating signal delay...</span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-label">Research Concept — AI-Mediated Interplanetary Communication</div>
+    <h1>What if the signal <em>itself</em> could think?</h1>
+    <p class="hero-sub">
+      A message to Mars takes 4 to 24 minutes. A conversation takes days.
+      We're researching an AI protocol that compresses hours of back-and-forth
+      into a single transmission, turning latency from an obstacle into a design constraint.
+    </p>
+
+    <!-- LIVE TELEMETRY -->
+    <div class="telemetry">
+      <div class="telemetry-cell">
+        <div class="telemetry-label">Earth — Mars Distance</div>
+        <div class="telemetry-value earth" id="t-distance">—<span class="unit">M km</span></div>
+      </div>
+      <div class="telemetry-cell">
+        <div class="telemetry-label">One-Way Signal Delay</div>
+        <div class="telemetry-value mars" id="t-delay">—<span class="unit">min</span></div>
+      </div>
+      <div class="telemetry-cell">
+        <div class="telemetry-label">Round Trips Saved (AI)</div>
+        <div class="telemetry-value accent" id="t-saved">~8x<span class="unit">per session</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 1: THE PROBLEM -->
+<section>
+  <div class="container">
+    <div class="section-num">01 — The Problem</div>
+    <h2 class="section-title">Bandwidth is not the bottleneck. Latency is.</h2>
+    <div class="section-body">
+      <p>
+        NASA's Deep Space Optical Communications (DSOC) experiment on the Psyche mission
+        demonstrated laser links at 267 Mbps from deep space. SpaceX, Lockheed Martin, and Blue Origin
+        are all building commercial Mars relay constellations. By 2032, bandwidth to Mars
+        will be measured in hundreds of megabits per second.
+      </p>
+      <p>
+        None of that solves the fundamental constraint:
+        <span class="highlight">the speed of light cannot be engineered away.</span>
+        At closest approach, a message takes 4 minutes one way. At opposition, 24 minutes.
+        Average: 13 minutes. A simple "yes or no?" question has a 26-minute round trip.
+        A typical mission control interaction that requires 5 exchanges takes over two hours.
+        For a colony of 100+ people trying to talk to families on Earth, this is unworkable.
+      </p>
+      <p>
+        Current protocols (NASA's DTN, Bundle Protocol v7) solve store-and-forward routing.
+        They get bits from A to B reliably across disrupted links. But they treat every message
+        as opaque cargo. They have no understanding of what's being communicated, and therefore
+        no ability to reduce the number of round trips needed to complete a conversation.
+      </p>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="stat-label">Without AI</div>
+        <div class="stat-value">~10 trips</div>
+        <div class="stat-sub">Typical complex conversation = 3+ hours</div>
+      </div>
+      <div class="stat">
+        <div class="stat-label">With Lightlag Protocol</div>
+        <div class="stat-value">~2 trips</div>
+        <div class="stat-sub">Same conversation = 40 minutes</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 2: THE PROTOCOL -->
+<section>
+  <div class="container">
+    <div class="section-num">02 — The Protocol</div>
+    <h2 class="section-title">Predictive context expansion with human-in-the-loop correction</h2>
+    <div class="section-body">
+      <p>
+        The core idea: before any message is transmitted, an AI agent on the sender's side
+        expands it into a <span class="highlight">context bundle</span> containing the original message,
+        anticipated follow-up questions, pre-computed answers to those questions, and branching
+        response trees for the most likely conversational paths. The receiver's AI unpacks this,
+        presents the original message alongside the expanded context, and the receiver edits,
+        corrects, and responds. Their response is similarly expanded before transmission.
+      </p>
+      <p>
+        After each round trip, both parties can review the AI-generated expansions and
+        <span class="highlight">edit history retroactively</span>. This creates an iterative convergence process:
+        the AI fills in blanks, humans correct, and within 3 to 5 actual transmissions the
+        conversation achieves the informational density of 20 to 30 conventional exchanges.
+      </p>
+    </div>
+
+    <!-- PROTOCOL ROUND DIAGRAM -->
+    <div class="protocol-visual">
+      <div class="protocol-header">
+        <span>Transmission Sequence — Example Session</span>
+        <span>3 transmissions = 15 effective exchanges</span>
+      </div>
+      <div class="protocol-body">
+        <div class="round">
+          <div class="round-earth">
+            <div class="round-label">Earth — Alice</div>
+            Original: "Did the Bay 3 pressure look off to you?"<br>
+            <span class="round-tag">+ 4 predicted follow-ups with answers</span><br>
+            <span class="round-tag">+ pressure trend data (7 days)</span><br>
+            <span class="round-tag">+ calibration schedule context</span>
+          </div>
+          <div class="round-arrow">
+            20 min
+            <svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+            Tx 1
+          </div>
+          <div class="round-mars">
+            <div class="round-label">Mars — Bob</div>
+            Receives full context. AI anticipated his question about sensor calibration.
+            Edits one expansion. Adds secondary valve observation.
+            <span class="round-tag">= 5 exchanges resolved in 1 transmission</span>
+          </div>
+        </div>
+
+        <div class="round">
+          <div class="round-mars">
+            <div class="round-label">Mars — Bob</div>
+            Response + corrected expansions + new data on valve anomaly.<br>
+            <span class="round-tag">+ 3 predicted follow-ups with answers</span><br>
+            <span class="round-tag">+ valve diagnostic log</span>
+          </div>
+          <div class="round-arrow">
+            20 min
+            <svg width="40" height="12" viewBox="0 0 40 12"><line x1="6" y1="6" x2="40" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="2,2 8,6 2,10" fill="none" stroke="currentColor" stroke-width="1" transform="translate(-2,0)"/></svg>
+            Tx 2
+          </div>
+          <div class="round-earth">
+            <div class="round-label">Earth — Alice</div>
+            Receives response + expanded context. 8 of 10 AI predictions were accurate.
+            Corrects 2. Reviews complete history. Adds maintenance recommendation.
+            <span class="round-tag">= 5 more exchanges resolved</span>
+          </div>
+        </div>
+
+        <div class="round">
+          <div class="round-earth">
+            <div class="round-label">Earth — Alice</div>
+            Final confirmation + retroactive edits to Round 1 context + action items.<br>
+            <span class="round-tag">conversation complete</span>
+          </div>
+          <div class="round-arrow">
+            20 min
+            <svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+            Tx 3
+          </div>
+          <div class="round-mars">
+            <div class="round-label">Mars — Bob</div>
+            Full conversation resolved. 15 effective exchanges completed
+            in 3 transmissions (60 min total signal time).
+            <span class="round-tag">Without AI: 10+ transmissions, 7+ hours</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 3: WHERE AI SITS IN THE STACK -->
+<section>
+  <div class="container">
+    <div class="section-num">03 — Architecture</div>
+    <h2 class="section-title">Where AI fits in the interplanetary protocol stack</h2>
+    <div class="section-body">
+      <p>
+        Lightlag operates as an application-layer protocol that sits on top of NASA's existing
+        DTN/Bundle Protocol infrastructure. It doesn't replace any of the work being done on
+        physical relay, store-and-forward routing, or bandwidth optimization. It makes all
+        of that infrastructure dramatically more useful for human communication.
+      </p>
+    </div>
+
+    <div class="stack">
+      <div class="stack-layer highlight-layer">
+        <span class="stack-layer-name">▸ Lightlag Protocol</span>
+        <span class="stack-layer-desc">AI context expansion, predictive bundling, retroactive editing</span>
+      </div>
+      <div class="stack-layer">
+        <span class="stack-layer-name">Application Layer</span>
+        <span class="stack-layer-desc">Messaging, video, file transfer, telemetry</span>
+      </div>
+      <div class="stack-layer">
+        <span class="stack-layer-name">Bundle Protocol (BPv7)</span>
+        <span class="stack-layer-desc">Store-and-forward, custody transfer, fragmentation</span>
+      </div>
+      <div class="stack-layer">
+        <span class="stack-layer-name">Convergence Layer</span>
+        <span class="stack-layer-desc">TCP, LTP, UDP adaptation</span>
+      </div>
+      <div class="stack-layer">
+        <span class="stack-layer-name">Link Layer</span>
+        <span class="stack-layer-desc">RF (DSN, UHF), Optical (DSOC, Starlink-Mars)</span>
+      </div>
+      <div class="stack-layer">
+        <span class="stack-layer-name">Physical Layer</span>
+        <span class="stack-layer-desc">Relay orbiters (MRO, MAVEN, TGO), ground stations, laser terminals</span>
+      </div>
+    </div>
+    <div class="stack-annotation">↑ This is the gap. Everything below exists. Everything above is what we're building.</div>
+  </div>
+</section>
+
+<!-- SECTION 4: INTERACTIVE SIMULATION -->
+<section>
+  <div class="container">
+    <div class="section-num">04 — Simulation</div>
+    <h2 class="section-title">Try it yourself</h2>
+    <div class="section-body">
+      <p>
+        Type a message from Earth. Watch the AI expand it, transmit it across the delay,
+        and see what arrives on Mars. This simulation uses a compressed 10-second delay
+        (real signal time is shown in the telemetry above).
+      </p>
+    </div>
+
+    <div class="sim-container">
+      <div class="sim-header">
+        <span class="sim-title">Lightlag Protocol Simulation v0.1</span>
+        <div class="sim-controls">
+          <button class="sim-btn active" data-delay="10">10s delay</button>
+          <button class="sim-btn" data-delay="30">30s delay</button>
+          <button class="sim-btn" data-delay="3">Fast (3s)</button>
+        </div>
+      </div>
+      <div class="sim-split">
+        <div class="sim-panel sim-panel-earth">
+          <div class="sim-panel-label">
+            <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--earth)"/></svg>
+            Earth Terminal
+          </div>
+          <div class="sim-messages" id="earth-messages"></div>
+          <div class="sim-input-row">
+            <input type="text" class="sim-input" id="earth-input" placeholder="Type a message to Mars..." />
+            <button class="sim-send" id="earth-send">Send</button>
+          </div>
+        </div>
+        <div class="sim-panel sim-panel-mars">
+          <div class="sim-panel-label">
+            <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--mars)"/></svg>
+            Mars Terminal
+          </div>
+          <div class="sim-messages" id="mars-messages"></div>
+        </div>
+      </div>
+      <div class="sim-transit" id="sim-transit">
+        <span id="transit-text">Signal in transit...</span>
+        <div class="progress-bar"><div class="progress-fill" id="transit-progress"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 5: TIMELINE -->
+<section>
+  <div class="container">
+    <div class="section-num">05 — Timeline</div>
+    <h2 class="section-title">Deployment roadmap aligned to real missions</h2>
+
+    <div class="timeline">
+      <div class="timeline-item active">
+        <div class="timeline-year">2026 — Now</div>
+        <div class="timeline-title">Protocol Research & Simulation</div>
+        <div class="timeline-desc">
+          Concept validation. Protocol spec. Open-source simulation framework.
+          Testing with synthetic conversations across simulated latency.
+          You're looking at Phase 0 right now.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2027 — 2028</div>
+        <div class="timeline-title">ISS & Low Earth Orbit Testing</div>
+        <div class="timeline-desc">
+          Artificial latency injection on ISS crew communications.
+          Test AI context expansion with real astronaut conversations.
+          Partner with NASA SCaN commercial services program.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2028 — 2030</div>
+        <div class="timeline-title">Lunar Gateway / Artemis Integration</div>
+        <div class="timeline-desc">
+          1.3-second Earth-Moon delay provides first real-latency environment.
+          Lightlag protocol handles communication sessions for Gateway crew.
+          SpaceX Starship cargo missions to Mars begin.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2030 — 2032</div>
+        <div class="timeline-title">Mars Communication Infrastructure</div>
+        <div class="timeline-desc">
+          Commercial relay constellations operational (SpaceX Starlink-Mars,
+          Blue Origin Blue Ring, Lockheed). First crewed Mars missions.
+          Lightlag protocol serves as default human communication layer.
+        </div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-year">2032+</div>
+        <div class="timeline-title">Autonomous Colony Communication</div>
+        <div class="timeline-desc">
+          100+ person Mars colony. AI agents handle routine communication
+          autonomously during 2-week solar conjunction blackouts.
+          Business, governance, and personal communication all
+          mediated through Lightlag.
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECTION 6: BLACKOUT AGENT -->
+<section>
+  <div class="container">
+    <div class="section-num">06 — The Blackout Problem</div>
+    <h2 class="section-title">What does an AI agent do during a 14-day solar conjunction?</h2>
+    <div class="section-body">
+      <p>
+        Every 26 months, Mars passes behind the Sun from Earth's perspective. For roughly
+        two weeks, all communication is severed. No messages in or out. For a colony, this
+        means no medical consultation, no supply chain coordination, no family contact.
+      </p>
+      <p>
+        A Lightlag agent on Mars during conjunction operates with
+        <span class="highlight">full delegated authority</span> within pre-approved parameters.
+        Before conjunction begins, both Earth and Mars agents negotiate a context handoff:
+        pending decisions with approval thresholds, medical protocols with escalation trees,
+        supply chain contingencies, personal message queues with emotional context flags.
+        The Mars-side agent triages, decides, and queues status reports for burst transmission
+        the moment the link reopens.
+      </p>
+      <p>
+        This is the same problem every business faces when a decision-maker is unreachable.
+        The Mars version is just the most extreme case. The protocol we're building here
+        applies anywhere autonomous AI agents need to operate independently while maintaining
+        alignment with human intent across communication gaps.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- WAITLIST -->
+<section class="cta-section">
+  <div class="container">
+    <div class="section-num" style="justify-content: center;">07 — Follow the Research</div>
+    <h2 class="section-title">This is an active research project.</h2>
+    <p class="cta-sub">
+      We're publishing protocol specs, simulation results, and analysis as we go.
+      Sign up to follow the work. No spam. Just signal.
+    </p>
+    <form class="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <input type="email" name="email" class="waitlist-input" placeholder="you@example.com" required />
+      <button type="submit" class="waitlist-submit">Subscribe</button>
+    </form>
+    <p class="waitlist-note">
+      Not going to Mars? <a href="https://briu.ai" style="color: var(--accent);">We solve the same problem for businesses on Earth.</a>
+    </p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="container">
+    <p>A research concept from <a href="https://briu.ai">Briu.ai</a> — AI agent implementation, Seattle WA</p>
+    <p class="footer-line">Protocol spec, simulation code, and research notes are open source. <a href="#">GitHub →</a></p>
+  </div>
+</div>
+
+<script>
+// ========== EARTH-MARS DISTANCE CALCULATOR ==========
+// Real orbital mechanics (simplified Keplerian)
+function getEarthMarsDistance() {
+  const now = new Date();
+  const daysSinceJ2000 = (now.getTime() - Date.UTC(2000, 0, 1, 12, 0, 0)) / 86400000;
+
+  // Mean anomaly (degrees)
+  const earthM = (357.529 + 0.98560028 * daysSinceJ2000) % 360;
+  const marsM = (19.373 + 0.52402068 * daysSinceJ2000) % 360;
+
+  // Eccentric anomaly (first-order approximation)
+  const earthE = earthM + (0.0167 * 180 / Math.PI) * Math.sin(earthM * Math.PI / 180);
+  const marsE = marsM + (0.0934 * 180 / Math.PI) * Math.sin(marsM * Math.PI / 180);
+
+  // True anomaly
+  const earthV = earthE; // close enough for visualization
+  const marsV = marsE;
+
+  // Heliocentric longitude (simplified: longitude of perihelion + true anomaly)
+  const earthLon = (102.937 + earthV) * Math.PI / 180;
+  const marsLon = (336.060 + marsV) * Math.PI / 180;
+
+  // Distance from Sun (AU)
+  const earthR = 1.000 * (1 - 0.0167 * 0.0167) / (1 + 0.0167 * Math.cos(earthV * Math.PI / 180));
+  const marsR = 1.524 * (1 - 0.0934 * 0.0934) / (1 + 0.0934 * Math.cos(marsV * Math.PI / 180));
+
+  // Distance between planets (AU)
+  const dx = marsR * Math.cos(marsLon) - earthR * Math.cos(earthLon);
+  const dy = marsR * Math.sin(marsLon) - earthR * Math.sin(earthLon);
+  const distAU = Math.sqrt(dx * dx + dy * dy);
+
+  const distKm = distAU * 149597870.7; // km
+  const distMKm = distKm / 1e6;
+  const lightDelayMin = (distKm / 299792.458) / 60;
+
+  return { distMKm: distMKm.toFixed(1), delayMin: lightDelayMin.toFixed(1) };
+}
+
+function updateTelemetry() {
+  const data = getEarthMarsDistance();
+  document.getElementById('t-distance').innerHTML = data.distMKm + '<span class="unit">M km</span>';
+  document.getElementById('t-delay').innerHTML = data.delayMin + '<span class="unit">min</span>';
+  document.getElementById('topbar-delay').textContent = 'Signal delay: ' + data.delayMin + ' min';
+}
+
+updateTelemetry();
+setInterval(updateTelemetry, 60000);
+
+// ========== SIMULATION ENGINE ==========
+let simDelay = 10; // seconds
+const earthMessages = document.getElementById('earth-messages');
+const marsMessages = document.getElementById('mars-messages');
+const earthInput = document.getElementById('earth-input');
+const earthSend = document.getElementById('earth-send');
+const simTransit = document.getElementById('sim-transit');
+const transitText = document.getElementById('transit-text');
+const transitProgress = document.getElementById('transit-progress');
+
+// Delay buttons
+document.querySelectorAll('.sim-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.sim-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    simDelay = parseInt(btn.dataset.delay);
+  });
+});
+
+// AI expansion examples (pre-scripted for demo purposes)
+const expansions = [
+  {
+    predicted: [
+      "Anticipated follow-up: \"When was it last calibrated?\" → Bay 3 pressure sensor was calibrated on Sol 247, 18 days ago. Next scheduled: Sol 280.",
+      "Anticipated follow-up: \"What's the normal range?\" → Nominal: 101.2-101.8 kPa. Current reading: 100.6 kPa (0.6 kPa below floor).",
+      "Anticipated follow-up: \"Should we run diagnostics?\" → Pre-staged diagnostic command ready for approval. Estimated runtime: 45 minutes."
+    ],
+    marsResponse: "Confirmed, Bay 3 is reading low. I noticed it during morning rounds. The secondary valve on the north panel has been sluggish since Sol 250. Running diagnostics now.",
+    marsExpanded: [
+      "Valve maintenance history attached (last 90 sols)",
+      "Similar anomaly occurred in Bay 1 on Sol 198. Resolution: gasket replacement. Parts inventory: 3 remaining."
+    ]
+  },
+  {
+    predicted: [
+      "Context: Prior messages suggest this is a personal check-in. Expanding with recent shared context.",
+      "Last family update: 3 days ago. Topics covered: daughter's recital, home renovation timeline.",
+      "Anticipated: \"How's the weather?\" → Current conditions at Jezero: -62°C, wind 12 km/h NW, dust opacity tau 0.4 (clear)."
+    ],
+    marsResponse: "Doing well! The sunset last night was incredible. Two-tone blue like we talked about. Attaching a photo from Hab 2 viewport.",
+    marsExpanded: [
+      "Mood context: Positive. Crew morale report from yesterday shows normal range.",
+      "Upcoming: Crew has EVA scheduled Sol 266 (2 days). Might be busy then."
+    ]
+  },
+  {
+    predicted: [
+      "Detected: Supply chain query. Pulling inventory context.",
+      "Current water recycler efficiency: 94.2% (target: 96%). Decline trend over 14 sols.",
+      "Next resupply window: Sol 340 (74 days). Filter replacement parts: 1 remaining on-site."
+    ],
+    marsResponse: "Already on it. We've been monitoring the decline. Engineering team has a workaround using the backup membrane. Should hold until resupply.",
+    marsExpanded: [
+      "Backup membrane rated for 60 sols continuous use. Margin: adequate.",
+      "Flagged for priority on next cargo manifest. Engineering report attached."
+    ]
+  }
+];
+
+let expansionIndex = 0;
+let simBusy = false;
+
+function addMessage(container, type, tag, text) {
+  const msg = document.createElement('div');
+  msg.className = 'sim-msg ' + type;
+  msg.innerHTML = '<div class="msg-tag">' + tag + '</div>' + text;
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTransit(direction, delay) {
+  simTransit.classList.add('active');
+  const realDelay = getEarthMarsDistance().delayMin;
+  transitText.textContent = direction + ' — Real delay: ' + realDelay + ' min (simulated: ' + delay + 's)';
+  transitProgress.style.transition = 'none';
+  transitProgress.style.width = '0%';
+  requestAnimationFrame(() => {
+    transitProgress.style.transition = 'width ' + delay + 's linear';
+    transitProgress.style.width = '100%';
+  });
+}
+
+function hideTransit() {
+  simTransit.classList.remove('active');
+  transitProgress.style.width = '0%';
+}
+
+async function sendMessage() {
+  const text = earthInput.value.trim();
+  if (!text || simBusy) return;
+
+  simBusy = true;
+  earthSend.disabled = true;
+  earthInput.value = '';
+
+  const exp = expansions[expansionIndex % expansions.length];
+  expansionIndex++;
+
+  // Show human message on Earth side
+  addMessage(earthMessages, 'human', 'You', text);
+
+  // Show AI expansion on Earth side
+  await sleep(600);
+  addMessage(earthMessages, 'ai', 'Lightlag AI — Context Expansion', 'Analyzing message. Generating predictive context bundle...');
+
+  await sleep(1200);
+  exp.predicted.forEach(p => {
+    addMessage(earthMessages, 'ai-expanded', 'Predicted', p);
+  });
+
+  await sleep(800);
+  addMessage(earthMessages, 'ai', 'Lightlag AI', 'Bundle ready. Transmitting to Mars. (' + exp.predicted.length + ' expansions, ' + (text.length + 500) + ' bytes)');
+
+  // Transit animation
+  showTransit('Earth → Mars', simDelay);
+  await sleep(simDelay * 1000);
+  hideTransit();
+
+  // Mars receives
+  addMessage(marsMessages, 'ai', 'Lightlag AI — Received', 'Bundle received from Earth. Unpacking context...');
+  await sleep(500);
+  addMessage(marsMessages, 'human', 'Original from Earth', text);
+  await sleep(300);
+  exp.predicted.forEach(p => {
+    addMessage(marsMessages, 'ai-expanded', 'AI Context', p);
+  });
+
+  await sleep(1000);
+  addMessage(marsMessages, 'human', 'Mars Crew Response', exp.marsResponse);
+  await sleep(500);
+  exp.marsExpanded.forEach(p => {
+    addMessage(marsMessages, 'ai-expanded', 'AI Expansion', p);
+  });
+
+  // Return transit
+  await sleep(800);
+  showTransit('Mars → Earth', simDelay);
+  await sleep(simDelay * 1000);
+  hideTransit();
+
+  // Earth receives Mars response
+  addMessage(earthMessages, 'ai', 'Lightlag AI — Response Received', 'Mars bundle received. Unpacking...');
+  await sleep(400);
+  addMessage(earthMessages, 'human', 'Mars Response', exp.marsResponse);
+  exp.marsExpanded.forEach(p => {
+    addMessage(earthMessages, 'ai-expanded', 'Mars AI Context', p);
+  });
+
+  addMessage(earthMessages, 'ai', 'Lightlag AI', '✓ Session complete. 1 round trip resolved ~' + (exp.predicted.length + exp.marsExpanded.length + 2) + ' exchanges.');
+
+  simBusy = false;
+  earthSend.disabled = false;
+  earthInput.focus();
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+earthSend.addEventListener('click', sendMessage);
+earthInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+// Pre-populate a hint
+earthInput.placeholder = 'Try: "Did the Bay 3 pressure look off to you?"';
+</script>
+
+</body>
+</html>
