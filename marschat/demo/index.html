@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightlag Protocol Demo — Live Simulation</title>
+<meta name="description" content="Interactive real-time demonstration of the Lightlag protocol with AI-powered context expansion across simulated interplanetary delay.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080a;
+  --bg-elevated: #0c1015;
+  --bg-panel: #111820;
+  --text: #d4dae3;
+  --text-dim: #6b7a8d;
+  --text-bright: #f0f4f8;
+  --accent: #3d9e9e;
+  --accent-glow: rgba(61, 158, 158, 0.15);
+  --mars: #c0714a;
+  --mars-glow: rgba(192, 113, 74, 0.15);
+  --earth: #4a8ec0;
+  --earth-glow: rgba(74, 142, 192, 0.15);
+  --amber: #d4a843;
+  --border: rgba(107, 122, 141, 0.15);
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ========== TOPBAR ========== */
+.topbar {
+  padding: 12px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg-elevated);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+  flex-shrink: 0;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-brand {
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.topbar-version {
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.topbar-status {
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+}
+
+.topbar-status .dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: pulse-dot 2s ease infinite;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.back-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 11px;
+  transition: color 0.2s;
+}
+
+.back-link:hover { color: var(--accent); }
+
+/* ========== CONTROLS BAR ========== */
+.controls-bar {
+  padding: 10px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.controls-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.controls-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  white-space: nowrap;
+}
+
+.delay-btn {
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.delay-btn:hover, .delay-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.api-key-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.api-key-input {
+  padding: 5px 10px;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 11px;
+  width: 260px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.api-key-input:focus { border-color: var(--accent); }
+.api-key-input::placeholder { color: var(--text-dim); }
+
+.api-status {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.api-status.connected { color: var(--accent); }
+.api-status.fallback { color: var(--amber); }
+
+.export-btn {
+  padding: 5px 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  font-family: var(--mono);
+  font-size: 11px;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+
+.export-btn:hover {
+  border-color: var(--amber);
+  color: var(--amber);
+  background: rgba(212, 168, 67, 0.08);
+}
+
+/* ========== TELEMETRY STRIP ========== */
+.telemetry-strip {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.telem-cell {
+  background: var(--bg-elevated);
+  padding: 10px 16px;
+  text-align: center;
+}
+
+.telem-label {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 2px;
+}
+
+.telem-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-bright);
+  font-variant-numeric: tabular-nums;
+}
+
+.telem-value .unit {
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--text-dim);
+  margin-left: 2px;
+}
+
+.telem-value.earth { color: var(--earth); }
+.telem-value.mars { color: var(--mars); }
+.telem-value.accent { color: var(--accent); }
+.telem-value.amber { color: var(--amber); }
+
+/* ========== MAIN SPLIT ========== */
+.sim-split {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+
+.sim-panel {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.sim-panel-earth {
+  border-right: 1px solid var(--border);
+}
+
+.sim-panel-header {
+  padding: 12px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+.sim-panel-earth .sim-panel-header { color: var(--earth); background: var(--earth-glow); }
+.sim-panel-mars .sim-panel-header { color: var(--mars); background: var(--mars-glow); }
+
+.sim-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px 20px;
+  scroll-behavior: smooth;
+}
+
+.sim-messages::-webkit-scrollbar { width: 4px; }
+.sim-messages::-webkit-scrollbar-track { background: transparent; }
+.sim-messages::-webkit-scrollbar-thumb { background: var(--border); }
+
+.sim-msg {
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+  border-left: 2px solid;
+  animation: msg-in 0.3s ease;
+}
+
+@keyframes msg-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.sim-msg.human {
+  border-color: var(--text-dim);
+  background: rgba(107, 122, 141, 0.08);
+}
+
+.sim-msg.ai {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+}
+
+.sim-msg.ai-expanded {
+  border-color: var(--amber);
+  background: rgba(212, 168, 67, 0.08);
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.sim-msg.system {
+  border-color: var(--border);
+  background: rgba(107, 122, 141, 0.04);
+  font-size: 11px;
+  color: var(--text-dim);
+  font-style: italic;
+}
+
+.sim-msg .msg-tag {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+  font-weight: 500;
+}
+
+.sim-msg.human .msg-tag { color: var(--text-dim); }
+.sim-msg.ai .msg-tag { color: var(--accent); }
+.sim-msg.ai-expanded .msg-tag { color: var(--amber); }
+.sim-msg.system .msg-tag { color: var(--text-dim); }
+
+/* ========== INPUT ROW ========== */
+.sim-input-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.sim-input {
+  flex: 1;
+  padding: 10px 14px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 12px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.sim-input:focus { border-color: var(--accent); }
+.sim-input::placeholder { color: var(--text-dim); }
+
+.sim-send {
+  padding: 10px 20px;
+  background: var(--accent);
+  border: none;
+  color: var(--bg);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.sim-send:hover { opacity: 0.85; }
+.sim-send:disabled { opacity: 0.4; cursor: not-allowed; }
+
+/* ========== TRANSIT BAR ========== */
+.transit-bar {
+  padding: 10px 24px;
+  background: var(--bg);
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+  flex-shrink: 0;
+  display: none;
+}
+
+.transit-bar.active { display: block; }
+
+.transit-bar .progress-track {
+  height: 2px;
+  background: var(--border);
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.transit-bar .progress-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--earth), var(--mars));
+  transition: width linear;
+}
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 768px) {
+  .sim-split { grid-template-columns: 1fr; }
+  .sim-panel-earth { border-right: none; border-bottom: 1px solid var(--border); max-height: 50vh; }
+  .sim-panel-mars { max-height: 50vh; }
+  .telemetry-strip { grid-template-columns: repeat(3, 1fr); }
+  .controls-bar { flex-direction: column; align-items: flex-start; }
+  .api-key-input { width: 200px; }
+  .topbar { flex-direction: column; align-items: flex-start; gap: 8px; }
+}
+
+@media (max-width: 480px) {
+  .telemetry-strip { grid-template-columns: repeat(2, 1fr); }
+  .api-key-input { width: 160px; }
+}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div class="topbar-left">
+    <span class="topbar-brand">Lightlag Protocol</span>
+    <span class="topbar-version">Demo v1.0</span>
+  </div>
+  <div class="topbar-right">
+    <div class="topbar-status">
+      <span class="dot"></span>
+      <span id="topbar-delay">Calculating...</span>
+    </div>
+    <a href="../" class="back-link">&larr; Concept Page</a>
+  </div>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls-bar">
+  <div class="controls-group">
+    <span class="controls-label">Delay</span>
+    <button class="delay-btn active" data-delay="3">3s</button>
+    <button class="delay-btn" data-delay="10">10s</button>
+    <button class="delay-btn" data-delay="30">30s</button>
+    <button class="delay-btn" data-delay="60">60s</button>
+  </div>
+  <div class="controls-group api-key-group">
+    <span class="controls-label">API Key</span>
+    <input type="password" class="api-key-input" id="api-key" placeholder="sk-ant-... (stored locally only)" />
+    <span class="api-status fallback" id="api-status">FALLBACK</span>
+  </div>
+  <div class="controls-group">
+    <button class="export-btn" id="export-btn">Export Session</button>
+  </div>
+</div>
+
+<!-- TELEMETRY STRIP -->
+<div class="telemetry-strip">
+  <div class="telem-cell">
+    <div class="telem-label">Distance</div>
+    <div class="telem-value earth" id="t-distance">--<span class="unit">M km</span></div>
+  </div>
+  <div class="telem-cell">
+    <div class="telem-label">Light Delay</div>
+    <div class="telem-value mars" id="t-delay">--<span class="unit">min</span></div>
+  </div>
+  <div class="telem-cell">
+    <div class="telem-label">Transmissions</div>
+    <div class="telem-value" id="t-transmissions">0</div>
+  </div>
+  <div class="telem-cell">
+    <div class="telem-label">Effective Exchanges</div>
+    <div class="telem-value accent" id="t-exchanges">0</div>
+  </div>
+  <div class="telem-cell">
+    <div class="telem-label">Compression Ratio</div>
+    <div class="telem-value amber" id="t-ratio">--<span class="unit">x</span></div>
+  </div>
+  <div class="telem-cell">
+    <div class="telem-label">Time Saved</div>
+    <div class="telem-value accent" id="t-saved">--</div>
+  </div>
+</div>
+
+<!-- MAIN SPLIT TERMINALS -->
+<div class="sim-split">
+  <div class="sim-panel sim-panel-earth">
+    <div class="sim-panel-header">
+      <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--earth)"/></svg>
+      Earth Terminal — Mission Control
+    </div>
+    <div class="sim-messages" id="earth-messages"></div>
+    <div class="sim-input-row">
+      <input type="text" class="sim-input" id="earth-input" placeholder='Try: "Bay 3 pressure is reading low, can you check?"' />
+      <button class="sim-send" id="earth-send">Transmit</button>
+    </div>
+  </div>
+  <div class="sim-panel sim-panel-mars">
+    <div class="sim-panel-header">
+      <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="var(--mars)"/></svg>
+      Mars Terminal — Ares Base
+    </div>
+    <div class="sim-messages" id="mars-messages"></div>
+  </div>
+</div>
+
+<!-- TRANSIT BAR -->
+<div class="transit-bar" id="transit-bar">
+  <span id="transit-text">Signal in transit...</span>
+  <div class="progress-track"><div class="progress-fill" id="transit-progress"></div></div>
+</div>
+
+<script>
+// ========== STATE ==========
+let simDelay = 3;
+let simBusy = false;
+let sessionStartTime = null;
+let totalTransmissions = 0;
+let totalEffectiveExchanges = 0;
+let totalElapsedMs = 0;
+const conversationLog = [];
+
+// ========== DOM REFS ==========
+const earthMessages = document.getElementById('earth-messages');
+const marsMessages = document.getElementById('mars-messages');
+const earthInput = document.getElementById('earth-input');
+const earthSend = document.getElementById('earth-send');
+const transitBar = document.getElementById('transit-bar');
+const transitText = document.getElementById('transit-text');
+const transitProgress = document.getElementById('transit-progress');
+const apiKeyInput = document.getElementById('api-key');
+const apiStatusEl = document.getElementById('api-status');
+
+// ========== ORBITAL MECHANICS ==========
+function getEarthMarsDistance() {
+  const now = new Date();
+  const daysSinceJ2000 = (now.getTime() - Date.UTC(2000, 0, 1, 12, 0, 0)) / 86400000;
+  const earthM = (357.529 + 0.98560028 * daysSinceJ2000) % 360;
+  const marsM = (19.373 + 0.52402068 * daysSinceJ2000) % 360;
+  const earthE = earthM + (0.0167 * 180 / Math.PI) * Math.sin(earthM * Math.PI / 180);
+  const marsE = marsM + (0.0934 * 180 / Math.PI) * Math.sin(marsM * Math.PI / 180);
+  const earthV = earthE;
+  const marsV = marsE;
+  const earthLon = (102.937 + earthV) * Math.PI / 180;
+  const marsLon = (336.060 + marsV) * Math.PI / 180;
+  const earthR = 1.000 * (1 - 0.0167 * 0.0167) / (1 + 0.0167 * Math.cos(earthV * Math.PI / 180));
+  const marsR = 1.524 * (1 - 0.0934 * 0.0934) / (1 + 0.0934 * Math.cos(marsV * Math.PI / 180));
+  const dx = marsR * Math.cos(marsLon) - earthR * Math.cos(earthLon);
+  const dy = marsR * Math.sin(marsLon) - earthR * Math.sin(earthLon);
+  const distAU = Math.sqrt(dx * dx + dy * dy);
+  const distKm = distAU * 149597870.7;
+  const distMKm = distKm / 1e6;
+  const lightDelayMin = (distKm / 299792.458) / 60;
+  return { distMKm: distMKm.toFixed(1), delayMin: lightDelayMin.toFixed(1) };
+}
+
+function updateTelemetry() {
+  const data = getEarthMarsDistance();
+  document.getElementById('t-distance').innerHTML = data.distMKm + '<span class="unit">M km</span>';
+  document.getElementById('t-delay').innerHTML = data.delayMin + '<span class="unit">min</span>';
+  document.getElementById('topbar-delay').textContent = 'Signal delay: ' + data.delayMin + ' min';
+}
+
+updateTelemetry();
+setInterval(updateTelemetry, 60000);
+
+// ========== DELAY BUTTONS ==========
+document.querySelectorAll('.delay-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (simBusy) return;
+    document.querySelectorAll('.delay-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    simDelay = parseInt(btn.dataset.delay);
+  });
+});
+
+// ========== API KEY ==========
+const savedKey = localStorage.getItem('lightlag-api-key');
+if (savedKey) {
+  apiKeyInput.value = savedKey;
+  apiStatusEl.textContent = 'READY';
+  apiStatusEl.className = 'api-status connected';
+}
+
+apiKeyInput.addEventListener('change', () => {
+  const key = apiKeyInput.value.trim();
+  if (key) {
+    localStorage.setItem('lightlag-api-key', key);
+    apiStatusEl.textContent = 'READY';
+    apiStatusEl.className = 'api-status connected';
+  } else {
+    localStorage.removeItem('lightlag-api-key');
+    apiStatusEl.textContent = 'FALLBACK';
+    apiStatusEl.className = 'api-status fallback';
+  }
+});
+
+// ========== FALLBACK EXPANSIONS ==========
+const fallbackExpansions = [
+  {
+    predicted: [
+      'Anticipated: "When was it last calibrated?" → Bay 3 pressure sensor calibrated Sol 247, 18 days ago. Next scheduled: Sol 280.',
+      'Anticipated: "What\'s the normal range?" → Nominal: 101.2-101.8 kPa. Current reading: 100.6 kPa (0.6 kPa below floor).',
+      'Anticipated: "Should we run diagnostics?" → Pre-staged diagnostic command ready for approval. Estimated runtime: 45 minutes.'
+    ],
+    marsResponse: 'Confirmed, Bay 3 is reading low. Noticed it during morning rounds. The secondary valve on the north panel has been sluggish since Sol 250. Running diagnostics now.',
+    marsExpanded: [
+      'Valve maintenance history attached (last 90 sols)',
+      'Similar anomaly occurred in Bay 1 on Sol 198. Resolution: gasket replacement. Parts inventory: 3 remaining.'
+    ]
+  },
+  {
+    predicted: [
+      'Context: Personal check-in detected. Expanding with recent shared context.',
+      'Last family update: 3 days ago. Topics: daughter\'s recital, home renovation.',
+      'Anticipated: "How\'s the weather?" → Jezero: -62C, wind 12 km/h NW, dust opacity tau 0.4 (clear).'
+    ],
+    marsResponse: 'Doing well. The sunset last night was incredible — two-tone blue like we talked about. Attaching a photo from Hab 2 viewport.',
+    marsExpanded: [
+      'Mood context: Positive. Crew morale report yesterday shows normal range.',
+      'Upcoming: Crew has EVA scheduled Sol 266 (2 days). Might be busy then.'
+    ]
+  },
+  {
+    predicted: [
+      'Detected: Supply chain query. Pulling inventory context.',
+      'Current water recycler efficiency: 94.2% (target: 96%). Decline trend over 14 sols.',
+      'Next resupply window: Sol 340 (74 days). Filter replacement parts: 1 remaining on-site.'
+    ],
+    marsResponse: 'Already on it. We\'ve been monitoring the decline. Engineering team has a workaround using the backup membrane. Should hold until resupply.',
+    marsExpanded: [
+      'Backup membrane rated for 60 sols continuous use. Margin: adequate.',
+      'Flagged for priority on next cargo manifest. Engineering report attached.'
+    ]
+  },
+  {
+    predicted: [
+      'Detected: EVA scheduling query. Cross-referencing crew roster and weather forecast.',
+      'Current dust storm probability: 12% (acceptable). Wind forecast Sol 267-270: 8-15 km/h.',
+      'Anticipated: "Who\'s on the EVA team?" → Crew rotation: Chen (lead), Okafor (support). Backup: Rodriguez.'
+    ],
+    marsResponse: 'EVA is go for Sol 267 as planned. Chen and Okafor completed suit checks this morning. We\'re staging tools at Airlock 2 tonight.',
+    marsExpanded: [
+      'EVA objectives: sample collection at Site 7B, antenna realignment at relay node 3.',
+      'Suit telemetry: all nominal. O2 reserves at 98%. Battery packs fully charged.'
+    ]
+  }
+];
+let fallbackIndex = 0;
+
+// ========== CLAUDE API ==========
+const SYSTEM_PROMPT = 'You are a Lightlag protocol AI agent operating on an interplanetary communication link. Given a human message, generate predictive context expansions. Respond ONLY with JSON: {"predicted": [array of 3-4 anticipated follow-up questions with pre-computed answers], "marsResponse": string (a realistic Mars crew member response), "marsExpanded": [array of 2-3 additional context items the Mars AI would attach]}. Make responses technically realistic. Reference real Mars mission terminology, habitat systems, and crew operations.';
+
+async function getAIExpansion(userMessage) {
+  const apiKey = apiKeyInput.value.trim();
+  if (!apiKey) return null;
+
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 20000);
+
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'anthropic-version': '2023-06-01',
+        'x-api-key': apiKey,
+        'anthropic-dangerous-direct-browser-access': 'true'
+      },
+      signal: controller.signal,
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-20250514',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: userMessage }]
+      })
+    });
+
+    clearTimeout(timeout);
+
+    if (!response.ok) {
+      const err = await response.text();
+      console.warn('API error:', response.status, err);
+      if (response.status === 401) {
+        apiStatusEl.textContent = 'INVALID KEY';
+        apiStatusEl.className = 'api-status fallback';
+      }
+      return null;
+    }
+
+    const data = await response.json();
+    let text = data.content[0].text;
+    text = text.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '');
+    const parsed = JSON.parse(text);
+
+    if (!Array.isArray(parsed.predicted) || !parsed.marsResponse || !Array.isArray(parsed.marsExpanded)) {
+      throw new Error('Invalid response structure');
+    }
+
+    apiStatusEl.textContent = 'CONNECTED';
+    apiStatusEl.className = 'api-status connected';
+    return parsed;
+  } catch (err) {
+    console.warn('AI expansion fallback:', err.message);
+    return null;
+  }
+}
+
+// ========== MESSAGING ==========
+function addMessage(container, type, tag, text) {
+  const msg = document.createElement('div');
+  msg.className = 'sim-msg ' + type;
+  msg.innerHTML = '<div class="msg-tag">' + escapeHtml(tag) + '</div>' + escapeHtml(text);
+  container.appendChild(msg);
+  container.scrollTop = container.scrollHeight;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+function showTransit(direction, delay) {
+  transitBar.classList.add('active');
+  const realDelay = getEarthMarsDistance().delayMin;
+  transitText.textContent = direction + ' — Real delay: ' + realDelay + ' min (simulated: ' + delay + 's)';
+  transitProgress.style.transition = 'none';
+  transitProgress.style.width = '0%';
+  requestAnimationFrame(() => {
+    transitProgress.style.transition = 'width ' + delay + 's linear';
+    transitProgress.style.width = '100%';
+  });
+}
+
+function hideTransit() {
+  transitBar.classList.remove('active');
+  transitProgress.style.width = '0%';
+}
+
+function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
+
+function updateStats() {
+  document.getElementById('t-transmissions').textContent = totalTransmissions;
+  document.getElementById('t-exchanges').textContent = totalEffectiveExchanges;
+
+  if (totalTransmissions > 0) {
+    const ratio = (totalEffectiveExchanges / (totalTransmissions * 2)).toFixed(1);
+    document.getElementById('t-ratio').innerHTML = ratio + '<span class="unit">x</span>';
+  }
+
+  if (totalElapsedMs > 0) {
+    // Without AI: each effective exchange would need its own round trip
+    const withoutAiMs = totalEffectiveExchanges * simDelay * 2 * 1000;
+    const savedMs = withoutAiMs - totalElapsedMs;
+    if (savedMs > 0) {
+      const savedSec = Math.round(savedMs / 1000);
+      if (savedSec >= 60) {
+        document.getElementById('t-saved').textContent = Math.floor(savedSec / 60) + 'm ' + (savedSec % 60) + 's';
+      } else {
+        document.getElementById('t-saved').textContent = savedSec + 's';
+      }
+    } else {
+      document.getElementById('t-saved').textContent = '--';
+    }
+  }
+}
+
+// ========== SEND ==========
+async function sendMessage() {
+  const text = earthInput.value.trim();
+  if (!text || simBusy) return;
+
+  if (!sessionStartTime) sessionStartTime = new Date();
+  const roundTripStart = Date.now();
+
+  simBusy = true;
+  earthSend.disabled = true;
+  earthInput.value = '';
+
+  const logEntry = {
+    timestamp: new Date().toISOString(),
+    earthMessage: text,
+    delay: simDelay,
+    source: 'fallback',
+    expansion: null,
+    marsResponse: null,
+    marsExpanded: null,
+    roundTripMs: 0
+  };
+
+  // Earth: show human message
+  addMessage(earthMessages, 'human', 'You — Earth Mission Control', text);
+  totalTransmissions++;
+  updateStats();
+
+  // Earth: AI processing
+  await sleep(500);
+  addMessage(earthMessages, 'ai', 'Lightlag AI — Analyzing', 'Generating predictive context bundle...');
+
+  // Call API or fall back
+  const aiResult = await getAIExpansion(text);
+  const exp = aiResult || fallbackExpansions[fallbackIndex % fallbackExpansions.length];
+  fallbackIndex++;
+  logEntry.source = aiResult ? 'claude-api' : 'fallback';
+
+  await sleep(aiResult ? 200 : 800);
+
+  // Show predicted expansions on Earth
+  exp.predicted.forEach(p => {
+    addMessage(earthMessages, 'ai-expanded', 'Predicted Context', p);
+  });
+  logEntry.expansion = exp.predicted;
+
+  await sleep(600);
+  const bundleSize = text.length + JSON.stringify(exp.predicted).length;
+  addMessage(earthMessages, 'ai', 'Lightlag AI',
+    'Bundle ready (' + (aiResult ? 'Claude API' : 'Local Cache') + '). ' +
+    exp.predicted.length + ' expansions, ~' + bundleSize + ' bytes. Transmitting...');
+
+  // Transit Earth -> Mars
+  showTransit('Earth → Mars', simDelay);
+  await sleep(simDelay * 1000);
+  hideTransit();
+
+  // Mars: receive
+  addMessage(marsMessages, 'ai', 'Lightlag AI — Bundle Received', 'Unpacking Earth transmission...');
+  await sleep(400);
+  addMessage(marsMessages, 'human', 'From Earth', text);
+  await sleep(200);
+  exp.predicted.forEach(p => {
+    addMessage(marsMessages, 'ai-expanded', 'AI Pre-Computed Context', p);
+  });
+
+  // Mars: crew response
+  await sleep(800);
+  addMessage(marsMessages, 'human', 'Mars Crew', exp.marsResponse);
+  logEntry.marsResponse = exp.marsResponse;
+  await sleep(400);
+  exp.marsExpanded.forEach(p => {
+    addMessage(marsMessages, 'ai-expanded', 'Mars AI Expansion', p);
+  });
+  logEntry.marsExpanded = exp.marsExpanded;
+
+  // Transit Mars -> Earth
+  await sleep(600);
+  showTransit('Mars → Earth', simDelay);
+  await sleep(simDelay * 1000);
+  hideTransit();
+
+  // Earth: receive Mars response
+  addMessage(earthMessages, 'ai', 'Lightlag AI — Mars Response', 'Bundle received from Ares Base. Unpacking...');
+  await sleep(300);
+  addMessage(earthMessages, 'human', 'Mars Crew Response', exp.marsResponse);
+  exp.marsExpanded.forEach(p => {
+    addMessage(earthMessages, 'ai-expanded', 'Mars AI Context', p);
+  });
+
+  // Count effective exchanges: original + predicted + mars response + mars expanded
+  const exchanges = 1 + exp.predicted.length + 1 + exp.marsExpanded.length;
+  totalEffectiveExchanges += exchanges;
+
+  const roundTripMs = Date.now() - roundTripStart;
+  totalElapsedMs += roundTripMs;
+  logEntry.roundTripMs = roundTripMs;
+
+  addMessage(earthMessages, 'ai', 'Lightlag AI',
+    'Round trip complete. ' + exchanges + ' effective exchanges resolved in 1 transmission cycle (' +
+    (roundTripMs / 1000).toFixed(1) + 's sim / ' + getEarthMarsDistance().delayMin + ' min real).');
+
+  updateStats();
+  conversationLog.push(logEntry);
+
+  simBusy = false;
+  earthSend.disabled = false;
+  earthInput.focus();
+}
+
+earthSend.addEventListener('click', sendMessage);
+earthInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') sendMessage(); });
+
+// ========== EXPORT ==========
+document.getElementById('export-btn').addEventListener('click', () => {
+  if (conversationLog.length === 0) {
+    alert('No conversation data to export yet. Send a message first.');
+    return;
+  }
+
+  const session = {
+    protocol: 'lightlag',
+    version: '1.0',
+    exportedAt: new Date().toISOString(),
+    sessionStarted: sessionStartTime ? sessionStartTime.toISOString() : null,
+    config: {
+      simulatedDelay: simDelay,
+      realDistance: getEarthMarsDistance()
+    },
+    stats: {
+      totalTransmissions,
+      totalEffectiveExchanges,
+      compressionRatio: totalTransmissions > 0 ? (totalEffectiveExchanges / (totalTransmissions * 2)).toFixed(2) : null,
+      totalElapsedMs,
+      estimatedWithoutAiMs: totalEffectiveExchanges * simDelay * 2 * 1000,
+      timeSavedMs: (totalEffectiveExchanges * simDelay * 2 * 1000) - totalElapsedMs
+    },
+    conversation: conversationLog
+  };
+
+  const blob = new Blob([JSON.stringify(session, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'lightlag-session-' + new Date().toISOString().slice(0, 19).replace(/:/g, '-') + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+// ========== INIT MESSAGE ==========
+addMessage(earthMessages, 'system', 'System', 'Lightlag Protocol Demo v1.0 initialized. Earth terminal ready. Enter an API key for live AI expansions, or send a message to use pre-computed fallbacks.');
+addMessage(marsMessages, 'system', 'System', 'Mars terminal standing by. Ares Base AI agent online. Awaiting incoming transmission from Earth.');
+</script>
+
+</body>
+</html>
