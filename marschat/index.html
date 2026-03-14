@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Lightlag — AI-Mediated Interplanetary Communication</title>
 <meta name="description" content="An open research concept for AI-optimized communication across planetary distances. Built by Briu.ai.">
+<meta property="og:title" content="Lightlag — AI-Mediated Interplanetary Communication">
+<meta property="og:description" content="What if the signal itself could think? An open research concept for AI-optimized communication across planetary distances.">
+<meta property="og:image" content="https://briu.ai/marschat/assets/og.svg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://briu.ai/marschat/assets/og.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -106,6 +112,43 @@ section {
 @keyframes pulse-dot {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.3; }
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.topbar-link {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+
+.topbar-link:hover {
+  color: var(--text-bright);
+}
+
+.topbar-subscribe {
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  padding: 4px 12px;
+  border-radius: 3px;
+}
+
+.topbar-subscribe:hover {
+  background: var(--accent-glow);
+  color: var(--text-bright);
+}
+
+@media (max-width: 600px) {
+  .topbar-nav { gap: 12px; }
+  .topbar-link { font-size: 10px; letter-spacing: 0.5px; }
+  .topbar-status { display: none; }
 }
 
 /* ========== HERO ========== */
@@ -745,6 +788,12 @@ section {
 <!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-brand">Lightlag</div>
+  <nav class="topbar-nav">
+    <a href="#protocol" class="topbar-link">Protocol</a>
+    <a href="/marschat/demo/" class="topbar-link">Simulation</a>
+    <a href="/marschat/whitepaper/" class="topbar-link">Whitepaper</a>
+    <a href="#waitlist" class="topbar-link topbar-subscribe">Subscribe</a>
+  </nav>
   <div class="topbar-status">
     <span class="dot"></span>
     <span id="topbar-delay">Calculating signal delay...</span>
@@ -824,7 +873,7 @@ section {
 </section>
 
 <!-- SECTION 2: THE PROTOCOL -->
-<section>
+<section id="protocol">
   <div class="container">
     <div class="section-num">02 — The Protocol</div>
     <h2 class="section-title">Predictive context expansion with human-in-the-loop correction</h2>
@@ -1098,7 +1147,7 @@ section {
 </section>
 
 <!-- WAITLIST -->
-<section class="cta-section">
+<section id="waitlist" class="cta-section">
   <div class="container">
     <div class="section-num" style="justify-content: center;">07 — Follow the Research</div>
     <h2 class="section-title">This is an active research project.</h2>

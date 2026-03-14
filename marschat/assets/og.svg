@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#06080a"/>
+      <stop offset="100%" stop-color="#0c1015"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#4a8ec0"/>
+      <stop offset="40%" stop-color="#3d9e9e"/>
+      <stop offset="100%" stop-color="#c0714a"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Subtle grid -->
+  <g opacity="0.04" stroke="#6b7a8d" stroke-width="0.5">
+    <line x1="0" y1="0" x2="0" y2="630"/><line x1="60" y1="0" x2="60" y2="630"/>
+    <line x1="120" y1="0" x2="120" y2="630"/><line x1="180" y1="0" x2="180" y2="630"/>
+    <line x1="240" y1="0" x2="240" y2="630"/><line x1="300" y1="0" x2="300" y2="630"/>
+    <line x1="360" y1="0" x2="360" y2="630"/><line x1="420" y1="0" x2="420" y2="630"/>
+    <line x1="480" y1="0" x2="480" y2="630"/><line x1="540" y1="0" x2="540" y2="630"/>
+    <line x1="600" y1="0" x2="600" y2="630"/><line x1="660" y1="0" x2="660" y2="630"/>
+    <line x1="720" y1="0" x2="720" y2="630"/><line x1="780" y1="0" x2="780" y2="630"/>
+    <line x1="840" y1="0" x2="840" y2="630"/><line x1="900" y1="0" x2="900" y2="630"/>
+    <line x1="960" y1="0" x2="960" y2="630"/><line x1="1020" y1="0" x2="1020" y2="630"/>
+    <line x1="1080" y1="0" x2="1080" y2="630"/><line x1="1140" y1="0" x2="1140" y2="630"/>
+    <line x1="0" y1="0" x2="1200" y2="0"/><line x1="0" y1="63" x2="1200" y2="63"/>
+    <line x1="0" y1="126" x2="1200" y2="126"/><line x1="0" y1="189" x2="1200" y2="189"/>
+    <line x1="0" y1="252" x2="1200" y2="252"/><line x1="0" y1="315" x2="1200" y2="315"/>
+    <line x1="0" y1="378" x2="1200" y2="378"/><line x1="0" y1="441" x2="1200" y2="441"/>
+    <line x1="0" y1="504" x2="1200" y2="504"/><line x1="0" y1="567" x2="1200" y2="567"/>
+  </g>
+
+  <!-- Earth dot -->
+  <circle cx="180" cy="340" r="24" fill="#4a8ec0" opacity="0.15"/>
+  <circle cx="180" cy="340" r="8" fill="#4a8ec0"/>
+  <text x="180" y="390" text-anchor="middle" font-family="monospace" font-size="11" fill="#4a8ec0" letter-spacing="2">EARTH</text>
+
+  <!-- Signal line -->
+  <line x1="220" y1="340" x2="980" y2="340" stroke="url(#signal)" stroke-width="1.5" stroke-dasharray="8,6" opacity="0.6"/>
+
+  <!-- Accent pulse at center -->
+  <circle cx="600" cy="340" r="16" fill="#3d9e9e" opacity="0.08"/>
+  <circle cx="600" cy="340" r="4" fill="#3d9e9e"/>
+  <text x="600" y="370" text-anchor="middle" font-family="monospace" font-size="9" fill="#3d9e9e" letter-spacing="1" opacity="0.7">AI MEDIATOR</text>
+
+  <!-- Mars dot -->
+  <circle cx="1020" cy="340" r="24" fill="#c0714a" opacity="0.15"/>
+  <circle cx="1020" cy="340" r="8" fill="#c0714a"/>
+  <text x="1020" y="390" text-anchor="middle" font-family="monospace" font-size="11" fill="#c0714a" letter-spacing="2">MARS</text>
+
+  <!-- Brand -->
+  <text x="100" y="120" font-family="monospace" font-size="14" fill="#3d9e9e" letter-spacing="4" text-transform="uppercase">LIGHTLAG</text>
+
+  <!-- Title -->
+  <text x="100" y="200" font-family="Georgia, serif" font-size="48" fill="#f0f4f8" font-style="italic">What if the signal</text>
+  <text x="100" y="260" font-family="Georgia, serif" font-size="48" fill="#3d9e9e" font-style="italic">itself could think?</text>
+
+  <!-- Distance readout -->
+  <text x="100" y="520" font-family="monospace" font-size="11" fill="#6b7a8d" letter-spacing="1">CURRENT EARTH—MARS DISTANCE</text>
+  <text x="100" y="548" font-family="monospace" font-size="28" fill="#d4dae3">225<tspan font-size="14" fill="#6b7a8d"> M km</tspan>  ·  12.5<tspan font-size="14" fill="#6b7a8d"> min light-delay</tspan></text>
+
+  <!-- From line -->
+  <text x="1100" y="580" text-anchor="end" font-family="monospace" font-size="11" fill="#6b7a8d" letter-spacing="1">A research concept from briu.ai</text>
+
+  <!-- Border -->
+  <rect x="0" y="0" width="1200" height="630" fill="none" stroke="rgba(107,122,141,0.15)" stroke-width="1"/>
+</svg>
