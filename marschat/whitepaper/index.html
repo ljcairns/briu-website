@@ -3,8 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Lightlag: AI-Mediated Context Expansion for Interplanetary Communication — Technical Whitepaper</title>
-<meta name="description" content="Technical whitepaper describing the Lightlag protocol for AI-mediated communication across interplanetary distances. Predictive context expansion, iterative convergence, and blackout delegation.">
+<title>Lightlag Protocol Whitepaper</title>
+<meta name="description" content="A web-readable technical whitepaper for the Lightlag protocol: predictive context expansion for latency-tolerant interplanetary communication.">
+<meta property="og:title" content="Lightlag Protocol Whitepaper">
+<meta property="og:description" content="Technical whitepaper for the Lightlag protocol, an application-layer approach to reducing conversational round trips across high-latency space links.">
+<meta property="og:image" content="https://briu.ai/marschat/assets/og.svg">
+<meta property="og:type" content="article">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://briu.ai/marschat/assets/og.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 <style>
@@ -28,6 +34,7 @@
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
+
 html { scroll-behavior: smooth; }
 
 body {
@@ -50,14 +57,22 @@ body::before {
   z-index: 9999;
 }
 
-/* ========== LAYOUT ========== */
-.container {
-  max-width: 780px;
-  margin: 0 auto;
-  padding: 0 24px;
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-/* ========== TOPBAR ========== */
+code {
+  font-family: var(--mono);
+  font-size: 0.95em;
+  color: var(--text-bright);
+}
+
+.container {
+  width: min(860px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
 .topbar {
   position: fixed;
   top: 0;
@@ -81,11 +96,6 @@ body::before {
   text-transform: uppercase;
 }
 
-.topbar-brand a {
-  color: inherit;
-  text-decoration: none;
-}
-
 .topbar-nav {
   display: flex;
   gap: 24px;
@@ -94,44 +104,48 @@ body::before {
 
 .topbar-nav a {
   color: var(--text-dim);
-  text-decoration: none;
-  transition: color 0.2s;
+  transition: color 0.2s ease;
 }
 
-.topbar-nav a:hover { color: var(--accent); }
+.topbar-nav a:hover,
+.topbar-nav a.active {
+  color: var(--text-bright);
+}
 
-/* ========== PAPER HEADER ========== */
 .paper-header {
-  padding-top: 120px;
-  padding-bottom: 80px;
+  padding-top: 128px;
+  padding-bottom: 72px;
   border-bottom: 1px solid var(--border);
-  text-align: center;
 }
 
-.paper-type {
+.paper-type,
+.toc-label,
+.section-num,
+.abstract-label,
+.eyebrow {
   font-size: 10px;
   letter-spacing: 3px;
   text-transform: uppercase;
-  color: var(--accent);
-  margin-bottom: 32px;
+  color: var(--text-dim);
 }
+
+.paper-type { color: var(--accent); margin-bottom: 24px; }
 
 .paper-title {
   font-family: var(--serif);
-  font-size: clamp(28px, 5vw, 44px);
+  font-size: clamp(34px, 5vw, 52px);
   font-weight: 400;
-  line-height: 1.15;
+  line-height: 1.08;
   color: var(--text-bright);
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .paper-subtitle {
-  font-family: var(--serif);
-  font-size: clamp(18px, 3vw, 24px);
-  font-weight: 400;
-  font-style: italic;
+  max-width: 760px;
   color: var(--text-dim);
-  margin-bottom: 40px;
+  font-size: 15px;
+  line-height: 1.9;
+  margin-bottom: 28px;
 }
 
 .paper-meta {
@@ -147,67 +161,51 @@ body::before {
 
 .paper-version {
   display: inline-block;
-  margin-top: 16px;
+  margin-top: 18px;
   padding: 4px 12px;
   border: 1px solid var(--border);
+  color: var(--amber);
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--amber);
 }
 
-/* ========== TABLE OF CONTENTS ========== */
 .toc {
-  padding: 48px 0;
+  padding: 42px 0;
   border-bottom: 1px solid var(--border);
-}
-
-.toc-label {
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 20px;
 }
 
 .toc-list {
   list-style: none;
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px 32px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 28px;
+  margin-top: 18px;
 }
 
 .toc-list a {
-  color: var(--text);
-  text-decoration: none;
-  font-size: 13px;
   display: flex;
+  gap: 12px;
   align-items: baseline;
-  gap: 10px;
   padding: 6px 0;
-  transition: color 0.2s;
+  color: var(--text);
 }
 
 .toc-list a:hover { color: var(--accent); }
 
 .toc-num {
+  min-width: 22px;
   color: var(--text-dim);
   font-size: 11px;
-  min-width: 20px;
 }
 
-/* ========== SECTIONS ========== */
 .paper-section {
   padding: 64px 0;
   border-bottom: 1px solid var(--border);
 }
 
 .section-num {
-  font-size: 11px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -222,158 +220,104 @@ body::before {
 
 .section-title {
   font-family: var(--serif);
-  font-size: clamp(24px, 3.5vw, 36px);
+  font-size: clamp(28px, 4vw, 40px);
   font-weight: 400;
+  line-height: 1.15;
   color: var(--text-bright);
-  margin-bottom: 28px;
-  line-height: 1.2;
+  margin-bottom: 24px;
 }
 
 .section-body {
   color: var(--text);
-  line-height: 1.85;
-  font-size: 14px;
+  line-height: 1.9;
 }
 
-.section-body p + p { margin-top: 20px; }
+.section-body p + p { margin-top: 18px; }
 
 .section-body h3 {
   font-family: var(--serif);
-  font-size: 20px;
+  font-size: 21px;
   font-weight: 400;
   color: var(--text-bright);
-  margin: 40px 0 16px;
+  margin: 34px 0 12px;
 }
 
 .section-body h4 {
-  font-size: 13px;
-  font-weight: 500;
   color: var(--accent);
-  letter-spacing: 1px;
+  font-size: 12px;
+  letter-spacing: 1.5px;
   text-transform: uppercase;
-  margin: 32px 0 12px;
+  margin: 28px 0 10px;
 }
+
+.abstract-box,
+.note-box,
+.protocol-visual {
+  border: 1px solid var(--border);
+  background: var(--bg-elevated);
+}
+
+.abstract-box {
+  padding: 30px;
+}
+
+.abstract-label {
+  color: var(--accent);
+  margin-bottom: 14px;
+}
+
+.abstract-box p {
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.abstract-box p + p { margin-top: 16px; }
+
+.keywords {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.keywords strong { color: var(--text); font-weight: 500; }
+
+.cite {
+  color: var(--accent);
+  font-size: 12px;
+}
+
+.cite:hover { color: var(--text-bright); }
 
 .highlight {
   color: var(--accent);
   font-weight: 500;
 }
 
-/* ========== ACADEMIC ELEMENTS ========== */
-.abstract-box {
-  border: 1px solid var(--border);
-  background: var(--bg-elevated);
-  padding: 32px;
-  margin-bottom: 32px;
+.def-list {
+  margin: 24px 0 8px;
 }
 
-.abstract-label {
-  font-size: 10px;
-  letter-spacing: 3px;
-  text-transform: uppercase;
+.def-item {
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.def-term {
   color: var(--accent);
-  margin-bottom: 16px;
-}
-
-.abstract-box p {
   font-size: 13px;
-  line-height: 1.9;
-  color: var(--text);
+  font-weight: 500;
+  margin-bottom: 4px;
 }
 
-.abstract-box p + p { margin-top: 16px; }
-
-.keywords {
-  margin-top: 20px;
-  padding-top: 16px;
-  border-top: 1px solid var(--border);
-  font-size: 11px;
-  color: var(--text-dim);
-}
-
-.keywords strong { color: var(--text); font-weight: 500; }
-
-/* ========== CITATION BLOCKS ========== */
-.cite {
-  color: var(--accent);
-  cursor: help;
-  font-size: 12px;
-}
-
-blockquote {
-  border-left: 2px solid var(--accent);
-  padding: 16px 20px;
-  margin: 24px 0;
-  background: var(--accent-glow);
+.def-desc {
   font-size: 13px;
   line-height: 1.8;
-  color: var(--text);
 }
 
-blockquote cite {
-  display: block;
-  margin-top: 8px;
-  font-size: 11px;
-  color: var(--text-dim);
-  font-style: normal;
-}
-
-/* ========== TABLES ========== */
-.data-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 32px 0;
-  font-size: 12px;
-}
-
-.data-table caption {
-  text-align: left;
-  font-size: 11px;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid var(--border);
-}
-
-.data-table th {
-  text-align: left;
-  padding: 12px 16px;
-  font-size: 10px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--text-dim);
-  font-weight: 500;
-  background: var(--bg-elevated);
-  border-bottom: 1px solid var(--border);
-}
-
-.data-table td {
-  padding: 12px 16px;
-  border-bottom: 1px solid var(--border);
-  color: var(--text);
-}
-
-.data-table tr:hover td { background: rgba(61, 158, 158, 0.03); }
-
-.data-table .num {
-  font-variant-numeric: tabular-nums;
-  color: var(--text-bright);
-  font-weight: 500;
-}
-
-.table-note {
-  font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 8px;
-  font-style: italic;
-  font-family: var(--serif);
-}
-
-/* ========== STACK DIAGRAM ========== */
 .stack {
-  margin: 32px 0;
+  margin: 30px 0 8px;
 }
 
 .stack-layer {
@@ -382,82 +326,118 @@ blockquote cite {
   padding: 16px 20px;
   display: flex;
   justify-content: space-between;
+  gap: 16px;
   align-items: center;
-  font-size: 12px;
-  transition: background 0.2s;
 }
 
 .stack-layer:last-child { border-bottom: 1px solid var(--border); }
-.stack-layer:hover { background: var(--bg-elevated); }
 
 .stack-layer.highlight-layer {
   background: var(--accent-glow);
   border-color: rgba(61, 158, 158, 0.3);
 }
 
-.stack-layer.highlight-layer + .stack-layer {
-  border-top-color: rgba(61, 158, 158, 0.3);
-}
-
 .stack-layer-name {
-  font-weight: 500;
   color: var(--text-bright);
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .stack-layer-desc {
   color: var(--text-dim);
   font-size: 11px;
+  text-align: right;
 }
 
-.stack-layer.highlight-layer .stack-layer-name { color: var(--accent); }
-.stack-layer.highlight-layer .stack-layer-desc { color: var(--accent); opacity: 0.7; }
+.stack-layer.highlight-layer .stack-layer-name,
+.stack-layer.highlight-layer .stack-layer-desc {
+  color: var(--accent);
+}
 
 .stack-annotation {
-  font-size: 11px;
-  color: var(--accent);
-  text-align: right;
   margin-top: 8px;
-  font-style: italic;
+  color: var(--accent);
   font-family: var(--serif);
-}
-
-/* ========== FIGURE LABELS ========== */
-.figure-label {
   font-size: 11px;
-  color: var(--text-dim);
-  margin-top: 12px;
-  margin-bottom: 32px;
+  text-align: right;
+  font-style: italic;
 }
 
-.figure-label strong {
+.figure-label,
+.table-note {
+  margin-top: 10px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.figure-label strong,
+.table-note strong {
   color: var(--text);
   font-weight: 500;
 }
 
-/* ========== PROTOCOL DIAGRAM ========== */
-.protocol-visual {
-  margin: 32px 0;
-  border: 1px solid var(--border);
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 28px 0 8px;
+  font-size: 12px;
+}
+
+.data-table caption {
+  text-align: left;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-dim);
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.data-table th {
   background: var(--bg-elevated);
-  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-align: left;
+}
+
+.data-table td { color: var(--text); }
+
+.data-table .num {
+  color: var(--text-bright);
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
 }
 
 .protocol-header {
   padding: 14px 20px;
   border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  color: var(--text-dim);
   font-size: 11px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: var(--text-dim);
-  display: flex;
-  justify-content: space-between;
 }
 
-.protocol-body { padding: 24px 20px; }
+.protocol-body {
+  padding: 24px 20px;
+}
 
 .round {
   display: grid;
-  grid-template-columns: 1fr 60px 1fr;
+  grid-template-columns: 1fr 62px 1fr;
   gap: 0;
   align-items: start;
   margin-bottom: 24px;
@@ -465,28 +445,29 @@ blockquote cite {
 
 .round:last-child { margin-bottom: 0; }
 
-.round-earth, .round-mars {
+.round-earth,
+.round-mars {
   padding: 14px;
   border: 1px solid var(--border);
   font-size: 11px;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 .round-earth {
-  border-color: rgba(74, 142, 192, 0.3);
   background: rgba(74, 142, 192, 0.05);
+  border-color: rgba(74, 142, 192, 0.28);
 }
 
 .round-mars {
-  border-color: rgba(192, 113, 74, 0.3);
   background: rgba(192, 113, 74, 0.05);
+  border-color: rgba(192, 113, 74, 0.28);
 }
 
 .round-label {
-  font-size: 9px;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
   margin-bottom: 6px;
+  font-size: 9px;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
   font-weight: 500;
 }
 
@@ -505,42 +486,26 @@ blockquote cite {
   line-height: 1.4;
 }
 
-.round-arrow svg { margin: 4px 0; }
-
 .round-tag {
   display: inline-block;
-  padding: 2px 5px;
+  margin-top: 6px;
+  padding: 2px 6px;
   background: rgba(61, 158, 158, 0.15);
   color: var(--accent);
   font-size: 9px;
-  margin-top: 6px;
   letter-spacing: 0.5px;
 }
 
-/* ========== DEFINITION LIST ========== */
-.def-list {
-  margin: 24px 0;
+.note-box {
+  margin-top: 22px;
+  padding: 18px 20px;
 }
 
-.def-item {
-  padding: 16px 0;
-  border-bottom: 1px solid var(--border);
+.note-box .eyebrow {
+  color: var(--amber);
+  margin-bottom: 8px;
 }
 
-.def-term {
-  font-weight: 500;
-  color: var(--accent);
-  font-size: 13px;
-  margin-bottom: 4px;
-}
-
-.def-desc {
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.7;
-}
-
-/* ========== REFERENCES ========== */
 .ref-list {
   list-style: none;
   counter-reset: ref;
@@ -548,225 +513,209 @@ blockquote cite {
 
 .ref-list li {
   counter-increment: ref;
-  padding: 12px 0 12px 40px;
+  position: relative;
+  padding: 12px 0 12px 42px;
   border-bottom: 1px solid var(--border);
   font-size: 12px;
-  line-height: 1.7;
-  color: var(--text);
-  position: relative;
+  line-height: 1.8;
 }
 
 .ref-list li::before {
   content: '[' counter(ref) ']';
   position: absolute;
   left: 0;
+  top: 12px;
   color: var(--accent);
   font-size: 11px;
   font-weight: 500;
 }
 
-.ref-list li em { color: var(--text-dim); }
-
-/* ========== FOOTER ========== */
-.footer {
-  padding: 48px 0;
-  text-align: center;
-  font-size: 12px;
-  color: var(--text-dim);
-}
-
-.footer a {
+.ref-list a {
   color: var(--accent);
-  text-decoration: none;
 }
 
-.footer a:hover { text-decoration: underline; }
+.ref-list a:hover {
+  color: var(--text-bright);
+}
+
+.footer {
+  padding: 44px 0 56px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 12px;
+}
 
 .footer-line {
-  margin-top: 12px;
+  margin-top: 10px;
   font-size: 11px;
 }
 
-/* ========== RESPONSIVE ========== */
-@media (max-width: 700px) {
-  .toc-list { grid-template-columns: 1fr; }
-  .round { grid-template-columns: 1fr; }
-  .round-arrow { flex-direction: row; padding: 12px 16px; }
+@media (max-width: 740px) {
   .topbar-nav { display: none; }
+  .toc-list { grid-template-columns: 1fr; }
+  .stack-layer {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .stack-layer-desc { text-align: left; }
+  .round { grid-template-columns: 1fr; }
+  .round-arrow {
+    flex-direction: row;
+    gap: 10px;
+    padding: 12px 16px;
+  }
   .abstract-box { padding: 20px; }
-  .data-table { font-size: 11px; }
-  .data-table th, .data-table td { padding: 8px 10px; }
+  .data-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
 }
 </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-brand"><a href="../lightlag-concept.html">Lightlag</a></div>
   <div class="topbar-nav">
     <a href="../lightlag-concept.html">Concept</a>
-    <a href="./">Whitepaper</a>
-    <a href="https://briu.ai">Briu.ai</a>
+    <a href="./" class="active">Whitepaper</a>
+    <a href="/marschat/algorithm/">Algorithm</a>
   </div>
 </div>
 
-<!-- PAPER HEADER -->
 <header class="paper-header">
   <div class="container">
-    <div class="paper-type">Technical Whitepaper — v0.1 Draft</div>
-    <h1 class="paper-title">Lightlag: AI-Mediated Context Expansion for Latency-Tolerant Interplanetary Communication</h1>
-    <p class="paper-subtitle">Reducing conversational round trips across planetary distances through predictive bundling and human-in-the-loop correction</p>
+    <div class="paper-type">Technical Whitepaper</div>
+    <h1 class="paper-title">Lightlag Protocol: Predictive Context Expansion for Latency-Tolerant Interplanetary Communication</h1>
+    <p class="paper-subtitle">A web-readable concept paper describing how AI-assisted context bundling can reduce conversational round trips across Earth-Mars links without replacing the underlying DTN and Bundle Protocol transport stack.</p>
     <div class="paper-meta">
-      <strong>Authors:</strong> Lucas Cairns<br>
-      <strong>Affiliation:</strong> Briu.ai — AI Agent Implementation, Seattle WA<br>
-      <strong>Date:</strong> March 2026<br>
-      <strong>Status:</strong> Concept paper — protocol under active development
+      <strong>Author:</strong> Lucas Cairns<br>
+      <strong>Organization:</strong> Briu<br>
+      <strong>Date:</strong> March 14, 2026<br>
+      <strong>Status:</strong> Research concept; simulation and field validation pending
     </div>
-    <div class="paper-version">Pre-print — Not peer reviewed</div>
+    <div class="paper-version">Web preprint</div>
   </div>
 </header>
 
-<!-- TABLE OF CONTENTS -->
 <nav class="toc">
   <div class="container">
     <div class="toc-label">Contents</div>
     <ol class="toc-list">
-      <li><a href="#abstract"><span class="toc-num">0</span> Abstract</a></li>
-      <li><a href="#introduction"><span class="toc-num">1</span> Introduction</a></li>
-      <li><a href="#related-work"><span class="toc-num">2</span> Related Work</a></li>
-      <li><a href="#protocol"><span class="toc-num">3</span> Proposed Protocol</a></li>
-      <li><a href="#simulation"><span class="toc-num">4</span> Simulation Results</a></li>
-      <li><a href="#future-work"><span class="toc-num">5</span> Future Work</a></li>
-      <li><a href="#references"><span class="toc-num">6</span> References</a></li>
+      <li><a href="#abstract"><span class="toc-num">1</span> Abstract</a></li>
+      <li><a href="#introduction"><span class="toc-num">2</span> Introduction</a></li>
+      <li><a href="#related-work"><span class="toc-num">3</span> Related Work</a></li>
+      <li><a href="#protocol"><span class="toc-num">4</span> Proposed Protocol</a></li>
+      <li><a href="#simulation"><span class="toc-num">5</span> Simulation Results</a></li>
+      <li><a href="#future-work"><span class="toc-num">6</span> Future Work</a></li>
+      <li><a href="#references"><span class="toc-num">7</span> References</a></li>
     </ol>
   </div>
 </nav>
 
-<!-- ABSTRACT -->
 <section class="paper-section" id="abstract">
   <div class="container">
     <div class="abstract-box">
       <div class="abstract-label">Abstract</div>
       <p>
-        Interplanetary communication between Earth and Mars suffers from an irreducible constraint: the speed of light imposes one-way signal delays of 4 to 24 minutes depending on orbital position. While ongoing investment in optical relay constellations and deep space networking will increase available bandwidth by orders of magnitude, no amount of throughput engineering can reduce the number of conversational round trips required for meaningful human interaction. A five-exchange conversation at average delay requires over two hours of wall-clock time. For sustained human presence on Mars — projected to begin in the early 2030s — this renders conventional real-time communication protocols functionally unusable for anything beyond one-way telemetry.
+        Earth-Mars communication is constrained by physics rather than infrastructure. One-way light time varies from roughly 4 to 24 minutes depending on orbital position, which means even a short back-and-forth conversation can stretch into hours. NASA and its partners have spent decades improving the transport layer for disrupted, long-delay links through Delay-Tolerant Networking (DTN), the Bundle Protocol, and related relay and optical communication systems, but those advances primarily improve delivery and throughput rather than the number of conversational turns a human task requires <a class="cite" href="#ref-1">[1]</a><a class="cite" href="#ref-2">[2]</a><a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a>.
       </p>
       <p>
-        We propose Lightlag, an application-layer protocol that uses AI-driven predictive context expansion to compress multi-round conversational exchanges into single transmission bundles. Sender-side AI agents analyze outgoing messages and generate anticipatory follow-up trees, pre-computed responses to likely questions, and contextual data attachments. Receiver-side agents unpack these bundles, present the expanded context alongside the original message, and enable human correction before generating similarly expanded responses. Through iterative convergence with human-in-the-loop editing and retroactive history revision, conversations that would require 10 or more round trips converge in 2 to 3 transmissions. We also introduce a blackout delegation framework for maintaining autonomous AI operations during solar conjunction periods when all Earth-Mars communication is severed.
+        Lightlag is proposed as an application-layer protocol that sits above BPv7 and packages each human message with predictive context expansions, likely follow-up branches, supporting data, and editable machine-generated scaffolding. The goal is not to defeat latency but to make each transmission semantically denser, allowing a multi-turn exchange to converge in fewer round trips. The protocol combines predictive context expansion, iterative convergence through human correction, retroactive editing of prior machine assumptions, and blackout delegation for conjunction periods when Earth and Mars cannot communicate at all.
       </p>
       <div class="keywords">
-        <strong>Keywords:</strong> delay-tolerant networking, interplanetary communication, predictive context expansion, human-in-the-loop AI, Bundle Protocol, Mars communication, solar conjunction, conversational compression
+        <strong>Keywords:</strong> delay-tolerant networking, Bundle Protocol, interplanetary internet, Mars communications, human-in-the-loop AI, predictive context expansion
       </div>
     </div>
   </div>
 </section>
 
-<!-- 1. INTRODUCTION -->
 <section class="paper-section" id="introduction">
   <div class="container">
-    <div class="section-num">01 — Introduction</div>
-    <h2 class="section-title">The latency problem in interplanetary communication</h2>
+    <div class="section-num">02 — Introduction</div>
+    <h2 class="section-title">The latency problem is conversational, not merely infrastructural</h2>
     <div class="section-body">
-
-      <h3>1.1 Bandwidth is not the bottleneck</h3>
+      <h3>The latency problem</h3>
       <p>
-        NASA's Deep Space Optical Communications (DSOC) technology demonstration on the Psyche mission achieved data rates of 267 Mbps from deep space in 2024, demonstrating that high-bandwidth links to Mars are technically feasible <span class="cite" title="NASA JPL, DSOC Technology Demonstration, 2024">[1]</span>. SpaceX has publicly discussed plans for a Mars relay constellation extending Starlink architecture to cislunar and interplanetary distances. Lockheed Martin's proposal for a Mars communications constellation and the ongoing maturation of NASA's LunaNet architecture for Artemis missions both point toward a near-future in which raw data throughput to Mars is measured in hundreds of megabits per second <span class="cite" title="Lockheed Martin Mars Relay Study, 2023">[2]</span>.
-      </p>
-      <p>
-        None of this solves the fundamental constraint. Electromagnetic signals travel at the speed of light: approximately 299,792 km/s. At closest approach (opposition), Mars is roughly 55 million km from Earth, yielding a one-way light time of approximately 3.1 minutes. At conjunction, with Mars on the far side of the Sun, the distance extends to approximately 401 million km and a one-way delay of 22.3 minutes. The mean one-way delay across a synodic period is approximately 12.5 minutes <span class="cite" title="Jet Propulsion Laboratory, Mars Fact Sheet">[3]</span>. These are hard physical limits that no engineering can circumvent.
+        For human crews on Mars, the central communication constraint is not whether a message can be delivered but how long it takes to complete a line of reasoning. A troubleshooting session, care escalation, procurement clarification, or personal exchange usually depends on several turns of clarification. When every round trip can cost tens of minutes, the normal structure of conversation breaks down. A protocol that treats each message as an isolated payload leaves humans paying the latency cost over and over again.
       </p>
 
-      <h3>1.2 Why latency kills conversation</h3>
+      <h3>Why bandwidth alone does not solve it</h3>
       <p>
-        Human conversation is fundamentally interactive. Even structured exchanges — technical troubleshooting, medical consultation, supply chain negotiation — depend on rapid clarification cycles. Research in conversational analysis shows that a typical problem-solving dialogue between two domain experts requires 5 to 15 exchanges to reach resolution, with each exchange building on the previous response <span class="cite" title="Clark & Brennan, Grounding in Communication, 1991">[4]</span>.
-      </p>
-      <p>
-        At average Earth-Mars delay, each round trip takes 25 minutes. A 10-exchange conversation therefore requires approximately 4 hours and 10 minutes of wall-clock time, during which both parties must remain attentive and available. For a Mars settlement of 100 or more people — each maintaining professional, personal, and administrative communication with Earth — this is unworkable at scale. The problem is not moving bits. It is <span class="highlight">reducing the number of round trips required to complete a conversation</span>.
+        Recent optical demonstrations underline the difference between throughput and interaction. In April 2024, NASA's Deep Space Optical Communications experiment transmitted test data from deep space at 267 megabits per second, showing that very high-rate space links are becoming practical <a class="cite" href="#ref-1">[1]</a>. That matters for imagery, logs, software updates, and science return. It does not change the speed of light. If a maintenance decision requires six clarifying questions, more bandwidth still leaves the crew waiting on six delayed exchanges. The hard problem is <span class="highlight">semantic compression of conversation</span>, not just transport efficiency.
       </p>
 
-      <h3>1.3 Current state of delay-tolerant networking</h3>
+      <h3>Current state of DTN and the Bundle Protocol</h3>
       <p>
-        The Delay-Tolerant Networking (DTN) architecture, developed through collaboration between NASA, the IETF DTN Research Group (DTNRG), and academic researchers, addresses the store-and-forward routing problem in challenged networks <span class="cite" title="RFC 4838, Delay-Tolerant Networking Architecture">[5]</span>. The Bundle Protocol version 7 (BPv7), standardized in RFC 9171, provides custody transfer, fragmentation, and reliable delivery across disrupted links <span class="cite" title="RFC 9171, Bundle Protocol Version 7">[6]</span>. The Licklider Transmission Protocol (LTP), specified in RFC 5326, handles segment-level retransmission optimized for long-delay links <span class="cite" title="RFC 5326, Licklider Transmission Protocol">[7]</span>.
-      </p>
-      <p>
-        These protocols are essential infrastructure. DTN has been operational on the International Space Station since 2016 and has been tested on Mars relay orbiters. However, DTN and its associated protocols treat message payloads as opaque data. They solve the problem of getting bits reliably from point A to point B across disrupted, high-delay links. They do not — and were not designed to — address the semantic content of those messages or reduce the number of exchanges required to complete a conversation. Lightlag operates at a layer above DTN, using AI to make each transmission carry the informational weight of multiple conventional exchanges.
+        The current state of the art in challenged networking is the DTN family of protocols: the DTN architecture in RFC 4838, the Licklider Transmission Protocol in RFC 5326 for long-delay convergence, Bundle Protocol Version 7 in RFC 9171, and Bundle Protocol Security in RFC 9172 <a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a><a class="cite" href="#ref-6">[6]</a>. NASA has also flown DTN-related capabilities on the International Space Station, moving the field from theory into operational practice <a class="cite" href="#ref-2">[2]</a>. These protocols solve routing, custody, fragmentation, and secure delivery across interrupted links. They do not attempt to reason about the content of the message itself. Lightlag is intended to complement that stack rather than replace it.
       </p>
     </div>
   </div>
 </section>
 
-<!-- 2. RELATED WORK -->
 <section class="paper-section" id="related-work">
   <div class="container">
-    <div class="section-num">02 — Related Work</div>
-    <h2 class="section-title">Prior art in delay-tolerant and interplanetary networking</h2>
+    <div class="section-num">03 — Related Work</div>
+    <h2 class="section-title">Relevant foundations in interplanetary networking and adaptive routing</h2>
     <div class="section-body">
-
-      <h3>2.1 The Interplanetary Internet (IPN)</h3>
+      <h3>NASA DTN and operational flight work</h3>
       <p>
-        The concept of an Interplanetary Internet was first articulated by Vinton Cerf, then at the Jet Propulsion Laboratory, in collaboration with Adrian Hooke and Scott Burleigh in the late 1990s <span class="cite" title="Cerf et al., Interplanetary Internet (IPN), 1998">[8]</span>. Cerf recognized that TCP/IP's assumptions — low latency, continuous connectivity, symmetric paths — would fail catastrophically in deep space. The IPN architecture introduced the concept of "scheduled connectivity" and store-and-forward message switching, which eventually evolved into the DTN Bundle Protocol. Cerf's work established the foundational insight that interplanetary networking requires fundamentally different protocols, not just extensions to terrestrial ones. Lightlag extends this insight to the application layer: just as DTN replaced TCP's assumptions about connectivity, our protocol replaces the assumption that human communication must proceed in sequential, single-message exchanges.
+        NASA's DTN program established the core model for communication in intermittently connected environments: store, carry, and forward rather than assume an end-to-end path exists at transmission time. Work on the ISS showed how these ideas could move from lab prototypes into flight systems and staged the transition toward higher-rate deep space networking <a class="cite" href="#ref-2">[2]</a><a class="cite" href="#ref-7">[7]</a>. Lightlag assumes those transport capabilities exist and asks a narrower question: once a bundle arrives, how much unresolved conversation should still remain?
       </p>
 
-      <h3>2.2 NASA DTN deployment history</h3>
+      <h3>Vint Cerf's Interplanetary Internet</h3>
       <p>
-        NASA's DTN implementation has progressed from research to operational deployment over two decades. The first space-based DTN experiment was conducted on the UK-DMC satellite in 2008. In 2012, NASA successfully demonstrated DTN from the ISS to Earth ground stations. By 2016, DTN was operational on the ISS, handling routine file transfers and crew email <span class="cite" title="NASA, DTN on the International Space Station, 2016">[9]</span>. Mars relay operations currently use a proprietary proximity-1 protocol rather than full DTN, but NASA's SCaN (Space Communications and Navigation) program has identified DTN as the baseline architecture for future Mars surface-to-Earth communications <span class="cite" title="NASA SCaN, Deep Space Communication Architecture Study, 2020">[10]</span>.
+        The Interplanetary Internet framing by Cerf, Hooke, Torgerson, Burleigh, and others remains the clearest conceptual ancestor for this work. Their contribution was to reject terrestrial assumptions about persistence, symmetry, and low latency, and to articulate a protocol approach designed for scheduled contacts and deep-space delay <a class="cite" href="#ref-8">[8]</a>. Lightlag extends that logic upward into the application layer: if transport assumptions must change for space, conversational assumptions likely must change as well.
       </p>
 
-      <h3>2.3 IETF DTN Research Group and standards</h3>
+      <h3>DTNRG and IETF RFCs</h3>
       <p>
-        The DTNRG, chartered within the IETF's Internet Research Task Force (IRTF), produced the foundational specifications for delay-tolerant networking. RFC 4838 <span class="cite" title="RFC 4838">[5]</span> defines the DTN architecture. RFC 9171 <span class="cite" title="RFC 9171">[6]</span> specifies Bundle Protocol version 7, replacing the experimental RFC 5050. RFC 9172 defines the Bundle Protocol Security (BPSec) specification for end-to-end security in DTN <span class="cite" title="RFC 9172, Bundle Protocol Security Specification">[11]</span>. RFC 5326 <span class="cite" title="RFC 5326">[7]</span> specifies the Licklider Transmission Protocol for convergence-layer reliability. These standards collectively provide the reliable transport substrate on which Lightlag operates.
+        The DTN Research Group and the later IETF standards process define the substrate on which Lightlag would operate. RFC 4838 outlines the DTN architecture. RFC 5326 defines LTP. RFC 9171 standardizes BPv7. RFC 9172 standardizes BPSec <a class="cite" href="#ref-3">[3]</a><a class="cite" href="#ref-4">[4]</a><a class="cite" href="#ref-5">[5]</a><a class="cite" href="#ref-6">[6]</a>. Those documents treat payloads as transport objects. Lightlag treats them as structured opportunities for pre-resolving future turns.
       </p>
 
-      <h3>2.4 AI and machine learning applied to DTN routing</h3>
+      <h3>AI and machine learning applied to DTN routing</h3>
       <p>
-        Recent work has explored applying machine learning to DTN routing optimization. Dudukovich et al. at NASA Glenn Research Center investigated using reinforcement learning for contact graph routing in space networks, demonstrating that ML-based routing can outperform static contact plans when network topology changes unpredictably <span class="cite" title="Dudukovich et al., Machine Learning for DTN Contact Graph Routing, NASA GRC, 2019">[12]</span>. Fraire et al. proposed using neural networks to predict contact opportunities in disruption-tolerant satellite networks <span class="cite" title="Fraire et al., Contact Plan Design for DTN Satellite Networks, 2021">[13]</span>. Burleigh et al. explored autonomous network management for deep space missions using cognitive networking approaches <span class="cite" title="Burleigh et al., Autonomous DTN Network Management, JPL, 2019">[14]</span>.
+        NASA-related research has already explored adaptive and machine-learned approaches to DTN routing. Dudukovich, Papachristou, Hallstrom, and Thompson proposed a machine-learning concept for DTN routing in 2017, explicitly aiming at dynamic contact opportunities and resilience in challenged environments <a class="cite" href="#ref-9">[9]</a>. Dudukovich's later dissertation extended this line of work into reinforcement-learning strategies for spacecraft-oriented DTN systems <a class="cite" href="#ref-10">[10]</a>. Francis, Vazquez-Castro, Ramamurthy, and Basu applied cognitive routing ideas to DTN-enabled space gateway services in swarm topologies <a class="cite" href="#ref-11">[11]</a>.
       </p>
       <p>
-        These efforts focus on optimizing the network layer — improving when and how bundles are routed. Lightlag addresses a complementary problem at the application layer: optimizing what is transmitted. Rather than improving the path a message takes, we reduce the number of messages required. Both approaches are synergistic; a Lightlag context bundle benefits equally from improved DTN routing.
-      </p>
-
-      <h3>2.5 Predictive and anticipatory communication systems</h3>
-      <p>
-        The concept of anticipatory communication has been explored in terrestrial contexts. Smart reply systems (Kannan et al., 2016) <span class="cite" title="Kannan et al., Smart Reply: Automated Response Suggestion for Email, Google, 2016">[15]</span> demonstrated that AI can predict likely responses to messages with useful accuracy. More recently, large language models have shown strong performance in generating contextually appropriate multi-turn dialogue <span class="cite" title="Brown et al., Language Models are Few-Shot Learners, 2020">[16]</span>. Lightlag extends these capabilities from response suggestion to full predictive context tree generation, and adds the critical human-in-the-loop correction mechanism that makes the predictions converge toward accurate communication rather than drift.
+        That body of work is important because it shows AI being used at the network decision layer. Lightlag addresses a different but adjacent layer. Instead of asking which path a message should take, it asks what additional context should travel with the message so that fewer delayed exchanges are needed after delivery.
       </p>
     </div>
   </div>
 </section>
 
-<!-- 3. PROPOSED PROTOCOL -->
 <section class="paper-section" id="protocol">
   <div class="container">
-    <div class="section-num">03 — Proposed Protocol</div>
-    <h2 class="section-title">The Lightlag protocol</h2>
+    <div class="section-num">04 — Proposed Protocol</div>
+    <h2 class="section-title">Lightlag as an application-layer protocol above BPv7</h2>
     <div class="section-body">
-
-      <h3>3.1 Design principles</h3>
       <p>
-        Lightlag is built on four core mechanisms, each addressing a specific aspect of the latency problem:
+        Lightlag is proposed as a semantic layer that wraps human-authored messages in a machine-generated context envelope before those messages enter the existing DTN stack. The protocol is designed around four operating mechanisms.
       </p>
 
       <div class="def-list">
         <div class="def-item">
-          <div class="def-term">Predictive Context Expansion</div>
-          <div class="def-desc">Before any message is transmitted, a sender-side AI agent analyzes the outgoing message and generates a context bundle containing: (a) the original message, (b) anticipated follow-up questions with pre-computed answers, (c) branching response trees for likely conversational paths, and (d) relevant contextual data attachments (sensor logs, inventory records, prior conversation history). The receiver's AI unpacks this bundle and presents the expanded context alongside the original message.</div>
+          <div class="def-term">Predictive context expansion</div>
+          <div class="def-desc">Before transmission, the sender-side agent generates likely follow-up questions, draft answers, relevant documents, state snapshots, and confidence scores. The intent is to ship not just the immediate message but the near future of the conversation.</div>
         </div>
         <div class="def-item">
-          <div class="def-term">Iterative Convergence via Human-in-the-Loop Correction</div>
-          <div class="def-desc">After each transmission, the receiving human reviews AI-generated expansions, corrects inaccurate predictions, confirms accurate ones, and adds new information. This correction signal is fed back to both local and remote AI agents, improving prediction accuracy in subsequent rounds. Empirically, AI predictions converge to approximately 80% accuracy within 2-3 exchanges in domain-specific conversations.</div>
+          <div class="def-term">Iterative convergence through human-in-the-loop correction</div>
+          <div class="def-desc">The receiver reviews the machine expansions, accepts useful ones, rejects inaccurate ones, and adds missing context. Those corrections become part of the next outbound bundle so both sides converge on a more accurate shared state rather than continuing to drift.</div>
         </div>
         <div class="def-item">
-          <div class="def-term">Retroactive Editing</div>
-          <div class="def-desc">Either party can edit the AI-generated context from previous rounds retroactively. These edits are transmitted as diffs in the next outgoing bundle, allowing both sides to maintain a converging shared understanding. This is analogous to a version-controlled conversation where both participants can amend the historical record.</div>
+          <div class="def-term">Retroactive editing</div>
+          <div class="def-desc">Prior assumptions can be corrected after the fact. Instead of treating each turn as immutable, Lightlag allows later bundles to carry diffs against earlier machine inferences so the conversation history itself becomes editable and progressively cleaned up.</div>
         </div>
         <div class="def-item">
-          <div class="def-term">Blackout Delegation</div>
-          <div class="def-desc">Before anticipated communication blackouts (solar conjunction, orbital geometry gaps, scheduled maintenance), Earth and Mars AI agents negotiate a delegation handoff. The Mars-side agent receives pre-authorized decision parameters, escalation thresholds, and contingency protocols. During blackout, the agent operates autonomously within these bounds, queuing decisions and status reports for burst transmission when the link reopens.</div>
+          <div class="def-term">Blackout delegation</div>
+          <div class="def-desc">Ahead of conjunction or scheduled blackout, Earth-side operators can delegate bounded decision authority, escalation rules, and contingency playbooks to a local Mars-side agent. During the blackout, the local system acts within that scope and queues a reconciliation log for the first post-blackout contact window.</div>
         </div>
       </div>
 
-      <h3>3.2 Protocol stack position</h3>
+      <h3>Protocol stack diagram</h3>
       <p>
-        Lightlag operates as an application-layer protocol atop the existing interplanetary networking stack. It does not replace or modify any existing DTN infrastructure. It consumes Bundle Protocol services for reliable delivery and adds semantic intelligence to each transmitted bundle.
+        The protocol stack position below is carried directly from the concept page because it captures the architectural claim cleanly: Lightlag occupies the gap between transport reliability and application semantics.
       </p>
 
       <div class="stack">
@@ -788,373 +737,271 @@ blockquote cite {
         </div>
         <div class="stack-layer">
           <span class="stack-layer-name">Link Layer</span>
-          <span class="stack-layer-desc">RF (DSN, UHF), Optical (DSOC, Starlink-Mars)</span>
+          <span class="stack-layer-desc">RF (DSN, UHF), Optical (DSOC, future relays)</span>
         </div>
         <div class="stack-layer">
           <span class="stack-layer-name">Physical Layer</span>
-          <span class="stack-layer-desc">Relay orbiters (MRO, MAVEN, TGO), ground stations, laser terminals</span>
+          <span class="stack-layer-desc">Relay orbiters, ground stations, optical terminals</span>
         </div>
       </div>
       <div class="stack-annotation">&#8593; Lightlag occupies the gap between application semantics and transport infrastructure.</div>
-      <div class="figure-label"><strong>Figure 1.</strong> Lightlag protocol stack position relative to existing DTN/BPv7 architecture.</div>
+      <div class="figure-label"><strong>Figure 1.</strong> Lightlag protocol stack position relative to the existing DTN and BPv7 architecture.</div>
 
-      <h3>3.3 Bundle structure</h3>
-      <p>
-        A Lightlag context bundle is structured as a BPv7 administrative record extension containing the following fields:
-      </p>
-
+      <h3>Illustrative bundle structure</h3>
       <table class="data-table">
-        <caption>Table 1 — Lightlag Bundle Fields</caption>
+        <caption>Table 1 — Proposed Lightlag Bundle Fields</caption>
         <thead>
           <tr>
             <th>Field</th>
             <th>Type</th>
-            <th>Description</th>
+            <th>Purpose</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>original_message</code></td>
             <td>Text</td>
-            <td>The human-authored message, unmodified</td>
+            <td>Human-authored source message</td>
           </tr>
           <tr>
             <td><code>context_tree</code></td>
             <td>JSON</td>
-            <td>Predicted Q&amp;A branches (max depth 3, max breadth 5)</td>
+            <td>Predicted follow-up branches and draft answers</td>
           </tr>
           <tr>
-            <td><code>data_attachments</code></td>
+            <td><code>attachments</code></td>
             <td>Binary[]</td>
-            <td>Referenced sensor data, logs, images</td>
+            <td>Supporting logs, sensor traces, images, manuals, or forms</td>
           </tr>
           <tr>
             <td><code>retro_edits</code></td>
             <td>Diff[]</td>
-            <td>Corrections to prior round context trees</td>
+            <td>Corrections against prior machine assumptions</td>
           </tr>
           <tr>
             <td><code>confidence_map</code></td>
             <td>Float[]</td>
-            <td>Per-prediction confidence scores (0.0–1.0)</td>
+            <td>Per-branch confidence used for UI ranking and review</td>
           </tr>
           <tr>
             <td><code>delegation_params</code></td>
             <td>JSON</td>
-            <td>Blackout authority scope (optional, pre-conjunction only)</td>
+            <td>Bounded authority rules for blackout periods</td>
           </tr>
           <tr>
             <td><code>session_id</code></td>
             <td>UUID</td>
-            <td>Conversation session identifier for state tracking</td>
-          </tr>
-          <tr>
-            <td><code>round_number</code></td>
-            <td>Int</td>
-            <td>Sequential exchange counter within session</td>
+            <td>Conversation identifier across delayed transmissions</td>
           </tr>
         </tbody>
       </table>
 
-      <h3>3.4 Transmission sequence</h3>
-      <p>
-        The following diagram illustrates a complete Lightlag session resolving a technical issue in 3 transmissions rather than the 10+ that would be required with conventional messaging:
-      </p>
-
+      <h3>Illustrative transmission sequence</h3>
       <div class="protocol-visual">
         <div class="protocol-header">
-          <span>Transmission Sequence — Example Session</span>
-          <span>3 transmissions = 15 effective exchanges</span>
+          <span>Example session</span>
+          <span>3 transmissions instead of 10+</span>
         </div>
         <div class="protocol-body">
           <div class="round">
             <div class="round-earth">
-              <div class="round-label">Earth — Alice (Mission Control)</div>
-              Original: "Did the Bay 3 pressure look off to you?"<br>
-              <span class="round-tag">+ 4 predicted follow-ups with answers</span><br>
-              <span class="round-tag">+ pressure trend data (7 days)</span><br>
-              <span class="round-tag">+ calibration schedule context</span>
+              <div class="round-label">Earth</div>
+              Message: "Bay 3 pressure drift still looks wrong."<br>
+              <span class="round-tag">+ predicted troubleshooting branches</span><br>
+              <span class="round-tag">+ seven-day sensor trend</span><br>
+              <span class="round-tag">+ calibration history</span>
             </div>
             <div class="round-arrow">
               20 min
-              <svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+              <svg width="40" height="12" viewBox="0 0 40 12" aria-hidden="true"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
               Tx 1
             </div>
             <div class="round-mars">
-              <div class="round-label">Mars — Bob (Hab Engineer)</div>
-              Receives full context. AI anticipated sensor calibration question.
-              Edits one expansion. Adds secondary valve observation.
-              <span class="round-tag">= 5 exchanges resolved in 1 transmission</span>
+              <div class="round-label">Mars</div>
+              Crew reviews the original note plus pre-expanded diagnostic context and corrects one machine guess immediately.
+              <span class="round-tag">several clarifications resolved locally</span>
             </div>
           </div>
 
           <div class="round">
             <div class="round-mars">
-              <div class="round-label">Mars — Bob</div>
-              Response + corrected expansions + valve anomaly data.<br>
-              <span class="round-tag">+ 3 predicted follow-ups with answers</span><br>
-              <span class="round-tag">+ valve diagnostic log</span>
+              <div class="round-label">Mars</div>
+              Response bundle includes corrected context, valve telemetry, and next-step observations.
+              <span class="round-tag">+ retroactive edits to round 1</span>
             </div>
             <div class="round-arrow">
               20 min
-              <svg width="40" height="12" viewBox="0 0 40 12"><line x1="6" y1="6" x2="40" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="2,2 8,6 2,10" fill="none" stroke="currentColor" stroke-width="1" transform="translate(-2,0)"/></svg>
+              <svg width="40" height="12" viewBox="0 0 40 12" aria-hidden="true"><line x1="6" y1="6" x2="40" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="2,2 8,6 2,10" fill="none" stroke="currentColor" stroke-width="1" transform="translate(-2,0)"/></svg>
               Tx 2
             </div>
             <div class="round-earth">
-              <div class="round-label">Earth — Alice</div>
-              8 of 10 AI predictions accurate. Corrects 2.
-              Adds maintenance recommendation.
-              <span class="round-tag">= 5 more exchanges resolved</span>
+              <div class="round-label">Earth</div>
+              Ground team receives both the answer and the cleaned-up context tree, reducing the need for incremental follow-ups.
+              <span class="round-tag">shared state converges</span>
             </div>
           </div>
 
           <div class="round">
             <div class="round-earth">
-              <div class="round-label">Earth — Alice</div>
-              Final confirmation + retroactive edits to Round 1 + action items.<br>
-              <span class="round-tag">conversation complete</span>
+              <div class="round-label">Earth</div>
+              Final confirmation, corrective action, and revised model assumptions are bundled together.
+              <span class="round-tag">conversation closed</span>
             </div>
             <div class="round-arrow">
               20 min
-              <svg width="40" height="12" viewBox="0 0 40 12"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+              <svg width="40" height="12" viewBox="0 0 40 12" aria-hidden="true"><line x1="0" y1="6" x2="34" y2="6" stroke="currentColor" stroke-width="1"/><polyline points="32,2 38,6 32,10" fill="none" stroke="currentColor" stroke-width="1"/></svg>
               Tx 3
             </div>
             <div class="round-mars">
-              <div class="round-label">Mars — Bob</div>
-              Full conversation resolved. 15 effective exchanges in
-              3 transmissions (60 min total signal time).
-              <span class="round-tag">Without Lightlag: 10+ transmissions, 7+ hours</span>
+              <div class="round-label">Mars</div>
+              Crew gets a final state package instead of reopening the thread for another partial clarification cycle.
+              <span class="round-tag">10+ conventional turns compressed</span>
             </div>
           </div>
         </div>
       </div>
-      <div class="figure-label"><strong>Figure 2.</strong> Three-round Lightlag session resolving a habitat pressure anomaly. Each transmission carries a predictive context bundle, reducing total exchanges from 10+ to 3.</div>
+      <div class="figure-label"><strong>Figure 2.</strong> Illustrative Lightlag exchange showing how predictive context and correction can reduce delayed conversational turns.</div>
 
-      <h3>3.5 Blackout delegation protocol</h3>
+      <h3>Blackout delegation model</h3>
       <p>
-        Solar conjunction occurs every 26 months when Mars passes behind the Sun relative to Earth. During this period, lasting approximately 14 days, all Earth-Mars communication is severed. For a Mars settlement, this means no medical consultation, no supply chain coordination, and no external oversight.
-      </p>
-      <p>
-        Before conjunction, Lightlag agents on both sides negotiate a delegation handoff. The Mars-side agent receives a <code>delegation_params</code> payload containing: pre-authorized decision categories with approval thresholds, medical protocols with escalation trees, supply chain contingencies with acceptable deviation ranges, and personal message queues with emotional context flags. During blackout, the Mars agent operates autonomously within these bounds — triaging incoming situations, making delegated decisions, and queuing status reports and decision logs for burst transmission the moment the link reopens.
-      </p>
-      <p>
-        Post-conjunction reconciliation follows a defined sequence: (1) burst transmission of all queued status reports and decisions, (2) Earth-side review and retroactive correction of any delegated decisions, (3) AI model update based on delegation accuracy, and (4) updated delegation parameters for the next conjunction.
+        Solar conjunction is the clearest case for delegation. If a Mars settlement expects a complete communication blackout, then a high-latency conversation protocol is still not enough. Lightlag therefore includes a handoff mode in which the Earth side transmits bounded authority scopes, escalation thresholds, and reconciliation rules before the blackout window starts. The Mars-side agent is not a free actor; it is a constrained delegate with logged authority and a mandatory post-blackout audit trail.
       </p>
     </div>
   </div>
 </section>
 
-<!-- 4. SIMULATION RESULTS -->
 <section class="paper-section" id="simulation">
   <div class="container">
-    <div class="section-num">04 — Simulation Results</div>
-    <h2 class="section-title">Preliminary compression analysis</h2>
+    <div class="section-num">05 — Simulation Results</div>
+    <h2 class="section-title">Placeholder compression table for planned simulation work</h2>
     <div class="section-body">
       <p>
-        We conducted preliminary simulation of Lightlag context expansion across four conversation categories using synthetic dialogues modeled on ISS crew communication logs and Mars mission simulation (HI-SEAS, MDRS) transcripts. The following table summarizes compression ratios — defined as the ratio of conventional exchanges to Lightlag transmissions required to achieve equivalent informational resolution.
+        This section is intentionally a placeholder. The table below is an illustrative planning artifact for the simulation program rather than a claim of measured experimental performance. It shows the conversation categories Lightlag should be evaluated against and the compression ratios the team intends to measure once the simulator and human-review loop are finalized.
       </p>
 
       <table class="data-table">
-        <caption>Table 2 — Conversation Compression Ratios by Category (Simulated)</caption>
+        <caption>Table 2 — Placeholder Conversation Compression Ratios</caption>
         <thead>
           <tr>
             <th>Conversation Type</th>
             <th>Conventional Exchanges</th>
-            <th>Lightlag Transmissions</th>
-            <th>Compression Ratio</th>
-            <th>AI Prediction Accuracy</th>
-            <th>Time Saved (avg delay)</th>
+            <th>Projected Lightlag Transmissions</th>
+            <th>Illustrative Compression Ratio</th>
+            <th>Why It Matters</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Technical / Engineering</td>
-            <td class="num">12.4</td>
-            <td class="num">2.8</td>
-            <td class="num">4.4x</td>
-            <td class="num">82%</td>
-            <td class="num">4h 01m</td>
+            <td>Technical</td>
+            <td class="num">11</td>
+            <td class="num">3</td>
+            <td class="num">3.7x</td>
+            <td>Equipment diagnosis, maintenance, and anomaly resolution</td>
           </tr>
           <tr>
-            <td>Personal / Family</td>
-            <td class="num">8.2</td>
-            <td class="num">2.1</td>
-            <td class="num">3.9x</td>
-            <td class="num">71%</td>
-            <td class="num">2h 33m</td>
+            <td>Personal</td>
+            <td class="num">7</td>
+            <td class="num">3</td>
+            <td class="num">2.3x</td>
+            <td>Emotional nuance is harder to predict and should be treated conservatively</td>
           </tr>
           <tr>
-            <td>Emergency / Medical</td>
-            <td class="num">15.6</td>
-            <td class="num">3.2</td>
-            <td class="num">4.9x</td>
-            <td class="num">78%</td>
-            <td class="num">5h 11m</td>
+            <td>Emergency</td>
+            <td class="num">14</td>
+            <td class="num">3</td>
+            <td class="num">4.7x</td>
+            <td>Time-critical triage benefits from aggressive pre-staging of likely branches</td>
           </tr>
           <tr>
-            <td>Supply Chain / Logistics</td>
-            <td class="num">10.8</td>
-            <td class="num">2.4</td>
+            <td>Supply Chain</td>
+            <td class="num">9</td>
+            <td class="num">2</td>
             <td class="num">4.5x</td>
-            <td class="num">86%</td>
-            <td class="num">3h 31m</td>
+            <td>Structured requests and inventories are good candidates for anticipatory expansion</td>
           </tr>
         </tbody>
       </table>
-      <div class="table-note">Simulated at 12.5-minute average one-way delay. n=50 synthetic conversations per category. Prediction accuracy measured as percentage of AI-generated context items accepted without correction by the receiving party.</div>
+      <div class="table-note"><strong>Note:</strong> Placeholder values only. Replace with measured results after simulator runs, reviewer scoring, and error analysis.</div>
 
-      <p>
-        Supply chain and logistics conversations showed the highest prediction accuracy (86%), likely because these exchanges follow relatively structured patterns with well-defined data dependencies. Personal and family conversations showed the lowest accuracy (71%), reflecting the higher unpredictability of emotional and social context. Emergency/medical scenarios achieved the highest absolute compression (4.9x) because the urgency context enables the AI to aggressively pre-stage diagnostic data, treatment protocols, and decision trees.
-      </p>
-
-      <h3>4.1 Bandwidth overhead</h3>
-      <p>
-        Lightlag context bundles are larger than conventional messages. Average bundle size across all categories was 14.2 KB compared to 0.8 KB for a conventional text message — a 17.8x increase in per-transmission data. However, given projected bandwidth availability (100+ Mbps optical links), this overhead is negligible. The critical resource being conserved is not bandwidth but wall-clock time and human attention.
-      </p>
-
-      <table class="data-table">
-        <caption>Table 3 — Bandwidth Overhead Analysis</caption>
-        <thead>
-          <tr>
-            <th>Metric</th>
-            <th>Conventional</th>
-            <th>Lightlag</th>
-            <th>Delta</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Avg message size</td>
-            <td class="num">0.8 KB</td>
-            <td class="num">14.2 KB</td>
-            <td class="num">+17.8x</td>
-          </tr>
-          <tr>
-            <td>Total data per conversation</td>
-            <td class="num">9.6 KB</td>
-            <td class="num">36.8 KB</td>
-            <td class="num">+3.8x</td>
-          </tr>
-          <tr>
-            <td>Total wall-clock time</td>
-            <td class="num">4h 10m</td>
-            <td class="num">58m</td>
-            <td class="num">-77%</td>
-          </tr>
-          <tr>
-            <td>Human attention required</td>
-            <td class="num">~50 min</td>
-            <td class="num">~18 min</td>
-            <td class="num">-64%</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="table-note">Based on 10-exchange technical conversation at 12.5-minute average delay. Total data includes all context bundles vs. all conventional messages for equivalent informational exchange.</div>
-
-      <h4>Limitations</h4>
-      <p>
-        These results are preliminary and based on synthetic conversations. Real-world validation will require testing with astronaut crew members in simulated and actual delay environments. Prediction accuracy is expected to improve with domain-specific fine-tuning and user-specific adaptation over time. The simulation does not yet account for multi-party conversations, which introduce additional complexity in context tree generation.
-      </p>
+      <div class="note-box">
+        <div class="eyebrow">Measurement Plan</div>
+        <p>
+          The eventual simulation program should score not just compression ratio, but also hallucination rate, correction burden, user trust, and task-completion time. A protocol that compresses turns while increasing operator error is not an improvement.
+        </p>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- 5. FUTURE WORK -->
 <section class="paper-section" id="future-work">
   <div class="container">
-    <div class="section-num">05 — Future Work</div>
-    <h2 class="section-title">Development roadmap</h2>
+    <div class="section-num">06 — Future Work</div>
+    <h2 class="section-title">Validation path from orbit to Mars</h2>
     <div class="section-body">
-
-      <h3>5.1 ISS testing (2027–2028)</h3>
+      <h3>ISS testing</h3>
       <p>
-        The first empirical validation of Lightlag will use artificial latency injection on ISS crew communications. By inserting configurable delays (3–24 minutes) into the existing crew-to-ground communication pipeline, we can test AI context expansion with real astronaut conversations in a controlled environment. This phase will partner with NASA's Space Communications and Navigation (SCaN) program, which has an existing commercial services framework for ISS communication experiments. Key metrics: prediction accuracy across conversation types, crew acceptance rates, and comparison of task completion times with and without Lightlag.
+        The first useful testbed is artificial latency injection around crew-support workflows already resembling delayed operational communication. The ISS matters because NASA has already used it as a DTN proving ground <a class="cite" href="#ref-2">[2]</a><a class="cite" href="#ref-7">[7]</a>. Lightlag could be evaluated there without pretending that LEO is Mars; the point would be workflow realism, not identical signal delay.
       </p>
 
-      <h3>5.2 Lunar Gateway integration (2028–2030)</h3>
+      <h3>Lunar Gateway integration</h3>
       <p>
-        NASA's Lunar Gateway station, planned for a near-rectilinear halo orbit around the Moon, provides the first real-latency testbed. The 1.3-second Earth-Moon delay is short enough that conventional communication remains functional but long enough to create meaningful conversational friction — particularly for time-sensitive EVA support and medical consultation. Lightlag integration at the Gateway would serve as both a technology demonstration and a genuine operational improvement. The Artemis program's emphasis on international partnerships and commercial involvement provides natural collaboration pathways.
+        Gateway provides a nearer operational environment in which communication remains usable but no longer feels instantaneous. That is a useful middle ground: enough delay to expose friction, enough access to iterate safely. A Gateway deployment would also test how Lightlag behaves when mission operations, international partners, and higher-value procedural traffic all share the same communications environment.
       </p>
 
-      <h3>5.3 Mars deployment (2030–2032+)</h3>
+      <h3>Mars deployment</h3>
       <p>
-        Full Mars deployment is contingent on the establishment of reliable Earth-Mars relay infrastructure and crewed surface operations. SpaceX's current Mars architecture timeline suggests initial cargo missions in the late 2020s with crewed missions following in the early 2030s. Lightlag would serve as the default human communication layer for Earth-Mars interaction, handling technical, personal, administrative, and emergency communication. The blackout delegation protocol becomes operationally critical during this phase, with solar conjunction occurring every 26 months.
-      </p>
-
-      <h3>5.4 Open research questions</h3>
-      <p>
-        Several questions remain for future investigation: (a) optimal context tree depth and breadth as a function of conversation type, (b) multi-party conversation support with divergent context trees, (c) cross-cultural and cross-language prediction accuracy, (d) integration with non-text modalities (video, spatial data, medical imaging), and (e) formal verification of blackout delegation safety properties.
+        Mars is the actual target environment. A production deployment would need to integrate with relay scheduling, local crew interfaces, mission logs, medical escalation, and blackout governance during conjunction. The deeper question is not whether a language model can generate plausible branches. It is whether a human crew would trust the protocol enough to rely on it when the cost of an extra round trip is measured in lost hours.
       </p>
     </div>
   </div>
 </section>
 
-<!-- 6. REFERENCES -->
 <section class="paper-section" id="references">
   <div class="container">
-    <div class="section-num">06 — References</div>
+    <div class="section-num">07 — References</div>
     <h2 class="section-title">References</h2>
     <ol class="ref-list">
-      <li>
-        NASA Jet Propulsion Laboratory. "Deep Space Optical Communications (DSOC) Technology Demonstration." <em>Psyche Mission Technology Demonstrations</em>, 2024. NASA JPL.
+      <li id="ref-1">
+        NASA Jet Propulsion Laboratory. <a href="https://www.jpl.nasa.gov/news/nasas-optical-comms-demo-transmits-data-over-140-million-miles/">"NASA's Optical Comms Demo Transmits Data Over 140 Million Miles."</a> April 2024.
       </li>
-      <li>
-        Lockheed Martin Space. "Mars Relay Network Architecture Study: Commercial Communications Infrastructure for Sustained Mars Operations." <em>Technical Report</em>, 2023.
+      <li id="ref-2">
+        Schlesinger, P., Willman, D., Pitts, J., Davidson, J., and Pohlchuck, A. <a href="https://ntrs.nasa.gov/citations/20170010395">"Delay/Disruption Tolerant Networking for the International Space Station (ISS)."</a> NASA Technical Paper, 2017.
       </li>
-      <li>
-        Williams, D.R. "Mars Fact Sheet." <em>NASA Goddard Space Flight Center, Planetary Fact Sheets</em>, 2024. Available: nssdc.gsfc.nasa.gov/planetary/factsheet/marsfact.html
+      <li id="ref-3">
+        Cerf, V., Burleigh, S., Hooke, A., Torgerson, L., Durst, R., Scott, K., Fall, K., and Weiss, H. <a href="https://www.rfc-editor.org/rfc/rfc4838">"Delay-Tolerant Networking Architecture."</a> RFC 4838, April 2007.
       </li>
-      <li>
-        Clark, H.H. and Brennan, S.E. "Grounding in Communication." <em>Perspectives on Socially Shared Cognition</em>, eds. L.B. Resnick, J.M. Levine, and S.D. Teasley. American Psychological Association, 1991, pp. 127–149.
+      <li id="ref-4">
+        Ramadas, M., Burleigh, S., and Farrell, S. <a href="https://www.rfc-editor.org/rfc/rfc5326">"Licklider Transmission Protocol - Specification."</a> RFC 5326, September 2008.
       </li>
-      <li>
-        Cerf, V., Burleigh, S., Hooke, A., Torgerson, L., Durst, R., Scott, K., Fall, K., and Weiss, H. "Delay-Tolerant Networking Architecture." <em>RFC 4838</em>, IRTF, April 2007.
+      <li id="ref-5">
+        Burleigh, S., Fall, K., and Birrane, E. <a href="https://www.rfc-editor.org/rfc/rfc9171">"Bundle Protocol Version 7."</a> RFC 9171, January 2022.
       </li>
-      <li>
-        Burleigh, S., Fall, K., and Birrane, E. "Bundle Protocol Version 7." <em>RFC 9171</em>, IETF, January 2022.
+      <li id="ref-6">
+        Birrane, E. and McKeever, K. <a href="https://www.rfc-editor.org/rfc/rfc9172">"Bundle Protocol Security (BPSec)."</a> RFC 9172, January 2022.
       </li>
-      <li>
-        Ramadas, M., Burleigh, S., and Farrell, S. "Licklider Transmission Protocol — Specification." <em>RFC 5326</em>, IETF, September 2008.
+      <li id="ref-7">
+        Caylor, M.J., Pitts, J., and Schlesinger, P. <a href="https://ntrs.nasa.gov/citations/20240006817">"The International Space Station, Optical Communications, and Delay Tolerant Networking: Towards A Solar System Internet Architecture."</a> NASA, 2024.
       </li>
-      <li>
-        Cerf, V., Hooke, A., Torgerson, L., and Burleigh, S. "The Interplanetary Internet: A Communications Infrastructure for Mars Exploration." <em>53rd International Astronautical Congress</em>, IAF, 1998.
+      <li id="ref-8">
+        Burleigh, S., Hooke, A., Torgerson, L., Fall, K., Cerf, V., Durst, B., Scott, K., and Weiss, H. <a href="https://ntrs.nasa.gov/citations/20030067908">"The Interplanetary Internet: A Communications Infrastructure for Mars Exploration."</a> Acta Astronautica 53(4-10), 2003.
       </li>
-      <li>
-        NASA. "Delay Tolerant Networking Aboard the International Space Station." <em>SCaN Technology and Standards</em>, 2016.
+      <li id="ref-9">
+        Dudukovich, R., Papachristou, C., Hallstrom, J., and Thompson, J. <a href="https://ntrs.nasa.gov/citations/20180001009">"A Machine Learning Concept for DTN Routing."</a> IEEE WiSEE, 2017.
       </li>
-      <li>
-        NASA Space Communications and Navigation (SCaN). "Deep Space Communication and Navigation Architecture Study for Mars Exploration." <em>SCaN Technical Report SCaN-2020-001</em>, 2020.
+      <li id="ref-10">
+        Dudukovich, R.W. <a href="https://ntrs.nasa.gov/citations/20190030424">"Utilizing Reinforcement Learning for Delay Tolerant Networking in Spacecraft Systems."</a> PhD dissertation, 2019.
       </li>
-      <li>
-        Birrane, E. and McKeever, K. "Bundle Protocol Security (BPSec)." <em>RFC 9172</em>, IETF, January 2022.
-      </li>
-      <li>
-        Dudukovich, R., Papachristou, C., and Hallstrom, J. "Machine Learning for Predictive Routing in Delay-Tolerant Space Networks." <em>IEEE Aerospace Conference</em>, 2019.
-      </li>
-      <li>
-        Fraire, J.A., De Jonckere, O., and Burleigh, S. "Contact Plan Design for DTN Satellite Networks." <em>IEEE International Conference on Communications (ICC)</em>, 2021.
-      </li>
-      <li>
-        Burleigh, S., Caini, C., Messina, J., and Rodolfi, M. "Toward a Unified Routing Framework for Delay-Tolerant Networking." <em>IEEE International Conference on Wireless for Space and Extreme Environments (WiSEE)</em>, 2019.
-      </li>
-      <li>
-        Kannan, A., Kurach, K., Ravi, S., Vinyals, O., et al. "Smart Reply: Automated Response Suggestion for Email." <em>Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining</em>, 2016.
-      </li>
-      <li>
-        Brown, T.B., Mann, B., Ryder, N., Subbiah, M., et al. "Language Models are Few-Shot Learners." <em>Advances in Neural Information Processing Systems (NeurIPS)</em>, 33, 2020.
+      <li id="ref-11">
+        Francis, D., Vazquez-Castro, M., Ramamurthy, B., and Basu, K. <a href="https://ntrs.nasa.gov/citations/20210001706">"Applying the Cognitive Space Gateway to Swarm Topologies."</a> NASA / Aerospace Conference publication, 2021.
       </li>
     </ol>
   </div>
 </section>
 
-<!-- FOOTER -->
 <div class="footer">
   <div class="container">
-    <p>A research concept from <a href="https://briu.ai">Briu.ai</a> — AI agent implementation, Seattle WA</p>
-    <p class="footer-line">This whitepaper is part of the <a href="../lightlag-concept.html">Lightlag</a> open research project.</p>
-    <p class="footer-line" style="margin-top: 16px; font-size: 10px;">
-      &copy; 2026 Briu.ai. This work is published under a Creative Commons Attribution 4.0 International License.
-    </p>
+    <p>This whitepaper is part of the <a href="../lightlag-concept.html">Lightlag</a> concept set.</p>
+    <p class="footer-line">Built in the same visual system as the concept page for web reading rather than PDF export.</p>
   </div>
 </div>
 

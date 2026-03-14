@@ -17,13 +17,8 @@
   </url>
   <url>
     <loc>https://briu.ai/build/</loc>
-    <lastmod>2026-03-08</lastmod>
+    <lastmod>2026-03-13</lastmod>
     <priority>0.8</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/brand-in-a-session/</loc>
-    <lastmod>2026-03-08</lastmod>
-    <priority>0.7</priority>
   </url>
   <url>
     <loc>https://briu.ai/build/the-real-numbers/</loc>
@@ -31,27 +26,7 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://briu.ai/build/how-we-built-briu-using-our-own-agent-stack/</loc>
-    <lastmod>2026-03-08</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://briu.ai/build/from-comment-to-fix-in-one-loop/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/six-layers-deep/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/we-tried-to-break-our-own-sanitizer/</loc>
-    <lastmod>2026-03-09</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/voice-profile/</loc>
     <lastmod>2026-03-09</lastmod>
     <priority>0.7</priority>
   </url>
@@ -71,11 +46,6 @@
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://briu.ai/refer/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://briu.ai/free-audit/</loc>
     <lastmod>2026-03-13</lastmod>
     <priority>0.8</priority>
@@ -91,42 +61,12 @@
     <priority>0.4</priority>
   </url>
   <url>
-    <loc>https://briu.ai/build/cost-arbitrage/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/dispatch-dashboard/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/how-we-red-teamed-our-own-agent/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://briu.ai/build/multi-agent-dispatch/</loc>
     <lastmod>2026-03-13</lastmod>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://briu.ai/build/operations/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://briu.ai/build/security-methodology/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/velocity/</loc>
-    <lastmod>2026-03-13</lastmod>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://briu.ai/build/what-a-real-session-actually-costs/</loc>
     <lastmod>2026-03-13</lastmod>
     <priority>0.7</priority>
   </url>

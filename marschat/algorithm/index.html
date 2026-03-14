@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lightlag Algorithm — Interactive Protocol Walkthrough</title>
+<meta name="description" content="Interactive explanation of the Lightlag protocol algorithm: pipeline, ContextBundle schema, correction loop, and latency compression calculator.">
+<meta property="og:title" content="Lightlag Algorithm — Interactive Protocol Walkthrough">
+<meta property="og:description" content="See how Lightlag expands, validates, transmits, unpacks, and converges across high-latency communication loops.">
+<meta property="og:image" content="https://briu.ai/marschat/assets/og.svg">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://briu.ai/marschat/assets/og.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #06080a;
+  --bg-elevated: #0c1015;
+  --bg-panel: #111820;
+  --text: #d4dae3;
+  --text-dim: #6b7a8d;
+  --text-bright: #f0f4f8;
+  --accent: #3d9e9e;
+  --accent-glow: rgba(61, 158, 158, 0.15);
+  --mars: #c0714a;
+  --mars-glow: rgba(192, 113, 74, 0.15);
+  --earth: #4a8ec0;
+  --earth-glow: rgba(74, 142, 192, 0.15);
+  --amber: #d4a843;
+  --border: rgba(107, 122, 141, 0.15);
+  --mono: 'JetBrains Mono', monospace;
+  --serif: 'Instrument Serif', Georgia, serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background:
+    radial-gradient(circle at top left, rgba(74, 142, 192, 0.12), transparent 32%),
+    radial-gradient(circle at top right, rgba(192, 113, 74, 0.12), transparent 28%),
+    var(--bg);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+::selection { background: var(--accent); color: var(--bg); }
+
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+.container {
+  width: min(1120px, calc(100% - 48px));
+  margin: 0 auto;
+}
+
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(6, 8, 10, 0.85);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border);
+  font-size: 12px;
+}
+
+.topbar-brand {
+  color: var(--accent);
+  font-weight: 500;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.topbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.topbar-link {
+  color: var(--text-dim);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  transition: color 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.topbar-link:hover,
+.topbar-link.active {
+  color: var(--text-bright);
+}
+
+.topbar-link.cta {
+  padding: 5px 12px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+}
+
+.topbar-link.cta:hover {
+  border-color: var(--accent);
+  background: var(--accent-glow);
+  color: var(--accent);
+}
+
+.hero {
+  padding: 140px 0 88px;
+  border-bottom: 1px solid var(--border);
+}
+
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
+  gap: 32px;
+  align-items: end;
+}
+
+.hero-label,
+.section-num,
+.panel-kicker,
+.card-kicker {
+  font-size: 11px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.hero h1 {
+  margin: 20px 0 28px;
+  font-family: var(--serif);
+  font-size: clamp(42px, 7vw, 78px);
+  font-weight: 400;
+  line-height: 1.03;
+  color: var(--text-bright);
+}
+
+.hero h1 em {
+  font-style: italic;
+  color: var(--accent);
+}
+
+.hero-sub {
+  max-width: 680px;
+  color: var(--text-dim);
+  font-size: 15px;
+  line-height: 1.9;
+}
+
+.hero-sub strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.hero-aside {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(12, 16, 21, 0.95), rgba(17, 24, 32, 0.75));
+  padding: 24px;
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+  margin-top: 20px;
+}
+
+.hero-stat {
+  background: var(--bg-elevated);
+  padding: 18px;
+}
+
+.hero-stat-label {
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.hero-stat-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.hero-stat-value.accent { color: var(--accent); }
+.hero-stat-value.earth { color: var(--earth); }
+.hero-stat-value.mars { color: var(--mars); }
+
+.hero-note {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+section {
+  padding: 92px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.section-head {
+  margin-bottom: 36px;
+}
+
+.section-num {
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-num::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.section-title {
+  max-width: 760px;
+  font-family: var(--serif);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 400;
+  line-height: 1.12;
+  color: var(--text-bright);
+  margin-bottom: 20px;
+}
+
+.section-body {
+  max-width: 760px;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.9;
+}
+
+.section-body p + p {
+  margin-top: 18px;
+}
+
+.highlight {
+  color: var(--accent);
+}
+
+.panel {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(12, 16, 21, 0.9), rgba(12, 16, 21, 0.65));
+  overflow: hidden;
+}
+
+.panel-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
+}
+
+.panel-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.panel-meta {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.pipeline-shell {
+  position: relative;
+  padding: 28px 24px 24px;
+}
+
+.pipeline-shell::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: 73px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(61, 158, 158, 0.5), transparent);
+}
+
+.pipeline-track {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(150px, 1fr));
+  gap: 14px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
+
+.pipeline-step {
+  position: relative;
+  min-height: 164px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: rgba(17, 24, 32, 0.56);
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: transform 0.2s, border-color 0.2s, background 0.2s, box-shadow 0.2s;
+}
+
+.pipeline-step::after {
+  content: '';
+  position: absolute;
+  top: 42px;
+  right: -14px;
+  width: 14px;
+  height: 1px;
+  background: var(--border);
+}
+
+.pipeline-step:last-child::after {
+  display: none;
+}
+
+.pipeline-step:hover {
+  transform: translateY(-2px);
+  border-color: rgba(61, 158, 158, 0.35);
+}
+
+.pipeline-step.active {
+  border-color: rgba(61, 158, 158, 0.4);
+  background: linear-gradient(180deg, rgba(61, 158, 158, 0.16), rgba(17, 24, 32, 0.8));
+  box-shadow: 0 0 0 1px rgba(61, 158, 158, 0.08), 0 18px 40px rgba(0, 0, 0, 0.22);
+}
+
+.pipeline-step.active .pipeline-index {
+  color: var(--accent);
+}
+
+.pipeline-index {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+
+.pipeline-name {
+  color: var(--text-bright);
+  font-size: 16px;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.pipeline-type {
+  display: inline-block;
+  margin-bottom: 12px;
+  padding: 3px 8px;
+  border: 1px solid rgba(107, 122, 141, 0.25);
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.pipeline-type.network {
+  color: var(--mars);
+  border-color: rgba(192, 113, 74, 0.35);
+}
+
+.pipeline-type.ai {
+  color: var(--accent);
+  border-color: rgba(61, 158, 158, 0.35);
+}
+
+.pipeline-summary {
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.pipeline-detail {
+  margin-top: 18px;
+  padding: 22px;
+  border: 1px solid var(--border);
+  background: rgba(6, 8, 10, 0.52);
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(220px, 0.85fr);
+  gap: 24px;
+}
+
+.detail-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-bright);
+  margin: 6px 0 14px;
+}
+
+.detail-text {
+  color: var(--text-dim);
+  line-height: 1.85;
+}
+
+.detail-list {
+  list-style: none;
+  display: grid;
+  gap: 10px;
+}
+
+.detail-list li {
+  padding-left: 16px;
+  position: relative;
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.detail-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 10px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.detail-aside {
+  padding: 18px;
+  border: 1px solid rgba(61, 158, 158, 0.18);
+  background: rgba(61, 158, 158, 0.08);
+}
+
+.detail-aside-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 12px;
+}
+
+.detail-aside p {
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+.schema-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(280px, 0.95fr);
+  gap: 20px;
+}
+
+.schema-panel {
+  padding: 0;
+}
+
+.schema-code {
+  padding: 18px 18px 10px;
+  background: rgba(6, 8, 10, 0.58);
+  overflow: auto;
+}
+
+.schema-line {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  padding: 5px 10px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.schema-line:hover,
+.schema-line.active {
+  background: rgba(61, 158, 158, 0.12);
+}
+
+.schema-frame {
+  cursor: default;
+}
+
+.schema-frame:hover {
+  background: transparent;
+}
+
+.schema-line-number {
+  width: 24px;
+  flex: 0 0 24px;
+  color: rgba(107, 122, 141, 0.7);
+  font-size: 11px;
+}
+
+.schema-line-content {
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.schema-key { color: var(--earth); }
+.schema-string { color: #a7d8d8; }
+.schema-number { color: var(--amber); }
+.schema-boolean { color: var(--mars); }
+.schema-brace { color: var(--text-dim); }
+
+.schema-annotation {
+  padding: 22px;
+}
+
+.annotation-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-bright);
+  margin: 8px 0 14px;
+}
+
+.annotation-copy {
+  color: var(--text-dim);
+  line-height: 1.85;
+}
+
+.annotation-points {
+  list-style: none;
+  display: grid;
+  gap: 12px;
+  margin-top: 18px;
+}
+
+.annotation-points li {
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  background: rgba(17, 24, 32, 0.46);
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--text);
+}
+
+.loop-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 20px;
+}
+
+.loop-track {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(160px, 1fr));
+  gap: 14px;
+  overflow-x: auto;
+}
+
+.loop-stage {
+  position: relative;
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: rgba(17, 24, 32, 0.52);
+  cursor: pointer;
+  transition: border-color 0.2s, transform 0.2s, background 0.2s;
+}
+
+.loop-stage::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -14px;
+  width: 14px;
+  height: 1px;
+  background: var(--border);
+}
+
+.loop-stage:last-child::after {
+  display: none;
+}
+
+.loop-stage:hover {
+  transform: translateY(-2px);
+}
+
+.loop-stage.active {
+  border-color: rgba(61, 158, 158, 0.38);
+  background: linear-gradient(180deg, rgba(61, 158, 158, 0.14), rgba(17, 24, 32, 0.82));
+}
+
+.loop-stage-label {
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+}
+
+.loop-stage-name {
+  color: var(--text-bright);
+  font-size: 15px;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+
+.loop-stage-copy {
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.75;
+}
+
+.loop-metric {
+  margin-top: 14px;
+}
+
+.loop-metric-label {
+  display: flex;
+  justify-content: space-between;
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.loop-bar {
+  height: 6px;
+  background: rgba(107, 122, 141, 0.15);
+  overflow: hidden;
+}
+
+.loop-bar span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, var(--earth), var(--accent));
+  width: var(--bar-width, 50%);
+}
+
+.loop-side {
+  padding: 22px;
+  border: 1px solid var(--border);
+  background: rgba(6, 8, 10, 0.48);
+}
+
+.loop-side-stat {
+  margin-top: 18px;
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+}
+
+.loop-side-stat:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.loop-side-value {
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--text-bright);
+}
+
+.loop-side-value.accent { color: var(--accent); }
+.loop-side-value.mars { color: var(--mars); }
+
+.loop-side-copy {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.8;
+  margin-top: 8px;
+}
+
+.formula-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.95fr) minmax(320px, 1.05fr);
+  gap: 20px;
+}
+
+.formula-card,
+.calculator-card {
+  padding: 24px;
+}
+
+.formula-block {
+  margin-top: 18px;
+  padding: 18px;
+  border: 1px solid var(--border);
+  background: rgba(6, 8, 10, 0.52);
+}
+
+.formula-line {
+  color: var(--text-bright);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.formula-line strong {
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.formula-note {
+  margin-top: 14px;
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.calc-form {
+  display: grid;
+  gap: 16px;
+}
+
+.calc-row {
+  display: grid;
+  gap: 8px;
+}
+
+.calc-label {
+  color: var(--text);
+  font-size: 12px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.calc-input {
+  width: 100%;
+  padding: 13px 14px;
+  border: 1px solid var(--border);
+  background: rgba(6, 8, 10, 0.6);
+  color: var(--text-bright);
+  outline: none;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.calc-input:focus {
+  border-color: rgba(61, 158, 158, 0.4);
+  background: rgba(17, 24, 32, 0.8);
+}
+
+.calc-results {
+  margin-top: 22px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1px;
+  background: var(--border);
+}
+
+.calc-result {
+  background: var(--bg-elevated);
+  padding: 18px;
+}
+
+.calc-result-label {
+  color: var(--text-dim);
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.calc-result-value {
+  color: var(--text-bright);
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.calc-result-value.accent {
+  color: var(--accent);
+}
+
+.calc-result-sub {
+  margin-top: 6px;
+  color: var(--text-dim);
+  font-size: 11px;
+}
+
+.calc-footnote {
+  margin-top: 18px;
+  color: var(--text-dim);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.links-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.link-card {
+  padding: 24px;
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, rgba(12, 16, 21, 0.92), rgba(17, 24, 32, 0.72));
+  transition: transform 0.2s, border-color 0.2s, background 0.2s;
+}
+
+.link-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(61, 158, 158, 0.28);
+  background: linear-gradient(180deg, rgba(61, 158, 158, 0.12), rgba(17, 24, 32, 0.82));
+}
+
+.link-card-title {
+  margin: 12px 0 10px;
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 400;
+  color: var(--text-bright);
+}
+
+.link-card-copy {
+  color: var(--text-dim);
+  line-height: 1.85;
+}
+
+.footer {
+  padding: 34px 0 48px;
+  color: var(--text-dim);
+  font-size: 12px;
+}
+
+.footer-line {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: center;
+}
+
+.footer-links {
+  display: flex;
+  gap: 18px;
+}
+
+@media (max-width: 1024px) {
+  .hero-grid,
+  .schema-layout,
+  .loop-grid,
+  .formula-grid,
+  .pipeline-detail {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 820px) {
+  .topbar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .topbar-nav {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+
+  .hero {
+    padding-top: 156px;
+  }
+
+  .hero-stats,
+  .calc-results,
+  .links-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    width: min(100% - 32px, 1120px);
+  }
+
+  .hero {
+    padding-top: 176px;
+  }
+
+  section {
+    padding: 78px 0;
+  }
+
+  .pipeline-shell::before {
+    display: none;
+  }
+
+  .pipeline-track,
+  .loop-track {
+    grid-template-columns: 1fr;
+  }
+
+  .pipeline-step::after,
+  .loop-stage::after {
+    display: none;
+  }
+
+  .footer-line {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .footer-links {
+    flex-wrap: wrap;
+  }
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="topbar-brand" href="/marschat/">Lightlag</a>
+  <div class="topbar-nav">
+    <a class="topbar-link active" href="/marschat/algorithm/">Algorithm</a>
+    <a class="topbar-link" href="/marschat/">Concept</a>
+    <a class="topbar-link" href="/marschat/proof/">Proof</a>
+    <a class="topbar-link cta" href="/marschat/whitepaper/">Whitepaper</a>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <div class="hero-label">Interactive Walkthrough — Lightlag Protocol</div>
+      <h1>The algorithm that turns <em>latency</em> into a planning problem.</h1>
+      <p class="hero-sub">
+        Lightlag does not try to outrun the speed of light. It bundles likely next moves ahead of the hop,
+        validates that bundle before transmission, and then uses receiver corrections to improve the next round.
+        <strong>The objective is fewer round trips, not bigger messages for their own sake.</strong>
+      </p>
+    </div>
+    <aside class="hero-aside">
+      <div class="panel-kicker">Compression Snapshot</div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-label">AI Calls In Loop</div>
+          <div class="hero-stat-value accent">5</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Protocol Phases</div>
+          <div class="hero-stat-value earth">6</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Typical Yield</div>
+          <div class="hero-stat-value mars">~5x</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-label">Correction Trend</div>
+          <div class="hero-stat-value accent">Down</div>
+        </div>
+      </div>
+      <p class="hero-note">The loop below shows six phases because transmission is explicit. The five AI-mediated calls are <span class="highlight">EXPAND</span>, <span class="highlight">VALIDATE</span>, <span class="highlight">UNPACK</span>, <span class="highlight">RESPOND+EXPAND</span>, and <span class="highlight">CONVERGE</span>.</p>
+    </aside>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">01 — Pipeline</div>
+      <h2 class="section-title">Five AI calls wrapped around one actual hop.</h2>
+      <div class="section-body">
+        <p>Each card is clickable. The diagram also auto-advances so the algorithm reads like a loop instead of a static list.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Lightlag Loop</div>
+        <div class="panel-meta">EXPAND &gt; VALIDATE &gt; TRANSMIT &gt; UNPACK &gt; RESPOND+EXPAND &gt; CONVERGE</div>
+      </div>
+      <div class="pipeline-shell">
+        <div class="pipeline-track" id="pipeline-track"></div>
+        <div class="pipeline-detail" id="pipeline-detail" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">02 — ContextBundle</div>
+      <h2 class="section-title">The bundle carries message intent, predicted branches, and correction history together.</h2>
+      <div class="section-body">
+        <p>The protocol needs structured context, not just a bigger prompt. Click any line in the schema to inspect what that field is doing in the loop.</p>
+      </div>
+    </div>
+
+    <div class="panel schema-panel">
+      <div class="panel-head">
+        <div class="panel-title">ContextBundle Schema</div>
+        <div class="panel-meta">Formatted JSON with field-level annotations</div>
+      </div>
+      <div class="schema-layout">
+        <div class="schema-code" id="schema-code"></div>
+        <div class="schema-annotation" id="schema-annotation" aria-live="polite"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">03 — Correction Loop</div>
+      <h2 class="section-title">Receiver edits are not failure. They are training data for the next bundle.</h2>
+      <div class="section-body">
+        <p>Lightlag improves when the receiver marks what was right, what was missing, and what should be rewritten. The next expansion round should cover more of the conversation with fewer corrections.</p>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-head">
+        <div class="panel-title">Iterative Convergence</div>
+        <div class="panel-meta">Round 1 expansions &gt; corrections &gt; Round 2 improves &gt; corrections decrease &gt; convergence</div>
+      </div>
+      <div style="padding: 24px;">
+        <div class="loop-grid">
+          <div class="loop-track" id="loop-track"></div>
+          <aside class="loop-side" id="loop-side" aria-live="polite"></aside>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">04 — Compression Metric</div>
+      <h2 class="section-title">Latency saved depends on how many exchanges the bundle resolves before the next hop.</h2>
+      <div class="section-body">
+        <p>This calculator uses a default Lightlag assumption of <span class="highlight">five effective exchanges resolved per bundled round</span>, matching the protocol example used across the concept page.</p>
+      </div>
+    </div>
+
+    <div class="formula-grid">
+      <div class="panel formula-card">
+        <div class="card-kicker">Formula</div>
+        <div class="annotation-title">Compression by fewer round trips</div>
+        <div class="formula-block">
+          <div class="formula-line"><strong>T_without</strong> = E × RTT</div>
+          <div class="formula-line"><strong>T_with</strong> = ceil(E ÷ 5) × RTT</div>
+          <div class="formula-line"><strong>Compression</strong> = T_without ÷ T_with</div>
+        </div>
+        <p class="formula-note">
+          <strong>E</strong> is the number of conversational exchanges required without AI assistance.
+          <strong>RTT</strong> is round-trip delay in minutes.
+          The constant <strong>5</strong> is the estimated bundle yield: one Lightlag round resolves about five ordinary exchanges before the next physical hop is needed.
+        </p>
+      </div>
+
+      <div class="panel calculator-card">
+        <div class="card-kicker">Live Calculator</div>
+        <div class="annotation-title">Time with AI vs without AI</div>
+        <form class="calc-form" id="calc-form">
+          <label class="calc-row">
+            <span class="calc-label">Exchanges Needed</span>
+            <input class="calc-input" id="calc-exchanges" type="number" min="1" step="1" value="15" inputmode="numeric">
+          </label>
+          <label class="calc-row">
+            <span class="calc-label">Round Trip Delay (minutes)</span>
+            <input class="calc-input" id="calc-rtt" type="number" min="1" step="0.1" value="26" inputmode="decimal">
+          </label>
+        </form>
+
+        <div class="calc-results">
+          <div class="calc-result">
+            <div class="calc-result-label">Without AI</div>
+            <div class="calc-result-value" id="without-ai">6h 30m</div>
+            <div class="calc-result-sub" id="without-ai-sub">15 conventional exchanges</div>
+          </div>
+          <div class="calc-result">
+            <div class="calc-result-label">With Lightlag</div>
+            <div class="calc-result-value accent" id="with-ai">1h 18m</div>
+            <div class="calc-result-sub" id="with-ai-sub">3 bundled rounds</div>
+          </div>
+          <div class="calc-result">
+            <div class="calc-result-label">Time Saved</div>
+            <div class="calc-result-value accent" id="time-saved">5h 12m</div>
+            <div class="calc-result-sub" id="time-saved-sub">80% faster</div>
+          </div>
+          <div class="calc-result">
+            <div class="calc-result-label">Compression Ratio</div>
+            <div class="calc-result-value" id="compression-ratio">5.0x</div>
+            <div class="calc-result-sub" id="compression-ratio-sub">Effective exchanges per hop matter most</div>
+          </div>
+        </div>
+
+        <p class="calc-footnote">If the receiver has to issue many corrections, bundle yield falls and convergence takes more rounds. That is why the correction loop above matters as much as the initial expansion.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="container">
+    <div class="section-head">
+      <div class="section-num">05 — Next Reads</div>
+      <h2 class="section-title">Follow the argument from algorithm to evidence.</h2>
+    </div>
+    <div class="links-grid">
+      <a class="link-card" href="/marschat/proof/">
+        <div class="card-kicker">Proof</div>
+        <div class="link-card-title">Lightlag Proof Page</div>
+        <p class="link-card-copy">Operational examples, quantitative framing, and the clearest evidence layer for whether the protocol meaningfully compresses interplanetary communication.</p>
+      </a>
+      <a class="link-card" href="/marschat/whitepaper/">
+        <div class="card-kicker">Whitepaper</div>
+        <div class="link-card-title">Technical Whitepaper</div>
+        <p class="link-card-copy">The full technical framing: stack position, predictive bundling, blackout delegation, convergence behavior, and open research questions.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-line">
+    <div>Lightlag by Briu.ai — AI-mediated communication across planetary distances.</div>
+    <div class="footer-links">
+      <a href="/marschat/">Concept</a>
+      <a href="/marschat/algorithm/">Algorithm</a>
+      <a href="/marschat/proof/">Proof</a>
+      <a href="/marschat/whitepaper/">Whitepaper</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+const pipelineSteps = [
+  {
+    id: 'expand',
+    label: '01',
+    name: 'EXPAND',
+    type: 'AI Call',
+    summary: 'Generate anticipated follow-ups, likely answers, and supporting context before the first hop.',
+    detail: 'The sender-side model turns a single message into a bounded set of predicted conversational branches. This is where Lightlag tries to front-load the next few exchanges.',
+    bullets: [
+      'Extract intent, constraints, and likely ambiguities from the raw message.',
+      'Produce candidate follow-up questions and provisional answers.',
+      'Attach supporting context such as logs, telemetry, or prior thread state.'
+    ],
+    role: 'Without expansion, every ambiguity waits for the next round trip.'
+  },
+  {
+    id: 'validate',
+    label: '02',
+    name: 'VALIDATE',
+    type: 'AI Call',
+    summary: 'Check the bundle for contradictions, unsupported claims, unsafe branch growth, or missing source context.',
+    detail: 'Validation keeps the bundle small enough to transmit and trustworthy enough to act on. The protocol is only useful if it prevents speculative drift.',
+    bullets: [
+      'Score confidence for each predicted branch.',
+      'Prune weak expansions and flag claims lacking support.',
+      'Mark what still requires explicit human review before send.'
+    ],
+    role: 'Validation is the control surface that keeps compression from becoming hallucinated compression.'
+  },
+  {
+    id: 'transmit',
+    label: '03',
+    name: 'TRANSMIT',
+    type: 'Network Phase',
+    summary: 'Ship the validated ContextBundle over the physical link as one payload.',
+    detail: 'This is the actual constrained resource: the interplanetary hop. Lightlag tries to make each hop carry enough context that the receiver does not need to immediately bounce back a clarification.',
+    bullets: [
+      'Serialize the bundle into a transport-safe payload.',
+      'Move it across DTN or any underlying interplanetary transport.',
+      'Preserve integrity metadata so the receiver can audit what was sent.'
+    ],
+    role: 'Transmission is shown explicitly because the protocol is designed around expensive round trips, not cheap API calls.'
+  },
+  {
+    id: 'unpack',
+    label: '04',
+    name: 'UNPACK',
+    type: 'AI Call',
+    summary: 'Reconstruct sender intent, rank predicted branches, and present context in a receiver-usable form.',
+    detail: 'The receiver-side model does not blindly trust the bundle. It organizes the payload so the human can see the original message, the predicted expansions, and the evidence that supports them.',
+    bullets: [
+      'Map transmitted branches into a readable review interface.',
+      'Show confidence, provenance, and open uncertainties.',
+      'Prepare the receiver to accept, edit, or reject each predicted branch.'
+    ],
+    role: 'Unpack is where the receiver regains control over what the AI thought was likely.'
+  },
+  {
+    id: 'respond-expand',
+    label: '05',
+    name: 'RESPOND+EXPAND',
+    type: 'AI Call',
+    summary: 'Capture receiver edits, compose the reply, and expand the next outbound bundle in the same pass.',
+    detail: 'Once the receiver corrects the bundle, those corrections become high-value inputs for the return message. The next bundle should already be better than the first because it now contains direct human feedback.',
+    bullets: [
+      'Accept edits to wrong or incomplete predictions.',
+      'Compose the human reply with corrections embedded.',
+      'Expand the return bundle using the newly clarified state.'
+    ],
+    role: 'This is the compounding step: every correction reduces future clarification load.'
+  },
+  {
+    id: 'converge',
+    label: '06',
+    name: 'CONVERGE',
+    type: 'AI Call',
+    summary: 'Measure what remains unresolved and decide whether another round is required.',
+    detail: 'Convergence is not a vague feeling. The protocol checks how much of the conversation is now settled, how many corrections remain, and whether the next bundle can plausibly finish the thread.',
+    bullets: [
+      'Compare predicted branch accuracy against receiver edits.',
+      'Estimate unresolved questions and residual ambiguity.',
+      'Terminate or trigger another bundled round based on remaining uncertainty.'
+    ],
+    role: 'The goal is not endless expansion. It is stopping as soon as the thread is actually closed.'
+  }
+];
+
+const schemaFields = [
+  {
+    id: 'bundle_id',
+    title: 'bundle_id',
+    why: 'Stable identifier for one transmitted unit.',
+    copy: 'Every transmitted ContextBundle needs an immutable handle so both sides can refer to the same payload when corrections, retries, or audits happen later.',
+    points: [
+      'Used to reconcile sender and receiver logs.',
+      'Lets later corrections point at a precise transmitted bundle.',
+      'Useful when retransmission or archival review is required.'
+    ],
+    line: `  <span class="schema-key">"bundle_id"</span>: <span class="schema-string">"ctx_01HZR4W5A9"</span>,`
+  },
+  {
+    id: 'conversation_id',
+    title: 'conversation_id',
+    why: 'Thread identity across many bundled rounds.',
+    copy: 'The conversation persists even as multiple bundles move back and forth. This field ties every round to the same human thread rather than treating each payload as standalone.',
+    points: [
+      'Enables multi-round convergence tracking.',
+      'Supports history-aware expansion and rollback.',
+      'Separates one mission thread from another.'
+    ],
+    line: `  <span class="schema-key">"conversation_id"</span>: <span class="schema-string">"mars-ops-bay3"</span>,`
+  },
+  {
+    id: 'round',
+    title: 'round',
+    why: 'Current loop iteration.',
+    copy: 'Round count matters because Lightlag expects the bundle to improve over time. The receiver must know whether they are seeing a first-pass speculative bundle or a later, correction-informed one.',
+    points: [
+      'Used in convergence metrics.',
+      'Signals expected confidence level.',
+      'Allows late edits to be mapped to the right iteration.'
+    ],
+    line: `  <span class="schema-key">"round"</span>: <span class="schema-number">2</span>,`
+  },
+  {
+    id: 'message',
+    title: 'message',
+    why: 'Canonical human message plus normalized form.',
+    copy: 'The original statement must remain visible. Lightlag should never replace the human message with only model-produced expansions.',
+    points: [
+      'Preserves the raw text for auditability.',
+      'Allows a normalized representation for downstream processing.',
+      'Keeps human intent primary even when the bundle grows.'
+    ],
+    line: `  <span class="schema-key">"message"</span>: { <span class="schema-key">"raw"</span>: <span class="schema-string">"Bay 3 pressure looks off."</span>, <span class="schema-key">"priority"</span>: <span class="schema-string">"operational"</span> },`
+  },
+  {
+    id: 'expansions',
+    title: 'expansions[]',
+    why: 'Predicted branches and prepared answers.',
+    copy: 'This is the compression layer. Each expansion anticipates a likely follow-up, includes a provisional answer, and attaches evidence so the receiver can accept or edit it quickly.',
+    points: [
+      'Carries likely next questions before they are asked.',
+      'Associates each prediction with confidence and sources.',
+      'Defines what the protocol hopes to resolve in the current round.'
+    ],
+    line: `  <span class="schema-key">"expansions"</span>: [{ <span class="schema-key">"question"</span>: <span class="schema-string">"Was the sensor calibrated?"</span>, <span class="schema-key">"confidence"</span>: <span class="schema-number">0.84</span> }],`
+  },
+  {
+    id: 'attachments',
+    title: 'attachments[]',
+    why: 'Supporting material that lets the receiver verify the branch.',
+    copy: 'Expansions are stronger when they cite the data that generated them. Attachments can be logs, charts, procedures, or any compact context that reduces the need for a follow-up request.',
+    points: [
+      'Provides grounding data alongside generated text.',
+      'Makes receiver review faster and safer.',
+      'Helps validation prune unsupported claims.'
+    ],
+    line: `  <span class="schema-key">"attachments"</span>: [{ <span class="schema-key">"type"</span>: <span class="schema-string">"trend_log"</span>, <span class="schema-key">"ref"</span>: <span class="schema-string">"bay3-pressure-7d.csv"</span> }],`
+  },
+  {
+    id: 'corrections',
+    title: 'corrections[]',
+    why: 'Receiver feedback captured as structured data.',
+    copy: 'Corrections are not informal comments off to the side. They are part of the protocol state, which lets the next expansion round improve with explicit, machine-readable feedback.',
+    points: [
+      'Records what was wrong, incomplete, or overconfident.',
+      'Feeds the next response-and-expand stage.',
+      'Makes correction volume measurable over time.'
+    ],
+    line: `  <span class="schema-key">"corrections"</span>: [{ <span class="schema-key">"field"</span>: <span class="schema-string">"expansions[1]"</span>, <span class="schema-key">"status"</span>: <span class="schema-string">"edited"</span> }],`
+  },
+  {
+    id: 'response_window',
+    title: 'response_window',
+    why: 'Bounds for human review and follow-up behavior.',
+    copy: 'High-latency systems need explicit operating constraints. This field states whether another round is allowed, whether human review is mandatory, and how aggressively the receiver should continue delegating to the model.',
+    points: [
+      'Defines operational limits for the next hop.',
+      'Signals when a human must intervene.',
+      'Prevents unbounded autonomous expansion.'
+    ],
+    line: `  <span class="schema-key">"response_window"</span>: { <span class="schema-key">"max_rounds"</span>: <span class="schema-number">3</span>, <span class="schema-key">"needs_human_review"</span>: <span class="schema-boolean">true</span> },`
+  },
+  {
+    id: 'checksum',
+    title: 'checksum',
+    why: 'Integrity and audit guardrail.',
+    copy: 'A bundle that crosses long-delay networks should be verifiable on arrival. This field is the minimal integrity layer that confirms the payload being unpacked is the one that was sent.',
+    points: [
+      'Supports payload integrity checks.',
+      'Useful for transport retries and archive validation.',
+      'Separates protocol correctness from transport correctness.'
+    ],
+    line: `  <span class="schema-key">"checksum"</span>: <span class="schema-string">"sha256:8f4b..."</span>`
+  }
+];
+
+const loopStages = [
+  {
+    id: 'r1-expand',
+    label: 'Stage 1',
+    name: 'Round 1 expansions',
+    copy: 'The sender predicts likely clarifications and attaches the first response tree.',
+    accuracy: 62,
+    corrections: 7,
+    note: 'Useful coverage, but still broad and somewhat speculative.'
+  },
+  {
+    id: 'r1-correct',
+    label: 'Stage 2',
+    name: 'Receiver corrections',
+    copy: 'The receiver edits weak branches, removes wrong assumptions, and marks missing context.',
+    accuracy: 62,
+    corrections: 7,
+    note: 'This is the highest-friction stage, but it creates the best learning signal.'
+  },
+  {
+    id: 'r2-expand',
+    label: 'Stage 3',
+    name: 'Round 2 expansions improve',
+    copy: 'The next bundle is narrower, better grounded, and covers more of the thread up front.',
+    accuracy: 84,
+    corrections: 3,
+    note: 'The model is now operating with explicit receiver feedback instead of only inference.'
+  },
+  {
+    id: 'r2-correct',
+    label: 'Stage 4',
+    name: 'Receiver corrections decrease',
+    copy: 'Fewer edits are needed because the likely branches have already been corrected once.',
+    accuracy: 84,
+    corrections: 2,
+    note: 'At this point the loop is compressing real waiting time, not just generating more text.'
+  },
+  {
+    id: 'convergence',
+    label: 'Stage 5',
+    name: 'Convergence',
+    copy: 'Only one or zero clarifications remain, so the thread can close or move into a final handoff.',
+    accuracy: 93,
+    corrections: 1,
+    note: 'Convergence means the bundle now resolves most of the conversation before the next hop.'
+  }
+];
+
+const pipelineTrack = document.getElementById('pipeline-track');
+const pipelineDetail = document.getElementById('pipeline-detail');
+const schemaCode = document.getElementById('schema-code');
+const schemaAnnotation = document.getElementById('schema-annotation');
+const loopTrack = document.getElementById('loop-track');
+const loopSide = document.getElementById('loop-side');
+
+let pipelineIndex = 0;
+let loopIndex = 0;
+let pipelineTimer = null;
+let loopTimer = null;
+
+function renderPipeline(activeIndex) {
+  pipelineTrack.innerHTML = pipelineSteps.map((step, index) => `
+    <button class="pipeline-step${index === activeIndex ? ' active' : ''}" data-index="${index}" type="button" aria-pressed="${index === activeIndex}">
+      <span class="pipeline-index">${step.label}</span>
+      <div class="pipeline-name">${step.name}</div>
+      <div class="pipeline-type ${step.type === 'Network Phase' ? 'network' : 'ai'}">${step.type}</div>
+      <div class="pipeline-summary">${step.summary}</div>
+    </button>
+  `).join('');
+
+  const active = pipelineSteps[activeIndex];
+  pipelineDetail.innerHTML = `
+    <div>
+      <div class="panel-kicker">${active.type}</div>
+      <div class="detail-title">${active.name}</div>
+      <p class="detail-text">${active.detail}</p>
+    </div>
+    <div>
+      <ul class="detail-list">
+        ${active.bullets.map((bullet) => `<li>${bullet}</li>`).join('')}
+      </ul>
+      <div class="detail-aside" style="margin-top: 18px;">
+        <div class="detail-aside-label">Why this matters</div>
+        <p>${active.role}</p>
+      </div>
+    </div>
+  `;
+
+  pipelineTrack.querySelectorAll('.pipeline-step').forEach((button) => {
+    button.addEventListener('click', () => {
+      pipelineIndex = Number(button.dataset.index);
+      renderPipeline(pipelineIndex);
+      restartPipelineTimer();
+    });
+  });
+}
+
+function restartPipelineTimer() {
+  window.clearInterval(pipelineTimer);
+  pipelineTimer = window.setInterval(() => {
+    pipelineIndex = (pipelineIndex + 1) % pipelineSteps.length;
+    renderPipeline(pipelineIndex);
+  }, 3200);
+}
+
+function renderSchema(activeId) {
+  schemaCode.innerHTML = `
+    <div class="schema-line schema-frame" aria-hidden="true">
+      <span class="schema-line-number"></span>
+      <span class="schema-line-content"><span class="schema-brace">{</span></span>
+    </div>
+  ` + schemaFields.map((field, index) => `
+    <button class="schema-line${field.id === activeId ? ' active' : ''}" data-field="${field.id}" type="button" aria-pressed="${field.id === activeId}">
+      <span class="schema-line-number">${index + 1}</span>
+      <span class="schema-line-content">${field.line}</span>
+    </button>
+  `).join('') + `
+    <div class="schema-line schema-frame" aria-hidden="true">
+      <span class="schema-line-number"></span>
+      <span class="schema-line-content"><span class="schema-brace">}</span></span>
+    </div>
+  `;
+
+  const active = schemaFields.find((field) => field.id === activeId) || schemaFields[1];
+  schemaAnnotation.innerHTML = `
+    <div class="panel-kicker">${active.why}</div>
+    <div class="annotation-title">${active.title}</div>
+    <p class="annotation-copy">${active.copy}</p>
+    <ul class="annotation-points">
+      ${active.points.map((point) => `<li>${point}</li>`).join('')}
+    </ul>
+  `;
+
+  schemaCode.querySelectorAll('.schema-line[data-field]').forEach((button) => {
+    button.addEventListener('click', () => renderSchema(button.dataset.field));
+  });
+}
+
+function renderLoop(activeIndex) {
+  loopTrack.innerHTML = loopStages.map((stage, index) => `
+    <button class="loop-stage${index === activeIndex ? ' active' : ''}" data-index="${index}" type="button" aria-pressed="${index === activeIndex}">
+      <div class="loop-stage-label">${stage.label}</div>
+      <div class="loop-stage-name">${stage.name}</div>
+      <div class="loop-stage-copy">${stage.copy}</div>
+      <div class="loop-metric">
+        <div class="loop-metric-label"><span>Prediction accuracy</span><span>${stage.accuracy}%</span></div>
+        <div class="loop-bar" style="--bar-width:${stage.accuracy}%"><span></span></div>
+      </div>
+      <div class="loop-metric">
+        <div class="loop-metric-label"><span>Corrections needed</span><span>${stage.corrections}</span></div>
+        <div class="loop-bar" style="--bar-width:${Math.min(stage.corrections * 12, 100)}%"><span style="background: linear-gradient(90deg, var(--mars), var(--amber));"></span></div>
+      </div>
+    </button>
+  `).join('');
+
+  const active = loopStages[activeIndex];
+  loopSide.innerHTML = `
+    <div class="panel-kicker">Current Stage</div>
+    <div class="annotation-title">${active.name}</div>
+    <p class="annotation-copy">${active.note}</p>
+    <div class="loop-side-stat">
+      <div class="loop-stage-label">Prediction accuracy</div>
+      <div class="loop-side-value accent">${active.accuracy}%</div>
+      <div class="loop-side-copy">Higher accuracy means the next bundle resolves more of the thread before another hop is required.</div>
+    </div>
+    <div class="loop-side-stat">
+      <div class="loop-stage-label">Corrections remaining</div>
+      <div class="loop-side-value mars">${active.corrections}</div>
+      <div class="loop-side-copy">The target pattern is simple: more of the receiver response becomes confirmation, less of it becomes cleanup.</div>
+    </div>
+  `;
+
+  loopTrack.querySelectorAll('.loop-stage').forEach((button) => {
+    button.addEventListener('click', () => {
+      loopIndex = Number(button.dataset.index);
+      renderLoop(loopIndex);
+      restartLoopTimer();
+    });
+  });
+}
+
+function restartLoopTimer() {
+  window.clearInterval(loopTimer);
+  loopTimer = window.setInterval(() => {
+    loopIndex = (loopIndex + 1) % loopStages.length;
+    renderLoop(loopIndex);
+  }, 2800);
+}
+
+function formatMinutes(totalMinutes) {
+  const rounded = Math.round(totalMinutes);
+  const hours = Math.floor(rounded / 60);
+  const minutes = rounded % 60;
+
+  if (hours === 0) {
+    return `${minutes}m`;
+  }
+
+  if (minutes === 0) {
+    return `${hours}h`;
+  }
+
+  return `${hours}h ${minutes}m`;
+}
+
+function updateCalculator() {
+  const exchanges = Math.max(1, Number(document.getElementById('calc-exchanges').value) || 1);
+  const rtt = Math.max(1, Number(document.getElementById('calc-rtt').value) || 1);
+  const bundledRounds = Math.ceil(exchanges / 5);
+  const timeWithout = exchanges * rtt;
+  const timeWith = bundledRounds * rtt;
+  const saved = Math.max(0, timeWithout - timeWith);
+  const ratio = timeWithout / timeWith;
+  const faster = Math.round((saved / timeWithout) * 100);
+
+  document.getElementById('without-ai').textContent = formatMinutes(timeWithout);
+  document.getElementById('without-ai-sub').textContent = `${exchanges} conventional exchanges`;
+  document.getElementById('with-ai').textContent = formatMinutes(timeWith);
+  document.getElementById('with-ai-sub').textContent = `${bundledRounds} bundled ${bundledRounds === 1 ? 'round' : 'rounds'}`;
+  document.getElementById('time-saved').textContent = formatMinutes(saved);
+  document.getElementById('time-saved-sub').textContent = `${faster}% faster`;
+  document.getElementById('compression-ratio').textContent = `${ratio.toFixed(1)}x`;
+  document.getElementById('compression-ratio-sub').textContent = `Assuming ~5 exchanges resolved per bundle`;
+}
+
+renderPipeline(pipelineIndex);
+restartPipelineTimer();
+renderSchema('expansions');
+renderLoop(loopIndex);
+restartLoopTimer();
+updateCalculator();
+
+document.getElementById('calc-form').addEventListener('input', updateCalculator);
+</script>
+
+</body>
+</html>

@@ -41,7 +41,7 @@
   // --- FOOTER ---
   var footerHtml = '<footer>\n' +
     '  <p>&copy; 2026 Briu. All rights reserved.</p>\n' +
-    '  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/industries/">Industries</a> <a href="/case-studies/">Case Studies</a> <a href="/resources/">Resources</a> <a href="/refer/">Refer &amp; Earn</a> <a href="/press/">Press</a> <a href="/privacy/">Privacy</a> <a href="/agents/">For AI Agents</a></div>\n' +
+    '  <div class="footer-links"><a href="mailto:hi@briu.ai">hi@briu.ai</a> <a href="/industries/">Industries</a> <a href="/discovery/">Discovery</a> <a href="/services/calculator/">Calculator</a> <a href="/press/">Press</a> <a href="/privacy/">Privacy</a> <a href="/agents/">For AI Agents</a></div>\n' +
     '</footer>';
 
   // Contact modal removed — all contact flows through chat bubble now
