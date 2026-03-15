@@ -223,8 +223,7 @@ a.stat-box:hover .stat-label::after { content: ' \2192'; }
 .vtl-filter { padding: 0.4rem 1rem; font-size: 0.72rem; font-weight: 600; font-family: var(--sans); cursor: pointer; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s; letter-spacing: 0.02em; text-transform: uppercase; }
 .vtl-filter.active { background: rgba(212,160,90,0.15); color: var(--gold); border-color: rgba(212,160,90,0.3); }
 .vtl-filter:hover { border-color: rgba(212,160,90,0.2); }
-.vtl-entry { transition: opacity 0.3s ease, transform 0.3s ease; }
-.vtl-entry.filtered-out { opacity: 0.15; pointer-events: none; }
+.vtl-entry.filtered-out { display: none; }
 
 /* Service cross-links */
 .card-service-link { display: block; font-size: 0.68rem; font-weight: 500; color: var(--text-muted); text-decoration: none; margin-top: 0.5rem; transition: color 0.2s; }
@@ -463,6 +462,42 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
   .build-cta { padding: 3rem 1.25rem 4rem; }
   .skill-grid { grid-template-columns: 1fr; }
 }
+
+/* THE STACK section */
+.stack-section { max-width: 1060px; margin: 0 auto; padding: 2rem 2rem 1rem; }
+.stack-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+.stack-col { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.75rem 1.5rem; transition: all 0.35s ease; }
+.stack-col:hover { border-color: rgba(212,160,90,0.2); background: var(--surface-2); transform: translateY(-3px); box-shadow: 0 8px 30px rgba(0,0,0,0.3); }
+.stack-tier { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--gold); margin-bottom: 0.5rem; }
+.stack-price { font-family: var(--serif); font-size: 1.6rem; color: var(--text); margin-bottom: 0.75rem; }
+.stack-price span { font-size: 0.85rem; color: var(--text-muted); }
+.stack-col p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; margin: 0; }
+.stack-total { text-align: center; font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem; }
+.stack-total strong { color: var(--text); }
+@media (max-width: 768px) { .stack-grid { grid-template-columns: 1fr; } }
+
+/* NO DEV TEAM section */
+.no-dev-team-section { max-width: 1060px; margin: 0 auto; padding: 3rem 2rem 1rem; text-align: center; }
+
+/* Ops aggregate line */
+.ops-aggregate-line { display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.5rem; padding: 1rem 1.5rem; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); max-width: 1060px; margin-left: auto; margin-right: auto; }
+.ops-aggregate-line strong { color: var(--text); font-family: var(--serif); font-size: 1.1rem; }
+.ops-agg-sep { color: rgba(255,255,255,0.15); }
+.ops-agg-success { position: relative; cursor: help; border-bottom: 1px dotted rgba(255,255,255,0.2); }
+.ops-agg-success[data-tooltip]:hover::after { content: attr(data-tooltip); position: absolute; bottom: calc(100% + 10px); left: 50%; transform: translateX(-50%); white-space: normal; width: 300px; padding: 0.6rem 0.85rem; background: var(--surface-2); border: 1px solid rgba(212,160,90,0.15); font-size: 0.72rem; color: var(--text-muted); z-index: 10; box-shadow: 0 6px 20px rgba(0,0,0,0.3); pointer-events: none; line-height: 1.5; font-weight: 400; font-family: var(--sans); }
+
+/* Ops feed footnote */
+.ops-feed-footnote { font-size: 0.72rem; color: rgba(234,231,227,0.45); margin-top: 0.75rem; line-height: 1.5; font-style: italic; }
+
+/* Growth chart */
+.growth-chart-section { max-width: 1060px; margin: 0 auto; padding: 2rem 2rem 1rem; }
+.growth-chart-container { background: var(--surface); border: 1px solid rgba(255,255,255,0.04); padding: 1.5rem; position: relative; }
+.growth-chart-toggle { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.growth-toggle-btn { padding: 0.35rem 0.85rem; font-size: 0.68rem; font-weight: 600; font-family: var(--sans); cursor: pointer; background: transparent; color: var(--text-muted); border: 1px solid rgba(255,255,255,0.06); transition: all 0.2s; letter-spacing: 0.02em; text-transform: uppercase; }
+.growth-toggle-btn.active { background: rgba(212,160,90,0.15); color: var(--gold); border-color: rgba(212,160,90,0.3); }
+.growth-toggle-btn:hover { border-color: rgba(212,160,90,0.2); }
+.growth-totals { display: flex; align-items: center; justify-content: center; gap: 0.75rem; flex-wrap: wrap; font-size: 0.88rem; color: var(--text-muted); margin-top: 1rem; }
+.growth-totals strong { color: var(--text); font-family: var(--serif); font-size: 1rem; }
 </style>
 </head>
 <body>
@@ -477,7 +512,30 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
 <section class="hero hero-breathe">
   <p class="hero-eyebrow">Build</p>
   <h1>Building a company with agents. Every workflow, every cost, live.</h1>
-  <p>One person, multiple agents, multiple models. API for orchestration, subscriptions for execution. The same multi-agent stack we deploy for clients.</p>
+  <p>One person. Flat-rate AI subscriptions for reasoning and building. A lightweight API agent for orchestration. Every idea becomes working software at near-zero incremental cost.</p>
+</section>
+
+<!-- THE STACK -->
+<section class="stack-section">
+  <p class="section-label reveal">The Stack</p>
+  <div class="stack-grid">
+    <div class="stack-col reveal-scale">
+      <div class="stack-tier">Reason</div>
+      <div class="stack-price">$20<span>/mo</span></div>
+      <p>Any leading model. Brain dumps, strategy, voice-to-text. Your whole team uses this.</p>
+    </div>
+    <div class="stack-col reveal-scale reveal-delay-1">
+      <div class="stack-tier">Build</div>
+      <div class="stack-price">$200&ndash;400<span>/mo</span></div>
+      <p>Claude Max + ChatGPT Pro. The same subscription you think with is the one that writes your code. Zero incremental cost per task.</p>
+    </div>
+    <div class="stack-col reveal-scale reveal-delay-2">
+      <div class="stack-tier">Orchestrate</div>
+      <div class="stack-price">~$400<span>/mo</span></div>
+      <p>A lightweight VPS agent. Signs tasks, tracks completion, logs everything. The only variable cost.</p>
+    </div>
+  </div>
+  <p class="stack-total">Total infrastructure for a one-person company: <strong>under $700/month</strong>. Traditional equivalent: <span class="vitals-trad">$15&ndash;25K/month</span>.</p>
 </section>
 
 <!-- 1. HUD Bar -->
@@ -685,42 +743,34 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
   </div>
 </section>
 
+<!-- NO DEV TEAM intro -->
+<section class="no-dev-team-section">
+  <h2 class="reveal" style="font-family:var(--serif);font-size:clamp(1.6rem,3.5vw,2.4rem);margin-bottom:0.75rem;">No dev team. No contractors. Just agents.</h2>
+  <p class="reveal" style="color:var(--text-muted);max-width:640px;font-size:0.95rem;line-height:1.7;">Everything below is the actual operating log from the system that built this website.</p>
+</section>
+
 <section class="dispatch-transparency-section">
   <p class="section-label reveal">Operations Transparency</p>
   <h2 class="reveal">Dispatch, execution, completion. In one loop.</h2>
-  <p class="reveal" style="color:var(--text-muted);max-width:720px;margin-bottom:1rem;">Every task Briu runs is tracked in real time. An orchestrator agent signs and dispatches work. An execution agent picks it up, runs it, and reports back. You see exactly what happened, how long it took, and what it cost. No black box.</p>
   <div class="ops-section-note reveal">
     <span class="live-dot"></span>
     <span>Recent operating snapshot from actual Briu task logs.</span>
   </div>
 
+  <div class="ops-aggregate-line reveal" id="ops-aggregate-line">
+    <span><strong id="ops-agg-tasks">&mdash;</strong> tasks</span>
+    <span class="ops-agg-sep">|</span>
+    <span class="ops-agg-success" data-tooltip="Failures are from active development and testing of the dispatch system, not production issues. The system is under continuous improvement."><strong id="ops-agg-success">&mdash;</strong>% success</span>
+    <span class="ops-agg-sep">|</span>
+    <span><strong id="ops-agg-duration">&mdash;</strong>s avg</span>
+    <span class="ops-agg-sep">|</span>
+    <span>$<strong id="ops-agg-cost">&mdash;</strong> API cost</span>
+  </div>
+
   <div class="ops-transparency-layout reveal">
     <div class="ops-transparency-main">
       <div class="ops-panel">
-        <p class="ops-panel-kicker">Aggregate view</p>
-        <div class="ops-summary-bar">
-          <div class="ops-summary-item">
-            <span>Tasks completed</span>
-            <strong>112</strong>
-          </div>
-          <div class="ops-summary-item">
-            <span>Success rate</span>
-            <strong>89%</strong>
-          </div>
-          <div class="ops-summary-item">
-            <span>Avg duration</span>
-            <strong>287s</strong>
-          </div>
-          <div class="ops-summary-item">
-            <span>Total API cost</span>
-            <strong>$4.37</strong>
-          </div>
-        </div>
-      </div>
-      <div class="ops-panel">
         <p class="ops-panel-kicker">Task feed</p>
-        <h3>Recent work, with backend, duration, and cost</h3>
-        <p style="font-size:0.84rem;color:rgba(234,231,227,0.6);margin-bottom:1rem;">The same operational trail that proves the work happened: what ran, which backend handled it, how long it took, and what it cost.</p>
         <div class="ops-feed-shell" aria-label="Recent task feed">
           <div class="ops-feed-header">
             <span>Description</span>
@@ -777,13 +827,13 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
             <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
           </div>
         </div>
+        <p class="ops-feed-footnote">Tasks showing $0.00 ran on flat-rate subscriptions. API cost is orchestration only.</p>
       </div>
     </div>
 
     <div class="ops-transparency-side">
       <div class="ops-panel">
         <p class="ops-panel-kicker">Workflow loop</p>
-        <h3>How work moves through the system</h3>
         <div class="ops-flow">
           <article class="ops-flow-step">
             <span class="ops-flow-index">Step 1</span>
@@ -805,31 +855,29 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
         </div>
         <p class="ops-flow-note">Every handoff leaves a visible trail. Nothing disappears into a queue and comes back as a mystery.</p>
       </div>
-      <div class="ops-panel">
-        <p class="ops-panel-kicker">What gets logged</p>
-        <h3>The proof is operational, not performative</h3>
-        <p>Visitors do not need to guess whether the system is real. The log shows who handled the task, how long it ran, and what it cost to complete.</p>
-        <div class="ops-meta-stack">
-          <div class="ops-meta-row">
-            <span>Dispatch origin</span>
-            <strong>Signed from VPS</strong>
-          </div>
-          <div class="ops-meta-row">
-            <span>Execution layer</span>
-            <strong>Claude Code and Codex on Mac</strong>
-          </div>
-          <div class="ops-meta-row">
-            <span>Recorded outputs</span>
-            <strong>Status, duration, cost</strong>
-          </div>
-          <div class="ops-meta-row">
-            <span>Visibility</span>
-            <strong>No black box</strong>
-          </div>
-        </div>
-        <p class="ops-meta-caption">If a run stalls, fails, or costs more than expected, it shows up in the same operating trail.</p>
-      </div>
     </div>
+  </div>
+</section>
+
+<!-- Growth Chart -->
+<section class="growth-chart-section">
+  <p class="section-label reveal">Growth</p>
+  <h2 class="reveal">Cumulative output over time.</h2>
+  <div class="growth-chart-container reveal">
+    <div class="growth-chart-toggle">
+      <button class="growth-toggle-btn active" onclick="showGrowthView('cumulative',this)">Cumulative</button>
+      <button class="growth-toggle-btn" onclick="showGrowthView('daily',this)">Daily</button>
+    </div>
+    <canvas id="growth-chart-canvas" height="320"></canvas>
+  </div>
+  <div class="growth-totals" id="growth-totals">
+    <span><strong id="growth-lines">&mdash;</strong> lines</span>
+    <span class="ops-agg-sep">|</span>
+    <span><strong id="growth-commits">&mdash;</strong> commits</span>
+    <span class="ops-agg-sep">|</span>
+    <span><strong id="growth-tasks">&mdash;</strong> tasks</span>
+    <span class="ops-agg-sep">|</span>
+    <span>$<strong id="growth-cost">&mdash;</strong> total API cost</span>
   </div>
 </section>
 
@@ -1359,6 +1407,7 @@ Briu.charts.briuOrg('build-org-chart');
 Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js?v=20260312a"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js" integrity="sha384-vsrfeLOOY6KuIYKDlmVH5UiBmgIdB1oEf7p01YgWHuqmOHfZr374+odEv96n9tNC" crossorigin="anonymous"></script>
 <script>
 /* HUD: Days Running counter (OpenClaw from Feb 10) */
 (function() {
@@ -1453,6 +1502,114 @@ function filterTimeline(cat, btn) {
     if (btn) filterTimeline(hash, btn);
   }
 })();
+
+/* ===================== */
+/* Metrics from JSON     */
+/* ===================== */
+var _metricsData = null;
+var _growthChart = null;
+
+function setText(id, val) {
+  var el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+fetch('./data/metrics.json')
+  .then(function(r) { return r.json(); })
+  .then(function(data) {
+    _metricsData = data;
+    var s = data.summary;
+
+    /* Aggregate stats line */
+    setText('ops-agg-tasks', s.total_tasks.toLocaleString());
+    setText('ops-agg-success', s.success_rate);
+    setText('ops-agg-duration', s.avg_duration);
+    setText('ops-agg-cost', s.total_api_cost.toFixed(2));
+
+    /* Growth totals */
+    setText('growth-lines', s.current_code_lines.toLocaleString());
+    setText('growth-commits', s.total_commits.toLocaleString());
+    setText('growth-tasks', s.total_tasks.toLocaleString());
+    setText('growth-cost', s.total_api_cost.toFixed(2));
+
+    /* Build chart once Chart.js is loaded */
+    function tryBuildChart() {
+      if (typeof Chart !== 'undefined') {
+        buildGrowthChart(data.daily, 'cumulative');
+      } else {
+        setTimeout(tryBuildChart, 200);
+      }
+    }
+    tryBuildChart();
+  })
+  .catch(function() {
+    /* Fetch failed — dashes remain as fallback */
+  });
+
+function buildGrowthChart(daily, mode) {
+  var canvas = document.getElementById('growth-chart-canvas');
+  if (!canvas) return;
+  if (_growthChart) { _growthChart.destroy(); _growthChart = null; }
+
+  var labels = daily.map(function(d) {
+    var parts = d.date.split('-');
+    var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    return months[parseInt(parts[1], 10) - 1] + ' ' + parseInt(parts[2], 10);
+  });
+
+  var datasets;
+  if (mode === 'cumulative') {
+    var cumCost = [], cumTasks = [], cumLines = [];
+    var rc = 0, rt = 0, rl = 0;
+    daily.forEach(function(d) {
+      rc += d.api_cost; rt += d.tasks; rl += d.lines_added;
+      cumCost.push(parseFloat(rc.toFixed(2)));
+      cumTasks.push(rt);
+      cumLines.push(rl);
+    });
+    datasets = [
+      { label: 'Cumulative Cost ($)', data: cumCost, borderColor: '#c0714a', backgroundColor: 'rgba(192,113,74,0.08)', yAxisID: 'yCost', tension: 0.3, pointRadius: 0, borderWidth: 2, fill: true },
+      { label: 'Cumulative Tasks', data: cumTasks, borderColor: '#3d9e9e', backgroundColor: 'rgba(61,158,158,0.08)', yAxisID: 'yCount', tension: 0.3, pointRadius: 0, borderWidth: 2, fill: true },
+      { label: 'Cumulative Lines Added', data: cumLines, borderColor: '#d4a843', backgroundColor: 'rgba(212,168,67,0.08)', yAxisID: 'yLines', tension: 0.3, pointRadius: 0, borderWidth: 2, fill: true }
+    ];
+  } else {
+    datasets = [
+      { label: 'Daily Cost ($)', data: daily.map(function(d) { return d.api_cost; }), backgroundColor: 'rgba(192,113,74,0.7)', borderColor: '#c0714a', borderWidth: 1, yAxisID: 'yCost', order: 2, type: 'bar' },
+      { label: 'Daily Tasks', data: daily.map(function(d) { return d.tasks; }), borderColor: '#3d9e9e', backgroundColor: 'transparent', yAxisID: 'yCount', tension: 0.3, pointRadius: 2, borderWidth: 2, type: 'line', order: 1 }
+    ];
+  }
+
+  var scales = {
+    x: { ticks: { color: 'rgba(234,231,227,0.4)', font: { size: 10 }, maxRotation: 45 }, grid: { color: 'rgba(255,255,255,0.03)' } },
+    yCost: { position: 'left', ticks: { color: '#c0714a', font: { size: 10 }, callback: function(v) { return '$' + v; } }, grid: { color: 'rgba(255,255,255,0.04)' }, title: { display: true, text: 'Cost ($)', color: '#c0714a', font: { size: 10 } } },
+    yCount: { position: 'right', ticks: { color: '#3d9e9e', font: { size: 10 } }, grid: { display: false }, title: { display: true, text: 'Tasks', color: '#3d9e9e', font: { size: 10 } } }
+  };
+  if (mode === 'cumulative') {
+    scales.yLines = { position: 'right', ticks: { color: '#d4a843', font: { size: 10 }, callback: function(v) { return (v / 1000).toFixed(0) + 'K'; } }, grid: { display: false }, title: { display: true, text: 'Lines', color: '#d4a843', font: { size: 10 } } };
+  }
+
+  _growthChart = new Chart(canvas.getContext('2d'), {
+    type: mode === 'cumulative' ? 'line' : 'bar',
+    data: { labels: labels, datasets: datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { labels: { color: 'rgba(234,231,227,0.6)', font: { size: 11 }, usePointStyle: true, pointStyleWidth: 12 } },
+        tooltip: { backgroundColor: 'rgba(13,15,14,0.95)', borderColor: 'rgba(212,160,90,0.2)', borderWidth: 1, titleColor: 'rgba(234,231,227,0.8)', bodyColor: 'rgba(234,231,227,0.6)', padding: 10 }
+      },
+      scales: scales
+    }
+  });
+}
+
+function showGrowthView(mode, btn) {
+  var btns = document.querySelectorAll('.growth-toggle-btn');
+  for (var i = 0; i < btns.length; i++) btns[i].classList.remove('active');
+  btn.classList.add('active');
+  if (_metricsData) buildGrowthChart(_metricsData.daily, mode);
+}
 </script>
 </body>
 </html>
