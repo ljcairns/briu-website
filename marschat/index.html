@@ -1281,10 +1281,16 @@ const expansions = [
 let expansionIndex = 0;
 let simBusy = false;
 
+function escapeHtml(s) {
+  var d = document.createElement('div');
+  d.textContent = s;
+  return d.innerHTML;
+}
+
 function addMessage(container, type, tag, text) {
   const msg = document.createElement('div');
   msg.className = 'sim-msg ' + type;
-  msg.innerHTML = '<div class="msg-tag">' + tag + '</div>' + text;
+  msg.innerHTML = '<div class="msg-tag">' + escapeHtml(tag) + '</div>' + escapeHtml(text);
   container.appendChild(msg);
   container.scrollTop = container.scrollHeight;
 }

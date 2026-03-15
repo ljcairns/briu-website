@@ -737,6 +737,12 @@
   </main>
 
 <script>
+  function escapeHtml(s) {
+    var d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+  }
+
   const TASKS = [
     {
       id: "lead-intake",
@@ -809,8 +815,8 @@
   function buildTaskMarkup(task) {
     return `
       <article class="task-card">
-        <h3>${task.name}</h3>
-        <p>${task.detail}</p>
+        <h3>${escapeHtml(task.name)}</h3>
+        <p>${escapeHtml(task.detail)}</p>
         <div class="slider-group">
           ${buildSlider(task.id, "time", "Time intensity")}
           ${buildSlider(task.id, "repetition", "Repetition")}
@@ -886,9 +892,9 @@
     resultsShell.innerHTML = topThree.map((task, index) => `
       <article class="result-card">
         <div class="result-rank">Priority ${index + 1}</div>
-        <h3>${task.name}</h3>
+        <h3>${escapeHtml(task.name)}</h3>
         <div class="result-score">Score ${task.score}</div>
-        <p>${task.agent}</p>
+        <p>${escapeHtml(task.agent)}</p>
         <div class="insight-bar">
           <span class="insight-pill">Time ${task.time}/5</span>
           <span class="insight-pill">Repetition ${task.repetition}/5</span>

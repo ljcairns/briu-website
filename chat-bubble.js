@@ -984,7 +984,7 @@
     var safe = d.innerHTML;
     // Auto-link bare paths FIRST (before markdown links consume them)
     safe = safe.replace(/(^|\s)(\/[a-z][a-z0-9\-\/]*\/?)(\s|[.,;!?]|$)/gi, function(m, pre, path, post) {
-      return pre + '<a href="' + path + '">' + path + '</a>' + post;
+      return pre + '<a href="' + escapeHtml(path) + '">' + escapeHtml(path) + '</a>' + post;
     });
     // Convert [text](url) markdown links
     safe = safe.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function(m, linkText, url) {

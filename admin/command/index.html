@@ -118,6 +118,11 @@ function categorize(p) {
   return 'Main Pages';
 }
 
+function escapeHtml(s) {
+  if (!s) return '';
+  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
 function renderPages() {
   var groups = {};
   var order = ['Main Pages', 'Build Articles', 'Prospects', 'Tools', 'Admin'];
@@ -182,11 +187,11 @@ renderPages();
     tasks.forEach(function(t) {
       var badgeClass = 'badge-' + (t.status || 'pending');
       html += '<tr>';
-      html += '<td>' + (t.id || '') + '</td>';
-      html += '<td><span class="badge ' + badgeClass + '">' + (t.status || 'unknown') + '</span></td>';
-      html += '<td>' + (t.created || '') + '</td>';
-      html += '<td>' + (t.duration || '') + '</td>';
-      html += '<td>' + (t.summary || '') + '</td>';
+      html += '<td>' + escapeHtml(t.id || '') + '</td>';
+      html += '<td><span class="badge ' + badgeClass + '">' + escapeHtml(t.status || 'unknown') + '</span></td>';
+      html += '<td>' + escapeHtml(t.created || '') + '</td>';
+      html += '<td>' + escapeHtml(t.duration || '') + '</td>';
+      html += '<td>' + escapeHtml(t.summary || '') + '</td>';
       html += '</tr>';
     });
     html += '</tbody></table>';
@@ -325,14 +330,14 @@ var recentCommits = [
   html += '<button class="refresh-btn" onclick="location.reload()">↻ Refresh</button><br><br>';
   recentCommits.forEach(function(c) {
     html += '<div class="commit-block">';
-    html += '<span class="commit-hash">' + c.hash + '</span> ';
-    html += '<span class="commit-time">' + c.date + '</span><br>';
-    html += '<span class="commit-msg">' + c.msg + '</span>';
+    html += '<span class="commit-hash">' + escapeHtml(c.hash) + '</span> ';
+    html += '<span class="commit-time">' + escapeHtml(c.date) + '</span><br>';
+    html += '<span class="commit-msg">' + escapeHtml(c.msg) + '</span>';
     if (c.files && c.files.length) {
       html += '<div class="commit-files">';
       c.files.forEach(function(f) {
         var cls = f.status === 'A' ? 'added' : f.status === 'D' ? 'deleted' : 'modified';
-        html += '<span class="' + cls + '">' + f.status + '</span> ' + f.path + '<br>';
+        html += '<span class="' + cls + '">' + escapeHtml(f.status) + '</span> ' + escapeHtml(f.path) + '<br>';
       });
       html += '</div>';
     }

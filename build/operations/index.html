@@ -306,6 +306,11 @@
   Chart.defaults.font.family = "'DM Sans', sans-serif";
   Chart.defaults.font.size = 11;
 
+  function escapeHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
   function formatCurrency(n) {
     return '$' + n.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
   }
@@ -522,7 +527,7 @@
       var html = '<table style="width:100%;text-align:left;font-size:0.85rem;color:var(--text-muted)">';
       html += '<tr><th style="padding:0.4rem">Date</th><th>Client</th><th style="text-align:right">Amount</th></tr>';
       rev.entries.forEach(function(e) {
-        html += '<tr><td style="padding:0.4rem">' + e.date + '</td><td>' + e.client + '</td><td style="text-align:right">' + formatCurrency(e.amount) + '</td></tr>';
+        html += '<tr><td style="padding:0.4rem">' + escapeHtml(e.date) + '</td><td>' + escapeHtml(e.client) + '</td><td style="text-align:right">' + formatCurrency(e.amount) + '</td></tr>';
       });
       html += '</table>';
       document.getElementById('rev-entries').innerHTML = html;
