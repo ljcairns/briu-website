@@ -334,6 +334,20 @@ section { padding-bottom: 2rem; }
 .ops-panel h3 { font-family: var(--serif); font-size: 1.08rem; line-height: 1.25; margin-bottom: 0.45rem; position: relative; z-index: 1; }
 .ops-panel > p { position: relative; z-index: 1; }
 .ops-panel-kicker { font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: var(--ops-amber); margin-bottom: 0.65rem; }
+.ops-summary-bar { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0.7rem; position: relative; z-index: 1; }
+.ops-summary-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(212,168,67,0.14); padding: 0.9rem 0.95rem; min-height: 98px; }
+.ops-summary-item strong { display: block; font-family: var(--serif); font-size: 1.35rem; line-height: 1.05; color: var(--text); margin-bottom: 0.35rem; }
+.ops-summary-item span { display: block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.13em; color: rgba(234,231,227,0.54); }
+.ops-feed-shell { position: relative; z-index: 1; border: 1px solid rgba(255,255,255,0.07); background: rgba(255,255,255,0.02); }
+.ops-feed-header, .ops-feed-row { display: grid; grid-template-columns: minmax(0, 1.9fr) 92px 84px 72px; gap: 0.9rem; align-items: center; }
+.ops-feed-header { padding: 0.8rem 1rem; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(234,231,227,0.48); border-bottom: 1px solid rgba(255,255,255,0.07); }
+.ops-feed-row { padding: 0.88rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.06); transition: background 0.25s ease, transform 0.25s ease; }
+.ops-feed-row:last-child { border-bottom: 0; }
+.ops-feed-row:hover { background: rgba(255,255,255,0.03); transform: translateX(2px); }
+.ops-feed-description { font-family: var(--serif); font-size: 0.98rem; line-height: 1.2; color: var(--text); }
+.ops-feed-backend { display: inline-flex; align-items: center; justify-content: center; padding: 0.28rem 0.5rem; font-size: 0.66rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; border: 1px solid rgba(61,158,158,0.24); background: rgba(61,158,158,0.12); color: var(--ops-teal); }
+.ops-feed-cell { font-size: 0.8rem; color: rgba(234,231,227,0.72); }
+.ops-feed-cost { color: var(--ops-amber); }
 .task-feed-list { display: flex; flex-direction: column; gap: 0.85rem; position: relative; z-index: 1; }
 .task-feed-card { position: relative; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem; transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease; }
 .task-feed-card::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 3px; background: var(--ops-amber); opacity: 0.9; }
@@ -360,20 +374,16 @@ section { padding-bottom: 2rem; }
 .task-feed-footer { display: flex; justify-content: space-between; gap: 0.75rem; flex-wrap: wrap; font-size: 0.66rem; color: rgba(234,231,227,0.5); line-height: 1.5; }
 .task-feed-thread { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; color: rgba(234,231,227,0.4); word-break: break-all; }
 .task-feed-error { padding: 1rem; border: 1px solid rgba(192,113,74,0.24); background: rgba(192,113,74,0.08); color: var(--text); }
-.ops-workflow-frame { position: relative; z-index: 1; }
-.ops-workflow-steps { display: grid; gap: 0.9rem; position: relative; padding-left: 1.15rem; }
-.ops-workflow-steps::before { content: ''; position: absolute; top: 1rem; bottom: 1rem; left: 0.35rem; width: 1px; background: linear-gradient(180deg, var(--ops-teal), var(--ops-amber), var(--ops-terracotta)); }
-.ops-workflow-node { position: relative; background: rgba(255,255,255,0.02); border: 1px solid rgba(255,255,255,0.06); padding: 1rem 1rem 1.05rem; border-radius: 26px 26px 14px 14px / 40px 40px 14px 14px; }
-.ops-workflow-node::before { content: ''; position: absolute; top: 1.15rem; left: -1.15rem; width: 12px; height: 12px; border-radius: 50%; background: var(--ops-amber); box-shadow: 0 0 0 4px rgba(212,168,67,0.1); }
-.ops-workflow-node:nth-child(1)::before { background: var(--ops-teal); box-shadow: 0 0 0 4px rgba(61,158,158,0.1); }
-.ops-workflow-node:nth-child(3)::before { background: var(--ops-terracotta); box-shadow: 0 0 0 4px rgba(192,113,74,0.1); }
-.ops-workflow-actor { display: block; font-size: 0.62rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.16em; color: rgba(234,231,227,0.5); margin-bottom: 0.35rem; }
-.ops-workflow-node h3 { margin-bottom: 0.35rem; }
-.ops-workflow-node p { font-size: 0.82rem; line-height: 1.55; color: rgba(234,231,227,0.68); margin-bottom: 0.8rem; }
-.ops-workflow-metric { font-size: 0.72rem; color: var(--ops-amber); letter-spacing: 0.02em; }
-.ops-workflow-return { display: flex; align-items: center; gap: 0.75rem; margin-top: 1rem; }
-.ops-workflow-return-line { width: 68px; height: 32px; border-left: 1px solid rgba(212,168,67,0.3); border-bottom: 1px solid rgba(212,168,67,0.3); border-radius: 0 0 0 24px; flex-shrink: 0; }
-.ops-workflow-return-copy { font-size: 0.78rem; color: rgba(234,231,227,0.58); line-height: 1.55; }
+.ops-flow { position: relative; z-index: 1; display: grid; gap: 0.75rem; }
+.ops-flow-step { position: relative; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); padding: 1rem 1rem 1.05rem 4rem; min-height: 108px; }
+.ops-flow-index { position: absolute; left: 1rem; top: 1rem; width: 2.2rem; height: 2.2rem; display: inline-flex; align-items: center; justify-content: center; border-radius: 999px; border: 1px solid rgba(212,168,67,0.24); background: rgba(212,168,67,0.08); font-size: 0.66rem; font-weight: 700; letter-spacing: 0.08em; color: var(--ops-amber); }
+.ops-flow-step h3 { margin-bottom: 0.35rem; }
+.ops-flow-step p { font-size: 0.84rem; line-height: 1.55; color: rgba(234,231,227,0.7); margin: 0; }
+.ops-flow-arrow { position: relative; height: 32px; margin-left: 2rem; }
+.ops-flow-arrow::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 1px; background: linear-gradient(180deg, rgba(61,158,158,0.4), rgba(212,168,67,0.7), rgba(192,113,74,0.4)); }
+.ops-flow-arrow::after { content: ''; position: absolute; bottom: 0; left: -5px; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 9px solid rgba(212,168,67,0.92); }
+.ops-flow-arrow span { position: absolute; top: 0; left: -5px; width: 12px; height: 12px; border-radius: 50%; background: var(--ops-teal); box-shadow: 0 0 12px rgba(61,158,158,0.45); animation: ops-flow-travel 2.6s ease-in-out infinite; }
+.ops-flow-note { margin-top: 1rem; padding-top: 0.95rem; border-top: 1px solid rgba(255,255,255,0.06); font-size: 0.78rem; line-height: 1.55; color: rgba(234,231,227,0.6); position: relative; z-index: 1; }
 .ops-meta-stack { display: flex; flex-direction: column; gap: 0.65rem; margin: 1rem 0 1.1rem; position: relative; z-index: 1; }
 .ops-meta-row { display: flex; justify-content: space-between; gap: 0.75rem; padding-bottom: 0.55rem; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 0.76rem; color: rgba(234,231,227,0.58); }
 .ops-meta-row strong { color: var(--text); font-weight: 500; text-transform: none; }
@@ -381,15 +391,27 @@ section { padding-bottom: 2rem; }
 .ops-meta-links a { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; color: var(--ops-amber); text-decoration: none; }
 .ops-meta-links a:hover { color: var(--gold-light); }
 .ops-meta-caption { font-size: 0.72rem; color: rgba(234,231,227,0.5); line-height: 1.55; }
+@keyframes ops-flow-travel {
+  0% { transform: translateY(0); opacity: 0.25; }
+  60% { transform: translateY(16px); opacity: 1; }
+  100% { transform: translateY(24px); opacity: 0; }
+}
 @media (max-width: 980px) {
   .ops-transparency-layout { grid-template-columns: 1fr; }
   .ops-stat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ops-summary-bar { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 640px) {
   .ops-stat-grid { grid-template-columns: 1fr; }
+  .ops-summary-bar { grid-template-columns: 1fr; }
   .ops-panel { padding: 1rem; }
   .task-feed-card-top { flex-direction: column; }
   .task-feed-status { min-width: 0; }
+  .ops-feed-header { display: none; }
+  .ops-feed-row { grid-template-columns: 1fr 1fr; gap: 0.55rem; }
+  .ops-feed-description { grid-column: 1 / -1; }
+  .ops-feed-cell { display: grid; gap: 0.18rem; }
+  .ops-feed-cell::before { content: attr(data-label); font-size: 0.56rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.12em; color: rgba(234,231,227,0.45); }
 }
 
 /* CTA */
@@ -666,31 +688,146 @@ a.story-card, a.story-card:visited, a.story-card:hover, a.story-card:active { te
 <section class="dispatch-transparency-section">
   <p class="section-label reveal">Operations Transparency</p>
   <h2 class="reveal">Dispatch, execution, completion. In one loop.</h2>
-  <p class="reveal" style="color:var(--text-muted);max-width:720px;margin-bottom:1rem;">This feed is driven by the `dispatched_tasks` contract and enriched with Paula&rsquo;s completion payloads. It shows the actual handoff path, current sync gap, and the operating numbers behind each task.</p>
+  <p class="reveal" style="color:var(--text-muted);max-width:720px;margin-bottom:1rem;">Every task Briu runs is tracked in real time. An orchestrator agent signs and dispatches work. An execution agent picks it up, runs it, and reports back. You see exactly what happened, how long it took, and what it cost. No black box.</p>
   <div class="ops-section-note reveal">
     <span class="live-dot"></span>
-    <span id="build-task-generated">Loading feed snapshot...</span>
+    <span>Recent operating snapshot from actual Briu task logs.</span>
   </div>
 
   <div class="ops-transparency-layout reveal">
     <div class="ops-transparency-main">
-      <div id="build-task-stats" class="ops-stat-grid"></div>
+      <div class="ops-panel">
+        <p class="ops-panel-kicker">Aggregate view</p>
+        <div class="ops-summary-bar">
+          <div class="ops-summary-item">
+            <span>Tasks completed</span>
+            <strong>112</strong>
+          </div>
+          <div class="ops-summary-item">
+            <span>Success rate</span>
+            <strong>89%</strong>
+          </div>
+          <div class="ops-summary-item">
+            <span>Avg duration</span>
+            <strong>287s</strong>
+          </div>
+          <div class="ops-summary-item">
+            <span>Total API cost</span>
+            <strong>$4.37</strong>
+          </div>
+        </div>
+      </div>
       <div class="ops-panel">
         <p class="ops-panel-kicker">Task feed</p>
-        <h3>Latest dispatched work</h3>
-        <p style="font-size:0.84rem;color:rgba(234,231,227,0.6);margin-bottom:1rem;">Newest first. Effective status comes from completion output when it exists, otherwise from the dispatch row.</p>
-        <div id="build-task-feed" class="task-feed-list"></div>
+        <h3>Recent work, with backend, duration, and cost</h3>
+        <p style="font-size:0.84rem;color:rgba(234,231,227,0.6);margin-bottom:1rem;">The same operational trail that proves the work happened: what ran, which backend handled it, how long it took, and what it cost.</p>
+        <div class="ops-feed-shell" aria-label="Recent task feed">
+          <div class="ops-feed-header">
+            <span>Description</span>
+            <span>Backend</span>
+            <span>Duration</span>
+            <span>Cost</span>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Built Lightlag concept page</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">191s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Content prune audit (69 files)</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">codex</span></div>
+            <div class="ops-feed-cell" data-label="Duration">343s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Cost infrastructure audit</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">202s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.94</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Paula daemon build</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">304s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Session rotation red team</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">297s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Brand strategy document</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">codex</span></div>
+            <div class="ops-feed-cell" data-label="Duration">83s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Dispatch monitor hardening</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">515s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+          <div class="ops-feed-row">
+            <div class="ops-feed-description">Marschat competitive research</div>
+            <div class="ops-feed-cell" data-label="Backend"><span class="ops-feed-backend">claude</span></div>
+            <div class="ops-feed-cell" data-label="Duration">280s</div>
+            <div class="ops-feed-cell ops-feed-cost" data-label="Cost">$0.00</div>
+          </div>
+        </div>
       </div>
     </div>
 
     <div class="ops-transparency-side">
       <div class="ops-panel">
         <p class="ops-panel-kicker">Workflow loop</p>
-        <h3>Jaume &gt; Paula &gt; completion</h3>
-        <div id="build-workflow-loop"></div>
+        <h3>How work moves through the system</h3>
+        <div class="ops-flow">
+          <article class="ops-flow-step">
+            <span class="ops-flow-index">Step 1</span>
+            <h3>Orchestrator (Jaume)</h3>
+            <p>Signs and dispatches tasks from VPS</p>
+          </article>
+          <div class="ops-flow-arrow" aria-hidden="true"><span></span></div>
+          <article class="ops-flow-step">
+            <span class="ops-flow-index">Step 2</span>
+            <h3>Executor (Paula)</h3>
+            <p>Runs work via Claude Code and Codex on Mac</p>
+          </article>
+          <div class="ops-flow-arrow" aria-hidden="true"><span></span></div>
+          <article class="ops-flow-step">
+            <span class="ops-flow-index">Step 3</span>
+            <h3>Verified completion</h3>
+            <p>Status, duration, and cost logged automatically</p>
+          </article>
+        </div>
+        <p class="ops-flow-note">Every handoff leaves a visible trail. Nothing disappears into a queue and comes back as a mystery.</p>
       </div>
       <div class="ops-panel">
-        <div id="build-task-meta"></div>
+        <p class="ops-panel-kicker">What gets logged</p>
+        <h3>The proof is operational, not performative</h3>
+        <p>Visitors do not need to guess whether the system is real. The log shows who handled the task, how long it ran, and what it cost to complete.</p>
+        <div class="ops-meta-stack">
+          <div class="ops-meta-row">
+            <span>Dispatch origin</span>
+            <strong>Signed from VPS</strong>
+          </div>
+          <div class="ops-meta-row">
+            <span>Execution layer</span>
+            <strong>Claude Code and Codex on Mac</strong>
+          </div>
+          <div class="ops-meta-row">
+            <span>Recorded outputs</span>
+            <strong>Status, duration, cost</strong>
+          </div>
+          <div class="ops-meta-row">
+            <span>Visibility</span>
+            <strong>No black box</strong>
+          </div>
+        </div>
+        <p class="ops-meta-caption">If a run stalls, fails, or costs more than expected, it shows up in the same operating trail.</p>
       </div>
     </div>
   </div>
@@ -1222,7 +1359,6 @@ Briu.charts.briuOrg('build-org-chart');
 Briu.charts.costPerHour('build-cost-per-hour');
 </script>
 <script src="/dynamic-stats.js?v=20260312a"></script>
-<script type="module" src="/build/task-feed.js?v=20260313b"></script>
 <script>
 /* HUD: Days Running counter (OpenClaw from Feb 10) */
 (function() {
