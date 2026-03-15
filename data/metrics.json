@@ -1,15 +1,40 @@
 {
-  "generated_at": "2026-03-15T04:55:53Z",
+  "generated_at": "2026-03-15T14:05:01Z",
   "summary": {
     "days_running": 33,
-    "current_code_lines": 25794,
+    "current_code_lines": 39123,
     "total_lines_added": 198860,
     "total_lines_removed": 25142,
     "total_lines_net": 173718,
     "total_commits": 580,
     "total_tasks": 294,
     "total_api_cost": 841.9,
-    "avg_daily_cost": 24.76
+    "avg_daily_cost": 24.76,
+    "total_errors": 765,
+    "total_critical_errors": 5,
+    "total_warnings": 53,
+    "top_error_sources": [
+      {
+        "source": "cost-watchdog",
+        "count": 289
+      },
+      {
+        "source": "email-watch",
+        "count": 288
+      },
+      {
+        "source": "calendar-watch",
+        "count": 96
+      },
+      {
+        "source": "cost-collect",
+        "count": 64
+      },
+      {
+        "source": "dispatch-monitor",
+        "count": 12
+      }
+    ]
   },
   "daily": [
     {
@@ -756,5 +781,422 @@
         "commits_openclaw": 2
       }
     }
-  ]
+  ],
+  "discord": {
+    "summary": {
+      "total_messages": 3361,
+      "messages_lucas": 402,
+      "messages_jaume": 0,
+      "messages_bot": 2959,
+      "threads_created": 42
+    },
+    "daily": [
+      {
+        "date": "2026-03-08",
+        "channels": {
+          "emails": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "home": {
+            "messages": 49,
+            "lucas": 3,
+            "jaume": 0,
+            "bot": 46,
+            "threads": 0,
+            "avg_response_time_s": 177.2
+          },
+          "orchestration": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "sales": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          }
+        },
+        "totals": {
+          "messages": 49,
+          "lucas": 3,
+          "jaume": 0,
+          "bot": 46,
+          "threads": 0
+        }
+      },
+      {
+        "date": "2026-03-09",
+        "channels": {
+          "emails": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "home": {
+            "messages": 151,
+            "lucas": 14,
+            "jaume": 0,
+            "bot": 137,
+            "threads": 0,
+            "avg_response_time_s": 130.8
+          },
+          "orchestration": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "sales": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          }
+        },
+        "totals": {
+          "messages": 151,
+          "lucas": 14,
+          "jaume": 0,
+          "bot": 137,
+          "threads": 0
+        }
+      },
+      {
+        "date": "2026-03-10",
+        "channels": {
+          "emails": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "home": {
+            "messages": 566,
+            "lucas": 93,
+            "jaume": 0,
+            "bot": 473,
+            "threads": 6,
+            "avg_response_time_s": 136.5
+          },
+          "orchestration": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "sales": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          }
+        },
+        "totals": {
+          "messages": 566,
+          "lucas": 93,
+          "jaume": 0,
+          "bot": 473,
+          "threads": 6
+        }
+      },
+      {
+        "date": "2026-03-11",
+        "channels": {
+          "emails": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "home": {
+            "messages": 97,
+            "lucas": 30,
+            "jaume": 0,
+            "bot": 67,
+            "threads": 3,
+            "avg_response_time_s": 22.4
+          },
+          "orchestration": {
+            "messages": 162,
+            "lucas": 38,
+            "jaume": 0,
+            "bot": 124,
+            "threads": 0,
+            "avg_response_time_s": 59.7
+          },
+          "sales": {
+            "messages": 0,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 0,
+            "threads": 0,
+            "avg_response_time_s": null
+          }
+        },
+        "totals": {
+          "messages": 259,
+          "lucas": 68,
+          "jaume": 0,
+          "bot": 191,
+          "threads": 3
+        }
+      },
+      {
+        "date": "2026-03-12",
+        "channels": {
+          "emails": {
+            "messages": 9,
+            "lucas": 3,
+            "jaume": 0,
+            "bot": 6,
+            "threads": 0,
+            "avg_response_time_s": 33.4
+          },
+          "home": {
+            "messages": 449,
+            "lucas": 111,
+            "jaume": 0,
+            "bot": 338,
+            "threads": 3,
+            "avg_response_time_s": 149.9
+          },
+          "orchestration": {
+            "messages": 333,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 333,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "sales": {
+            "messages": 50,
+            "lucas": 17,
+            "jaume": 0,
+            "bot": 33,
+            "threads": 0,
+            "avg_response_time_s": 84.9
+          }
+        },
+        "totals": {
+          "messages": 841,
+          "lucas": 131,
+          "jaume": 0,
+          "bot": 710,
+          "threads": 3
+        }
+      },
+      {
+        "date": "2026-03-13",
+        "channels": {
+          "emails": {
+            "messages": 2,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 2,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "home": {
+            "messages": 486,
+            "lucas": 51,
+            "jaume": 0,
+            "bot": 435,
+            "threads": 24,
+            "avg_response_time_s": 116.0
+          },
+          "orchestration": {
+            "messages": 605,
+            "lucas": 0,
+            "jaume": 0,
+            "bot": 605,
+            "threads": 0,
+            "avg_response_time_s": null
+          },
+          "sales": {
+            "messages": 24,
+            "lucas": 6,
+            "jaume": 0,
+            "bot": 18,
+            "threads": 0,
+            "avg_response_time_s": 61.9
+          }
+        },
+        "totals": {
+          "messages": 1117,
+          "lucas": 57,
+          "jaume": 0,
+          "bot": 1060,
+          "threads": 24
+        }
+      },
+      {
+        "date": "2026-03-14",
+        "channels": {
+          "emails": {
+            "messages": 6,
+            "lucas": 1,
+            "jaume": 0,
+            "bot": 5,
+            "threads": 0,
+            "avg_response_time_s": 30.9
+          },
+          "home": {
+            "messages": 234,
+            "lucas": 33,
+            "jaume": 0,
+            "bot": 201,
+            "threads": 6,
+            "avg_response_time_s": 121.8
+          },
+          "orchestration": {
+            "messages": 130,
+            "lucas": 1,
+            "jaume": 0,
+            "bot": 129,
+            "threads": 0,
+            "avg_response_time_s": 846.2
+          },
+          "sales": {
+            "messages": 8,
+            "lucas": 1,
+            "jaume": 0,
+            "bot": 7,
+            "threads": 0,
+            "avg_response_time_s": 33.9
+          }
+        },
+        "totals": {
+          "messages": 378,
+          "lucas": 36,
+          "jaume": 0,
+          "bot": 342,
+          "threads": 6
+        }
+      }
+    ]
+  },
+  "system_health": {
+    "daily_errors": {
+      "2026-02-26": {
+        "critical": 0,
+        "error": 26,
+        "warning": 13,
+        "total": 39
+      },
+      "2026-02-28": {
+        "critical": 0,
+        "error": 0,
+        "warning": 8,
+        "total": 8
+      },
+      "2026-03-02": {
+        "critical": 0,
+        "error": 2,
+        "warning": 0,
+        "total": 2
+      },
+      "2026-03-03": {
+        "critical": 0,
+        "error": 148,
+        "warning": 0,
+        "total": 148
+      },
+      "2026-03-05": {
+        "critical": 0,
+        "error": 0,
+        "warning": 4,
+        "total": 4
+      },
+      "2026-03-09": {
+        "critical": 0,
+        "error": 0,
+        "warning": 4,
+        "total": 4
+      },
+      "2026-03-10": {
+        "critical": 0,
+        "error": 74,
+        "warning": 6,
+        "total": 80
+      },
+      "2026-03-11": {
+        "critical": 0,
+        "error": 273,
+        "warning": 0,
+        "total": 273
+      },
+      "2026-03-12": {
+        "critical": 0,
+        "error": 51,
+        "warning": 6,
+        "total": 57
+      },
+      "2026-03-13": {
+        "critical": 0,
+        "error": 12,
+        "warning": 6,
+        "total": 18
+      },
+      "2026-03-14": {
+        "critical": 2,
+        "error": 87,
+        "warning": 6,
+        "total": 95
+      },
+      "2026-03-15": {
+        "critical": 3,
+        "error": 34,
+        "warning": 0,
+        "total": 37
+      }
+    },
+    "error_sources": [
+      {
+        "source": "cost-watchdog",
+        "count": 289
+      },
+      {
+        "source": "email-watch",
+        "count": 288
+      },
+      {
+        "source": "calendar-watch",
+        "count": 96
+      },
+      {
+        "source": "cost-collect",
+        "count": 64
+      },
+      {
+        "source": "dispatch-monitor",
+        "count": 12
+      }
+    ]
+  }
 }
